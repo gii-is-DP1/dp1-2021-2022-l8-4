@@ -31,6 +31,22 @@
         <spring-format.version>0.0.19</spring-format.version>
 
     </properties>
+    <developers>
+        <developer>
+            <id>lNoelia</id>
+            <name>noelopdur</name>
+            <email>noelopdur@alum.us.es</email>
+            <url>http://www.tmht.com/lNoelia</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <properties>
+                <picUrl>
+                 https://s3-us-west-2.amazonaws.com/melingoimages/Images/27866.jpg
+                </picUrl>
+            </properties>
+            </developer>
+    </developers>
 
     <developers>
         <developer>
@@ -47,6 +63,38 @@
             </picUrl>
             </properties>
         </developer>
+    </developers>
+
+    <developer>
+ 
+        <id>Rick3600</id>
+        <name>Ricardo</name>
+        <email>nadalrick@gmail.com</email>
+        <url>https://github.com/Rick3600</url>
+        <role> leader</role>
+        
+        <properties>
+            <picUrl>
+                https://avatars.githubusercontent.com/u/72402373
+            </picUrl>
+        </properties>
+    </developer>
+
+    <developers> 
+        <developer> 
+        <id>sarcrudua</id> 
+        <name>Sara</name> 
+        <email>saracduarez@gmail.com</email> 
+        <url>https://github.com/sarcrudua</url> 
+        <roles> 
+            <role>developer</role> 
+        </roles> 
+        <properties> 
+            <picUrl> 
+        </picUrl> 
+        </properties> 
+    </developer> 
+    
     </developers>
 
     <dependencies>
