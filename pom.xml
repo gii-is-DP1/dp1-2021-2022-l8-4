@@ -32,6 +32,23 @@
 
     </properties>
 
+    <developers>
+        <developer>
+            <id>Josdelsan</id>
+            <name>José María Delgado Sánchez</name>
+            <email>josem_ds@hotmail.com</email>
+            <url>https://github.com/Josdelsan</url>
+            <roles>
+            <role>developer</role>
+            </roles>
+            <properties>
+            <picUrl>
+            https://i.pinimg.com/564x/cf/0d/01/cf0d01dcc6ff472155f3a7d9c5f0cec7.jpg
+            </picUrl>
+            </properties>
+        </developer>
+    </developers>
+
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
