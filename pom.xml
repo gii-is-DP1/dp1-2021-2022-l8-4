@@ -65,6 +65,21 @@
         </developer>
     </developers>
 
+    <developer>
+ 
+        <id>Rick3600</id>
+        <name>Ricardo</name>
+        <email>nadalrick@gmail.com</email>
+        <url>https://github.com/Rick3600</url>
+        <role> leader</role>
+        
+        <properties>
+            <picUrl>
+                https://avatars.githubusercontent.com/u/72402373
+            </picUrl>
+        </properties>
+    </developer>
+
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
