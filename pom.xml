@@ -31,23 +31,6 @@
         <spring-format.version>0.0.19</spring-format.version>
 
     </properties>
-
-    <developers>
-        <developer>
-            <id>rosmolarr</id>
-            <name>Rosa</name>
-            <email>rosmolarr@alum.us.es</email>
-            <url>https://github.com/rosmolarr</url>
-            <roles>
-            <role>developer</role>
-            </roles>
-            <properties>
-            <picUrl>
-                https://cf.ltkcdn.net/gatos/images/std/236641-800x515r1-etapas-desarrollo-gatitos.jpg
-            </picUrl>
-            </properties>
-        </developer>
-    </developers>
     
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
