@@ -75,22 +75,7 @@
                 </picUrl>
             </properties>
         </developer>
-
-        <developer>
-    
-            <id>Rick3600</id>
-            <name>Ricardo</name>
-            <email>nadalrick@gmail.com</email>
-            <url>https://github.com/Rick3600</url>
-            <roles>
-                <role>developer</role>
-            </roles>       
-            <properties>
-                <picUrl>
-                    https://avatars.githubusercontent.com/u/72402373
-                </picUrl>
-            </properties>
-        </developer>
+        
     <developer>
  
         <id>Rick3600</id>
