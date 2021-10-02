@@ -31,6 +31,7 @@
         <spring-format.version>0.0.19</spring-format.version>
 
     </properties>
+
     <developers>
         <developer>
             <id>carvarsou</id>
@@ -74,22 +75,7 @@
                 </picUrl>
             </properties>
         </developer>
-
-        <developer>
-    
-            <id>Rick3600</id>
-            <name>Ricardo</name>
-            <email>nadalrick@gmail.com</email>
-            <url>https://github.com/Rick3600</url>
-            <roles>
-                <role>developer</role>
-            </roles>       
-            <properties>
-                <picUrl>
-                    https://avatars.githubusercontent.com/u/72402373
-                </picUrl>
-            </properties>
-        </developer>
+        
     <developer>
  
         <id>Rick3600</id>
@@ -119,8 +105,21 @@
             </properties> 
         </developer> 
     
-    </developers>
-
+        <developer> 
+            <id>rosmolarr</id> 
+            <name>Rosa</name> 
+            <email>rosamolina100@gmail.com</email> 
+            <url>https://github.com/rosmolarr</url> 
+            <roles> 
+                <role>developer</role> 
+            </roles> 
+            <properties> 
+                <picUrl> 
+            </picUrl> 
+            </properties> 
+        </developer>
+    </developers>     
+    
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
