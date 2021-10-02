@@ -9,7 +9,7 @@
 
     <parent>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>L8-4</artifactId>
+        <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.4.RELEASE</version>
     </parent>
     <name>petclinic</name>
@@ -32,22 +32,80 @@
 
     </properties>
     <developers>
-<developer>
-<id>carvarsou</id>
-<name>Carlos Varela Soult</name>
-<email>carlosvsoult@gmail.com</email>
-<url>https://github.com/carvarsou</url>
-<roles>
-<role>leader</role>
-</roles>
-<properties>
-<picUrl>
-https://avatars.githubusercontent.com/u/80246400?v=4
-</picUrl>
-</properties>
-</developer>
-<!-- More developers ...-->
-</developers>
+        <developer>
+            <id>carvarsou</id>
+            <name>Carlos Varela Soult</name>
+            <email>carlosvsoult@gmail.com</email>
+            <url>https://github.com/carvarsou</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://avatars.githubusercontent.com/u/80246400?v=4
+                </picUrl>
+            </properties>
+        </developer>
+        <developer>
+            <id>lNoelia</id>
+            <name>noelopdur</name>
+            <email>noelopdur@alum.us.es</email>
+            <url>http://www.tmht.com/lNoelia</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <properties>
+                <picUrl>
+                 https://s3-us-west-2.amazonaws.com/melingoimages/Images/27866.jpg
+                </picUrl>
+            </properties>
+            </developer>
+        <developer>
+            <id>Josdelsan</id>
+            <name>José María Delgado Sánchez</name>
+            <email>josem_ds@hotmail.com</email>
+            <url>https://github.com/Josdelsan</url>
+            <roles>
+            <role>developer</role>
+            </roles>
+            <properties>
+            <picUrl>
+            https://i.pinimg.com/564x/cf/0d/01/cf0d01dcc6ff472155f3a7d9c5f0cec7.jpg
+            </picUrl>
+            </properties>
+        </developer>
+
+    <developer>
+ 
+        <id>Rick3600</id>
+        <name>Ricardo</name>
+        <email>nadalrick@gmail.com</email>
+        <url>https://github.com/Rick3600</url>
+        <roles>
+        <role>leader</role>
+        </roles>
+        <properties>
+            <picUrl>
+                https://avatars.githubusercontent.com/u/72402373
+            </picUrl>
+        </properties>
+    </developer>
+        <developer> 
+        <id>sarcrudua</id> 
+        <name>Sara</name> 
+        <email>saracduarez@gmail.com</email> 
+        <url>https://github.com/sarcrudua</url> 
+        <roles> 
+            <role>developer</role> 
+        </roles> 
+        <properties> 
+            <picUrl> 
+        </picUrl> 
+        </properties> 
+    </developer> 
+    
+    </developers>
+
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
