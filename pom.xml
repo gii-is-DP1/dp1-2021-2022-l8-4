@@ -34,6 +34,20 @@
 
     <developers>
         <developer>
+            <id>carvarsou</id>
+            <name>Carlos Varela Soult</name>
+            <email>carlosvsoult@gmail.com</email>
+            <url>https://github.com/carvarsou</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://avatars.githubusercontent.com/u/80246400?v=4
+                </picUrl>
+            </properties>
+        </developer>
+        <developer>
             <id>lNoelia</id>
             <name>noelopdur</name>
             <email>noelopdur@alum.us.es</email>
@@ -46,8 +60,7 @@
                  https://s3-us-west-2.amazonaws.com/melingoimages/Images/27866.jpg
                 </picUrl>
             </properties>
-        </developer>
-
+            </developer>
         <developer>
             <id>Josdelsan</id>
             <name>José María Delgado Sánchez</name>
@@ -78,8 +91,21 @@
                 </picUrl>
             </properties>
         </developer>
-
-
+    <developer>
+ 
+        <id>Rick3600</id>
+        <name>Ricardo</name>
+        <email>nadalrick@gmail.com</email>
+        <url>https://github.com/Rick3600</url>
+        <roles>
+        <role>leader</role>
+        </roles>
+        <properties>
+            <picUrl>
+                https://avatars.githubusercontent.com/u/72402373
+            </picUrl>
+        </properties>
+    </developer>
         <developer> 
             <id>sarcrudua</id> 
             <name>Sara</name> 
