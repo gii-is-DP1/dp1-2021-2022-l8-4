@@ -62,6 +62,7 @@ INSERT INTO owners VALUES (12, 'Carlos', 'Varela', 'Calle Raqueta', 'Valencia', 
 INSERT INTO owners VALUES (13, 'Noelia', 'López', 'Calle Piruleta 15', 'Aracena', '677929190', 'owner1');
 INSERT INTO owners VALUES (14, 'Ricardo', 'Nadal', 'Calle Cocodrilo 19', 'Chipiona', '637648280', 'owner1');
 INSERT INTO owners VALUES (15, 'Sara', 'Cruz', 'Calle Luis Montoto', 'Sevilla', '711295836', 'owner1');
+INSERT INTO owners VALUES (16, 'Rosa', 'Molina', 'Calle Alcalde Manuel Marin', 'Camas', '644015424', 'owner1');
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
@@ -81,6 +82,7 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (15, 'Takao', '2020
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (16, 'Noodle', '2014-03-12', 4, 13);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (17, 'Nicolas', '2016-03-12', 1, 14);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (18, 'Minnie', '2014-10-24', 1, 15);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (19, 'Nuno', '2021-04-22', 1, 16);
 
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01', 'rabies shot');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
