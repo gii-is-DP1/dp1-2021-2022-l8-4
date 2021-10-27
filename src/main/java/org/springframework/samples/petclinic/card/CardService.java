@@ -14,7 +14,7 @@ public class CardService {
     @Autowired
     private CardRepository cardRepository;
 
-    @Transactional (readOnly = true)
+    @Transactional 
     public Iterable<Card> findAll(){
         Iterable<Card> res = cardRepository.findAll();
         return res;

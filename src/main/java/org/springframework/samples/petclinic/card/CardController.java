@@ -23,30 +23,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/cards")
 public class CardController {
     
-//  private static final String VIEWS_CARD_CREATE_OR_UPDATE_FORM = "cards/createOrUpdateCardForm";
+   private static final String VIEWS_CARD_CREATE_OR_UPDATE_FORM = "cards/createOrUpdateCardForm";
 
     @Autowired
     private CardService cardService;
 
-    public String listadoCards(ModelMap modelmap){
-        String vista ="cards/listadoCards";
+    @GetMapping()
+    public String cardsList(ModelMap modelMap){
+        String view ="cards/cardsList";
         Iterable<Card> cards= cardService.findAll();
-        modelmap.addAttribute("cards", cards);
-        return vista;
-    }
-    /*@InitBinder
-    public void setAllowedFields(WebDataBinder dataBinder) {
-        dataBinder.setDisallowedFields("id");
-    }*/
-
-    /*@GetMapping(value = "/cards/new")
-    public String initCreationForm(Map<String, Object> model) {
-        Card card = new Card();
-        model.put("card", card);
-        return VIEWS_CARD_CREATE_OR_UPDATE_FORM;
+        modelMap.addAttribute("cards", cards);
+        return view;
     }
 
-    @PostMapping(value = "/cards/new")
+    @GetMapping(path = "/new")
+    public String initCreationForm(ModelMap modelMap) {
+        String view = VIEWS_CARD_CREATE_OR_UPDATE_FORM;
+        modelMap.addAttribute("card", new Card());
+        return view;
+    }
+
+    @PostMapping(path = "/new")
     public String processCreationForm(@Valid Card card, BindingResult result) {
         if (result.hasErrors()){
             return VIEWS_CARD_CREATE_OR_UPDATE_FORM;
@@ -56,7 +53,7 @@ public class CardController {
 
             return "redirect:/cards/" + card.getId();
         }
-    }*/
+    }
 /*
     @GetMapping(value = "/cards")
     public String processFindForm(Card card, BindingResult result, Map<String, Object> model) {
