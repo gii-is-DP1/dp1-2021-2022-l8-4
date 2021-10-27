@@ -12,14 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class CardService {
 
     @Autowired
-    private static CardRepository cardRepository;
+    private CardRepository cardRepository;
 
-    /*@Autowired
-    public CardService(CardRepository cardRepository) {
-        this.cardRepository = cardRepository;
-    }*/
-
-    @Transactional //(readOnly = true)
+    @Transactional 
     public Iterable<Card> findAll(){
         Iterable<Card> res = cardRepository.findAll();
         return res;
@@ -30,9 +25,9 @@ public class CardService {
         return (int) cardRepository.count();
     }
 
-    /*@Transactional
+    @Transactional
     public void saveCard(Card card) throws DataAccessException {
         //creating card
         cardRepository.save(card);
-    }*/
+    }
 }
