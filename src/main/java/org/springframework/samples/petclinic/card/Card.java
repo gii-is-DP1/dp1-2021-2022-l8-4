@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.card;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.samples.petclinic.model.NamedEntity;
@@ -13,6 +14,7 @@ import lombok.Setter;
  * @author José Maria Delgado Sanchez
  */
 @Entity
+@Table(name = "cards")
 public class Card extends NamedEntity{
     @NotEmpty
     @Getter

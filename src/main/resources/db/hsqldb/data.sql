@@ -89,4 +89,4 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
-INSERT INTO card(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',2);
+INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
