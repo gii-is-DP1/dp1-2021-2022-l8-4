@@ -13,7 +13,9 @@
             <div class="form-group has-feedback">
                 <petclinic:inputField label="Name" name="name"/>
                 <petclinic:inputField label="Cost" name="cost"/>
-                <petclinic:inputField label="Type" name="type"/>
+                <div class="control-group">
+                    <petclinic:selectField name="type" label="Type" names="${types}" size="2"/>
+                </div>
             </div>
 
             <div class="form-group">
