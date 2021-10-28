@@ -1,7 +1,7 @@
 package org.springframework.samples.petclinic.card;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,7 +25,7 @@ public class CardController {
     @Autowired
     private CardService cardService;
 
-    
+    private static final String VIEWS_CARDS_CREATE_OR_UPDATE_FORM = "cards/createOrUpdateCardForm";
 
     @GetMapping()
     public String cardsList(ModelMap modelMap){
@@ -39,39 +37,28 @@ public class CardController {
 
     @GetMapping(path = "/new")
     public String initCreationForm(ModelMap modelMap) {
-        String view = "cards/editCard";
+        String view = VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
         modelMap.addAttribute("card", new Card());
+        List<CardType> types = new ArrayList<CardType>();
+        types.add(CardType.PERMANENTE);types.add(CardType.DESCARTAR);
+        modelMap.addAttribute("types", types );
         return view;
     }
 
-    @PostMapping(path = "/save")
+    @PostMapping(path = "/new")
     public String processCreationForm(@Valid Card card, BindingResult result, ModelMap modelMap) {
         String view="cards/cardsList";
         if (result.hasErrors()){
 
             modelMap.addAttribute("card",card);
-            return "cards/editCard";
+            return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
 
         }else {
             //creating card
             cardService.saveCard(card);
             modelMap.addAttribute("message","Card succesfully saved!");
-            
+            view = cardsList(modelMap);
         }
         return view;
     } 
-/*
-    @GetMapping(value = "/cards")
-    public String processFindForm(Card card, BindingResult result, Map<String, Object> model) {
-
-        Iterable<Card> results = this.cardService.findAll();
-        if(results.){
-            //no cards found
-            result.rejectValue("notFound", "not found");
-            return "cards";
-        }else {
-            model.put("selections", results);
-            return "cards/cardsList";
-        }
-    }*/
 }
