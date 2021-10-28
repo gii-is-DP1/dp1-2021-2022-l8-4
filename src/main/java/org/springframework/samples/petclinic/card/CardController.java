@@ -18,15 +18,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * @author Jose Maria Delgado Sanchez
  * @author Noelia López Durán
+ * @author Ricardo Nadal García
  */
 @Controller
 @RequestMapping("/cards")
 public class CardController {
-    
-   private static final String VIEWS_CARD_CREATE_OR_UPDATE_FORM = "cards/createOrUpdateCardForm";
 
     @Autowired
     private CardService cardService;
+
+    
 
     @GetMapping()
     public String cardsList(ModelMap modelMap){
@@ -38,22 +39,27 @@ public class CardController {
 
     @GetMapping(path = "/new")
     public String initCreationForm(ModelMap modelMap) {
-        String view = VIEWS_CARD_CREATE_OR_UPDATE_FORM;
+        String view = "cards/editCard";
         modelMap.addAttribute("card", new Card());
         return view;
     }
 
-    @PostMapping(path = "/new")
-    public String processCreationForm(@Valid Card card, BindingResult result) {
+    @PostMapping(path = "/save")
+    public String processCreationForm(@Valid Card card, BindingResult result, ModelMap modelMap) {
+        String view="cards/cardsList";
         if (result.hasErrors()){
-            return VIEWS_CARD_CREATE_OR_UPDATE_FORM;
+
+            modelMap.addAttribute("card",card);
+            return "cards/editCard";
+
         }else {
             //creating card
-            this.cardService.saveCard(card);
-
-            return "redirect:/cards/" + card.getId();
+            cardService.saveCard(card);
+            modelMap.addAttribute("message","Card succesfully saved!");
+            
         }
-    }
+        return view;
+    } 
 /*
     @GetMapping(value = "/cards")
     public String processFindForm(Card card, BindingResult result, Map<String, Object> model) {

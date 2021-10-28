@@ -26,8 +26,10 @@ public class CardService {
     }
 
     @Transactional
-    public void saveCard(Card card) throws DataAccessException {
+    public void saveCard(Card card)  {
         //creating card
         cardRepository.save(card);
     }
+
+    
 }
