@@ -31,5 +31,9 @@ public class CardService {
         cardRepository.save(card);
     }
 
+    @Transactional
+	public Card findCardById(int id) throws DataAccessException {
+		return cardRepository.findById(id).get();
+	}
     
 }
