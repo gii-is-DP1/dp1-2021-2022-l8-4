@@ -14,10 +14,10 @@ public class CardService {
     @Autowired
     private static CardRepository cardRepository;
 
-    /*@Autowired
+    @Autowired
     public CardService(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
-    }*/
+    }
 
     @Transactional //(readOnly = true)
     public Iterable<Card> findAll(){
