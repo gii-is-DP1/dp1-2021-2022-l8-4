@@ -90,3 +90,5 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
 INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
+
+INSERT INTO usersKoT(username, email, password, firstName, lastName) VALUES ('user1', 'user1@email.com', 'u53r', 'User', 'Prueba');
