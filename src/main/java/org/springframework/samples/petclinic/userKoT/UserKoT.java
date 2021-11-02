@@ -12,30 +12,20 @@ import lombok.Setter;
 * @author Sara Cruz
 * @author Rosa Molina
 */
-
+@Getter
+@Setter
 @Entity
-@Table(name = "usersKoT")
-public class User extends NamedEntity {
+@Table(name = "userskot")
+public class UserKoT extends NamedEntity{
 
-    @Getter
-    @Setter
-    @Id
-    String username;
+    private String username;
 
-    @Getter
-    @Setter
-    String email;
+    private String email;
 
-    @Getter
-    @Setter
-    String password;
+    private String password;
 
-    @Getter
-    @Setter
-    String firstName;
+    private String firstname;
 
-    @Getter
-    @Setter
-    String lastName;
+    private String lastname;
     
 }

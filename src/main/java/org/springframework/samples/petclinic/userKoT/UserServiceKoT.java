@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 */
 
 @Service
-public class UserService {
+public class UserServiceKoT {
     
-	@Autowired UserRepository userRepository;
+	@Autowired UserRepositoryKoT userRepository;
 
 	@Transactional
-	public Iterable<User> findAll(){
-        Iterable<User> res = userRepository.findAll();
+	public Iterable<UserKoT> findAll(){
+        Iterable<UserKoT> res = userRepository.findAll();
         return res;
     }
 
@@ -30,12 +30,12 @@ public class UserService {
 	}
  
 	@Transactional
-	public void saveUser(User user) {
+	public void saveUser(UserKoT user) {
 		userRepository.save(user);
 	}
 	
     @Transactional
-    public Optional<User> findUser(String username){
+    public Optional<UserKoT> findUser(String username){
     	return userRepository.findById(username);
     }
 }

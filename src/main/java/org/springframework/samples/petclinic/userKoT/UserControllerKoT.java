@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @author Rosa Molina
  */
 @Controller
-public class UserController {
+public class UserControllerKoT {
 
 	@Autowired
-	private UserService userService;
+	private UserServiceKoT userService;
     
    // private static final String VIEWS_USERS_CREATE_FORM = "users/usersList";
 
 	@GetMapping()
     public String usersList(ModelMap modelMap){
-        String view ="users/usersList";
-        Iterable<User> users= userService.findAll();
+        String view ="userskot/usersList";
+        Iterable<UserKoT> users= userService.findAll();
         modelMap.addAttribute("users", users);
         return view;
     }
