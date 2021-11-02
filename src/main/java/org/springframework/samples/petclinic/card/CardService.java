@@ -1,5 +1,8 @@
 package org.springframework.samples.petclinic.card;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,12 @@ public class CardService {
         Iterable<Card> res = cardRepository.findAll();
         return res;
     }
+    @Transactional(readOnly = true)
+	public Collection<CardType> findCardTypes() throws DataAccessException {
+        Collection<CardType> ct = new ArrayList<CardType>();
+        ct.add(CardType.DESCARTAR);ct.add(CardType.PERMANENTE);
+		return ct;
+	}
 
     @Transactional
     public int cardCount(){
