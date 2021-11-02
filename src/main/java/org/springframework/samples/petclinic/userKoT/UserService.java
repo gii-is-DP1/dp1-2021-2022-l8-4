@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 
@@ -26,12 +25,22 @@ public class UserService {
 	}
  
 	@Transactional
-	public void saveUser(User user) throws DataAccessException {
+	public void saveUser(User user) {
 		userRepository.save(user);
 	}
 	
-	public Optional<User> findUser(String username) {
+	public Optional<User> findUser(String username) throws DataAccessException {
 		return userRepository.findById(username);
 	}
- 
+
+	@Transactional
+	public Iterable<User> findAll(){
+        Iterable<User> res = userRepository.findAll();
+        return res;
+    }
+
+	@Transactional
+	public int userCount(){
+		return (int) userRepository.count();
+	}
 }

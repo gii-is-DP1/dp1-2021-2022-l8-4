@@ -1,43 +1,26 @@
 package org.springframework.samples.petclinic.userKoT;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.owner.OwnerService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * @author Sara Cruz
+ * @author Rosa Molina
+ */
 @Controller
 public class UserController {
 
-    private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
-
-	private final UserService userService;
-
 	@Autowired
-	public UserController(UserService clinicService) {
-		this.userService = ;
-	}
+	private UserService userService;
+    //private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
 
-	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id");
-	}
-
-	@GetMapping(value = "/users/new")
-	public String initCreationForm(Map<String, Object> model) {
-		Owner owner = new Owner();
-		model.put("owner", owner);
-		return VIEWS_OWNER_CREATE_FORM;
-	}
-
-	@PostMapping(value = "/users/new")
-	public String processCreationForm(@Valid Owner owner, BindingResult result) {
-		if (result.hasErrors()) {
-			return VIEWS_OWNER_CREATE_FORM;
-		}
-		else {
-			//creating owner, user, and authority
-			this.ownerService.saveOwner(owner);
-			return "redirect:/";
-		}
-	}
+	@GetMapping()
+    public String usersList(ModelMap modelMap){
+        String view ="users/usersList";
+        Iterable<User> users= userService.findAll();
+        modelMap.addAttribute("users", users);
+        return view;
+    }
 }
