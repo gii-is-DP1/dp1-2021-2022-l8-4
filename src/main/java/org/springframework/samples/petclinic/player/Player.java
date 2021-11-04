@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.player;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,23 +25,27 @@ public class Player extends NamedEntity {
     @Getter
     @Setter
     @Enumerated(value=EnumType.ORDINAL)
+    @Column(name="monster_name")
     private MonsterName monsterName;
 
     @Getter
     @Setter
     @NotNull
+    @Column(name="life_points")
     private Integer lifePoints;
 
     @Getter
     @Setter
     @NotNull
     @Min(0)
+    @Column(name="victory_points")
     private Integer victoryPoints;
 
     @Getter
     @Setter
     @NotNull
     @Min(0)
+    @Column(name="energy_points")
     private Integer energyPoints;
 
     @Getter
