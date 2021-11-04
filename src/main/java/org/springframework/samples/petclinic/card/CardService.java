@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Jose Maria Delgado Sanchez
+ *  @author Noelia López Durán
  */
 @Service
 public class CardService {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class PlayerStatusController {
     
     
-	private final PlayerService playerService;
+	//private final PlayerService playerService;
 
     /**
      * Copied from VisitController 
@@ -22,11 +22,11 @@ public class PlayerStatusController {
 	 * @param playerId
 	 * @return Player
 	 */
-	@ModelAttribute("playerStatus")
+	/*@ModelAttribute("playerStatus")
 	public PlayerStatus loadPlayerWithPlayerStatus(@PathVariable("playerId") int playerId) {
 		Player player = this.playerService.findPlayerById(playerId);
 		PlayerStatus playerStatus = new playerStatus();
 		player.addPlayerStatus(playerStatus);
 		return playerStatus;
-	}
+	}*/
 }
