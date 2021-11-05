@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 * @author Rosa Molina
 */
 
-public interface UserRepository extends CrudRepository<User, String>{
+public interface UserRepositoryKoT extends CrudRepository<UserKoT, String>{
+
     
 }

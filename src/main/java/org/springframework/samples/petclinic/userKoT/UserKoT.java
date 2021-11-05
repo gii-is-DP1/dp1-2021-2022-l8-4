@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.samples.petclinic.model.NamedEntity;
+
 import lombok.Getter;
 import lombok.Setter;
 /**
@@ -13,18 +15,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "usersKoT")
-public class User {
-    @Id
-    String username;
+@Table(name = "userskot")
+public class UserKoT extends NamedEntity{
 
-    String email;
+    private String username;
 
-    String password;
+    private String email;
 
-    String firstName;
+    private String password;
 
-    String lastName;
-    
+    private String firstname;
+
+    private String lastname;
     
 }
