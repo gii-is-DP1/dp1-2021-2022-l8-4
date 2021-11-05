@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.card;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,19 +21,17 @@ import lombok.Setter;
 @Entity
 @Table(name = "cards")
 public class Card extends NamedEntity{
-    @NotEmpty
-    @Getter
-    @Setter
-    private String name;
 
     @NotNull
     @Setter
     @Getter
+    @Column(name="cost")
     private Integer cost;
 
     @Getter
-    @Enumerated(value=EnumType.ORDINAL)
     @Setter
+    @Enumerated(value=EnumType.ORDINAL)
+    @Column(name="type")
     private CardType type;
 
 
