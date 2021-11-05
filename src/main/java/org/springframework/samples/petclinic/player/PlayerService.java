@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.player;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,4 +26,9 @@ public class PlayerService {
     public int playerCount(){
         return (int) playerRepository.count();
     }   
+
+    @Transactional
+	public Player findPlayerById(int id) throws DataAccessException {
+		return playerRepository.findById(id).get();
+	}
 }
