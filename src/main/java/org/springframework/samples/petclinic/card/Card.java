@@ -4,10 +4,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.samples.petclinic.deck.Deck;
+import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.NamedEntity;
 
 import lombok.Getter;
@@ -33,6 +36,14 @@ public class Card extends NamedEntity{
     @Enumerated(value=EnumType.ORDINAL)
     @Column(name="type")
     private CardType type;
+
+    @ManyToOne
+    @JoinColumn(name="deck_id")
+    private Deck deck;
+
+    @ManyToOne
+    @JoinColumn(name="game_id")
+    private Game game;
 
 
 }

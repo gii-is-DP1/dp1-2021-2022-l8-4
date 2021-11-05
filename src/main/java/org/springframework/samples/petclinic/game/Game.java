@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.game;
 
 
+import java.sql.Time;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -43,6 +44,12 @@ import lombok.Setter;
     @Column(name="turn")
     private Integer turn;
 
+    @NotNull
+    @Getter
+    @Setter
+    @Column(name="start_time")
+    private Time startTime;
+
     @Getter
     @Setter
     @Column(name="winner")
@@ -54,6 +61,7 @@ import lombok.Setter;
     private Deck deck;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "card_id", referencedColumnName = "id")
     private Set<Card> availableCards;
 
  }
