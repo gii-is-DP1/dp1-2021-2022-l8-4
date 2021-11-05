@@ -94,3 +94,4 @@ INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location) VALUES (1,1,10,2,3,0);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location) VALUES (2,2,10,0,0,0);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location) VALUES (3,3,10,0,0,1);
+
