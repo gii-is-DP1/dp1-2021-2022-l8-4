@@ -89,6 +89,8 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+INSERT INTO achievements(id,name,reward_points,condition) VALUES (1,'Mi primera partida',10,TRUE);
+
 INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
 
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location) VALUES (1,1,10,2,3,0);
