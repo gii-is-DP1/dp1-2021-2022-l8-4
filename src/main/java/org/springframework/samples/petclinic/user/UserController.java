@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,13 +40,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 
 	private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
-
 	private final OwnerService ownerService;
+	private UserService userService;
+	
+    @GetMapping()
+    public String usersList(ModelMap modelMap){
+        String view ="users/usersList";
+        Iterable<User> users= userService.findAll();
+        modelMap.addAttribute("users", users);
+        return view;
+    }
 
 	@Autowired
 	public UserController(OwnerService clinicService) {
 		this.ownerService = clinicService;
 	}
+	
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
@@ -70,5 +80,7 @@ public class UserController {
 			return "redirect:/";
 		}
 	}
+
+
 
 }
