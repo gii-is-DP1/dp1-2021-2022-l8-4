@@ -26,4 +26,6 @@ public class UserControllerKoT {
         modelMap.addAttribute("userskot", userskot);
         return view;
     }
+
+    
 }
