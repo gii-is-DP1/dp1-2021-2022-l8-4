@@ -1,11 +1,18 @@
 package org.springframework.samples.petclinic.game;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.player.Player;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,16 +28,34 @@ import lombok.Setter;
     @NotEmpty
     @Getter
     @Setter
-    private String gameName;
-
-    @NotEmpty
-    @Getter
-    @Setter
-    private String gameCreator;
+    @Column(name="creator")
+    private String creator;
 
     @NotNull
     @Getter
     @Setter
-    private Integer gameTurn;
+    @Min(0)
+    @Column(name="turn")
+    private Integer turn;
+
+    @Getter
+    @Setter
+    @Column(name="winner")
+    private String winner;
+
+    @NotNull
+    @Getter
+    @Setter
+    @Column(name="start_time")
+    private LocalDateTime startTime;
+
+    @NotNull
+    @Getter
+    @Setter
+    @Column(name="end_time")
+    private LocalDateTime endTime;
+
+    @OneToMany(mappedBy = "game")
+    private List<Player> players;
 
  }
