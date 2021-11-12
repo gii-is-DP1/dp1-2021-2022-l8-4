@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.deck.Deck;
-import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.NamedEntity;
 
 import lombok.Getter;
@@ -37,13 +36,8 @@ public class Card extends NamedEntity{
     @Column(name="type")
     private CardType type;
 
-    @ManyToOne
+    @ManyToOne(optional=false)
     @JoinColumn(name="deck_id")
     private Deck deck;
-
-    @ManyToOne
-    @JoinColumn(name="game_id")
-    private Game game;
-
 
 }

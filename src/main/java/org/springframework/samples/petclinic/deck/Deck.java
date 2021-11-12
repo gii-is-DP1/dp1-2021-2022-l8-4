@@ -6,7 +6,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -14,7 +13,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
 import lombok.Getter;
@@ -42,8 +40,6 @@ public class Deck extends BaseEntity{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deck")
     private List<Card> cardList;
 
-    @OneToOne(mappedBy = "deck")
-    private Game game;
 
     /**
 	 * Return the next card in the deck.
