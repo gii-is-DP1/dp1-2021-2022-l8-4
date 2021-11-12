@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
 
@@ -17,16 +18,19 @@ import lombok.Setter;
  */
 
 @Entity
+@Setter
+@Getter
+@Table(name = "playerstatus")
 public class PlayerStatus extends BaseEntity{
-    @Getter
-    @Setter
     @Enumerated(value=EnumType.ORDINAL)
     private StatusType status;
 
-    @Setter
-    @Getter
     private Integer amount;
 
     @ManyToOne
     private Player player;
+
+    public void setStatus(Player player){
+        this.player = player;
+    }
 }
