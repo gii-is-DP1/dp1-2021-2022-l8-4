@@ -31,4 +31,17 @@ public class Roll {
         return resultado; 
     }
     
+    public static List<DiceValues> rollDice(List<DiceValues> dadosConservados) {
+        List<DiceValues> resultado=new ArrayList<DiceValues>();
+        Integer tiradas=6;
+        int i;
+        int max=5;
+        int min=0;
+        resultado.addAll(dadosConservados);
+        for(i=0;i<tiradas-dadosConservados.size();i++) {
+            Integer valor=(int)Math.floor(Math.random()*(max-min+1)+min);
+            resultado.add(DiceValues.values()[valor]);
+        }
+        return resultado; 
+    }
 }
