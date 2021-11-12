@@ -45,4 +45,5 @@ public class Card extends NamedEntity{
     @JoinColumn(name="deck_id")
     private Deck deck;
 
+    
 }
