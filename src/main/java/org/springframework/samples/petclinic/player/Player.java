@@ -12,6 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.NamedEntity;
 
@@ -56,7 +57,10 @@ public class Player extends BaseEntity {
     @Enumerated(value=EnumType.ORDINAL)
     private LocationType location;
     
-   
+    @ManyToOne(optional=false) 
+    @JoinColumn(name="game_id")
+    private Game game;
+    
     @Transient
     private Roll roll;
    

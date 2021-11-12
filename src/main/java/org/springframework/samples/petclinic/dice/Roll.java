@@ -3,6 +3,10 @@ package org.springframework.samples.petclinic.dice;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ricardo Nadal Garcia
+ */
+
 public class Roll {
 
     private Integer rollAmount;
