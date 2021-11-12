@@ -1,9 +1,13 @@
 package org.springframework.samples.petclinic.player;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.dice.DiceValues;
+import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,4 +35,9 @@ public class PlayerService {
 	public Player findPlayerById(int id) throws DataAccessException {
 		return playerRepository.findById(id).get();
 	}
+
+    @Transactional
+    public List<DiceValues> roll(){
+        return Roll.rollDice();
+    }
 }

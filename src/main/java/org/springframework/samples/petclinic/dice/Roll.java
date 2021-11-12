@@ -10,15 +10,15 @@ import java.util.List;
 public class Roll {
 
     private Integer rollAmount;
-    private List<DiceValues> DiceValues;
+    private static List<DiceValues> values;
 
     public Roll() {
         rollAmount=0;
-        DiceValues=rollDice();
+        values=rollDice();
         
     }
-    
-    public List<DiceValues> rollDice(){
+   
+    public static List<DiceValues> rollDice(){
         List<DiceValues> resultado=new ArrayList<DiceValues>();
         Integer tiradas=6;
         int i;
@@ -26,8 +26,9 @@ public class Roll {
         int min=0;
         for(i=0;i<tiradas;i++) {
             Integer valor=(int)Math.floor(Math.random()*(max-min+1)+min);
-            resultado.add(DiceValues.get(valor));
+            resultado.add(DiceValues.values()[valor]);
         }
         return resultado; 
     }
+    
 }
