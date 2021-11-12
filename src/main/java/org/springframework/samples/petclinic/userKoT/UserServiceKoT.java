@@ -35,9 +35,9 @@ public class UserServiceKoT {
 	public void saveUser(UserKoT user) {
 		userRepository.save(user);
 	}
-	
-    @Transactional
-	public UserKoT findCardById(int id) throws DataAccessException {
-		return userRepository.findById(id).get();
-	}
+
+	@Transactional
+    public Optional<UserKoT> findUser(String username){
+        return userRepository.findById(username);
+    }
 }

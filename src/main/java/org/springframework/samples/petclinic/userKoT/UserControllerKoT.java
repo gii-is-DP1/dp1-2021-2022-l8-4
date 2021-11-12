@@ -65,7 +65,7 @@ public class UserControllerKoT {
 /**
  * EDITAR USUARIO
  */
-
+/*
     @GetMapping(value = "/{userkotId}/edit")
     public String initUpdateForm(@PathVariable("userkotId") int userkotId, ModelMap modelMap) {
         userkot userkot = this.userService.findUser(userkotId);
@@ -74,7 +74,7 @@ public class UserControllerKoT {
         types.add(CardType.PERMANENTE);types.add(CardType.DESCARTAR);
         modelMap.addAttribute("types", types );
         return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
-    }
+    }*/
 
     /**
      *
@@ -84,7 +84,7 @@ public class UserControllerKoT {
      * @param model
      * @return
      */
-    
+    /*
     @PostMapping(value = "/{cardId}/edit")
     public String processUpdateForm(@Valid Card card, BindingResult result, @PathVariable("cardId") int cardId, ModelMap modelMap) {
         if (result.hasErrors()) {
@@ -97,6 +97,6 @@ public class UserControllerKoT {
                     this.cardService.saveCard(cardToUpdate);                    
             return "redirect:/cards";
         }
-    }
+    }*/
     
 }
