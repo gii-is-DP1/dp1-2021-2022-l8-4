@@ -94,9 +94,8 @@ INSERT INTO achievements(id,name,reward_points,condition) VALUES (1,'Mi primera 
 INSERT INTO decks(id,number_of_cards_left) VALUES(1,66);
 INSERT INTO cards(id,cost,name,type,deck_id,discarded) VALUES(1,5,'Monstruo Alfa',1,1,FALSE);
 
+INSERT INTO games(id,name,creator,turn,winner,start_time,end_time) VALUES (1,'Partida tremenda','Rick360','3','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00');
 
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game) VALUES (1,1,10,2,3,0,1);
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game) VALUES (2,2,10,0,0,0,1);
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game) VALUES (3,3,10,0,0,1,1);
-
-INSERT INTO games(id,creator,turn,winner,start_time,end_time) VALUES ('Rick360','3','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00');
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (1,1,10,2,3,0,1);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (2,2,10,0,0,0,1);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (3,3,10,0,0,1,1);

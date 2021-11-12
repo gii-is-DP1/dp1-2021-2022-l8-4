@@ -58,6 +58,7 @@ public class Player extends BaseEntity {
     private LocationType location;
     
     @ManyToOne(optional=false) 
+    @JoinColumn(name="game_id")
     private Game game;
     
     @Transient
