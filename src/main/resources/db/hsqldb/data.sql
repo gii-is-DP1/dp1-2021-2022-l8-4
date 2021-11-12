@@ -91,13 +91,15 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04',
 
 INSERT INTO achievements(id,name,reward_points,condition) VALUES (1,'Mi primera partida',10,TRUE);
 
-INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
+INSERT INTO decks(id,number_of_cards_left) VALUES(1,66);
+INSERT INTO cards(id,cost,name,type,deck_id,discarded) VALUES(1,5,'Monstruo Alfa',1,1,FALSE);
 
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location) VALUES (1,1,10,2,3,0);
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location) VALUES (2,2,10,0,0,0);
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location) VALUES (3,3,10,0,0,1);
+INSERT INTO games(id,name,creator,turn,winner,start_time,end_time) VALUES (1,'Partida tremenda','Rick360','3','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00');
 
 INSERT INTO userskot(username,email,password) VALUES ('user1','user1@email.com','u53r1');
 INSERT INTO userskot(username,email,password) VALUES ('user2','user2@email.com','u53r2');
 INSERT INTO userskot(username,email,password) VALUES ('user3','user3@email.com','u53r3');
 INSERT INTO userskot(username,email,password) VALUES ('user4','user4@email.com','u53r4');
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (1,1,10,2,3,0,1);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (2,2,10,0,0,0,1);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (3,3,10,0,0,1,1);
