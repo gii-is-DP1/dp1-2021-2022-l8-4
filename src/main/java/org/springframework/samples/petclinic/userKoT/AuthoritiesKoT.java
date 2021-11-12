@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "authorities")
+@Table(name = "authoritieskot")
 public class AuthoritiesKoT extends BaseEntity{
 	
 	@ManyToOne

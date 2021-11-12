@@ -96,10 +96,9 @@ INSERT INTO cards(id,cost,name,type,deck_id,discarded) VALUES(1,5,'Monstruo Alfa
 
 INSERT INTO games(id,name,creator,turn,winner,start_time,end_time) VALUES (1,'Partida tremenda','Rick360','3','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00');
 
-INSERT INTO userskot(username,email,password) VALUES ('user1','user1@email.com','u53r1');
-INSERT INTO userskot(username,email,password) VALUES ('user2','user2@email.com','u53r2');
-INSERT INTO userskot(username,email,password) VALUES ('user3','user3@email.com','u53r3');
-INSERT INTO userskot(username,email,password) VALUES ('user4','user4@email.com','u53r4');
+INSERT INTO userskot(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
+INSERT INTO authoritieskot(id,username,authority) VALUES (1,1,'admin');
+
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (1,1,10,2,3,0,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (2,2,10,0,0,0,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (3,3,10,0,0,1,1);

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 */
 
 @Service
-public class UserServiceKoT {
+public class UserServiceKoT{
     
 	@Autowired 
 	private UserRepositoryKoT userRepository;
