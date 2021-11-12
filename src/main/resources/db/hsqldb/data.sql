@@ -101,3 +101,7 @@ INSERT INTO boards(id,tokyo_city_status,tokyo_bay_status,game_id) VALUES (1,1,0,
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (1,1,10,2,3,0,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (2,2,10,0,0,0,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (3,3,10,0,0,1,1);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (4,4,4,8,2,2,1);
+
+INSERT INTO playerStatus(id,player_id,status,amount) VALUES (1, 1, 1,1 );
+INSERT INTO playerStatus(id,player_id,status,amount) VALUES (2, 4, 0,2 );
