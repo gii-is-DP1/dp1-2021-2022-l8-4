@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
 
@@ -19,13 +20,16 @@ import lombok.Setter;
 @Table(name = "userskot")
 public class UserKoT extends BaseEntity{
 
+    @NotEmpty
     @Column(name = "username")
     private String username;
 
+    @NotEmpty
     @Email
     @Column(name = "email")
     private String email;
 
+    @NotEmpty
     @Column(name = "password")
     private String password;
     

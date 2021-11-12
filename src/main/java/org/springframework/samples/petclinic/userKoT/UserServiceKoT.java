@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 
@@ -36,7 +37,7 @@ public class UserServiceKoT {
 	}
 	
     @Transactional
-    public Optional<UserKoT> findUser(String username){
-    	return userRepository.findById(username);
-    }
+	public UserKoT findCardById(int id) throws DataAccessException {
+		return userRepository.findById(id).get();
+	}
 }

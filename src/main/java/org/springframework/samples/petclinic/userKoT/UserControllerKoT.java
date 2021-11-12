@@ -60,4 +60,43 @@ public class UserControllerKoT {
         }
         return view;
     } 
+
+
+/**
+ * EDITAR USUARIO
+ */
+
+    @GetMapping(value = "/{userkotId}/edit")
+    public String initUpdateForm(@PathVariable("userkotId") int userkotId, ModelMap modelMap) {
+        userkot userkot = this.userService.findUser(userkotId);
+        modelMap.put("card", card);
+        List<CardType> types = new ArrayList<CardType>();
+        types.add(CardType.PERMANENTE);types.add(CardType.DESCARTAR);
+        modelMap.addAttribute("types", types );
+        return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
+    }
+
+    /**
+     *
+     * @param card
+     * @param result
+     * @param cardId
+     * @param model
+     * @return
+     */
+    
+    @PostMapping(value = "/{cardId}/edit")
+    public String processUpdateForm(@Valid Card card, BindingResult result, @PathVariable("cardId") int cardId, ModelMap modelMap) {
+        if (result.hasErrors()) {
+            modelMap.put("card", card);
+            return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
+        }
+        else {
+                        Card cardToUpdate=this.cardService.findCardById(cardId);
+            BeanUtils.copyProperties(card, cardToUpdate, "id");                                                                                                    
+                    this.cardService.saveCard(cardToUpdate);                    
+            return "redirect:/cards";
+        }
+    }
+    
 }
