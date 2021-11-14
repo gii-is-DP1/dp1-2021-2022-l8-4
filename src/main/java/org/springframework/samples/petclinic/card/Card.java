@@ -41,6 +41,7 @@ public class Card extends NamedEntity{
     @NotNull
     @Getter
     @Setter
+    @Column(name = "discarded")
     private Boolean discarded;
 
     @ManyToOne(optional=false)
