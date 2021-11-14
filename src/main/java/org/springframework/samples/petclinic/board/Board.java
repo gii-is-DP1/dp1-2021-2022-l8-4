@@ -50,6 +50,6 @@ public class Board extends BaseEntity{
 
     @Setter
     @Getter
-    @OneToMany(mappedBy = "deck")
+    @OneToMany(mappedBy = "board")
     private List<Card> card;
 }

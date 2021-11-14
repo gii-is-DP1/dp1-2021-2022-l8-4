@@ -40,7 +40,7 @@ public class Deck extends BaseEntity{
     @OneToMany(mappedBy = "deck")
     private List<Card> cardList;
 
-    @OneToOne
+    @OneToOne(mappedBy = "deck")
     private Board board;
 
 
