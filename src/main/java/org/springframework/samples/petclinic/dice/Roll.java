@@ -3,22 +3,35 @@ package org.springframework.samples.petclinic.dice;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author Ricardo Nadal Garcia
  */
 
 public class Roll {
 
-    private Integer rollAmount;
-    private static List<DiceValues> values;
+    @Getter
+    @Setter
+    private Integer rollAmount=0;
+
+    @Getter
+    @Setter
+    private List<DiceValues> values;
+
+    @Getter
+    @Setter
+    private Integer maxThrows=3;
+
 
     public Roll() {
-        rollAmount=0;
-        values=rollDice();
+        this.rollAmount=0;
+        rollDice();
         
     }
    
-    public static List<DiceValues> rollDice(){
+    public void rollDice(){
         List<DiceValues> resultado=new ArrayList<DiceValues>();
         Integer tiradas=6;
         int i;
@@ -28,10 +41,11 @@ public class Roll {
             Integer valor=(int)Math.floor(Math.random()*(max-min+1)+min);
             resultado.add(DiceValues.values()[valor]);
         }
-        return resultado; 
+        this.values=resultado; 
+        this.rollAmount++;
     }
     
-    public static List<DiceValues> rollDice(List<DiceValues> dadosConservados) {
+    public void rollDice(List<DiceValues> dadosConservados) {
         List<DiceValues> resultado=new ArrayList<DiceValues>();
         Integer tiradas=6;
         int i;
@@ -42,6 +56,14 @@ public class Roll {
             Integer valor=(int)Math.floor(Math.random()*(max-min+1)+min);
             resultado.add(DiceValues.values()[valor]);
         }
-        return resultado; 
+      //  this.rollAmount++;
+        this.values=resultado; 
+/*
+        if(this.rollAmount==this.maxThrows) {
+            this.rollAmount=0;
+        }
+        */
     }
+
+    
 }
