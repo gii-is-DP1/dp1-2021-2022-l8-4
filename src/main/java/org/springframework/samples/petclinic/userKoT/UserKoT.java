@@ -39,6 +39,6 @@ public class UserKoT extends BaseEntity{
     
     private boolean enabled;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userkot")
 	private Set<AuthoritiesKoT> authorities;
 }

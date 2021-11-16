@@ -67,7 +67,7 @@ public class UserControllerKoT {
 
     @GetMapping(value = "/{userId}/edit")
 	public String initUpdateForm(@PathVariable("userId") int userId, ModelMap modelMap) {
-		UserKoT user = this.userService.findUserkotById(userId);
+		Optional<UserKoT> user = this.userService.findUserkotById(userId);
 		modelMap.put("user", user);
 		return VIEWS_USERS_KOT_CREATE_UPDATE_FORM;
 	}
@@ -88,9 +88,9 @@ public class UserControllerKoT {
 			return VIEWS_USERS_KOT_CREATE_UPDATE_FORM;
 		}
 		else {
-            UserKoT userToUpdate=this.userService.findUserkotById(userId);
+            Optional<UserKoT> userToUpdate=this.userService.findUserkotById(userId);
 			BeanUtils.copyProperties(user, userToUpdate, "id");                                                                                                    
-            this.userService.saveUser(userToUpdate);                    
+            this.userService.saveUser(userToUpdate.get());                    
 			return "redirect:/userskot";
 		}
 	}

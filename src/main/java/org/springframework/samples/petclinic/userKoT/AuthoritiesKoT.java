@@ -19,7 +19,7 @@ public class AuthoritiesKoT extends BaseEntity{
 	
 	@ManyToOne
 	@JoinColumn(name = "userid")
-	UserKoT user;
+	UserKoT userkot;
 	
 	@Size(min = 3, max = 50)
 	String authority;

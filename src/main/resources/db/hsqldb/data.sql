@@ -103,6 +103,11 @@ INSERT INTO games(id,name,creator,turn,winner,start_time,end_time,board_id) VALU
 INSERT INTO userskot(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authoritieskot(id,userid,authority) VALUES (1,1,'admin');
 
+INSERT INTO userskot(id,username,email,password,enabled) VALUES (2,'user2','user2@email.com','u53r2', TRUE);
+
+INSERT INTO userskot(id,username,email,password,enabled) VALUES (3,'user3','user3@email.com','u53r3', TRUE);
+INSERT INTO authoritieskot(id,userid,authority) VALUES (3,3,'admin');
+
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (1,1,10,2,3,0,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (2,2,10,0,0,0,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (3,3,10,0,0,1,1);

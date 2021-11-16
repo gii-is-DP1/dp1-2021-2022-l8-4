@@ -37,7 +37,7 @@ public class UserServiceKoT{
 	}
 
 	@Transactional
-	public UserKoT findUserkotById(int id) throws DataAccessException {
-		return userRepository.findById(id).get();
+	public Optional<UserKoT> findUserkotById(int id) throws DataAccessException {
+		return userRepository.findById(id);
 	}
 }

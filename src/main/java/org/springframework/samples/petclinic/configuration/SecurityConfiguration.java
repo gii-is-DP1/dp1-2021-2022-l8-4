@@ -36,8 +36,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/","/oups").permitAll()
 				.antMatchers("/users/new").permitAll()
-				.antMatchers("/userskot").permitAll()
-				.antMatchers("/userskot/**").permitAll()
+				.antMatchers("/userskot/new").permitAll()
+				.antMatchers("/userskot/**").hasAnyAuthority("admin")
 				.antMatchers("/cards").permitAll()
 				.antMatchers("/players").permitAll()
 				.antMatchers("/achievements").permitAll()
@@ -74,11 +74,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	      .authoritiesByUsernameQuery(
 	       "select userid, authority "
 	        + "from authoritieskot inner join userskot on authoritieskot.userid = userskot.id "
-	        + "where userid = ?")	      	      
+	        + "where username = ?")	      	      
 	      .passwordEncoder(passwordEncoder());	
 	}
 	
-	// añadir inner join en authorities para q reconozca username 
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {	    
