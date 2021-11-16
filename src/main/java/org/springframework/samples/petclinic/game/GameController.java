@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.player.Player;
+import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -35,6 +37,16 @@ public class GameController {
         return view;
     }
 
+    @GetMapping("/{gameId}/players")
+    public String gamePlayers(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+        String view="games/playersList";
+        Iterable<Player> players= gameService.findPlayerList(gameId);
+        Game game=gameService.findGameById(gameId);
+        modelMap.addAttribute("players",players);
+        modelMap.addAttribute("game",game);
+        return view;
+    }
+
     @GetMapping("/{gameId}/roll")
     public String gameRoll(ModelMap modelMap){
         String view ="games/roll";
@@ -55,8 +67,6 @@ public class GameController {
         roll.setMaxThrows(3);
         roll.setRollAmount(rollAmount);
         gameService.turnRoll(roll);
-        
-        
         
         modelMap.addAttribute("roll",roll);
 
