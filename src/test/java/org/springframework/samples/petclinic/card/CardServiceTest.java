@@ -1,18 +1,22 @@
 package org.springframework.samples.petclinic.card;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.petclinic.card.exceptions.DuplicatedCardNameException;
 import org.springframework.samples.petclinic.deck.Deck;
+import org.springframework.samples.petclinic.deck.DeckService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,12 +29,17 @@ public class CardServiceTest {
     
     @Autowired
     private CardService cardService;
-    private CardRepository cardRepository;
+    @Autowired
+    private DeckService deckService;
 
     @Test
-    public void testCountWithInitialData(){
-        int count = cardService.cardCount();
-        assertEquals(count, 1);
+    public void testFindCardTypes() {
+        Collection<CardType> cardTypes = cardService.findCardTypes();
+        List<CardType> cardTypesList = cardTypes.stream().collect(Collectors.toList());
+        CardType cardType1 = cardTypesList.get(0);
+        assertThat(cardType1).isEqualTo(CardType.DESCARTAR);
+        CardType cardType2 = cardTypesList.get(1);
+        assertThat(cardType2).isEqualTo(CardType.PERMANENTE);
     }
 
     @Test
@@ -45,32 +54,71 @@ public class CardServiceTest {
     }
 
     @Test
-    public void testSaveCard() {
-        Card card = new Card();
-        Deck deck = new Deck();
-        List<Card> cardList = new ArrayList<>();
-        
-        // Creating a new card
-        card.setId(66);
-        card.setName("Fábrica de lava");
-        card.setCost(4);
-        card.setDiscarded(true);
-        card.setType(CardType.DESCARTAR);
-        
-        // Creating a new deck
-        deck.setId(1);
-        // Set deckId to card
-        card.setDeck(deck);
-        // Set card to deck cardList
-        cardList.add(card);
-        deck.setCardList(cardList);
-        cardService.saveCard(card); 
+    public void testCountWithInitialData(){
+        int count = cardService.cardCount();
+        assertEquals(count, 1);
     }
+
+    @Test
+    public void testSaveCardIntoDatabaseAndGenerateId() {
+        Deck deck = deckService.findDeckById(1);
+        Card card = new Card();
+        card.setName("Fábrica de lava");
+        card.setCost(5);
+        card.setDiscarded(false);
+        card.setType(CardType.DESCARTAR);
+        card.setDeck(deck);
+        cardService.saveCard(card);
+        assertThat(card.getDeck()).isEqualTo(deck);
+        assertThat(card.getId()).isNotNull();
+    }
+
+    @Test
+    @Transactional
+    public void testThrowExceptionUsingCardsWithTheSameName() {
+        Deck deck = deckService.findDeckById(1);
+        Card card = new Card();
+        card.setName("Fábrica de lava");
+        card.setCost(5);
+        card.setDiscarded(false);
+        card.setType(CardType.DESCARTAR);
+        card.setDeck(deck);
+        try {
+            this.cardService.saveCard(card);;
+        } catch (DuplicatedCardNameException ex) {
+            ex.printStackTrace();
+        }
+
+        Card anotherCardWithTheSameName = new Card();
+        anotherCardWithTheSameName.setName("Fábrica de lava");
+        anotherCardWithTheSameName.setCost(20);
+        anotherCardWithTheSameName.setDiscarded(true);
+        anotherCardWithTheSameName.setType(CardType.PERMANENTE);
+        anotherCardWithTheSameName.setDeck(deck);
+        Assertions.assertThrows(DuplicatedCardNameException.class, () ->{
+			cardService.saveCard(anotherCardWithTheSameName);
+		});
+    }
+
+    @Test
+    @Transactional
+	public void testUpdateCardName() throws Exception {
+		Card card = cardService.findCardById(1);
+
+		String newName = "Fábrica de agua";
+		card.setName(newName);
+		this.cardService.saveCard(card);
+
+		card = this.cardService.findCardById(1);
+		assertThat(card.getName()).isEqualTo(newName);
+	}
 
     @Test
     public void testFindCardById() {
         Card card = cardService.findCardById(1);
         assertEquals(card.getCost(), 5);
+        assertThat(card.getName()).startsWith("Monstruo Alfa");
+        assertThat(card.getDiscarded()).isEqualTo(false);
     }
 
 }
