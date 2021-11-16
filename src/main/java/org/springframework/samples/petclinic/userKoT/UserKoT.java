@@ -24,13 +24,16 @@ import lombok.Setter;
 @Table(name = "userskot")
 public class UserKoT extends BaseEntity{
 
+    @NotEmpty
     @Column(name = "username")
     private String username;
 
+    @NotEmpty
     @Email
     @Column(name = "email")
     private String email;
 
+    @NotEmpty
     @Column(name = "password")
     private String password;
     
