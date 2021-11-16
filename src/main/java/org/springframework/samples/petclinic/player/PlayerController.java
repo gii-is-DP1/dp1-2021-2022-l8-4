@@ -66,7 +66,6 @@ public class PlayerController {
         modelMap.addAttribute("dices",dices);
         
         Player playerRolled=playerService.findPlayerById(playerId);
-
         
         modelMap.put("player", playerRolled);
         
