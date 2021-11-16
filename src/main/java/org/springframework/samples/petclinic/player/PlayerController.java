@@ -39,37 +39,5 @@ public class PlayerController {
         return view;
     }
 
-    @GetMapping("/{playerId}/roll")
-    public String roll(ModelMap modelMap, @PathVariable("playerId") int playerId) {
-        String view="players/roll";
 
-        Player player=playerService.findPlayerById(playerId);
-        modelMap.put("player", player);
-
-        
-        
-        List<DiceValues> dices=playerService.turnRoll(0,player.keep);
-        modelMap.addAttribute("dices",dices);
-
-        modelMap.addAttribute("rollAmount",0);
-
-        return view;
-    }
-
-    @PostMapping("/{playerId}/roll")
-    public String rollKeep(@Valid Player player,BindingResult result,ModelMap modelMap, @PathVariable("playerId") int playerId,@RequestParam("rollAmount") Integer rollAmount) throws DuplicatedMonsterNameException {
-        
-        String view="players/roll";
-        rollAmount++;
-        
-        List<DiceValues> dices=playerService.turnRoll(rollAmount,player.keep);
-        modelMap.addAttribute("dices",dices);
-        
-        Player playerRolled=playerService.findPlayerById(playerId);
-        
-        modelMap.put("player", playerRolled);
-        
-        modelMap.addAttribute("rollAmount",rollAmount);
-        return view;
-    }
 }

@@ -70,24 +70,5 @@ public class PlayerService {
 	}
 
 
-    @Transactional
-    public List<DiceValues> turnRoll(Integer rollAmount,DiceValues[] keepDice) {
-        
-        Roll roll=new Roll();
-
-        if(rollAmount == null || rollAmount == 0) {
-            roll.rollDice();
-        } else if(rollAmount < roll.getMaxThrows() && keepDice.length != 6) {
-            List<DiceValues> valoresConservados=Arrays.asList(keepDice);
-            roll.rollDice(valoresConservados);
-        } else {
-            
-            roll.rollDice(); //Esto por ahora, la idea seria finalizar las tiradas
-        }
-
-        
-        return roll.getValues();
-    }
-
    
 }

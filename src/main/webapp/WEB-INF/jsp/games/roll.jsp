@@ -9,16 +9,17 @@
                         <petclinic:layout pageName="dices">
                             <h2>Roll</h2>
                             
-                            <c:out value="${rollAmount}" />
-                            <form:form modelAttribute="player">
+                            
+                            <form:form modelAttribute="roll">
+                                <c:out value="${roll.rollAmount}" />
                                 <table>
                                     <tr>
                                         <td>
-                                            <form:checkboxes items="${dices}" path="keep"/>  
+                                            <form:checkboxes items="${roll.values}" path="keep"/>  
                                         </td>
                                     </tr>
                                 </table>
-                                <input type="hidden" value="${rollAmount}" name="rollAmount" ></input>
+                                <input type="hidden" value="${roll.rollAmount}" name="rollAmount" ></input>
                                <input type="submit" label="CONSERVAR DADOS" >
                             </form:form>
 
@@ -29,7 +30,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach items="${dices}" var="dice">
+                                    <c:forEach items="${roll.values}" var="dice">
                                         <tr>
                                             <td>                                                   
                                                     <c:out value="${dice}" /> 
