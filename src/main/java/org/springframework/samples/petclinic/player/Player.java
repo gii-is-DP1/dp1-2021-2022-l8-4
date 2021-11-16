@@ -1,11 +1,13 @@
 package org.springframework.samples.petclinic.player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.enterprise.inject.Default;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +22,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
@@ -76,8 +79,12 @@ public class Player extends BaseEntity {
     private List<Card> cards;
     
     
+    
+
     @Transient
-    private Roll roll;
+    public DiceValues[] keep;
+
+
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player" , fetch = FetchType.EAGER)
     private Set<PlayerStatus> playerStatus; 
@@ -106,4 +113,8 @@ public class Player extends BaseEntity {
         playerStatus.setStatus(this);
         
     }
+
+    
+
+    
 }
