@@ -1,7 +1,11 @@
 package org.springframework.samples.petclinic.userKoT;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -33,4 +37,8 @@ public class UserKoT extends BaseEntity{
     @Column(name = "password")
     private String password;
     
+    private boolean enabled;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private Set<AuthoritiesKoT> authorities;
 }

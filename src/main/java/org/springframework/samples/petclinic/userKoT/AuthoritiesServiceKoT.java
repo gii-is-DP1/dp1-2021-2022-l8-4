@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.user;
+package org.springframework.samples.petclinic.userKoT;
 
 
 import java.util.Optional;
@@ -30,26 +30,26 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Michael Isvy
  */
 @Service
-public class AuthoritiesService {
+public class AuthoritiesServiceKoT {
 
-	private AuthoritiesRepository authoritiesRepository;
-	private UserService userService;
+	private AuthoritiesRepositoryKoT authoritiesRepository;
+	private UserServiceKoT userService;
 
 	@Autowired
-	public AuthoritiesService(AuthoritiesRepository authoritiesRepository,UserService userService) {
+	public AuthoritiesServiceKoT(AuthoritiesRepositoryKoT authoritiesRepository,UserServiceKoT userService) {
 		this.authoritiesRepository = authoritiesRepository;
 		this.userService = userService;
 	}
 
 	@Transactional
-	public void saveAuthorities(Authorities authorities) throws DataAccessException {
+	public void saveAuthorities(AuthoritiesKoT authorities) throws DataAccessException {
 		authoritiesRepository.save(authorities);
 	}
 	
 	@Transactional
 	public void saveAuthorities(Integer userid, String role) throws DataAccessException {
-		Authorities authority = new Authorities();
-		Optional<User> user = userService.findUserkotById(userid);
+		AuthoritiesKoT authority = new AuthoritiesKoT();
+		Optional<UserKoT> user = userService.findUserkotById(userid);
 		if(user.isPresent()) {
 			authority.setUser(user.get());
 			authority.setAuthority(role);
@@ -58,6 +58,5 @@ public class AuthoritiesService {
 		}else
 			throw new DataAccessException("User '"+userid+"' not found!") {};
 	}
-
 
 }

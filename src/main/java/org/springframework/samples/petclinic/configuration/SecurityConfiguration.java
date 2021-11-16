@@ -67,16 +67,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.jdbcAuthentication()
 	      .dataSource(dataSource)
 	      .usersByUsernameQuery(
-	       "select username,password,enabled "
-	        + "from users "
+	       "select username, password, enabled "
+	        + "from userskot "
 	        + "where username = ?")
 	      .authoritiesByUsernameQuery(
-	       "select username, authority "
-	        + "from authorities "
-	        + "where username = ?")	      	      
+	       "select userid, authority "
+	        + "from authoritieskot inner join userskot on authoritieskot.userid = userskot.id "
+	        + "where userid = ?")	      	      
 	      .passwordEncoder(passwordEncoder());	
 	}
 	
+	// añadir inner join en authorities para q reconozca username 
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {	    
 		PasswordEncoder encoder =  NoOpPasswordEncoder.getInstance();

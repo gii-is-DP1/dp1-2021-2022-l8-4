@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 */
 
 @Service
-public class UserServiceKoT {
+public class UserServiceKoT{
     
 	@Autowired 
 	private UserRepositoryKoT userRepository;
@@ -35,9 +35,13 @@ public class UserServiceKoT {
 	public void saveUser(UserKoT user) {
 		userRepository.save(user);
 	}
-
-	@Transactional
+	/*
+    @Transactional
     public Optional<UserKoT> findUser(String username){
-        return userRepository.findById(username);
-    }
+    	return userRepository.findById(username);
+    }*/
+	@Transactional
+	public Optional<UserKoT> findUserkotById(int id) throws DataAccessException {
+		return userRepository.findById(id);
+	}
 }
