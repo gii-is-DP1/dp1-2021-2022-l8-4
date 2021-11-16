@@ -101,7 +101,7 @@ INSERT INTO boards(id,tokyo_city_status,tokyo_bay_status,deck_id) VALUES (1,1,0,
 INSERT INTO games(id,name,creator,turn,winner,start_time,end_time,board_id) VALUES (1,'Partida tremenda','Rick360','3','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00',1);
 
 INSERT INTO userskot(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
-INSERT INTO authoritieskot(id,username,authority) VALUES (1,1,'admin');
+INSERT INTO authoritieskot(id,userid,authority) VALUES (1,1,'admin');
 
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (1,1,10,2,3,0,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (2,2,10,0,0,0,1);
