@@ -23,6 +23,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.dice.DiceValues;
+import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
@@ -34,6 +35,7 @@ import lombok.Setter;
 /**
  * @author Ricardo Nadal Garcia
  * @author Noelia López Durán
+ * @author José María Delgado Sánchez
  */
  
 @Entity
@@ -72,6 +74,9 @@ public class Player extends BaseEntity {
     @ManyToOne(optional=false) 
     @JoinColumn(name="game_id")
     private Game game;
+
+    @OneToMany(mappedBy = "player")
+    private List<Card> cards;
     
     
     
