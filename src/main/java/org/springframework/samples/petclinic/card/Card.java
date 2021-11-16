@@ -42,6 +42,8 @@ public class Card extends NamedEntity{
     private Boolean discarded;
 
     @ManyToOne(optional=false)
+    @Getter
+    @Setter
     @JoinColumn(name="deck_id")
     private Deck deck;
 
