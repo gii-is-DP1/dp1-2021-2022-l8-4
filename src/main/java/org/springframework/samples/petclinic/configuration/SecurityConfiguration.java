@@ -73,7 +73,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	      .authoritiesByUsernameQuery(
 	       "select userid, authority "
 	        + "from authoritieskot inner join userskot on authoritieskot.userid = userskot.id "
-	        + "where userid = ?")	      	      
+	        + "where username = ?")	      	      
 	      .passwordEncoder(passwordEncoder());	
 	}
 	

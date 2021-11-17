@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthoritiesServiceKoT {
 
 	private AuthoritiesRepositoryKoT authoritiesRepository;
+	
 	private UserServiceKoT userService;
 
 	@Autowired
@@ -53,7 +54,7 @@ public class AuthoritiesServiceKoT {
 		if(user.isPresent()) {
 			authority.setUser(user.get());
 			authority.setAuthority(role);
-			//user.get().getAuthorities().add(authority);
+			user.get().getAuthorities().add(authority);
 			authoritiesRepository.save(authority);
 		}else
 			throw new DataAccessException("User '"+userid+"' not found!") {};
