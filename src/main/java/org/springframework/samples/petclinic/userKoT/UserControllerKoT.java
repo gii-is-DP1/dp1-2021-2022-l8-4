@@ -30,6 +30,7 @@ public class UserControllerKoT {
 	private UserServiceKoT userService;
     
    private static final String VIEWS_USERS_KOT_CREATE_UPDATE_FORM = "userskot/createUserskotForm";
+   private static final String VIEW_WELCOME = "welcome";
 
 	@GetMapping()
     public String usersList(ModelMap modelMap){
@@ -51,7 +52,6 @@ public class UserControllerKoT {
 
     @PostMapping(path = "/new")
     public String processCreationForm(@Valid UserKoT userkot, BindingResult result, ModelMap modelMap) {
-        String view;
         if (result.hasErrors()){
             modelMap.addAttribute("userkot", userkot);
             return VIEWS_USERS_KOT_CREATE_UPDATE_FORM;
@@ -60,14 +60,14 @@ public class UserControllerKoT {
             //creating user
             userService.saveUser(userkot);
             modelMap.addAttribute("message","User succesfully created!");
-            view = usersList(modelMap);
+            usersList(modelMap);
+            return VIEW_WELCOME;
         }
-        return "redirect:";
     } 
 
-    @GetMapping(value = "/{userId}/edit")
-	public String initUpdateForm(@PathVariable("userId") int userId, ModelMap modelMap) {
-		Optional<UserKoT> user = this.userService.findUserkotById(userId);
+    @GetMapping(value = "/{userkotId}/edit")
+	public String initUpdateForm(@PathVariable("userId") int userkotId, ModelMap modelMap) {
+		Optional<UserKoT> user = this.userService.findUserkotById(userkotId);
 		modelMap.put("user", user);
 		return VIEWS_USERS_KOT_CREATE_UPDATE_FORM;
 	}
