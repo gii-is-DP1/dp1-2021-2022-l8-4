@@ -52,9 +52,7 @@ public class Roll {
     public void rollDiceNext(List<DiceValues> dadosConservados) {
         rollDice(dadosConservados);
         this.rollAmount++;
-        if(this.rollAmount > this.maxThrows) {
-            this.rollAmount=0;
-        }
+        
     }
     
     public void rollDice(List<DiceValues> dadosConservados) {
@@ -73,6 +71,8 @@ public class Roll {
         
     
     }
+
+    
 
 
 
