@@ -49,4 +49,5 @@ public class UserServiceKoT{
 	public Optional<UserKoT> findUserkotById(int id) throws DataAccessException {
 		return userRepository.findById(id);
 	}
+
 }
