@@ -30,7 +30,7 @@ import lombok.Setter;
     @Getter
     @Setter
     @ManyToOne(optional=false)
-    @JoinColumn(name="game_id")
+    @JoinColumn(name="card_id")
     private Card card;
 
     @Setter

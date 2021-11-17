@@ -31,7 +31,7 @@ public class PlayerCard extends BaseEntity {
     @Getter
     @Setter
     @ManyToOne(optional=false)
-    @JoinColumn(name="game_id")
+    @JoinColumn(name="card_id")
     private Card card;
 
     @Setter

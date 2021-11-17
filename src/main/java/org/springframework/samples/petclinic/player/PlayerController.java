@@ -25,4 +25,6 @@ public class PlayerController {
         modelMap.addAttribute("players", players);
         return view;
     }
+
+
 }
