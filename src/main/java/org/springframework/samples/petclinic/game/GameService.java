@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.game;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +36,10 @@ public class GameService {
     @Transactional
     public Game findGameById(int id) throws DataAccessException{
         return gameRepository.findById(id).get();
+    }
+
+    @Transactional
+    public List<Game> findOnGoingGames() throws DataAccessException{
+        return gameRepository.findOnGoingGames();
     }
 }

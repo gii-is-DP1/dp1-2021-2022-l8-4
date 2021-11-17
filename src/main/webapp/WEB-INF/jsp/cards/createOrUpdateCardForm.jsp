@@ -14,7 +14,7 @@
                 <petclinic:inputField label="Name" name="name"/>
                 <petclinic:inputField label="Cost" name="cost"/>
                 <div class="control-group">
-                    <petclinic:selectField name="type" label="Type" names="${types}" size="2"/>
+                    <petclinic:selectField name="type" label="Type" names="${cardTypes}" size="2"/>
                 </div>
             </div>
 

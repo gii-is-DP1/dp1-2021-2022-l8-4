@@ -52,7 +52,7 @@ public class AuthoritiesServiceKoT {
 		AuthoritiesKoT authority = new AuthoritiesKoT();
 		Optional<UserKoT> user = userService.findUserkotById(userid);
 		if(user.isPresent()) {
-			authority.setUser(user.get());
+			authority.setUserkot(user.get());
 			authority.setAuthority(role);
 			user.get().getAuthorities().add(authority);
 			authoritiesRepository.save(authority);

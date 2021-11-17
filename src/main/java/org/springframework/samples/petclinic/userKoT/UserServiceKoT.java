@@ -31,19 +31,12 @@ public class UserServiceKoT{
 		return (int) userRepository.count();
 	}
 
-	@Transactional
-	public Optional<UserKoT> findUserkotById(int id) throws DataAccessException {
-		return userRepository.findById(id);
-	}
-
 	@Autowired
 	public AuthoritiesServiceKoT authoritiesService;
 
 	@Transactional
-	public void saveUser(UserKoT user) {
-		user.setEnabled(true);
-		userRepository.save(user);
-		authoritiesService.saveAuthorities(user.getId(), "user");
+	public Optional<UserKoT> findUserkotById(int id) throws DataAccessException {
+		return userRepository.findById(id);
 	}
 
 }
