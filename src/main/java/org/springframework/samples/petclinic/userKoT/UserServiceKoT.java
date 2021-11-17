@@ -1,9 +1,11 @@
 package org.springframework.samples.petclinic.userKoT;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.jasper.tagplugins.jstl.core.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class UserServiceKoT{
     
 	@Autowired 
 	private UserRepositoryKoT userRepository;
+	@Autowired
+	private AuthoritiesRepositoryKoT authoritiesRepository;
 
 	@Transactional
 	public Iterable<UserKoT> findAll(){
@@ -33,7 +37,12 @@ public class UserServiceKoT{
  
 	@Transactional
 	public void saveUser(UserKoT user) {
+		user.setEnabled(true);
 		userRepository.save(user);
+		AuthoritiesKoT authority = new AuthoritiesKoT();
+		authority.setUserkot(user);
+		authority.setAuthority("user");
+		authoritiesRepository.save(authority);
 	}
 
 	@Transactional

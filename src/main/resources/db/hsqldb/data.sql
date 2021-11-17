@@ -103,6 +103,7 @@ INSERT INTO userskot(id,username,email,password,enabled) VALUES (1,'user1','user
 INSERT INTO authoritieskot(id,userid,authority) VALUES (1,1,'admin');
 
 INSERT INTO userskot(id,username,email,password,enabled) VALUES (2,'user2','user2@email.com','u53r2', TRUE);
+INSERT INTO authoritieskot(id,userid,authority) VALUES (2,2,'user');
 
 INSERT INTO userskot(id,username,email,password,enabled) VALUES (3,'user3','user3@email.com','u53r3', TRUE);
 INSERT INTO authoritieskot(id,userid,authority) VALUES (3,3,'admin');
