@@ -1,11 +1,6 @@
 package org.springframework.samples.petclinic.game;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
@@ -18,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *  @author Ricardo Nadal Garcia 

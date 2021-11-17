@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
-import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.stereotype.Service;
 
 /**
