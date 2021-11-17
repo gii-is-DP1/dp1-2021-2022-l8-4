@@ -6,27 +6,25 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="userskot">
-    <h2>
-        <c:if test="${userkot['new']}">New </c:if> user
-    </h2>
-    <form:form modelAttribute="userkot" class="form-horizontal" id="add-userkot-form">
-        <div class="form-group has-feedback">
-            <petclinic:inputField label="Username" name="username"/>
-            <petclinic:inputField label="Email" name="email"/>
-            <petclinic:inputField label="Password" name="password"/>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <c:choose>
-                    <c:when test="${userkot['new']}">
-                        <button class="btn btn-default" type="submit">Create user</button>
-                    </c:when>
-                    <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update user</button>
-                    </c:otherwise>
-                </c:choose>
+
+<petclinic:layout pageName="Userskot">
+    
+    <jsp:body>
+        <h2>User</h2>
+        <form:form modelAttribute="user" class="form-horizontal" >
+            <div class="form-group has-feedback">
+                <petclinic:inputField label="Username" name="username"/>
+                <petclinic:inputField label="Email" name="email"/>
+                <petclinic:inputField label="Password" name="password"/>
             </div>
-        </div>
-    </form:form>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="hidden" name="id" value="${Userskot.id}"/>
+                    <button class="btn btn-default" type="submit">Save user</button>
+                </div>
+            </div>
+        </form:form>
+    </jsp:body>
+
 </petclinic:layout>

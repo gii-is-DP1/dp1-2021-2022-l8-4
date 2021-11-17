@@ -65,9 +65,9 @@ public class UserControllerKoT {
         return "redirect:";
     } 
 
-    @GetMapping(value = "/{userId}/edit")
-	public String initUpdateForm(@PathVariable("userId") int userId, ModelMap modelMap) {
-		Optional<UserKoT> user = this.userService.findUserkotById(userId);
+    @GetMapping(value = "/{userkotId}/edit")
+	public String initUpdateForm(@PathVariable("userkotId") int userkotId, ModelMap modelMap) {
+		Optional<UserKoT> user = this.userService.findUserkotById(userkotId);
 		modelMap.put("user", user);
 		return VIEWS_USERS_KOT_CREATE_UPDATE_FORM;
 	}
