@@ -57,9 +57,12 @@ import lombok.Setter;
     @Column(name="end_time")
     private LocalDateTime endTime;
 
+    
     @OneToMany(mappedBy = "game")
     private List<Player> players;
 
+    @Setter
+    @Getter
     @OneToOne
     private Board board;
  }

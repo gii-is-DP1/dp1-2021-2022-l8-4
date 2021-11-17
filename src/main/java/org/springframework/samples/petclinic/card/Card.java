@@ -1,18 +1,21 @@
 package org.springframework.samples.petclinic.card;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.samples.petclinic.association.BoardCard;
+import org.springframework.samples.petclinic.association.PlayerCard;
 import org.springframework.samples.petclinic.board.Board;
-import org.springframework.samples.petclinic.deck.Deck;
 import org.springframework.samples.petclinic.model.NamedEntity;
-import org.springframework.samples.petclinic.player.Player;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,23 +41,10 @@ public class Card extends NamedEntity{
     @Column(name="type")
     private CardType type;
 
-    @NotNull
-    @Getter
-    @Setter
-    @Column(name = "discarded")
-    private Boolean discarded;
+    @OneToMany(mappedBy = "card")
+    private List<BoardCard> boardCard;
 
-    @ManyToOne(optional=false)
-    @JoinColumn(name="deck_id")
-    private Deck deck;
-
-    @ManyToOne(optional=true)
-    @JoinColumn(name="board_id")
-    private Board board;
-
-    @ManyToOne(optional = true)
-    @JoinColumn(name="player_id")
-    private Player player;
-
+    @OneToMany(mappedBy = "card")
+    private List<PlayerCard> playerCard;
     
 }

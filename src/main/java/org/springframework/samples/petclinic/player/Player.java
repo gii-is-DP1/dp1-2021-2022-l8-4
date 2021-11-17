@@ -20,6 +20,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.samples.petclinic.association.PlayerCard;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
@@ -68,12 +69,14 @@ public class Player extends BaseEntity {
     @Enumerated(value=EnumType.ORDINAL)
     private LocationType location;
     
+    @Setter
+    @Getter
     @ManyToOne(optional=false) 
     @JoinColumn(name="game_id")
     private Game game;
 
     @OneToMany(mappedBy = "player")
-    private List<Card> cards;
+    private List<PlayerCard> playerCard;
     
     
     @Transient

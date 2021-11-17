@@ -9,9 +9,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.deck.Deck;
+import org.springframework.samples.petclinic.association.BoardCard;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
@@ -43,13 +43,13 @@ public class Board extends BaseEntity{
     @OneToOne(mappedBy = "board")
     private Game game;
 
-    @Setter
-    @Getter
-    @OneToOne
-    private Deck deck;
-
-    @Setter
-    @Getter
     @OneToMany(mappedBy = "board")
-    private List<Card> card;
+    private List<BoardCard> boardCard;
+
+    
+    @Setter
+    @Getter
+    @Transient
+    private List<Integer> deckOrder;
+
 }
