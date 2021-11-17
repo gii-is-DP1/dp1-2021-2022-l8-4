@@ -9,12 +9,10 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.card.exceptions.DuplicatedCardNameException;
 import org.springframework.samples.petclinic.deck.Deck;
 import org.springframework.samples.petclinic.deck.DeckService;
 import org.springframework.stereotype.Service;
@@ -71,33 +69,6 @@ public class CardServiceTest {
         cardService.saveCard(card);
         assertThat(card.getDeck()).isEqualTo(deck);
         assertThat(card.getId()).isNotNull();
-    }
-
-    @Test
-    @Transactional
-    public void testThrowExceptionUsingCardsWithTheSameName() {
-        Deck deck = deckService.findDeckById(1);
-        Card card = new Card();
-        card.setName("Fábrica de lava");
-        card.setCost(5);
-        card.setDiscarded(false);
-        card.setType(CardType.DESCARTAR);
-        card.setDeck(deck);
-        try {
-            this.cardService.saveCard(card);;
-        } catch (DuplicatedCardNameException ex) {
-            ex.printStackTrace();
-        }
-
-        Card anotherCardWithTheSameName = new Card();
-        anotherCardWithTheSameName.setName("Fábrica de lava");
-        anotherCardWithTheSameName.setCost(20);
-        anotherCardWithTheSameName.setDiscarded(true);
-        anotherCardWithTheSameName.setType(CardType.PERMANENTE);
-        anotherCardWithTheSameName.setDeck(deck);
-        Assertions.assertThrows(DuplicatedCardNameException.class, () ->{
-			cardService.saveCard(anotherCardWithTheSameName);
-		});
     }
 
     @Test
