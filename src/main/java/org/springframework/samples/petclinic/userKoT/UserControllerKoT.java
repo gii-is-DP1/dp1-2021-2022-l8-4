@@ -29,8 +29,8 @@ public class UserControllerKoT {
 	@Autowired
 	private UserServiceKoT userService;
     
-   private static final String VIEWS_USERS_KOT_CREATE_UPDATE_FORM = "userskot/createUserskotForm";
    private static final String VIEW_WELCOME = "welcome";
+   private static final String VIEWS_USERS_KOT_CREATE_UPDATE_FORM = "userskot/createOrUpdateUserskotForm";
 
 	@GetMapping()
     public String usersList(ModelMap modelMap){
@@ -65,8 +65,9 @@ public class UserControllerKoT {
         }
     } 
 
+    
     @GetMapping(value = "/{userkotId}/edit")
-	public String initUpdateForm(@PathVariable("userId") int userkotId, ModelMap modelMap) {
+	public String initUpdateForm(@PathVariable("userkotId") int userkotId, ModelMap modelMap) {
 		Optional<UserKoT> user = this.userService.findUserkotById(userkotId);
 		modelMap.put("user", user);
 		return VIEWS_USERS_KOT_CREATE_UPDATE_FORM;
@@ -89,8 +90,9 @@ public class UserControllerKoT {
 		}
 		else {
             Optional<UserKoT> userToUpdate=this.userService.findUserkotById(userId);
-			BeanUtils.copyProperties(user, userToUpdate, "id");                                                                                                    
-            this.userService.saveUser(userToUpdate.get());                    
+			BeanUtils.copyProperties(user, userToUpdate.get(), "id");                                                                                               
+            this.userService.saveUser(userToUpdate.get());      
+            modelMap.addAttribute("message","User succesfully edited!");              
 			return "redirect:/userskot";
 		}
 	}
