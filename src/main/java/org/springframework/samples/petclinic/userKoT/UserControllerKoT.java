@@ -29,7 +29,7 @@ public class UserControllerKoT {
 	@Autowired
 	private UserServiceKoT userService;
     
-   private static final String VIEWS_USERS_KOT_CREATE_UPDATE_FORM = "userskot/createUserskotForm";
+   private static final String VIEWS_USERS_KOT_CREATE_UPDATE_FORM = "userskot/createOrUpdateUserskotForm";
 
 	@GetMapping()
     public String usersList(ModelMap modelMap){
