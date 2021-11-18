@@ -36,6 +36,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/","/oups").permitAll()
 				.antMatchers("/users/new").permitAll()
+				.antMatchers("/userskot/new").permitAll()
+				.antMatchers("/userskot/**").hasAnyAuthority("admin")
 				.antMatchers("/cards").permitAll()
 				.antMatchers("/players").permitAll()
 				.antMatchers("/players/**").permitAll()
@@ -69,16 +71,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.jdbcAuthentication()
 	      .dataSource(dataSource)
 	      .usersByUsernameQuery(
-	       "select username,password,enabled "
-	        + "from users "
+	       "select username, password, enabled "
+	        + "from userskot "
 	        + "where username = ?")
 	      .authoritiesByUsernameQuery(
-	       "select username, authority "
-	        + "from authorities "
+	       "select userid, authority "
+	        + "from authoritieskot inner join userskot on authoritieskot.userid = userskot.id "
 	        + "where username = ?")	      	      
 	      .passwordEncoder(passwordEncoder());	
 	}
 	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {	    
 		PasswordEncoder encoder =  NoOpPasswordEncoder.getInstance();
