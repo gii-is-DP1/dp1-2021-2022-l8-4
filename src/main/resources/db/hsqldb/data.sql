@@ -104,4 +104,5 @@ INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,loc
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (4,4,4,8,2,2,1);
 
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (1, 1, 1,1 );
-INSERT INTO playerStatus(id,player_id,status,amount) VALUES (2, 4, 0,2 );
+INSERT INTO playerStatus(id,player_id,status,amount) VALUES (2, 1, 0,1 );
+INSERT INTO playerStatus(id,player_id,status,amount) VALUES (3, 4, 0,2 );

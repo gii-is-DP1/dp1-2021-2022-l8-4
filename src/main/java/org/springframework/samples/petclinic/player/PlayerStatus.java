@@ -5,6 +5,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
 
@@ -28,6 +29,7 @@ public class PlayerStatus extends BaseEntity{
     private Integer amount;
 
     @ManyToOne
+    @JoinColumn(name = "player_id")
     private Player player;
 
     public void setStatus(Player player){

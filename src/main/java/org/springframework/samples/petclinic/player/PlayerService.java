@@ -1,6 +1,10 @@
 package org.springframework.samples.petclinic.player;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
@@ -19,6 +23,7 @@ public class PlayerService {
     
     @Autowired
     private PlayerRepository playerRepository;
+    private PlayerStatusRepository playerStatusRepository;
 
     @Transactional
     public Iterable<Player> findAll(){
@@ -55,5 +60,22 @@ public class PlayerService {
     @Transactional
 	public Player findPlayerById(int id) throws DataAccessException {
 		return playerRepository.findById(id).get();
+    }
+
+    @Transactional
+	public void savePlayerStatus(PlayerStatus pStatus) throws DataAccessException {
+		playerStatusRepository.save(pStatus);
+	}
+    
+    @Transactional
+    public List<PlayerStatus> findPlayerStatus(int playerId){
+        return playerStatusRepository.findByPlayerId(playerId);
+        
+    }
+    @Transactional(readOnly = true)
+	public Collection<StatusType> findStatusTypes() throws DataAccessException {
+        Collection<StatusType> ct = new ArrayList<StatusType>();
+        ct.add(StatusType.Veneno);ct.add(StatusType.Reductor);
+		return ct;
 	}
 }
