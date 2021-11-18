@@ -58,7 +58,7 @@
 										</div>
 										<div class="col-lg-8">
 											<p class="text-left">
-												<a href="<c:url value="/" />"
+												<a href="<c:url value="/userskot" />"
 													class="btn btn-primary btn-block btn-sm">Edit profile</a>
 											</p>
 										</div>
@@ -73,8 +73,6 @@
 										<div class="col-lg-12">
 											<p>
 												<a href="#" class="btn btn-primary btn-block">My Profile</a>
-												<a href="#" class="btn btn-danger btn-block">Change
-													Password</a>
 											</p>
 										</div>
 									</div>

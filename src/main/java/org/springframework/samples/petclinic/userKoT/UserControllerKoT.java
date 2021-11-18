@@ -65,6 +65,7 @@ public class UserControllerKoT {
         return "redirect:";
     } 
 
+    
     @GetMapping(value = "/{userkotId}/edit")
 	public String initUpdateForm(@PathVariable("userkotId") int userkotId, ModelMap modelMap) {
 		Optional<UserKoT> user = this.userService.findUserkotById(userkotId);
@@ -89,8 +90,9 @@ public class UserControllerKoT {
 		}
 		else {
             Optional<UserKoT> userToUpdate=this.userService.findUserkotById(userId);
-			BeanUtils.copyProperties(user, userToUpdate, "id");                                                                                                    
-            this.userService.saveUser(userToUpdate.get());                    
+			BeanUtils.copyProperties(user, userToUpdate.get(), "id");                                                                                               
+            this.userService.saveUser(userToUpdate.get());      
+            modelMap.addAttribute("message","User succesfully edited!");              
 			return "redirect:/userskot";
 		}
 	}
