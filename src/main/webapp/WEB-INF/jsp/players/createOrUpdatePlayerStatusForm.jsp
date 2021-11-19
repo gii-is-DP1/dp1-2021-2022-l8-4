@@ -21,13 +21,20 @@
             </tr>
             </thead>
             <tr>
-                <td><c:out value="${playerStatus.player.monsterName}"/></td>
+                <td><c:out value="${player.monsterName}"/></td>
+                <td><c:out value="${player.lifePoints}" /></td>
+                <td><c:out value="${player.victoryPoints}"/></td>
+                <td><c:out value="${player.energyPoints}"/></td>
+                <td><c:out value="${player.location}"/></td>
+
             </tr>
         </table>
 
         <form:form modelAttribute="playerStatus" class="form-horizontal">
             <div class="form-group has-feedback">
-                <petclinic:selectField label="Status" name="status"/>
+                <div class="control-group">
+                    <petclinic:selectField name="status" label="Status" names="${statusTypes}" size="2"/>
+                </div>
                 <petclinic:inputField label="Amount" name="amount"/>
             </div>
 
@@ -39,22 +46,6 @@
             </div>
         </form:form>
 
-        <br/>
-        <b>Previous Status</b>
-        <table class="table table-striped">
-            <tr>
-                <th>Status</th>
-                <th>Amount</th>
-            </tr>
-            <c:forEach var="playerStatus" items="${playerStatus.player.status}">
-                <c:if test="${!playerStatus['new']}">
-                    <tr>
-                        <td><c:out value="${playerStatus.status}"/></td>
-                        <td><c:out value="${playerStatus.amount}"/></td>
-                    </tr>
-                </c:if>
-            </c:forEach>
-        </table>
     </jsp:body>
 
 </petclinic:layout>
