@@ -73,10 +73,6 @@ public class CardController {
 	public String initUpdateForm(@PathVariable("cardId") int cardId, ModelMap modelMap) {
 		Card card = this.cardService.findCardById(cardId);
 		modelMap.put("card", card);
-        
-        List<CardType> types = new ArrayList<CardType>();
-        types.add(CardType.PERMANENTE);types.add(CardType.DESCARTAR);
-        modelMap.addAttribute("types", types );
 		return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
 	}
 

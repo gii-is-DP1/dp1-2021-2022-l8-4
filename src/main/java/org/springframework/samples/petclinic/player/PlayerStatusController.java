@@ -1,12 +1,21 @@
 package org.springframework.samples.petclinic.player;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * @author Noelia López Durán
@@ -15,9 +24,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class PlayerStatusController {
     
     
-	private PlayerService playerService;
+	private final PlayerService playerService;
 	private static final String VIEWS_PLAYERSTATUS_CREATE_OR_UPDATE_FORM = "players/createOrUpdatePlayerStatusForm";
 
+	@Autowired
+	public PlayerStatusController(PlayerService playerServ) {
+		this.playerService = playerServ;
+	}
+
+	@InitBinder
+	public void setAllowedFields(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
     /**
      * Copied from VisitController 
 	 * Called before each and every @GetMapping or @PostMapping annotated method. 2 goals:
@@ -27,26 +45,40 @@ public class PlayerStatusController {
 	 * @param playerId
 	 * @return Player
 	 */
-	@ModelAttribute("playerStatus")
-	public PlayerStatus loadPlayerWithPlayerStatus(@PathVariable("playerId") int playerId) {
-		Player player = this.playerService.findPlayerById(playerId);
-		PlayerStatus playerStatus = new PlayerStatus();
-		player.addPlayerStatus(playerStatus);
-		return playerStatus;
+	@ModelAttribute("statusTypes")
+	public Collection<StatusType> populateStatusTypes() {
+		return this.playerService.findStatusTypes();
 	}
 
 	@GetMapping(path = "/players/{playerId}/playerStatus/new")
 	public String initNewStatusForm(@PathVariable("playerId") int playerId, ModelMap modelMap) {
 		String view = VIEWS_PLAYERSTATUS_CREATE_OR_UPDATE_FORM;
+		Player player = this.playerService.findPlayerById(playerId);
+		modelMap.put("player",player);
 		modelMap.addAttribute("playerStatus", new PlayerStatus());
 		return view;
 	}
-	//Falta el post
+	@PostMapping(path = "/players/{playerId}/playerStatus/new")
+	public String processNewStatusForm(@Valid PlayerStatus pStatus,@PathVariable int playerId, BindingResult result,ModelMap modelMap) {
+		if (result.hasErrors()) {
+			modelMap.addAttribute("playerStatus", pStatus);
+			return VIEWS_PLAYERSTATUS_CREATE_OR_UPDATE_FORM;
+		}
+		else {
+			pStatus.setPlayer(playerService.findPlayerById(playerId));
+			this.playerService.savePlayerStatus(pStatus);
+			return showPlayerStatus(playerId, modelMap);
+		}
+	}
 
 	@GetMapping(path = "/players/{playerId}/playerStatus")
 	public String showPlayerStatus(@PathVariable int playerId, Map<String, Object> modelMap) {
-		modelMap.put("playerStatus", this.playerService.findPlayerById(playerId).getPlayerStatus());
-		return "playerList";//To-Do
+		String view = "players/playerStatusList";
+		Player player = this.playerService.findPlayerById(playerId);
+		List<PlayerStatus> lsStatus =  player.getPlayerStatusList();
+		modelMap.put("player",player);
+		modelMap.put("playerStatus", lsStatus );
+		return view;	
 	}
 
 }
