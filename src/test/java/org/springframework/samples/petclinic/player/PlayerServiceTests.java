@@ -3,8 +3,8 @@ package org.springframework.samples.petclinic.player;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.Iterators;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,7 +69,7 @@ public class PlayerServiceTests {
 
     @Test
 	@Transactional
-	public void shouldThrowExceptionInsertingPlayersWithTheSameName(){
+	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){
         Game game1 = this.gameService.findGameById(1);
 		Player player = new Player();
 		player.setMonsterName(MonsterName.GigaZaur);
@@ -109,4 +109,48 @@ public class PlayerServiceTests {
 		assertThat(player2.getMonsterName()).isEqualTo(newName);
 	}
 
+    @Test
+	@Transactional
+	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() {
+        Game game1 = this.gameService.findGameById(1);
+		Player player = new Player();
+		player.setMonsterName(MonsterName.GigaZaur);
+        player.setLifePoints(10);
+        player.setVictoryPoints(2);
+        player.setEnergyPoints(6);
+        player.setLocation(LocationType.fueraTokyo);
+        player.setGame(game1);
+
+        Player anotherPlayer = new Player();		
+		anotherPlayer.setMonsterName(MonsterName.Alien);
+		anotherPlayer.setGame(game1);
+        anotherPlayer.setLifePoints(10);
+        anotherPlayer.setVictoryPoints(0);
+        anotherPlayer.setEnergyPoints(0);
+        anotherPlayer.setLocation(LocationType.fueraTokyo);
+
+        try {
+            this.playerService.savePlayer(player);
+            this.playerService.savePlayer(anotherPlayer);
+        } catch (DuplicatedMonsterNameException ex) {
+            ex.printStackTrace();
+        }
+        
+		Assertions.assertThrows(DuplicatedMonsterNameException.class, () ->{
+			anotherPlayer.setMonsterName(MonsterName.GigaZaur);;
+			playerService.savePlayer(anotherPlayer);
+		});		
+	}
+
+/*
+    @Test
+	void shouldFindPlayerStatusByPlayerId() throws Exception {
+		List<PlayerStatus> lsStatus = this.playerService.findPlayerStatus(1);
+		assertThat(lsStatus.size()).isEqualTo(2);
+		PlayerStatus[] pStatusArray = lsStatus.toArray(new PlayerStatus[lsStatus.size()]);
+		assertThat(pStatusArray[0].getAmount()).isNotNull();
+		assertThat(pStatusArray[0].getStatus()).isNotNull();
+		assertThat(pStatusArray[0].getAmount()).isEqualTo(1);
+		assertThat(pStatusArray[0].getStatus()).isEqualTo(StatusType.Reductor);
+	}*/
 }

@@ -94,6 +94,9 @@ public class Player extends BaseEntity {
 		}
 		return this.playerStatus;
 	}
+    protected void setPlayerStatusInternal(Set<PlayerStatus> playerStatus){
+        this.playerStatus = playerStatus;
+    }
     
     public String monsterStatus() {
         String status="ALIVE";
@@ -102,14 +105,14 @@ public class Player extends BaseEntity {
         }
         return status;
     }
-    public List<PlayerStatus> getPlayerStatus(){
+    public List<PlayerStatus> getPlayerStatusList(){
         List<PlayerStatus> listPlayerStatus = new ArrayList<>(getPlayerStatusInternal());
 		return Collections.unmodifiableList(listPlayerStatus);
     }
 
     public void addPlayerStatus(PlayerStatus playerStatus){
         getPlayerStatusInternal().add(playerStatus);
-        playerStatus.setStatus(this);
+        playerStatus.setPlayer(this);
         
     }
 
