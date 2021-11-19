@@ -7,9 +7,22 @@
                         <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
                         <petclinic:layout pageName="dices">
-                            <h1>TURNO ACTUAL</h1> 
-                            <c:out value="${game.turn}" />
-                            <h2>Tirada de dados</h2>
+                            <h2>
+                                Jugadores vivos: 
+                                <c:out value="${game.playersAlive()}" /> /
+                                <c:out value="${game.playersAmount()}" /> 
+                            </h2> 
+                            
+                            <h2>
+                                Turno actual: 
+                                <c:out value="${game.turn}" />
+                            </h2>
+                            <h2>
+                                Es el turno de:
+                                <c:out value="${game.actualTurn(turnList).getMonsterName().toString()}" />
+                            </h2> 
+
+                            <h1>Tirada de dados</h1>
                             
                             
                             <form:form modelAttribute="roll">

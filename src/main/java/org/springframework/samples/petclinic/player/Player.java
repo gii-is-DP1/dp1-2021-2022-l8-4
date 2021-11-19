@@ -113,7 +113,7 @@ public class Player extends BaseEntity {
     }
 
     public Boolean isDead(){
-        return this.lifePoints>=0;
+        return this.lifePoints<=0;
     }
 
     

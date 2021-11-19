@@ -72,20 +72,13 @@ public class GameService {
         game.setTurn(game.getTurn()+1);
     }
 
-    public Integer actualTurn(List<Integer> turnList,Integer gameId){
+    public Integer actualTurnPlayerId(List<Integer> turnList,Integer gameId){
         Game game=findGameById(gameId);
-        List<Player> jugadores=game.getPlayers();
-        return actualTurnPosicionLista(turnList, game.getTurn(), jugadores);
-        
+        Player player=game.actualTurn(turnList);
+        return player.getId();
     }
 
-    private Integer actualTurnPosicionLista(List<Integer> turnList,Integer posicionLista,List<Player> jugadores) {
-        Integer numeroTurno = posicionLista % jugadores.size();
-        if(jugadores.get(turnList.get(numeroTurno)).isDead()) {
-            return actualTurnPosicionLista(turnList, numeroTurno++, jugadores);
-        }
-        return turnList.get(numeroTurno);
-    }
+    
 
     
 

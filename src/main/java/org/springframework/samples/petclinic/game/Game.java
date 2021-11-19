@@ -77,4 +77,41 @@ import lombok.Setter;
        Collections.shuffle(listaTurnos);
        return listaTurnos;
     }
+
+    public Player actualTurn(List<Integer> turnList){
+      
+      List<Player> jugadores=getPlayers();
+      Player jugadorActual= actualTurnPosicionLista(turnList, getTurn(), jugadores);
+      
+      return jugadorActual;
+      
+  }
+
+  private Player actualTurnPosicionLista(List<Integer> turnList,Integer posicionLista,List<Player> jugadores) {
+      Integer numeroTurno = posicionLista % (jugadores.size());
+      
+      for(Player player:players) {
+         if(player.getId()==turnList.get(numeroTurno) && player.isDead()) {
+            numeroTurno++;
+            return actualTurnPosicionLista(turnList, numeroTurno, jugadores);
+         } else if(player.getId()==turnList.get(numeroTurno)){
+            return player;
+         }
+      }
+      return null;
+  }
+
+  public Integer playersAlive(){
+     Integer vivos=0;
+     for(Player player:this.players) {
+         if(!player.isDead()){
+            vivos++;
+         }
+     }
+     return vivos;
+  }
+
+  public Integer playersAmount(){
+     return this.players.size();
+  }
  }

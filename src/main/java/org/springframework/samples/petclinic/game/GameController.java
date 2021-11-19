@@ -90,7 +90,7 @@ public class GameController {
         String view="games/roll";
         gameService.turnRoll(roll);
         if(roll.getRollAmount()==roll.getMaxThrows()) {
-            Integer playerIdActualTurn=1;
+            Integer playerIdActualTurn=gameService.actualTurnPlayerId(turnList, gameId);
             playerService.useRoll(gameId,playerIdActualTurn,roll);
         }
         
@@ -98,9 +98,6 @@ public class GameController {
             gameService.nuevoTurno(gameId);
             roll=new Roll();
         }
-
-
-
 
         Game game=gameService.findGameById(gameId);
         Iterable<Player> players= gameService.findPlayerList(gameId);
