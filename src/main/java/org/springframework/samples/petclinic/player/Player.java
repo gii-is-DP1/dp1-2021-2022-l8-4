@@ -112,7 +112,7 @@ public class Player extends BaseEntity {
 
     public void addPlayerStatus(PlayerStatus playerStatus){
         getPlayerStatusInternal().add(playerStatus);
-        playerStatus.setStatus(this);
+        playerStatus.setPlayer(this);
         
     }
 

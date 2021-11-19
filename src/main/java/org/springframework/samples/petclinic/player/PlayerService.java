@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -75,8 +74,8 @@ public class PlayerService {
         
     }
     @Transactional(readOnly = true)
-	public Collection<StatusType> findStatusTypes() throws DataAccessException {
-        Collection<StatusType> ct = new ArrayList<StatusType>();
+	public List<StatusType> findStatusTypes() throws DataAccessException {
+        List<StatusType> ct = new ArrayList<StatusType>();
         ct.add(StatusType.Veneno);ct.add(StatusType.Reductor);
 		return ct;
 	}

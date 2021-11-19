@@ -59,15 +59,15 @@ public class PlayerStatusController {
 		return view;
 	}
 	@PostMapping(path = "/players/{playerId}/playerStatus/new")
-	public String processNewStatusForm(@Valid PlayerStatus pStatus, BindingResult result,ModelMap modelMap) {
-		String view = VIEWS_PLAYERSTATUS_CREATE_OR_UPDATE_FORM;
+	public String processNewStatusForm(@Valid PlayerStatus pStatus,@PathVariable int playerId, BindingResult result,ModelMap modelMap) {
 		if (result.hasErrors()) {
 			modelMap.addAttribute("playerStatus", pStatus);
-			return view;
+			return VIEWS_PLAYERSTATUS_CREATE_OR_UPDATE_FORM;
 		}
 		else {
+			pStatus.setPlayer(playerService.findPlayerById(playerId));
 			this.playerService.savePlayerStatus(pStatus);
-			return "redirect:/players/{playerId}/playerStatus/";
+			return showPlayerStatus(playerId, modelMap);
 		}
 	}
 
