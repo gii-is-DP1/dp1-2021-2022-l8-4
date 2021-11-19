@@ -1,6 +1,14 @@
 package org.springframework.samples.petclinic.game;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.board.BoardService;
+import org.springframework.samples.petclinic.boardcard.BoardCard;
+import org.springframework.samples.petclinic.card.Card;
+import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
@@ -16,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  *  @author Ricardo Nadal Garcia 
+ *  @author Jose Maria Delgado Sanchez
  */
 
  @Controller
@@ -27,6 +36,12 @@ public class GameController {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private BoardService boardService;
+
+    @Autowired
+    private CardService cardService;
 
     @GetMapping()
     public String gameList(ModelMap modelMap){
@@ -58,7 +73,14 @@ public class GameController {
         Roll roll=new Roll();
         
         modelMap.addAttribute("roll",roll);
-       
+
+        //Retrieve data from board_card association and generate a list of cards
+        List<BoardCard> boardCard = boardService.findCardList(game.getBoard().getId());
+        Collection<Card> cards = boardCard.stream()
+                                            .filter(x -> x.getSold() == false)
+                                            .map(x -> cardService.findCardById(x.getCard().getId()))
+                                            .collect(Collectors.toSet());
+        modelMap.addAttribute("cards", cards);
 
         return view;
     }
@@ -73,8 +95,6 @@ public class GameController {
             playerService.useRoll(gameId,playerIdActualTurn,roll);
         }
         
-
-
 
 
         Game game=gameService.findGameById(gameId);

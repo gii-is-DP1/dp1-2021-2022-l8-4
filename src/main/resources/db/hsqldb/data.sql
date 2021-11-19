@@ -115,3 +115,5 @@ INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,loc
 
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (1, 1, 1,1 );
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (2, 4, 0,2 );
+
+INSERT INTO boards_cards(id,board_id,card_id,sold) VALUES (1, 1, 1,FALSE);
