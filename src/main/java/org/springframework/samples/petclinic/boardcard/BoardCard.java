@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.association;
+package org.springframework.samples.petclinic.boardcard;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

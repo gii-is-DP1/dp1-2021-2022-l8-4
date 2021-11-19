@@ -1,6 +1,5 @@
-package org.springframework.samples.petclinic.association;
+package org.springframework.samples.petclinic.playercard;
 
-import javax.enterprise.inject.Default;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
