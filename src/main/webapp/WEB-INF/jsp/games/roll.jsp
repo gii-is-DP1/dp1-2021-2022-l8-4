@@ -17,12 +17,8 @@
                                     Cantidad de tiradas realizadas: 
                                     <c:out value="${roll.rollAmount}" /> / <c:out value="${roll.maxThrows}" />
                                 </span>
-                                
-
-
-                                
-
-                                    <h4>Tirada inicial</h4>
+                            
+                                    
                                     <table id="dicesTable" class="table table-striped">
                                         <thead>
                                             <tr>
@@ -41,7 +37,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                <c:if test="${roll.rollAmount < roll.maxThrows}">
+                                <c:if test="${!roll.rollFinished()}">
                                     <c:if test="${roll.rollAmount != 0}">
                                         <table>
                                             <tr>
@@ -55,17 +51,30 @@
 
                                 
                                     <input type="hidden" value="${roll.rollAmount}" name="rollAmount" ></input>
-                                    <input type="hidden" value="${roll.values}" name="values" ></input>
+                                    
+                                    <input type="hidden" value="False" name="newTurn" ></input>
                                     <input type="submit" value="REALIZAR TIRADA DE DADOS" >
                                 </c:if>
-                                <c:if test="${roll.rollAmount >= roll.maxThrows}">
 
+                                <input type="hidden" value="${roll.rollAmount}" name="rollAmount" ></input>
+                                <input type="hidden" value="${turnList}" name="turnList" ></input>
+                                
+                                <c:if test="${roll.rollFinished()}">
+                                    <h2>FINAL TURNO</h2>
+                                    <input type="hidden" value="True" name="newTurn" ></input>
+                                    <input type="submit" value="FINALIZAR TURNO" >
                                 </c:if>
                             </form:form>
 
+                            <input type="hidden" value="${turnList}" name="turnList" ></input>
+
+                            <input type="hidden" value="${roll.values}" name="values" ></input>
                             
 
-                            
+
+
+
+
                             <h2>Players</h2>
 
                             <table id="playersTable" class="table table-striped">

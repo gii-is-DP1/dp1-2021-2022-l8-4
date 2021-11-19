@@ -68,8 +68,7 @@ public class Player extends BaseEntity {
     @Enumerated(value=EnumType.ORDINAL)
     private LocationType location;
     
-    @Setter
-    @Getter
+   
     @ManyToOne(optional=false) 
     @JoinColumn(name="game_id")
     private Game game;
@@ -111,6 +110,10 @@ public class Player extends BaseEntity {
         getPlayerStatusInternal().add(playerStatus);
         playerStatus.setStatus(this);
         
+    }
+
+    public Boolean isDead(){
+        return this.lifePoints>=0;
     }
 
     

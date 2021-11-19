@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Jose Maria Delgado Sanchez
+ * @author Ricardo Nadal Garcia
  */
 @Service
 public class GameService {
@@ -65,6 +66,30 @@ public class GameService {
             roll.setRollAmount(roll.getMaxThrows()); 
         }
     }
+
+    public void nuevoTurno(int gameId) {
+        Game game=findGameById(gameId);
+        game.setTurn(game.getTurn()+1);
+    }
+
+    public Integer actualTurn(List<Integer> turnList,Integer gameId){
+        Game game=findGameById(gameId);
+        List<Player> jugadores=game.getPlayers();
+        return actualTurnPosicionLista(turnList, game.getTurn(), jugadores);
+        
+    }
+
+    private Integer actualTurnPosicionLista(List<Integer> turnList,Integer posicionLista,List<Player> jugadores) {
+        Integer numeroTurno = posicionLista % jugadores.size();
+        if(jugadores.get(turnList.get(numeroTurno)).isDead()) {
+            return actualTurnPosicionLista(turnList, numeroTurno++, jugadores);
+        }
+        return turnList.get(numeroTurno);
+    }
+
+    
+
+     
 
    
 }

@@ -9,23 +9,20 @@ import lombok.Setter;
 /**
  * @author Ricardo Nadal Garcia
  */
-
+@Getter
+@Setter
 public class Roll {
 
-    @Getter
-    @Setter
+    
     private Integer rollAmount=0;
 
-    @Getter
-    @Setter
+   
     private List<DiceValues> values;
 
-    @Getter
-    @Setter
+    
     private Integer maxThrows=3;
 
-    @Getter
-    @Setter
+    
     private DiceValues[] keep;
 
     public Roll() {
@@ -68,12 +65,13 @@ public class Roll {
         }
         
         this.values=resultado; 
-        
-    
+    }
+
+    public Boolean rollFinished() {
+        return this.rollAmount >= this.maxThrows;
     }
 
     
-
 
 
     
