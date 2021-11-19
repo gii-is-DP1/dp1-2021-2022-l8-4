@@ -17,6 +17,7 @@
                                         <th style="width: 120px">Winner</th>
                                         <th style="width: 150px">Start time</th>
                                         <th style="width: 150px">End time</th>
+                                        <th style="width: 100px;">Jugadores</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -43,6 +44,10 @@
                                             <td>
                                                 <c:out value="${game.endTime}" />
                                             </td>
+                                            <td>
+                                                <c:out value="${game.playersAlive()}" /> /
+                                                <c:out value="${game.playersAmount()}" /> 
+                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
