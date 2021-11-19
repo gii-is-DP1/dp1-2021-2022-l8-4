@@ -62,6 +62,7 @@ import lombok.Setter;
     @OneToMany(mappedBy = "game")
     private List<Player> players;
 
+    
     @OneToOne
     private Board board;
  }

@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.deck.Deck;
-import org.springframework.samples.petclinic.deck.DeckService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,8 +25,6 @@ public class CardServiceTest {
     
     @Autowired
     private CardService cardService;
-    @Autowired
-    private DeckService deckService;
 
     @Test
     public void testFindCardTypes() {
@@ -59,15 +55,11 @@ public class CardServiceTest {
 
     @Test
     public void testSaveCardIntoDatabaseAndGenerateId() {
-        Deck deck = deckService.findDeckById(1);
         Card card = new Card();
         card.setName("Fábrica de lava");
         card.setCost(5);
-        card.setDiscarded(false);
         card.setType(CardType.DESCARTAR);
-        card.setDeck(deck);
         cardService.saveCard(card);
-        assertThat(card.getDeck()).isEqualTo(deck);
         assertThat(card.getId()).isNotNull();
     }
 
@@ -89,7 +81,6 @@ public class CardServiceTest {
         Card card = cardService.findCardById(1);
         assertEquals(card.getCost(), 5);
         assertThat(card.getName()).startsWith("Monstruo Alfa");
-        assertThat(card.getDiscarded()).isEqualTo(false);
     }
 
 }

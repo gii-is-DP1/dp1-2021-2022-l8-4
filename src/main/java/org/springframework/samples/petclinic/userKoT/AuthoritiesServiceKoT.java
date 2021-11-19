@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.user;
+package org.springframework.samples.petclinic.userKoT;
 
 
 import java.util.Optional;
@@ -30,28 +30,34 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Michael Isvy
  */
 @Service
-public class UserService {
+public class AuthoritiesServiceKoT {
 
-	private UserRepository userRepository;
+	private AuthoritiesRepositoryKoT authoritiesRepository;
+	
+	private UserServiceKoT userService;
 
 	@Autowired
-	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
+	public AuthoritiesServiceKoT(AuthoritiesRepositoryKoT authoritiesRepository,UserServiceKoT userService) {
+		this.authoritiesRepository = authoritiesRepository;
+		this.userService = userService;
 	}
 
 	@Transactional
-	public void saveUser(User user) throws DataAccessException {
-		user.setEnabled(true);
-		userRepository.save(user);
+	public void saveAuthorities(AuthoritiesKoT authorities) throws DataAccessException {
+		authoritiesRepository.save(authorities);
 	}
 	
-	public Optional<User> findUser(String username) {
-		return userRepository.findById(username);
+	@Transactional
+	public void saveAuthorities(Integer userid, String role) throws DataAccessException {
+		AuthoritiesKoT authority = new AuthoritiesKoT();
+		Optional<UserKoT> user = userService.findUserkotById(userid);
+		if(user.isPresent()) {
+			authority.setUserkot(user.get());
+			authority.setAuthority(role);
+			user.get().getAuthorities().add(authority);
+			authoritiesRepository.save(authority);
+		}else
+			throw new DataAccessException("User '"+userid+"' not found!") {};
 	}
 
-	@Transactional 
-    public Iterable<User> findAll(){
-        Iterable<User> res = userRepository.findAll();
-        return res;
-    }
 }
