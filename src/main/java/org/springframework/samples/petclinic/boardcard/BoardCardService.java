@@ -7,8 +7,10 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.board.Board;
 import org.springframework.samples.petclinic.board.BoardService;
 import org.springframework.samples.petclinic.card.Card;
+import org.springframework.samples.petclinic.player.Player;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,8 +25,8 @@ public class BoardCardService {
     private BoardService boardService;
 
     @Transactional
-    public Set<Card> findCardsOnSaleByBoardId(int boardId){
-        return boardService.findBoardById(boardId).getBoardCard()
+    public Set<Card> findAvailableCardsByBoard(Board board){
+        return boardService.findBoardById(board.getId()).getBoardCard()
                                             .stream()
                                             .filter(x -> x.getSold() == false)
                                             .map(x -> x.getCard())
@@ -37,7 +39,9 @@ public class BoardCardService {
     }
 
     @Transactional
-    public BoardCard findBoardCardsByIds(int boardId, int cardId) throws DataAccessException {
-        return boardCardRepository.findBoardCardsByIds(boardId, cardId);
+    public BoardCard findByBoardCard(Board board, Card card) throws DataAccessException {
+        return boardCardRepository.findByBoardCards(board, card);
     }
+
+
 }

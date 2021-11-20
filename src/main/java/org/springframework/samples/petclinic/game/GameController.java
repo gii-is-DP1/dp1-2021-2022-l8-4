@@ -83,7 +83,7 @@ public class GameController {
         modelMap.addAttribute("roll",roll);
 
         //Retrieve data from board_card association and generate a list of cards
-        Set<Card> cards = boardCardService.findCardsOnSaleByBoardId(game.getBoard().getId());
+        Set<Card> cards = boardCardService.findAvailableCardsByBoard(game.getBoard());
         
         modelMap.addAttribute("cards", cards);
         

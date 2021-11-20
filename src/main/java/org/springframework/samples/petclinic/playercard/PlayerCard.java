@@ -12,6 +12,7 @@ import org.springframework.samples.petclinic.player.Player;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Builder.Default;
 
 /**
  * @author José Maria Delgado Sanchez
@@ -37,5 +38,11 @@ public class PlayerCard extends BaseEntity {
     @Getter
     @Column(name="discarded")
     private Boolean discarded;
+
+    public PlayerCard(Player player, Card card){
+        this.player = player;
+        this.card = card;
+        this.discarded = false;
+    }
     
 }
