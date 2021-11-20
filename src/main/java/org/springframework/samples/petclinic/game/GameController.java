@@ -2,11 +2,13 @@ package org.springframework.samples.petclinic.game;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.board.BoardService;
 import org.springframework.samples.petclinic.boardcard.BoardCard;
+import org.springframework.samples.petclinic.boardcard.BoardCardService;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.dice.Roll;
@@ -38,10 +40,7 @@ public class GameController {
     private PlayerService playerService;
 
     @Autowired
-    private BoardService boardService;
-
-    @Autowired
-    private CardService cardService;
+    private BoardCardService boardCardService;
 
     @GetMapping()
     public String gameList(ModelMap modelMap){
@@ -75,11 +74,8 @@ public class GameController {
         modelMap.addAttribute("roll",roll);
 
         //Retrieve data from board_card association and generate a list of cards
-        List<BoardCard> boardCard = boardService.findCardList(game.getBoard().getId());
-        Collection<Card> cards = boardCard.stream()
-                                            .filter(x -> x.getSold() == false)
-                                            .map(x -> cardService.findCardById(x.getCard().getId()))
-                                            .collect(Collectors.toSet());
+        Set<Card> cards = boardCardService.findCardsOnSaleByBoardId(game.getBoard().getId());
+        
         modelMap.addAttribute("cards", cards);
 
         return view;
