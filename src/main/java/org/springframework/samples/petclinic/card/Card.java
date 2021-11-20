@@ -23,17 +23,15 @@ import lombok.Setter;
  * @author Ricardo Nadal García
  */
 @Entity
+@Getter
+@Setter
 @Table(name = "cards")
 public class Card extends NamedEntity{
 
     @NotNull
-    @Setter
-    @Getter
     @Column(name="cost")
     private Integer cost;
 
-    @Getter
-    @Setter
     @Enumerated(value=EnumType.ORDINAL)
     @Column(name="type")
     private CardType type;

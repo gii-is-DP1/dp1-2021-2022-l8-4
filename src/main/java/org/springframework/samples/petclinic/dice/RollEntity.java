@@ -3,29 +3,39 @@ package org.springframework.samples.petclinic.dice;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.springframework.samples.petclinic.model.BaseEntity;
+
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * @author Ricardo Nadal Garcia
  */
+/*
+@Entity
 @Getter
 @Setter
-public class Roll {
+@Table(name="roll")
+public class RollEntity extends BaseEntity {
 
     
     private Integer rollAmount;
 
    
-    private List<DiceValues> values;
+    @OneToMany(mappedBy = "roll")
+    private List<Dice> values;
 
     
     private Integer maxThrows;
 
     
     private DiceValues[] keep;
-
-    public Roll() {
+/*
+    public RollEntity() {
         this.maxThrows=3;
         this.rollAmount=0;
         this.keep=new DiceValues[8];
@@ -55,15 +65,23 @@ public class Roll {
     }
     
     public void rollDice(List<DiceValues> dadosConservados) {
-        List<DiceValues> resultado=new ArrayList<DiceValues>();
+        List<Dice> resultado=new ArrayList<Dice>();
         Integer tiradas=6;
         int i;
         int max=5;
         int min=0;
-        resultado.addAll(dadosConservados);
+        
+        for(DiceValues dadoValor:dadosConservados){
+            Dice dado=new Dice();
+            dado.setValue(dadoValor);
+            resultado.add(dado);
+        }
+        
         for(i=0;i<tiradas-dadosConservados.size();i++) {
+            Dice dado=new Dice();
             Integer valor=(int)Math.floor(Math.random()*(max-min+1)+min);
-            resultado.add(DiceValues.values()[valor]);
+            dado.setValue(DiceValues.values()[valor]);
+            resultado.add(dado);
         }
         
         this.values=resultado; 
@@ -78,3 +96,4 @@ public class Roll {
 
     
 }
+*/
