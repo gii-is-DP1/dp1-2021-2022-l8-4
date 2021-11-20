@@ -1,11 +1,9 @@
 package org.springframework.samples.petclinic.userKoT;
 
-import java.util.HashSet;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.apache.jasper.tagplugins.jstl.core.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
