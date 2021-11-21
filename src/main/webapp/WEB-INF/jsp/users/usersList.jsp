@@ -11,7 +11,9 @@
                             <table id="usersTable" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th style="width: 200px;">Username</th>
+                                        <th style="width: 150px;">Username</th>
+                                        <th style="width: 200px;">Email</th>
+                                        <th style="width: 120px">Password</th>
 
                                     </tr>
                                 </thead>
@@ -19,8 +21,20 @@
                                     <c:forEach items="${users}" var="user">
                                         <tr>
                                             <td>
-                                                <c:out value="${user.name}" />
+                                                <c:out value="${user.username}" />
                                                 </a>
+                                            </td>
+                                            <td>
+                                                <c:out value="${user.email}" />
+                                            </td>
+                                            <td>
+                                                <c:out value="${user.password}" />
+                                            </td>
+                                            <td>
+                                                <spring:url value="/users/{userId}/edit" var="userid">
+                                                    <spring:param name="userId" value="${user.id}"/>
+                                                </spring:url>
+                                                <a href="${fn:escapeXml(userid)}">edit user</a>
                                             </td>
                                         </tr>
                                     </c:forEach>

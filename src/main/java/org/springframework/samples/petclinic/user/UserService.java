@@ -1,57 +1,61 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.springframework.samples.petclinic.user;
 
-
 import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 /**
- * Mostly used as a facade for all Petclinic controllers Also a placeholder
- * for @Transactional and @Cacheable annotations
- *
- * @author Michael Isvy
- */
+* @author Sara Cruz
+* @author Rosa Molina
+* @author Carlos Varela Soult
+*/
+
 @Service
-public class UserService {
-
+public class UserService{
+    
+	@Autowired 
 	private UserRepository userRepository;
-
 	@Autowired
-	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+	private AuthoritiesRepository authoritiesRepository;
 
 	@Transactional
-	public void saveUser(User user) throws DataAccessException {
-		user.setEnabled(true);
-		userRepository.save(user);
-	}
-	
-	public Optional<User> findUser(String username) {
-		return userRepository.findById(username);
-	}
-
-	@Transactional 
-    public Iterable<User> findAll(){
+	public Iterable<User> findAll(){
         Iterable<User> res = userRepository.findAll();
         return res;
     }
+
+	@Transactional
+	public int userCount(){
+		return (int) userRepository.count();
+	}
+ 
+	@Transactional
+	public void saveUser(User user) {
+		user.setEnabled(true);
+		userRepository.save(user);
+		Authorities authority = new Authorities();
+		authority.setUser(user);
+		authority.setAuthority("user");
+		authoritiesRepository.save(authority);
+	}
+
+	@Transactional
+	public Optional<User> findUserById(int id) throws DataAccessException {
+		return userRepository.findById(id);
+	}
+	
+	@Transactional
+	public Integer getCurrentUserId(String currentUserUsername) {
+		User currentUser = userRepository.findCurrentUser(currentUserUsername);
+		Integer currentUserId = currentUser.getId();
+		return currentUserId;
+	}
+	
+	
+
 }
