@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 /**
 * @author Sara Cruz
 * @author Rosa Molina
+* @author Carlos Varela Soult
 */
 
 @Service
@@ -47,5 +48,14 @@ public class UserServiceKoT{
 	public Optional<UserKoT> findUserkotById(int id) throws DataAccessException {
 		return userRepository.findById(id);
 	}
+	
+	@Transactional
+	public Integer getCurrentUserId(String currentUserUsername) {
+		UserKoT currentUserKoT = userRepository.findCurrentUser(currentUserUsername);
+		Integer currentUserId = currentUserKoT.getId();
+		return currentUserId;
+	}
+	
+	
 
 }
