@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.user;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.player.Player;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,4 +44,9 @@ public class User extends BaseEntity{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Authorities> authorities;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "user")
+    private List<Player> players;
 }

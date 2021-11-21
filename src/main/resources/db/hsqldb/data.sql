@@ -15,10 +15,13 @@ INSERT INTO authorities(id,userid,authority) VALUES (2,2,'user');
 INSERT INTO users(id,username,email,password,enabled) VALUES (3,'user3','user3@email.com','u53r3', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (3,3,'admin');
 
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (1,1,10,2,3,0,1);
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (2,2,10,0,0,0,1);
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (3,3,10,0,0,1,1);
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id) VALUES (4,4,4,8,2,2,1);
+INSERT INTO users(id,username,email,password,enabled) VALUES (4,'fire','fire@email.com','fire', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (4,4,'admin');
+
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (1,1,10,2,3,0,1,1);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (2,2,10,0,0,0,1,2);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (3,3,10,0,0,1,1,3);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (4,4,4,8,2,2,1,4);
 
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (1, 1, 1,1 );
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (2, 1, 0,1 );
