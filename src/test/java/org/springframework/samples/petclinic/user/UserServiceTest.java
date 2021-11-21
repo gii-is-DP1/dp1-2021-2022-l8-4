@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.userkot;
+package org.springframework.samples.petclinic.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
