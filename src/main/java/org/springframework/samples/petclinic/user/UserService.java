@@ -74,13 +74,15 @@ public class UserService {
 	 * @return Autheticated User if logged in or null if no one is logged in
 	 */
 	@Transactional
-	public String authenticatedUser() {
-		String currentUser = null;
+	public User authenticatedUser() {
+		User currentUser = null;
+		String currentUsername = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null) {
 			if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
 				org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-				currentUser = user.getUsername();
+				currentUsername = user.getUsername();
+				currentUser = findUserByUsername(currentUsername);
 			}
 		}
 		return currentUser;
