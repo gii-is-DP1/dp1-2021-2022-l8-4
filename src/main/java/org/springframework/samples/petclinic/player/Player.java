@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.player;
 
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -20,10 +22,11 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.samples.petclinic.association.PlayerCard;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.playercard.PlayerCard;
+import org.springframework.samples.petclinic.user.User;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -76,6 +79,9 @@ public class Player extends BaseEntity {
     @OneToMany(mappedBy = "player")
     private List<PlayerCard> playerCard;
     
+    @ManyToOne(optional=false)
+    @JoinColumn(name="user_id")
+    private User user;
     
     
 

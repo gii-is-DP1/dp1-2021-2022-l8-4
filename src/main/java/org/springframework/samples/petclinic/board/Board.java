@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.springframework.samples.petclinic.association.BoardCard;
+import org.springframework.samples.petclinic.boardcard.BoardCard;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
@@ -43,6 +43,8 @@ public class Board extends BaseEntity{
     @OneToOne(mappedBy = "board")
     private Game game;
 
+    @Setter
+    @Getter
     @OneToMany(mappedBy = "board")
     private List<BoardCard> boardCard;
 

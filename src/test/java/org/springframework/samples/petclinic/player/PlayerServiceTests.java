@@ -16,6 +16,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GameService;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
+import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,8 @@ public class PlayerServiceTests {
     protected PlayerService playerService;
     @Autowired
 	protected GameService gameService;	
+    @Autowired
+    protected UserService userService;
 
 
     @Test
@@ -51,6 +55,7 @@ public class PlayerServiceTests {
 	@Transactional
 	public void shouldInsertPlayerIntoDatabaseAndGenerateId() {
         Game game1 = this.gameService.findGameById(1);
+        User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
 		player.setMonsterName(MonsterName.GigaZaur);
         player.setLifePoints(10);
@@ -58,6 +63,7 @@ public class PlayerServiceTests {
         player.setEnergyPoints(6);
         player.setLocation(LocationType.fueraTokyo);
         player.setGame(game1);
+        player.setUser(user1);
             try {
                 this.playerService.savePlayer(player);;
             } catch (DuplicatedMonsterNameException ex) {
@@ -71,6 +77,7 @@ public class PlayerServiceTests {
 	@Transactional
 	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){
         Game game1 = this.gameService.findGameById(1);
+        User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
 		player.setMonsterName(MonsterName.GigaZaur);
         player.setLifePoints(10);
@@ -78,6 +85,7 @@ public class PlayerServiceTests {
         player.setEnergyPoints(6);
         player.setLocation(LocationType.fueraTokyo);
         player.setGame(game1);
+        player.setUser(user1);
             try {
                 this.playerService.savePlayer(player);;
             } catch (DuplicatedMonsterNameException ex) {
@@ -113,6 +121,7 @@ public class PlayerServiceTests {
 	@Transactional
 	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() {
         Game game1 = this.gameService.findGameById(1);
+        User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
 		player.setMonsterName(MonsterName.GigaZaur);
         player.setLifePoints(10);
@@ -120,10 +129,12 @@ public class PlayerServiceTests {
         player.setEnergyPoints(6);
         player.setLocation(LocationType.fueraTokyo);
         player.setGame(game1);
+        player.setUser(user1);
 
         Player anotherPlayer = new Player();		
 		anotherPlayer.setMonsterName(MonsterName.Alien);
 		anotherPlayer.setGame(game1);
+        anotherPlayer.setUser(user1);
         anotherPlayer.setLifePoints(10);
         anotherPlayer.setVictoryPoints(0);
         anotherPlayer.setEnergyPoints(0);
