@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.board.Board;
 import org.springframework.samples.petclinic.board.BoardService;
 import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.player.Player;
 import org.springframework.stereotype.Service;
 
 /**

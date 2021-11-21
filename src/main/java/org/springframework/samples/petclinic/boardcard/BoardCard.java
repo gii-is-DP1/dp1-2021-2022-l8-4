@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.samples.petclinic.board.Board;
 import org.springframework.samples.petclinic.card.Card;
@@ -16,9 +17,9 @@ import lombok.Setter;
 /**
  * @author José Maria Delgado Sanchez
  */
-
  @Entity
- @Table(name="boards_cards")
+ @Table(name="boards_cards",
+ uniqueConstraints = @UniqueConstraint(name = "uniqueBoardCard", columnNames = {"board_id", "card_id"}))
  public class BoardCard extends BaseEntity{
 
     @Getter

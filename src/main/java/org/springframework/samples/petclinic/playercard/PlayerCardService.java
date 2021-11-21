@@ -51,6 +51,14 @@ public class PlayerCardService {
         Set<Card> availableCards = boardCardService.findAvailableCardsByBoard(board);
         if(availableCards.contains(card)){
 
+            //Check if the player has enough energy
+            Integer energyPoints = player.getEnergyPoints();
+            Integer cost = card.getCost();
+            if(energyPoints >= cost){
+            
+            //Calculate new energyPoints value
+            player.setEnergyPoints(energyPoints-cost);
+
             //Create a PlayerCard object and save it
             PlayerCard playerCard = new PlayerCard(player, card);
             savePlayerCard(playerCard);
@@ -58,7 +66,7 @@ public class PlayerCardService {
             //Update status of the card
             BoardCard boardCard = boardCardService.findByBoardCard(board, card);
             boardCard.setSold(true);
-
+            }
         }   
     }
 }

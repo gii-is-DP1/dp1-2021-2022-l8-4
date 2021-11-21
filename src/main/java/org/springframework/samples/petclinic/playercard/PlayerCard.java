@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.model.BaseEntity;
@@ -12,14 +13,13 @@ import org.springframework.samples.petclinic.player.Player;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Builder.Default;
 
 /**
  * @author José Maria Delgado Sanchez
  */
-
 @Entity
-@Table(name="players_cards")
+@Table(name="players_cards",
+uniqueConstraints = @UniqueConstraint(name = "uniquePlayerCard", columnNames = {"player_id", "card_id"}))
 public class PlayerCard extends BaseEntity {
 
     @Getter

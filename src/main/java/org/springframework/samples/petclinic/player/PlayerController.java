@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardService;
-import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.playercard.PlayerCardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
