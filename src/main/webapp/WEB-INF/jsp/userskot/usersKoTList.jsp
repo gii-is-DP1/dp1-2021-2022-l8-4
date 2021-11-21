@@ -30,6 +30,12 @@
                                             <td>
                                                 <c:out value="${user.password}" />
                                             </td>
+                                            <td>
+                                                <spring:url value="/userskot/{userkotId}/edit" var="userkotid">
+                                                    <spring:param name="userkotId" value="${user.id}"/>
+                                                </spring:url>
+                                                <a href="${fn:escapeXml(userkotid)}">edit user</a>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
