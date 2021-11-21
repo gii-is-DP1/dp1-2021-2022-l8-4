@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.game;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,6 +78,29 @@ public class GameService {
         Game game=findGameById(gameId);
         Player player=game.actualTurn(turnList);
         return player.getId();
+    }
+
+    public List<Game> findAllFinished() {
+        Iterable<Game> resultSinFiltrar=findAll();
+        List<Game> resultadoFiltrado=new ArrayList<Game>();
+        for(Game game:resultSinFiltrar) {
+            if(game.getFinished()) {
+                resultadoFiltrado.add(game);
+            }
+        }
+        return resultadoFiltrado;
+    }
+
+    public void endGame(Integer gameId) {
+        Game game = findGameById(gameId);
+        if(game.playersWithMaxVictoryPoints().size() != 0) {
+            game.setFinished(Boolean.TRUE);
+            
+        } else if(game.playersAlive().size() == 1){
+            game.setFinished(Boolean.TRUE);
+             game.setWinner(game.playersAlive().get(0).getMonsterName().toString()); //Esto hay que cambiarlo al nombre del usuario relacionado
+        }
+        saveGame(game);
     }
 
     

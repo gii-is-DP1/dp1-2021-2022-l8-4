@@ -54,7 +54,7 @@ import lombok.Setter;
     @Column(name="start_time")
     private LocalDateTime startTime;
 
-    @NotNull
+    
     
     @Column(name="end_time")
     private LocalDateTime endTime;
@@ -66,6 +66,9 @@ import lombok.Setter;
     
     @OneToOne
     private Board board;
+
+    @Column(name = "finished")
+    private Boolean finished;
 
     
 
@@ -101,17 +104,31 @@ import lombok.Setter;
       return null;
   }
 
-  public Integer playersAlive(){
-     Integer vivos=0;
+  public List<Player> playersAlive(){
+     List<Player> vivos=new ArrayList<Player>();
      for(Player player:this.players) {
          if(!player.isDead()){
-            vivos++;
+            vivos.add(player);
          }
      }
      return vivos;
   }
+  
 
   public Integer playersAmount(){
      return this.players.size();
   }
+  
+  public List<Player> playersWithMaxVictoryPoints() {
+     List<Player> playerList=new ArrayList<Player>();
+     Integer maxPoints=20;
+     for(Player player:this.players) {
+        if(player.getVictoryPoints()>=maxPoints) {
+            playerList.add(player);
+        }
+     }
+     return playerList;
+  }
+
+
  }

@@ -44,6 +44,14 @@ public class GameController {
         return view;
     }
 
+    @GetMapping("/finished")
+    public String gameListFinished(ModelMap modelMap){
+        String view ="games/gamesList";
+        Iterable<Game> games= gameService.findAllFinished();
+        modelMap.addAttribute("games", games);
+        return view;
+    }
+
     @GetMapping("/{gameId}/players")
     public String gamePlayers(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         String view="games/playersList";
@@ -54,7 +62,7 @@ public class GameController {
         return view;
     }
 
-    @GetMapping("/{gameId}/roll") //PREGUNTAR AL PROFESOR RESPECTO QUE HACER CON EL TEMA DE ROLL, COMO LO OBTENGO AQUI PARA LOS DEMAS JUGADORES 
+    @GetMapping("/{gameId}/roll") 
     public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId){
         String view ="games/roll";
 

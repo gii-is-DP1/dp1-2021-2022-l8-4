@@ -45,7 +45,7 @@
                                                 <c:out value="${game.endTime}" />
                                             </td>
                                             <td>
-                                                <c:out value="${game.playersAlive()}" /> /
+                                                <c:out value="${game.playersAlive().size()}" /> /
                                                 <c:out value="${game.playersAmount()}" /> 
                                              </td>
                                         </tr>
