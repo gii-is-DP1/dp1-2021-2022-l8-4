@@ -9,7 +9,7 @@
                         <petclinic:layout pageName="dices">
                             <h2>
                                 Jugadores vivos: 
-                                <c:out value="${game.playersAlive()}" /> /
+                                <c:out value="${game.playersAlive().size()}" /> /
                                 <c:out value="${game.playersAmount()}" /> 
                             </h2> 
                             
