@@ -35,9 +35,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/","/oups").permitAll()
+				.antMatchers("/currentuser").permitAll()
 				.antMatchers("/users/new").permitAll()
-				.antMatchers("/userskot/new").permitAll()
-				.antMatchers("/userskot/**").hasAnyAuthority("admin")
+				.antMatchers("/users/**").hasAnyAuthority("admin")
 				.antMatchers("/cards").permitAll()
 				.antMatchers("/players").permitAll()
 				.antMatchers("/players/**").permitAll()
@@ -48,8 +48,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/games/**").permitAll()
 				.antMatchers("/achievements/**").hasAnyAuthority("admin")
 				.antMatchers("/admin/**").hasAnyAuthority("admin")
-				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")				
-				.antMatchers("/vets/**").authenticated()
 				.anyRequest().denyAll()
 				.and()
 				 	.formLogin()
@@ -72,11 +70,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	      .dataSource(dataSource)
 	      .usersByUsernameQuery(
 	       "select username, password, enabled "
-	        + "from userskot "
+	        + "from users "
 	        + "where username = ?")
 	      .authoritiesByUsernameQuery(
 	       "select userid, authority "
-	        + "from authoritieskot inner join userskot on authoritieskot.userid = userskot.id "
+	        + "from authorities inner join users on authorities.userid = users.id "
 	        + "where username = ?")	      	      
 	      .passwordEncoder(passwordEncoder());	
 	}

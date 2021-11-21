@@ -8,7 +8,7 @@
 <petclinic:layout pageName="achievements">
     <jsp:body>
         <h2>Achievement</h2>
-        <form:form modelAttribute="achievement" class="form-horizontal" action="/achievements/save">
+        <form:form modelAttribute="achievement" class="form-horizontal" action="/achievements/new">
             <div class="form-group has-feedback">
                 <petclinic:inputField label="Title" name="name"/>
                 <petclinic:inputField label="Reward points" name="rewardPoints"/>
