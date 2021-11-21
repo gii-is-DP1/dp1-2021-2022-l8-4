@@ -70,6 +70,7 @@ public class GameService {
     public void nuevoTurno(int gameId) {
         Game game=findGameById(gameId);
         game.setTurn(game.getTurn()+1);
+        saveGame(game);
     }
 
     public Integer actualTurnPlayerId(List<Integer> turnList,Integer gameId){
