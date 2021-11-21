@@ -9,6 +9,7 @@ import lombok.Setter;
 /**
  * @author Ricardo Nadal Garcia
  */
+
 @Getter
 @Setter
 public class Roll {
@@ -24,6 +25,8 @@ public class Roll {
 
     
     private DiceValues[] keep;
+
+
 
     public Roll() {
         this.maxThrows=3;

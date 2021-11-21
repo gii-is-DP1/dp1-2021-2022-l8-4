@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.boardcard.BoardCardService;
 import org.springframework.samples.petclinic.card.Card;
+
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
@@ -63,20 +64,16 @@ public class GameController {
         Iterable<Player> players= gameService.findPlayerList(gameId);
         Game game=gameService.findGameById(gameId);
 
-      //  if(roll.equals(null) || rollAmount.equals(null)) {
-           // roll=new Roll();
-     //   } 
-         Roll roll=new Roll();
+        if(MapGameRepository.getInstance().getTurnList(gameId) == null) {
+            List<Integer> turnList=game.initialTurnList();
+            MapGameRepository.getInstance().putTurnList(gameId, turnList);
+        }
+       
 
-        List<Integer> turnList=new ArrayList<Integer>();
-      //  if(turnListText.equals(null) ||turnListText.isEmpty()) {
-            turnList=game.initialTurnList();
-       // }else{
-    //    turnList=ListTurnFormatter.stringToList(turnListText);
-      //  }
         
         
-        
+        List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
+        Roll roll=MapGameRepository.getInstance().getRoll(gameId);
 
         modelMap.addAttribute("players",players);
         modelMap.addAttribute("game",game);
@@ -93,29 +90,31 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/roll")
-    public String rollKeep(@ModelAttribute("turnList") String turnListText,@ModelAttribute("newTurn") Boolean nuevoTurno,@ModelAttribute("roll") Roll roll,BindingResult result,ModelMap modelMap, @PathVariable("gameId") int gameId) throws DuplicatedMonsterNameException  {
-        List<Integer> turnList=ListTurnFormatter.stringToList(turnListText);
-        String view="games/roll";
-        gameService.turnRoll(roll);
-        if(roll.getRollAmount()==roll.getMaxThrows()) {
-            Integer playerIdActualTurn=gameService.actualTurnPlayerId(turnList, gameId);
-            playerService.useRoll(gameId,playerIdActualTurn,roll);
-        }
+    public String rollKeep(@ModelAttribute("newTurn") Boolean nuevoTurno,@ModelAttribute("roll") Roll roll,BindingResult result,ModelMap modelMap, @PathVariable("gameId") int gameId) throws DuplicatedMonsterNameException  {
+        
+        List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
         
 
         if(nuevoTurno){
             gameService.nuevoTurno(gameId);
             roll=new Roll();
+
+        } else{
+            gameService.turnRoll(roll);
+            if(roll.getRollAmount()==roll.getMaxThrows()) {
+                Integer playerIdActualTurn=gameService.actualTurnPlayerId(turnList, gameId);
+                playerService.useRoll(gameId,playerIdActualTurn,roll);
+            }
         }
+        
+        
+        
+        
 
-        Game game=gameService.findGameById(gameId);
-        Iterable<Player> players= gameService.findPlayerList(gameId);
-        modelMap.addAttribute("turnList",turnList);
-        modelMap.addAttribute("players",players);
-        modelMap.addAttribute("game",game);
-        modelMap.addAttribute("roll",roll);
+        MapGameRepository.getInstance().putRoll(gameId,roll);
+       
 
-        return view;
+        return "redirect:/games/{gameId}/roll";
     }
     
 
