@@ -26,7 +26,7 @@ public class CurrentUserController {
                 System.out.println("User not authenticated");
                 System.out.println(username);
             }
-        }
+        }   
         return username;
     }
 }

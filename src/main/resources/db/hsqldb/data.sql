@@ -91,9 +91,7 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04',
 
 INSERT INTO achievements(id,name,reward_points,condition) VALUES (1,'Mi primera partida',10,TRUE);
 
-INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
-
-
+INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1); 
 
 INSERT INTO boards(id,tokyo_city_status,tokyo_bay_status) VALUES (1,1,0);
 

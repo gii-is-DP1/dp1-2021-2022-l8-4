@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
          return view;
      }
 
-     @PostMapping(path="/save")
+     @PostMapping(path="/new")
      public String postAchievement(@Valid Achievements achievement, BindingResult result, ModelMap modelMap) {
         String view = "achievements/achievementsList";
         if (result.hasErrors()) {
@@ -67,5 +67,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
          }
          return view;
      }
+
 
  }

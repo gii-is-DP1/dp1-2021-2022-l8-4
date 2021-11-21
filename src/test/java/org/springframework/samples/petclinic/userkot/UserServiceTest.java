@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.user;
+package org.springframework.samples.petclinic.userkot;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,8 +24,8 @@ public class UserServiceTest {
 
     @Test
     public void testGetCurrentUserId() {
-        Integer currentUserId = userService.getCurrentUserId("user1");
-        assertThat(currentUserId).isEqualTo(1);
+        Integer currentUserId = userService.getCurrentUserId("user2");
+        assertThat(currentUserId).isEqualTo(2);
     }
 
 
