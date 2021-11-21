@@ -55,7 +55,4 @@ public class UserServiceKoT{
 		Integer currentUserId = currentUserKoT.getId();
 		return currentUserId;
 	}
-	
-	
-
 }
