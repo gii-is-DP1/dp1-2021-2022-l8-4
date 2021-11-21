@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.achievements;
+package org.springframework.samples.petclinic.achievement;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
  @Controller
  @RequestMapping("/achievements")
- public class AchievementsController {
+ public class AchievementController {
      @Autowired
-     private AchievementsService achievementsService;
+     private AchievementService achievementService;
 
      private static final String ACHIEVEMENTS_UPDATE_FORM = "achievements/updateAchievement";
 
      @GetMapping()
      public String getAchievementsList(ModelMap modelMap) {
          String view = "achievements/achievementsList";
-         Iterable<Achievements> achievements = achievementsService.findAll(); 
+         Iterable<Achievement> achievements = achievementService.findAll(); 
          modelMap.addAttribute("achievements", achievements);
          return view;
      }
@@ -36,17 +36,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
      @GetMapping(path="/new")
      public String createAchievement(ModelMap modelMap) {
          String view = ACHIEVEMENTS_UPDATE_FORM;
-         modelMap.addAttribute("achievement", new Achievements());
+         modelMap.addAttribute("achievement", new Achievement());
          return view;
      }
 
      @PostMapping(path="/new")
-     public String  processCreationAchievement(@Valid Achievements achievement, BindingResult result, ModelMap modelMap) {
+     public String  processCreationAchievement(@Valid Achievement achievement, BindingResult result, ModelMap modelMap) {
         if (result.hasErrors()) {
             modelMap.addAttribute("achievement", achievement);
             return ACHIEVEMENTS_UPDATE_FORM;
         } else {
-            achievementsService.saveAchievement(achievement);
+            achievementService.saveAchievement(achievement);
             modelMap.addAttribute("message", "Achievement succesfully saved");
             getAchievementsList(modelMap);
             return "redirect:/achievements";
@@ -55,7 +55,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
      @GetMapping(value = "/{achievementId}/edit")
      public String initUpdateForm(@PathVariable("achievementId") int achievementId, ModelMap modelMap) {
-         Optional<Achievements> achievement = this.achievementsService.findAchievementById(achievementId);
+         Optional<Achievement> achievement = this.achievementService.findAchievementById(achievementId);
          modelMap.put("achievements", achievement.get());
          return ACHIEVEMENTS_UPDATE_FORM;
      }
@@ -69,25 +69,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
       * @return
       */
      @PostMapping(value = "/{achievementId}/edit")
-     public String processUpdateForm(@Valid Achievements achievements, BindingResult result, @PathVariable("achievementId") int achievementId, 
+     public String processUpdateForm(@Valid Achievement achievements, BindingResult result, @PathVariable("achievementId") int achievementId, 
      ModelMap modelMap) {
          if (result.hasErrors()) {
              modelMap.put("achievements", achievements);
              return ACHIEVEMENTS_UPDATE_FORM;
          }
          else {
-            Optional<Achievements> achievementsToUpdate = this.achievementsService.findAchievementById(achievementId);
+            Optional<Achievement> achievementsToUpdate = this.achievementService.findAchievementById(achievementId);
             BeanUtils.copyProperties(achievements, achievementsToUpdate.get(), "id");                                                                                                    
-            this.achievementsService.saveAchievement(achievements);                    
+            this.achievementService.saveAchievement(achievements);                    
             return "redirect:/achievements";
          }
      }
 
      @GetMapping(path="/delete/{achievementId}")
      public String deleteAchievement(@PathVariable("achievementId") int achievementId, ModelMap modelMap) {
-         Optional<Achievements> achievement = achievementsService.findAchievementById(achievementId);
+         Optional<Achievement> achievement = achievementService.findAchievementById(achievementId);
          if (achievement.isPresent()) {
-            achievementsService.deleteAchievement(achievement.get());
+            achievementService.deleteAchievement(achievement.get());
             modelMap.addAttribute("message", "Achievement succesfully deleted");
          }
          else {

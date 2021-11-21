@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.achievements;
+package org.springframework.samples.petclinic.achievement;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -16,7 +16,7 @@ import lombok.Setter;
  @Getter
  @Setter
  @Table (name = "achievements")
- public class Achievements extends NamedEntity{
+ public class Achievement extends NamedEntity{
     
     @Getter
     @Setter
