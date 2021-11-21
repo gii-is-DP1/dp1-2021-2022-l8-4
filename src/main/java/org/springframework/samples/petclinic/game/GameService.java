@@ -11,6 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
+import org.springframework.samples.petclinic.user.User;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,6 +53,19 @@ public class GameService {
     @Transactional
     public List<Game> findOnGoingGames() throws DataAccessException{
         return gameRepository.findOnGoingGames();
+    }
+
+    /**
+	 * 
+	 * @return Associated player if exist in the game or null if not
+	 */
+    @Transactional
+    public Player playerInGameByUser(User user, int gameId){
+        Player player = user.getPlayers().stream()
+                        .filter(p -> p.getGame().getId() == gameId)
+                        .findFirst()
+                        .get();
+        return player;
     }
 
     @Transactional
@@ -103,6 +117,7 @@ public class GameService {
         saveGame(game);
     }
 
+    
     
 
     

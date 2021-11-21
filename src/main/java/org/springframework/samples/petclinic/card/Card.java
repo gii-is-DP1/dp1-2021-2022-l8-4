@@ -10,9 +10,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.samples.petclinic.association.BoardCard;
-import org.springframework.samples.petclinic.association.PlayerCard;
+import org.springframework.samples.petclinic.boardcard.BoardCard;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.playercard.PlayerCard;
 
 import lombok.Getter;
 import lombok.Setter;

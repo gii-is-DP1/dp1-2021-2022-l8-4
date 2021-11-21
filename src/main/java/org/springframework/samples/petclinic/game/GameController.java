@@ -2,14 +2,13 @@ package org.springframework.samples.petclinic.game;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.text.StyledEditorKit.BoldAction;
-import javax.validation.constraints.Null;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.boardcard.BoardCardService;
+import org.springframework.samples.petclinic.card.Card;
 
 import org.springframework.samples.petclinic.dice.Roll;
-import org.springframework.samples.petclinic.dice.RollValuesFormatter;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  *  @author Ricardo Nadal Garcia 
+ *  @author Jose Maria Delgado Sanchez
  */
 
  @Controller
@@ -35,6 +35,9 @@ public class GameController {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private BoardCardService boardCardService;
 
     @GetMapping()
     public String gameList(ModelMap modelMap){
@@ -83,6 +86,12 @@ public class GameController {
         modelMap.addAttribute("players",players);
         modelMap.addAttribute("game",game);
         modelMap.addAttribute("roll",roll);
+
+        //Retrieve data from board_card association and generate a list of cards
+        Set<Card> cards = boardCardService.findAvailableCardsByBoard(game.getBoard());
+        
+        modelMap.addAttribute("cards", cards);
+        
         modelMap.addAttribute("turnList",turnList);
 
         return view;
@@ -93,6 +102,7 @@ public class GameController {
         
         List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
         
+
         if(nuevoTurno){
             gameService.nuevoTurno(gameId);
             roll=new Roll();

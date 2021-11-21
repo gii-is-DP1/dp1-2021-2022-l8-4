@@ -9,6 +9,13 @@
             "name": "Launch PetclinicApplication",
             "request": "launch",
             "mainClass": "org.springframework.samples.petclinic.PetclinicApplication",
+            "projectName": "G8-4"
+        },
+        {
+            "type": "java",
+            "name": "Launch PetclinicApplication",
+            "request": "launch",
+            "mainClass": "org.springframework.samples.petclinic.PetclinicApplication",
             "projectName": "spring-petclinic"
         },
         {
