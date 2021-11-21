@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Jose Maria Delgado Sanchez
+ * @author Ricardo Nadal Garcia
  */
 @Service
 public class GameService {
@@ -65,6 +66,23 @@ public class GameService {
             roll.setRollAmount(roll.getMaxThrows()); 
         }
     }
+
+    public void nuevoTurno(int gameId) {
+        Game game=findGameById(gameId);
+        game.setTurn(game.getTurn()+1);
+    }
+
+    public Integer actualTurnPlayerId(List<Integer> turnList,Integer gameId){
+        Game game=findGameById(gameId);
+        Player player=game.actualTurn(turnList);
+        return player.getId();
+    }
+
+    
+
+    
+
+     
 
    
 }
