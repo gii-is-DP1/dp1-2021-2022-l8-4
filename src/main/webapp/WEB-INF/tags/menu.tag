@@ -29,6 +29,13 @@
 					<li><a href="<c:url value="/userskot/new" />">Register</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
+
+					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new"
+						title="home page">
+						<span class="" aria-hidden="true"></span>
+						<span>Nueva partida</span>
+					</petclinic:menuItem>
+
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
 							<strong><sec:authentication property="name" /></strong> <span

@@ -54,8 +54,14 @@ public class GameService {
         return gameRepository.findOnGoingGames();
     }
 
+    @Transactional
+    public void createNewGame(User creator, Game newGame){
+        newGame.setCreator(creator);
+        newGame.setTurn(0);
+        saveGame(newGame);
+    }
+
     /**
-	 * 
 	 * @return Associated player if exist in the game or null if not
 	 */
     @Transactional

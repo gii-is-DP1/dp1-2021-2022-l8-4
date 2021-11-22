@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.google.j2objc.annotations.AutoreleasePool;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.boardcard.BoardCardService;
 import org.springframework.samples.petclinic.card.Card;
@@ -12,6 +14,8 @@ import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
+import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -38,6 +42,9 @@ public class GameController {
 
     @Autowired
     private BoardCardService boardCardService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping()
     public String gameList(ModelMap modelMap){
@@ -106,10 +113,6 @@ public class GameController {
                 playerService.useRoll(gameId,playerIdActualTurn,roll);
             }
         }
-        
-        
-        
-        
 
         MapGameRepository.getInstance().putRoll(gameId,roll);
        
@@ -117,9 +120,28 @@ public class GameController {
         return "redirect:/games/{gameId}/roll";
     }
     
-
+    @GetMapping("/new") 
+    public String newGame(ModelMap modelMap){
+        if(userService.authenticatedUser() instanceof User){
+            String view ="games/newGame";
+            modelMap.addAttribute("newGame", new Game());
+            return view;
+        }else{
+            return "redirect:/";
+        }
+    }
         
-
+    @PostMapping("/new")
+    public String createNewGame(@ModelAttribute("newGame") Game newGame, ModelMap modelMap){
+        if(userService.authenticatedUser() instanceof User){
+            User user = userService.authenticatedUser();
+            gameService.createNewGame(user, newGame);
+            
+            return "games/" + newGame.getId() + "/lobby";
+        }else{
+            return "redirect:/";
+        }
+    }
         
         
        

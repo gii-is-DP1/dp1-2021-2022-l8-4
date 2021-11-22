@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Player;
 
@@ -45,8 +46,9 @@ public class User extends BaseEntity{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Authorities> authorities;
 
-    @Getter
-    @Setter
     @OneToMany(mappedBy = "user")
-    private List<Player> players;
+    private Set<Player> players;
+
+    @OneToMany(mappedBy = "creator")
+    private Set<Game> games;
 }

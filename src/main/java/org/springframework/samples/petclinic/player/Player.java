@@ -1,7 +1,5 @@
 package org.springframework.samples.petclinic.player;
 
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
