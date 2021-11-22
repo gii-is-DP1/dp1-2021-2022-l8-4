@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -69,7 +70,7 @@ public class GameService {
     }
 
     @Transactional
-    public void turnRoll(Roll roll) {
+    public void turnRoll(Roll roll,Integer gameId) {
         if(roll.getRollAmount() == null || roll.getRollAmount() == 0) {
             roll.rollDiceInitial();
         } else if(roll.getRollAmount() < roll.getMaxThrows() && roll.getKeep().length != 6) {
@@ -80,17 +81,18 @@ public class GameService {
             roll.rollDiceNext(valoresConservados);
             roll.setRollAmount(roll.getMaxThrows()); 
         }
+        MapGameRepository.getInstance().putRoll(gameId,roll);
     }
 
     public void nuevoTurno(int gameId) {
         Game game=findGameById(gameId);
+        MapGameRepository.getInstance().putRoll(gameId, new Roll());
         game.setTurn(game.getTurn()+1);
         saveGame(game);
     }
 
-    public Integer actualTurnPlayerId(List<Integer> turnList,Integer gameId){
-        Game game=findGameById(gameId);
-        Player player=game.actualTurn(turnList);
+    public Integer actualTurnPlayerId(Integer gameId){
+        Player player=actualTurn(gameId);
         return player.getId();
     }
 
@@ -109,13 +111,51 @@ public class GameService {
         Game game = findGameById(gameId);
         if(game.playersWithMaxVictoryPoints().size() != 0) {
             game.setFinished(Boolean.TRUE);
+            game.setWinner(game.playersWithMaxVictoryPoints().get(0).getUser().getUsername());
             
         } else if(game.playersAlive().size() == 1){
             game.setFinished(Boolean.TRUE);
-             game.setWinner(game.playersAlive().get(0).getMonsterName().toString()); //Esto hay que cambiarlo al nombre del usuario relacionado
+             game.setWinner(game.playersAlive().get(0).getUser().getUsername()); 
         }
         saveGame(game);
     }
+
+
+
+    public List<Integer> initialTurnList(Integer gameId){
+        List<Integer> listaTurnos=new ArrayList<Integer>();
+        List<Player> jugadores= findPlayerList(gameId);
+        for(Player player:jugadores) {
+           listaTurnos.add(player.getId());
+        }
+        Collections.shuffle(listaTurnos);
+        return listaTurnos;
+     }
+
+     
+    public Player actualTurn(Integer gameId){
+        List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
+        Game game = findGameById(gameId);
+        List<Player> jugadores=game.getPlayers();
+        Player actualPlayer= actualTurnPositionList(turnList, game.getTurn(), jugadores);
+        
+        return actualPlayer;
+    }
+
+    private Player actualTurnPositionList(List<Integer> turnList,Integer listPosition,List<Player> players) {
+        Integer turnNum = listPosition % (players.size());
+        
+        for(Player player:players) {
+           if(player.getId()==turnList.get(turnNum) && player.isDead()) {
+              turnNum++;
+              return actualTurnPositionList(turnList, turnNum, players);
+           } else if(player.getId()==turnList.get(turnNum)){
+              return player;
+           }
+        }
+        return null;
+    }
+
 
     
     

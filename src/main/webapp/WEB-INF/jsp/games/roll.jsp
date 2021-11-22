@@ -19,7 +19,7 @@
                             </h2>
                             <h2>
                                 Es el turno de:
-                                <c:out value="${game.actualTurn(turnList).getMonsterName().toString()}" />
+                                <c:out value="${actualPlayerTurn}" />
                             </h2> 
 
                             <h1>Tirada de dados</h1>

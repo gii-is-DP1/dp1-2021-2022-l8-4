@@ -72,26 +72,23 @@ public class GameController {
         Iterable<Player> players= gameService.findPlayerList(gameId);
         Game game=gameService.findGameById(gameId);
 
+
         if(MapGameRepository.getInstance().getTurnList(gameId) == null) {
-            List<Integer> turnList=game.initialTurnList();
+            List<Integer> turnList=gameService.initialTurnList(gameId);
             MapGameRepository.getInstance().putTurnList(gameId, turnList);
         }
        
-
-        
-        
         List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
         Roll roll=MapGameRepository.getInstance().getRoll(gameId);
 
+        String actualPlayerTurn=gameService.actualTurn(gameId).getMonsterName().toString();
+        modelMap.addAttribute("actualPlayerTurn",actualPlayerTurn);
         modelMap.addAttribute("players",players);
         modelMap.addAttribute("game",game);
         modelMap.addAttribute("roll",roll);
-
         //Retrieve data from board_card association and generate a list of cards
         Set<Card> cards = boardCardService.findAvailableCardsByBoard(game.getBoard());
-        
         modelMap.addAttribute("cards", cards);
-        
         modelMap.addAttribute("turnList",turnList);
 
         return view;
@@ -99,29 +96,17 @@ public class GameController {
 
     @PostMapping("/{gameId}/roll")
     public String rollKeep(@ModelAttribute("newTurn") Boolean nuevoTurno,@ModelAttribute("roll") Roll roll,BindingResult result,ModelMap modelMap, @PathVariable("gameId") int gameId) throws DuplicatedMonsterNameException  {
-        
-        List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
-        
 
         if(nuevoTurno){
             gameService.nuevoTurno(gameId);
-            roll=new Roll();
-
         } else{
-            gameService.turnRoll(roll);
+            gameService.turnRoll(roll,gameId);
             if(roll.getRollAmount()==roll.getMaxThrows()) {
-                Integer playerIdActualTurn=gameService.actualTurnPlayerId(turnList, gameId);
+                Integer playerIdActualTurn=gameService.actualTurnPlayerId(gameId);
                 playerService.useRoll(gameId,playerIdActualTurn,roll);
+                
             }
         }
-        
-        
-        
-        
-
-        MapGameRepository.getInstance().putRoll(gameId,roll);
-       
-
         return "redirect:/games/{gameId}/roll";
     }
     
