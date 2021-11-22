@@ -67,42 +67,8 @@ import lombok.Setter;
     @OneToOne
     private Board board;
 
-    @Column(name = "finished")
-    private Boolean finished;
-
     
-
-    public List<Integer> initialTurnList(){
-       List<Integer> listaTurnos=new ArrayList<Integer>();
-       for(Player player:this.players) {
-          listaTurnos.add(player.getId());
-       }
-       Collections.shuffle(listaTurnos);
-       return listaTurnos;
-    }
-
-    public Player actualTurn(List<Integer> turnList){
-      
-      List<Player> jugadores=getPlayers();
-      Player jugadorActual= actualTurnPosicionLista(turnList, getTurn(), jugadores);
-      
-      return jugadorActual;
-      
-  }
-
-  private Player actualTurnPosicionLista(List<Integer> turnList,Integer posicionLista,List<Player> jugadores) {
-      Integer numeroTurno = posicionLista % (jugadores.size());
-      
-      for(Player player:players) {
-         if(player.getId()==turnList.get(numeroTurno) && player.isDead()) {
-            numeroTurno++;
-            return actualTurnPosicionLista(turnList, numeroTurno, jugadores);
-         } else if(player.getId()==turnList.get(numeroTurno)){
-            return player;
-         }
-      }
-      return null;
-  }
+ 
 
   public List<Player> playersAlive(){
      List<Player> vivos=new ArrayList<Player>();
@@ -114,6 +80,9 @@ import lombok.Setter;
      return vivos;
   }
   
+  public Boolean isFinished(){
+     return this.winner!=null && !this.winner.isEmpty() ;
+     }
 
   public Integer playersAmount(){
      return this.players.size();

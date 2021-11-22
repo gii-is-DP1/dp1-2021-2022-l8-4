@@ -14,7 +14,9 @@
                                         <th style="width: 150px;">Game Name</th>
                                         <th style="width: 120px;">Creator</th>
                                         <th style="width: 120px">Turn</th>
+                                        <th style="width: 120px">Winner</th>
                                         <th style="width: 150px">Start time</th>
+                                        <th style="width: 150px">End time</th>
                                         <th style="width: 100px;">Jugadores</th>
                                     </tr>
                                 </thead>
@@ -34,10 +36,15 @@
                                                 </a>
                                             </td>
                                             <td>
+                                                <c:out value="${game.winner}" />
+                                            </td>
+                                            <td>
                                                 <c:out value="${game.startTime}" />
                                             </td>
                                             <td>
-                                                <c:out value="${game.playersAlive().size()}" /> /
+                                                <c:out value="${game.endTime}" />
+                                            </td>
+                                            <td>
                                                 <c:out value="${game.playersAmount()}" /> 
                                              </td>
                                         </tr>
