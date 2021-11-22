@@ -192,4 +192,7 @@ public class PlayerService {
                 player.setLifePoints(0);
                 }
     }
+
+    
+
 }

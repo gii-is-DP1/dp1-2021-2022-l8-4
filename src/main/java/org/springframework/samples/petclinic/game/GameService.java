@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
+import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+    private PlayerService playerService;
+    
     @Transactional
     public Iterable<Game> findAll(){
         Iterable<Game> res = gameRepository.findAll();
@@ -154,6 +158,12 @@ public class GameService {
            }
         }
         return null;
+    }
+
+    @Transactional
+    public Boolean isPlayerTurn(){
+        Boolean result=Boolean.TRUE;
+        return result;
     }
 
 
