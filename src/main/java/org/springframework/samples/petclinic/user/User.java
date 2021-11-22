@@ -51,4 +51,25 @@ public class User extends BaseEntity{
 
     @OneToMany(mappedBy = "creator")
     private Set<Game> games;
+
+    /**
+     * @return true if the user has an active player in a game/lobby
+     */
+    public Boolean hasActivePlayer(){
+        return this.players.stream()
+                    .map(p -> p.getGame())
+                    .filter(g -> !g.isFinished())
+                    .findFirst()
+                    .isPresent();
+    }
+
+    /**
+     * @return true if the user is the creator of the selected game
+     */
+    public Boolean isCreator(Game game){
+        return this.games.stream()
+                        .filter(g -> g.equals(game))
+                        .findFirst()
+                        .isPresent();
+    }
 }

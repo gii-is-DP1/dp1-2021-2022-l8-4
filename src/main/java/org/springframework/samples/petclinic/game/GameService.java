@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.game;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,6 +62,13 @@ public class GameService {
         saveGame(newGame);
     }
 
+    @Transactional
+    public void deleteGameByCreator(User creator, Game game){
+        if(creator.isCreator(game)){
+            gameRepository.delete(game);
+        }  
+    }
+
     /**
 	 * @return Associated player if exist in the game or null if not
 	 */
@@ -71,6 +79,19 @@ public class GameService {
                         .findFirst()
                         .get();
         return player;
+    }
+
+    /**
+	 * @return True if the game could be started, false if the game cannot be started yet
+	 */
+    public Boolean startGameByCreator(User creator, Game game){
+        Boolean started=false;
+        if(creator.isCreator(game) && game.hasEnoughPlayers() && !game.isStarted()){
+            game.setTurn(1);
+            game.setStartTime(LocalDateTime.now());
+            started=true;
+        }
+        return started;
     }
 
     @Transactional

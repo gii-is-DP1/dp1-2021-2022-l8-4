@@ -3,8 +3,13 @@ package org.springframework.samples.petclinic.game;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -19,6 +24,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.board.Board;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.player.MonsterName;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.user.User;
 
@@ -61,7 +67,7 @@ import lombok.Setter;
     private Integer maxNumberOfPlayers;
 
     
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
 
@@ -69,6 +75,67 @@ import lombok.Setter;
     private Board board;
 
     
+    /**
+     * @return true if the game has started
+     */
+    public Boolean isStarted(){
+       return this.turn !=0;
+    }
+
+    /**
+     * @return true if the game has enough players to start
+     */
+    public Boolean hasEnoughPlayers(){
+       Integer nPlayers = this.players.size();
+      return  nPlayers >= 2 && nPlayers <= this.maxNumberOfPlayers;
+   }
+
+    /**
+     * @return true if the game has finished
+     */
+    public Boolean isFinished(){
+       return this.winner != null;
+    }
+
+    /**
+     * @return true if the game has room for more players
+     */
+    public Boolean hasRoom(){
+       return this.players.size() < this.maxNumberOfPlayers;
+    }
+
+    /**
+     * @return true if the monster is still available in the game
+     */
+    public Boolean monsterAvailable(MonsterName monsterName){
+       return !this.players.stream()
+                        .map(p -> p.getMonsterName())
+                        .filter(pm -> pm == monsterName)
+                        .findAny()
+                        .isPresent();
+    }
+
+    /**
+     * @return a Set containing the available monster to pick
+     */
+    public Set<MonsterName> availableMonsters(){
+       MonsterName[] monsters = MonsterName.values();
+       Set<MonsterName> allMonsters = new HashSet<>(monsters.length);
+       Set<MonsterName> availableMonsters = new HashSet<MonsterName>(monsters.length);
+       Set<MonsterName> actualPlayersMonster = this.players.stream()
+                                                         .map(p -> p.getMonsterName())
+                                                         .collect(Collectors.toSet());
+      
+       for(int i=0;i<monsters.length;i++){
+         allMonsters.add(monsters[i]);
+       }
+
+       availableMonsters = allMonsters.stream()
+                                    .filter(x -> !actualPlayersMonster.contains(x))
+                                    .collect(Collectors.toSet());
+
+       return availableMonsters;
+    }
 
     public List<Integer> initialTurnList(){
        List<Integer> listaTurnos=new ArrayList<Integer>();

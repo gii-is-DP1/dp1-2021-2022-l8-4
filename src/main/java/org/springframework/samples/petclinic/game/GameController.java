@@ -19,6 +19,7 @@ import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -137,10 +138,71 @@ public class GameController {
             User user = userService.authenticatedUser();
             gameService.createNewGame(user, newGame);
             
-            return "games/" + newGame.getId() + "/lobby";
+            return "redirect:/games/" + newGame.getId() + "/lobby";
         }else{
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/{gameId}/lobby") 
+    public String gameLobby(ModelMap modelMap, @PathVariable("gameId") int gameId){
+        if(userService.authenticatedUser() instanceof User){
+            Game game = gameService.findGameById(gameId);
+            if(!game.isStarted()){
+                String view ="games/lobby";
+
+                modelMap.addAttribute("availableMonsters", game.availableMonsters());
+                modelMap.addAttribute("game", game);
+                modelMap.addAttribute("players", game.getPlayers());
+                modelMap.addAttribute("newPlayer", new Player());
+                return view;
+            }
+            return "redirect:/games";           
+        }else{
+            return "redirect:/";
+        }
+    }
+
+    @PostMapping("/{gameId}/lobby")
+    public String joinGame(@ModelAttribute("newPlayer") Player newPlayer, ModelMap modelMap, @PathVariable("gameId") int gameId){
+        if(userService.authenticatedUser() instanceof User){
+            User user = userService.authenticatedUser();
+            Game game = gameService.findGameById(gameId);
+            playerService.joinGame(user, newPlayer, game);
+
+            return "redirect:/games/" + game.getId() + "/lobby";
+        }
+        
+        return "redirect:/games";
+    }
+
+    @DeleteMapping("/{gameId}/lobby")
+    public String deleteGame(ModelMap modelMap, @PathVariable("gameId") int gameId){
+        if(userService.authenticatedUser() instanceof User){
+            User user = userService.authenticatedUser();
+            Game game = gameService.findGameById(gameId);
+            gameService.deleteGameByCreator(user, game);  
+        }
+        
+        return "redirect:/games";
+    }
+
+
+    @GetMapping("/{gameId}/start") 
+    public String startGame(ModelMap modelMap, @PathVariable("gameId") int gameId){
+        if(userService.authenticatedUser() instanceof User){
+            User user = userService.authenticatedUser();
+            Game game = gameService.findGameById(gameId);
+            Boolean started = gameService.startGameByCreator(user, game);
+            if(started){
+                return "redirect:/games/" + game.getId() + "/roll";
+            }else{
+                return "redirect:/games/" + game.getId() + "/lobby";
+            }
+        }else{
+            return "redirect:/games";
+        }
+        
     }
         
         
