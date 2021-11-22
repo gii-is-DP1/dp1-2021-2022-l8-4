@@ -9,7 +9,7 @@
                         <petclinic:layout pageName="dices">
                             <h2>
                                 Jugadores vivos: 
-                                <c:out value="${game.playersAlive()}" /> /
+                                <c:out value="${game.playersAlive().size()}" /> /
                                 <c:out value="${game.playersAmount()}" /> 
                             </h2> 
                             
@@ -19,65 +19,69 @@
                             </h2>
                             <h2>
                                 Es el turno de:
-                                <c:out value="${game.actualTurn(turnList).getMonsterName().toString()}" />
+                                <c:out value="${actualPlayerTurn}" />
                             </h2> 
 
                             <h1>Tirada de dados</h1>
                             
-                            
-                            <form:form modelAttribute="roll">
-                                <span>
-                                    Cantidad de tiradas realizadas: 
-                                    <c:out value="${roll.rollAmount}" /> / <c:out value="${roll.maxThrows}" />
-                                </span>
+                            <c:if test="${isPlayerTurn}">
+                                <form:form modelAttribute="roll">
+                                    <span>
+                                        Cantidad de tiradas realizadas: 
+                                        <c:out value="${roll.rollAmount}" /> / <c:out value="${roll.maxThrows}" />
+                                    </span>
                             
                                     
-                                    <table id="dicesTable" class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 150px;">Value</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                            <c:forEach items="${roll.values}" var="dice">
-                                                
-                                                    <td>                                                   
-                                                            <c:out value="${dice}" /> 
+                                    
+                                    <c:if test="${!roll.rollFinished()}">
+                                        <c:if test="${roll.rollAmount != 0}">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <form:checkboxes items="${roll.values}" path="keep"/>  
                                                     </td>
-                                                
-                                            </c:forEach>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                <c:if test="${!roll.rollFinished()}">
-                                    <c:if test="${roll.rollAmount != 0}">
-                                        <table>
-                                            <tr>
-                                                <td>
-                                                    <form:checkboxes items="${roll.values}" path="keep"/>  
-                                                </td>
-                                            </tr>
-                                        </table>
+                                                </tr>
+                                            </table>
                                 
+                                        </c:if>
+
+                                
+                                        <input type="hidden" value="${roll.rollAmount}" name="rollAmount" ></input>
+                                    
+                                        <input type="hidden" value="False" name="newTurn" ></input>
+                                        <br>
+                                        <input type="submit" value="REALIZAR TIRADA DE DADOS" >
                                     </c:if>
 
-                                
                                     <input type="hidden" value="${roll.rollAmount}" name="rollAmount" ></input>
-                                    
-                                    <input type="hidden" value="False" name="newTurn" ></input>
-                                    <input type="submit" value="REALIZAR TIRADA DE DADOS" >
-                                </c:if>
-
-                                <input type="hidden" value="${roll.rollAmount}" name="rollAmount" ></input>
-                                <input type="hidden" value="${turnList}" name="turnList" ></input>
+                                    <input type="hidden" value="${turnList}" name="turnList" ></input>
                                 
-                                <c:if test="${roll.rollFinished()}">
-                                    <h2>FINAL TURNO</h2>
-                                    <input type="hidden" value="True" name="newTurn" ></input>
-                                    <input type="submit" value="FINALIZAR TURNO" >
-                                </c:if>
-                            </form:form>
+                                    <c:if test="${roll.rollFinished()}">
+                                        <h2>FINAL TURNO</h2>
+                                        <input type="hidden" value="True" name="newTurn" ></input>
+                                        <input type="submit" value="FINALIZAR TURNO" >
+                                    </c:if>
+                                </form:form>
+                            </c:if>
+                            
+                            <table id="dicesTable" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 150px;">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <c:forEach items="${roll.values}" var="dice">
+                                        
+                                            <td>                                                   
+                                                    <c:out value="${dice}" /> 
+                                            </td>
+                                        
+                                    </c:forEach>
+                                    </tr>
+                                </tbody>
+                            </table>
 
                             <input type="hidden" value="${turnList}" name="turnList" ></input>
 

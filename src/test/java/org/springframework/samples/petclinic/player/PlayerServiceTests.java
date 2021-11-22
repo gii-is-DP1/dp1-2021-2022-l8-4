@@ -39,7 +39,7 @@ public class PlayerServiceTests {
     @Test
     public void testCountWithInitialData(){
         int count = playerService.playerCount();
-       assertEquals(count,4);
+       assertEquals(count,7);
     }
     @Test
     public void testFindPlayerWithCorrectId(){
@@ -51,7 +51,8 @@ public class PlayerServiceTests {
         assertThat(player4.getLocation().toString()).startsWith("bahiaTokyo");
         assertThat(player4.getGame().getId()).isEqualTo(1);
     }
-    /*@Test
+    /* ESTA COMENTADO POR EL TEMA DE THROW EXCEPTION
+    @Test
 	@Transactional
 	public void shouldInsertPlayerIntoDatabaseAndGenerateId() {
         Game game1 = this.gameService.findGameById(1);
@@ -151,8 +152,8 @@ public class PlayerServiceTests {
 			anotherPlayer.setMonsterName(MonsterName.GigaZaur);;
 			playerService.savePlayer(anotherPlayer);
 		});		
-	}*/
-
+	}
+*/
 /*
     @Test
 	void shouldFindPlayerStatusByPlayerId() throws Exception {

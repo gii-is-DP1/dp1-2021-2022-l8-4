@@ -37,8 +37,7 @@ public class PlayerService {
     public int playerCount(){
         return (int) playerRepository.count();
     } 
-
-    /*
+/*
     @Transactional(rollbackFor = DuplicatedMonsterNameException.class)
     public void savePlayer(Player player) throws DuplicatedMonsterNameException {
         Player otherPlayer=getPlayerwithIdDifferent(player.getMonsterName().toString(), player.getId());
@@ -48,6 +47,9 @@ public class PlayerService {
                 playerRepository.save(player);   
         playerRepository.save(player);
     }
+    
+*/
+
     public Player getPlayerwithIdDifferent(String monsterName,Integer id) {
 		monsterName = monsterName.toLowerCase();
 		for (Player player : playerRepository.findAll()) {
@@ -58,7 +60,7 @@ public class PlayerService {
 			}
 		}
 		return null;
-	}*/
+	}
 
     @Transactional
     public void savePlayer(Player player){
@@ -211,4 +213,7 @@ public class PlayerService {
                 player.setLifePoints(0);
                 }
     }
+
+    
+
 }
