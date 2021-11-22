@@ -1,10 +1,7 @@
 package org.springframework.samples.petclinic.game;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import com.google.j2objc.annotations.AutoreleasePool;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.boardcard.BoardCardService;
@@ -202,7 +199,7 @@ public class GameController {
         }else{
             return "redirect:/games";
         }
-        
+     
     }
         
         

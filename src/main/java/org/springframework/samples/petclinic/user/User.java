@@ -57,6 +57,7 @@ public class User extends BaseEntity{
      */
     public Boolean hasActivePlayer(){
         return this.players.stream()
+                    .filter(p -> !p.isDead())
                     .map(p -> p.getGame())
                     .filter(g -> !g.isFinished())
                     .findFirst()

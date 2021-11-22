@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.board.Board;
+import org.springframework.samples.petclinic.board.BoardService;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
@@ -23,6 +25,9 @@ public class GameService {
     
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private BoardService boardService;
 
     @Transactional
     public Iterable<Game> findAll(){
@@ -89,6 +94,11 @@ public class GameService {
         if(creator.isCreator(game) && game.hasEnoughPlayers() && !game.isStarted()){
             game.setTurn(1);
             game.setStartTime(LocalDateTime.now());
+
+            Board board = new Board();
+            boardService.saveBoard(board);
+            game.setBoard(board);
+            saveGame(game);
             started=true;
         }
         return started;

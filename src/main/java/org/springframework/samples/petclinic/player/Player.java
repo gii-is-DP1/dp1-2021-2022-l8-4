@@ -91,6 +91,13 @@ public class Player extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player" , fetch = FetchType.EAGER)
     private Set<PlayerStatus> playerStatus; 
     
+    /**
+     * Give the player the opportunity to kill himself and stop playing
+     */
+    public void surrender(){
+        this.lifePoints=0;
+    }
+
     protected Set<PlayerStatus> getPlayerStatusInternal() {
 		if (this.playerStatus == null) {
 			this.playerStatus = new HashSet<>();

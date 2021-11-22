@@ -16,7 +16,7 @@ INSERT INTO authorities(id,userid,authority) VALUES (3,3,'admin');
 INSERT INTO users(id,username,email,password,enabled) VALUES (4,'fire','fire@email.com','fire', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (4,4,'admin');
 
-INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,board_id,max_number_of_players) VALUES (1,'Partida tremenda',1,'3','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00',1,6);
+INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,board_id,max_number_of_players) VALUES (1,'Partida tremenda',1,'3',null,'2020-11-01T10:00:00','2020-11-01T11:00:00',1,6);
 
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (1,1,10,2,3,0,1,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (2,2,10,0,0,0,1,2);

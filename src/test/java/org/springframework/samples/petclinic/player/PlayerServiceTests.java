@@ -51,7 +51,7 @@ public class PlayerServiceTests {
         assertThat(player4.getLocation().toString()).startsWith("bahiaTokyo");
         assertThat(player4.getGame().getId()).isEqualTo(1);
     }
-    @Test
+    /*@Test
 	@Transactional
 	public void shouldInsertPlayerIntoDatabaseAndGenerateId() {
         Game game1 = this.gameService.findGameById(1);
@@ -71,9 +71,9 @@ public class PlayerServiceTests {
             }
 		// checks that id has been generated
 		assertThat(player.getId()).isNotNull();
-	}
+	}*/
 
-    @Test
+    /*@Test
 	@Transactional
 	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){
         Game game1 = this.gameService.findGameById(1);
@@ -103,7 +103,7 @@ public class PlayerServiceTests {
 			playerService.savePlayer(anotherPlayerWithTheSameName);
 		});	
 
-	}
+	}*/
     @Test
 	@Transactional
 	public void shouldUpdateMonsterName() throws Exception {
@@ -117,7 +117,7 @@ public class PlayerServiceTests {
 		assertThat(player2.getMonsterName()).isEqualTo(newName);
 	}
 
-    @Test
+    /*@Test
 	@Transactional
 	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() {
         Game game1 = this.gameService.findGameById(1);
@@ -151,7 +151,7 @@ public class PlayerServiceTests {
 			anotherPlayer.setMonsterName(MonsterName.GigaZaur);;
 			playerService.savePlayer(anotherPlayer);
 		});		
-	}
+	}*/
 
 /*
     @Test
