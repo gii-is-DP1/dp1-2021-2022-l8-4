@@ -72,9 +72,9 @@ public class PlayerServiceTests {
             }
 		// checks that id has been generated
 		assertThat(player.getId()).isNotNull();
-	}
+	}*/
 
-    @Test
+    /*@Test
 	@Transactional
 	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){
         Game game1 = this.gameService.findGameById(1);
@@ -104,7 +104,7 @@ public class PlayerServiceTests {
 			playerService.savePlayer(anotherPlayerWithTheSameName);
 		});	
 
-	}
+	}*/
     @Test
 	@Transactional
 	public void shouldUpdateMonsterName() throws Exception {
@@ -118,7 +118,7 @@ public class PlayerServiceTests {
 		assertThat(player2.getMonsterName()).isEqualTo(newName);
 	}
 
-    @Test
+    /*@Test
 	@Transactional
 	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() {
         Game game1 = this.gameService.findGameById(1);
