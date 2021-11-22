@@ -181,6 +181,19 @@ public class GameService {
         return result;
     }
 
+    @Transactional
+    public Boolean isPlayerInGame(Integer gameId) {
+        Game game = findGameById(gameId);
+        User user=userService.authenticatedUser();
+        Boolean result=Boolean.FALSE;
+        if(user!=null) {
+            for(Player player:game.getPlayers()) {
+                result=result || player.getUser().getId() == user.getId();
+            }
+        }
+        return result;
+    }
+
 
     
     

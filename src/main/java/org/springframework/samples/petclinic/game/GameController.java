@@ -65,6 +65,16 @@ public class GameController {
         return view;
     }
 
+    @GetMapping("/finished/{gameId}")
+    public String gameFinished(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+        String view="games/playersList";
+        Iterable<Player> players= gameService.findPlayerList(gameId);
+        Game game=gameService.findGameById(gameId);
+        modelMap.addAttribute("players",players);
+        modelMap.addAttribute("game",game);
+        return view;
+    }
+
     @GetMapping("/{gameId}/roll") 
     public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId){
         String view ="games/roll";
@@ -83,8 +93,13 @@ public class GameController {
 
         String actualPlayerTurn=gameService.actualTurn(gameId).getMonsterName().toString();
         modelMap.addAttribute("actualPlayerTurn",actualPlayerTurn);
+
         Boolean isPlayerTurn=gameService.isPlayerTurn(gameId);
         modelMap.addAttribute("isPlayerTurn",isPlayerTurn);
+
+        Boolean isPlayerInGame=gameService.isPlayerInGame(gameId);
+        modelMap.addAttribute("isPlayerInGame",isPlayerInGame);
+
         modelMap.addAttribute("players",players);
         modelMap.addAttribute("game",game);
         modelMap.addAttribute("roll",roll);
