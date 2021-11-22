@@ -67,8 +67,7 @@ import lombok.Setter;
     @OneToOne
     private Board board;
 
-    @Column(name = "finished")
-    private Boolean finished;
+    
  
 
   public List<Player> playersAlive(){
@@ -81,6 +80,9 @@ import lombok.Setter;
      return vivos;
   }
   
+  public Boolean isFinished(){
+     return this.winner!=null && !this.winner.isEmpty() ;
+     }
 
   public Integer playersAmount(){
      return this.players.size();

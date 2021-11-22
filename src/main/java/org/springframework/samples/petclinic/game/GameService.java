@@ -14,6 +14,7 @@ import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,7 +28,7 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    private PlayerService playerService;
+    private UserService userService;
     
     @Transactional
     public Iterable<Game> findAll(){
@@ -104,7 +105,18 @@ public class GameService {
         Iterable<Game> resultSinFiltrar=findAll();
         List<Game> resultadoFiltrado=new ArrayList<Game>();
         for(Game game:resultSinFiltrar) {
-            if(game.getFinished()) {
+            if(game.isFinished()) {
+                resultadoFiltrado.add(game);
+            }
+        }
+        return resultadoFiltrado;
+    }
+
+    public List<Game> findAllNotFinished() {
+        Iterable<Game> resultSinFiltrar=findAll();
+        List<Game> resultadoFiltrado=new ArrayList<Game>();
+        for(Game game:resultSinFiltrar) {
+            if(!game.isFinished()) {
                 resultadoFiltrado.add(game);
             }
         }
@@ -114,11 +126,10 @@ public class GameService {
     public void endGame(Integer gameId) {
         Game game = findGameById(gameId);
         if(game.playersWithMaxVictoryPoints().size() != 0) {
-            game.setFinished(Boolean.TRUE);
             game.setWinner(game.playersWithMaxVictoryPoints().get(0).getUser().getUsername());
             
         } else if(game.playersAlive().size() == 1){
-            game.setFinished(Boolean.TRUE);
+            
              game.setWinner(game.playersAlive().get(0).getUser().getUsername()); 
         }
         saveGame(game);
@@ -161,8 +172,12 @@ public class GameService {
     }
 
     @Transactional
-    public Boolean isPlayerTurn(){
-        Boolean result=Boolean.TRUE;
+    public Boolean isPlayerTurn(Integer gameId){
+        User user=userService.authenticatedUser();
+        Boolean result=Boolean.FALSE;
+        if(user!=null){
+            result=actualTurn(gameId).getUser().getId() == user.getId();
+        }
         return result;
     }
 

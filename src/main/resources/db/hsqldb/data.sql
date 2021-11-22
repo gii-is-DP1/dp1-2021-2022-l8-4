@@ -5,8 +5,8 @@ INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
 INSERT INTO boards(id,tokyo_city_status,tokyo_bay_status) VALUES (1,1,0);
 INSERT INTO boards(id,tokyo_city_status,tokyo_bay_status) VALUES (2,1,0);
 
-INSERT INTO games(id,name,creator,turn,winner,start_time,end_time,board_id,finished) VALUES (1,'Partida tremenda','Rick360','3','Rick360','2020-11-01T10:00:00',null,1,'False');
-INSERT INTO games(id,name,creator,turn,winner,start_time,end_time,board_id,finished) VALUES (2,'Partida tremenda ya jugada','Rick360','15','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00',2,'True');
+INSERT INTO games(id,name,creator,turn,start_time,end_time,board_id) VALUES (1,'Partida tremenda','Rick360','3','2020-11-01T10:00:00',null,1);
+INSERT INTO games(id,name,creator,turn,winner,start_time,end_time,board_id) VALUES (2,'Partida tremenda ya jugada','Rick360','15','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00',2);
 
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
@@ -21,7 +21,7 @@ INSERT INTO users(id,username,email,password,enabled) VALUES (4,'fire','fire@ema
 INSERT INTO authorities(id,userid,authority) VALUES (4,4,'admin');
 
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (1,1,10,2,3,0,1,1);
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (2,2,10,0,0,0,1,2);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (2,5,10,0,0,0,1,2);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (3,3,10,0,0,1,1,3);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (4,4,4,8,2,2,1,4);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (5,3,10,0,0,1,2,1);

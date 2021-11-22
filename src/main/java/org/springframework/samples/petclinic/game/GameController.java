@@ -40,16 +40,16 @@ public class GameController {
     private BoardCardService boardCardService;
 
     @GetMapping()
-    public String gameList(ModelMap modelMap){
+    public String gameListNotFinished(ModelMap modelMap){
         String view ="games/gamesList";
-        Iterable<Game> games= gameService.findAll();
+        Iterable<Game> games= gameService.findAllNotFinished();
         modelMap.addAttribute("games", games);
         return view;
     }
 
     @GetMapping("/finished")
     public String gameListFinished(ModelMap modelMap){
-        String view ="games/gamesList";
+        String view ="games/gamesListFinished";
         Iterable<Game> games= gameService.findAllFinished();
         modelMap.addAttribute("games", games);
         return view;
@@ -83,6 +83,8 @@ public class GameController {
 
         String actualPlayerTurn=gameService.actualTurn(gameId).getMonsterName().toString();
         modelMap.addAttribute("actualPlayerTurn",actualPlayerTurn);
+        Boolean isPlayerTurn=gameService.isPlayerTurn(gameId);
+        modelMap.addAttribute("isPlayerTurn",isPlayerTurn);
         modelMap.addAttribute("players",players);
         modelMap.addAttribute("game",game);
         modelMap.addAttribute("roll",roll);
@@ -96,17 +98,19 @@ public class GameController {
 
     @PostMapping("/{gameId}/roll")
     public String rollKeep(@ModelAttribute("newTurn") Boolean nuevoTurno,@ModelAttribute("roll") Roll roll,BindingResult result,ModelMap modelMap, @PathVariable("gameId") int gameId) throws DuplicatedMonsterNameException  {
-
-        if(nuevoTurno){
-            gameService.nuevoTurno(gameId);
-        } else{
-            gameService.turnRoll(roll,gameId);
-            if(roll.getRollAmount()==roll.getMaxThrows()) {
-                Integer playerIdActualTurn=gameService.actualTurnPlayerId(gameId);
-                playerService.useRoll(gameId,playerIdActualTurn,roll);
-                
+        if(gameService.isPlayerTurn(gameId)) {
+            if(nuevoTurno){
+                gameService.nuevoTurno(gameId);
+            } else{
+                gameService.turnRoll(roll,gameId);
+                if(roll.getRollAmount()==roll.getMaxThrows()) {
+                    Integer playerIdActualTurn=gameService.actualTurnPlayerId(gameId);
+                    playerService.useRoll(gameId,playerIdActualTurn,roll);
+                    
+                }
             }
         }
+        
         return "redirect:/games/{gameId}/roll";
     }
     
