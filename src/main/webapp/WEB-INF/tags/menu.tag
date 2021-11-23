@@ -30,8 +30,11 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 
-					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new"
-						title="home page">
+					<petclinic:menuItem active="${name eq 'lobbiesList'}" url="/games/lobbies">
+						<span class="" aria-hidden="true"></span>
+						<span>Unirse a partida</span>
+					</petclinic:menuItem>
+					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new">
 						<span class="" aria-hidden="true"></span>
 						<span>Nueva partida</span>
 					</petclinic:menuItem>

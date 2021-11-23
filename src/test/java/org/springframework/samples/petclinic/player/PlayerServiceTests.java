@@ -45,7 +45,7 @@ public class PlayerServiceTests {
     public void testFindPlayerWithCorrectId(){
         Player player4 = playerService.findPlayerById(4);
         assertThat(player4.getMonsterName().toString()).startsWith("CyberBunny");
-		assertThat(player4.getLifePoints()).isEqualTo(4);
+		assertThat(player4.getLifePoints()).isEqualTo(0);
         assertThat(player4.getVictoryPoints()).isEqualTo(8);
         assertThat(player4.getEnergyPoints()).isEqualTo(2);
         assertThat(player4.getLocation().toString()).startsWith("bahiaTokyo");

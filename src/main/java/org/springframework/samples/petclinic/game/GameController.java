@@ -46,9 +46,20 @@ public class GameController {
 
     @GetMapping()
     public String gameListNotFinished(ModelMap modelMap){
-        String view ="games/gamesList";
-        Iterable<Game> games= gameService.findAllNotFinished();
-        modelMap.addAttribute("games", games);
+        if(userService.authenticatedUser() instanceof User){
+            String view ="games/gamesList";
+            Iterable<Game> games= gameService.findAllNotFinished();
+            modelMap.addAttribute("games", games);
+            return view;
+        }
+        return "redirect:/";
+    }
+
+    @GetMapping("/lobbies")
+    public String lobbies(ModelMap modelMap){
+        String view = "games/lobbiesList";
+        List<Game> lobbies = gameService.findLobbies();
+        modelMap.addAttribute("lobbies", lobbies);
         return view;
     }
 
