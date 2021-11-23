@@ -58,7 +58,7 @@ public class GameController {
     @GetMapping("/lobbies")
     public String lobbies(ModelMap modelMap){
         String view = "games/lobbiesList";
-        List<Game> lobbies = gameService.findLobbies(); //Esto no furula
+        List<Game> lobbies = gameService.findLobbies(); 
         modelMap.addAttribute("lobbies", lobbies);
         return view;
     }

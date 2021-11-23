@@ -6,7 +6,7 @@
                     <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
                         <petclinic:layout pageName="games">
-                            <h2>Games</h2>
+                            <h2>Partida terminada :</h2>
 
                             <table id="gamesTable" class="table table-striped">
                                 <thead>
@@ -28,7 +28,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <c:out value="${game.creator}" />
+                                                <c:out value="${game.creator.getUsername()}" />
                                                 </a>
                                             </td>
                                             <td>
