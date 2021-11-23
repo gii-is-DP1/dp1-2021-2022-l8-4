@@ -21,7 +21,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach items="${games}" var="game">
+                                    
                                         <tr>
                                             <td>
                                                 <c:out value="${game.name}" />
@@ -48,7 +48,7 @@
                                                 <c:out value="${game.playersAmount()}" /> 
                                              </td>
                                         </tr>
-                                    </c:forEach>
+                                    
                                 </tbody>
                             </table>
                         </petclinic:layout>

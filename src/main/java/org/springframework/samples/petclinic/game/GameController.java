@@ -58,7 +58,7 @@ public class GameController {
     @GetMapping("/lobbies")
     public String lobbies(ModelMap modelMap){
         String view = "games/lobbiesList";
-        List<Game> lobbies = gameService.findLobbies();
+        List<Game> lobbies = gameService.findLobbies(); //Esto no furula
         modelMap.addAttribute("lobbies", lobbies);
         return view;
     }
@@ -83,7 +83,7 @@ public class GameController {
 
     @GetMapping("/finished/{gameId}")
     public String gameFinished(ModelMap modelMap, @PathVariable("gameId") int gameId) {
-        String view="games/playersList";
+        String view="games/gameFinished";
         Iterable<Player> players= gameService.findPlayerList(gameId);
         Game game=gameService.findGameById(gameId);
         modelMap.addAttribute("players",players);
@@ -94,11 +94,12 @@ public class GameController {
     @GetMapping("/{gameId}/roll") 
     public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId){
         String view ="games/roll";
-
-        Iterable<Player> players= gameService.findPlayerList(gameId);
         Game game=gameService.findGameById(gameId);
 
-
+        if(game.isFinished()) {
+            return "redirect:/games/finished/{gameId}";
+        }
+        Iterable<Player> players= gameService.findPlayerList(gameId);
         if(MapGameRepository.getInstance().getTurnList(gameId) == null) {
             List<Integer> turnList=gameService.initialTurnList(gameId);
             MapGameRepository.getInstance().putTurnList(gameId, turnList);
