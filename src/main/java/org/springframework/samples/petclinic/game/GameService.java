@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.game;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,10 +10,11 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.board.Board;
+import org.springframework.samples.petclinic.board.BoardService;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
-import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class GameService {
     
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private BoardService boardService;
 
     @Autowired
     private UserService userService;
@@ -62,7 +67,35 @@ public class GameService {
     }
 
     /**
-	 * 
+	 * @return List of games that have not started yet
+	 */
+    @Transactional
+    public List<Game> findLobbies(){
+        return gameRepository.findLobbies();
+    }
+    
+
+    /**
+	 * Create a new game in the data base setting its creator
+	 */
+    @Transactional
+    public void createNewGame(User creator, Game newGame){
+        newGame.setCreator(creator);
+        newGame.setTurn(0);
+        saveGame(newGame);
+    }
+
+    /**
+     * Delete a game given its creator
+	 */
+    @Transactional
+    public void deleteGameByCreator(User creator, Game game){
+        if(creator.isCreator(game)){
+            gameRepository.delete(game);
+        }  
+    }
+
+    /**
 	 * @return Associated player if exist in the game or null if not
 	 */
     @Transactional
@@ -72,6 +105,24 @@ public class GameService {
                         .findFirst()
                         .get();
         return player;
+    }
+
+    /**
+	 * @return True if the game could be started, false if the game cannot be started yet
+	 */
+    public Boolean startGameByCreator(User creator, Game game){
+        Boolean started=false;
+        if(creator.isCreator(game) && game.hasEnoughPlayers() && !game.isStarted()){
+            game.setTurn(1);
+            game.setStartTime(LocalDateTime.now());
+
+            Board board = new Board();
+            boardService.saveBoard(board);
+            game.setBoard(board);
+            saveGame(game);
+            started=true;
+        }
+        return started;
     }
 
     @Transactional
