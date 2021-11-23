@@ -57,8 +57,7 @@ public class PlayerCardService {
         Board board = game.getBoard();
         Set<Card> availableCards = boardCardService.findAvailableCardsByBoard(board);
         if(availableCards.contains(card) 
-            && !game.isFinished()
-            && game.isStarted()
+            && game.isOnGoing()
             && !player.isDead()){
 
             //Check if the player has enough energy
