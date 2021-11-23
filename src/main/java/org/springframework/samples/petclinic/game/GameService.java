@@ -66,6 +66,18 @@ public class GameService {
         return gameRepository.findOnGoingGames();
     }
 
+    /**
+	 * @return List of games that have not started yet
+	 */
+    @Transactional
+    public List<Game> findLobbies(){
+        return gameRepository.findLobbies();
+    }
+    
+
+    /**
+	 * Create a new game in the data base setting its creator
+	 */
     @Transactional
     public void createNewGame(User creator, Game newGame){
         newGame.setCreator(creator);
@@ -73,6 +85,9 @@ public class GameService {
         saveGame(newGame);
     }
 
+    /**
+     * Delete a game given its creator
+	 */
     @Transactional
     public void deleteGameByCreator(User creator, Game game){
         if(creator.isCreator(game)){
