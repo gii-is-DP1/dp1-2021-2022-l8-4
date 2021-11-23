@@ -28,7 +28,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <c:out value="${game.creator}" />
+                                                <c:out value="${game.creator.getUsername()}" />
                                                 </a>
                                             </td>
                                             <td>
