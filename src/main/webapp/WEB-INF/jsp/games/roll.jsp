@@ -7,6 +7,10 @@
                         <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
                         <petclinic:layout pageName="dices">
+
+                            <c:if test="${!isPlayerInGame}">
+                                <h1>MODO ESPECTADOR</h1>
+                            </c:if>
                             <h2>
                                 Jugadores vivos: 
                                 <c:out value="${game.playersAlive().size()}" /> /
