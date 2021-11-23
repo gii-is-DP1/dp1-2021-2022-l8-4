@@ -81,7 +81,7 @@ public class GameController {
         return view;
     }
 
-    @GetMapping("/finished/{gameId}")
+    @GetMapping("/{gameId}/finished")
     public String gameFinished(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         String view="games/gameFinished";
         Iterable<Player> players= gameService.findPlayerList(gameId);
@@ -91,13 +91,13 @@ public class GameController {
         return view;
     }
 
-    @GetMapping("/{gameId}/roll") 
+    @GetMapping("/{gameId}/playing") 
     public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId){
-        String view ="games/roll";
+        String view ="games/playing";
         Game game=gameService.findGameById(gameId);
 
         if(game.isFinished()) {
-            return "redirect:/games/finished/{gameId}";
+            return "redirect:/games/{gameId}/finished";
         }
         Iterable<Player> players= gameService.findPlayerList(gameId);
         if(MapGameRepository.getInstance().getTurnList(gameId) == null) {
@@ -128,7 +128,7 @@ public class GameController {
         return view;
     }
 
-    @PostMapping("/{gameId}/roll")
+    @PostMapping("/{gameId}/playing")
     public String rollKeep(@ModelAttribute("newTurn") Boolean nuevoTurno,@ModelAttribute("roll") Roll roll,BindingResult result,ModelMap modelMap, @PathVariable("gameId") int gameId) throws DuplicatedMonsterNameException  {
         if(gameService.isPlayerTurn(gameId)) {
             if(nuevoTurno){
@@ -143,7 +143,7 @@ public class GameController {
             }
         }
         
-        return "redirect:/games/{gameId}/roll";
+        return "redirect:/games/{gameId}/playing";
     }
     
     @GetMapping("/new") 
@@ -220,7 +220,7 @@ public class GameController {
             Game game = gameService.findGameById(gameId);
             Boolean started = gameService.startGameByCreator(user, game);
             if(started){
-                return "redirect:/games/" + game.getId() + "/roll";
+                return "redirect:/games/" + game.getId() + "/playing";
             }else{
                 return "redirect:/games/" + game.getId() + "/lobby";
             }

@@ -42,7 +42,7 @@ public class PlayerController {
         Player player = playerService.findPlayerById(playerId);
         Card card = cardService.findCardById(cardId);
         playerCardService.buyCard(player, card);
-        return "redirect:/games/" + player.getGame().getId() + "/roll";
+        return "redirect:/games/" + player.getGame().getId() + "/playing";
     }
 
 
