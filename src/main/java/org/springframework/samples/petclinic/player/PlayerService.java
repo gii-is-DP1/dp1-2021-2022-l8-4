@@ -162,7 +162,7 @@ public class PlayerService {
         //Si tokyo tiene espacio
         Boolean bayInPlay=listaJugadoresEnPartida.stream().filter(p-> !p.isDead()).count() > 4;
         tokyoCityEmpty= !listaJugadoresEnPartida.stream().anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
-        tokyoBayEmpty=  !listaJugadoresEnPartida.stream().anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
+        tokyoBayEmpty=  !listaJugadoresEnPartida.stream().anyMatch(p -> p.getLocation().equals(LocationType.bahiaTokyo));
 
         if(tokyoCityEmpty && damage > 0) {
             playerActualTurn.setLocation(LocationType.ciudadTokyo);
