@@ -12,7 +12,6 @@ import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.card.Deck;
 import org.springframework.samples.petclinic.game.Game;
-import org.springframework.samples.petclinic.game.GameService;
 import org.springframework.samples.petclinic.game.MapGameRepository;
 import org.springframework.stereotype.Service;
 
@@ -62,16 +61,18 @@ public class GameCardService {
         Integer availableCards = findAvailableCardsByGame(game).size();
         if(availableCards < maxCardsOnSale){
             Deck deck = MapGameRepository.getInstance().getDeck(game);
-            if(!deck.isEmpty() && deck != null){
-                Card card = cardService.nextCard(game);
-                GameCard gameCard = new GameCard();
-                gameCard.setCard(card);
-                gameCard.setGame(game);
-                gameCard.setSold(false);
-                saveGameCard(gameCard);
+            if(deck != null){
+                if(!deck.isEmpty()){
+                    Card card = cardService.nextCard(game);
+                    GameCard gameCard = new GameCard();
+                    gameCard.setCard(card);
+                    gameCard.setGame(game);
+                    gameCard.setSold(false);
+                    saveGameCard(gameCard);
 
-                //Recursive call
-                showCards(game);
+                    //Recursive call
+                    showCards(game);
+                } 
             }
         }
     }

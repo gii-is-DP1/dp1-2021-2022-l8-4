@@ -10,7 +10,7 @@ import org.springframework.samples.petclinic.dice.Roll;
 public class MapGameRepository{
     Map<Integer,Roll> rollMap;
     Map<Integer, List<Integer>> turnListMap;
-    Map<Game, Deck> deckMap;
+    Map<Integer, Deck> deckMap;
     private static MapGameRepository instance=null;
     
 
@@ -26,7 +26,7 @@ public class MapGameRepository{
     public void init(){
        rollMap=new HashMap<Integer,Roll>();
        turnListMap=new HashMap<Integer,List<Integer>>();
-       deckMap = new HashMap<Game, Deck>();
+       deckMap = new HashMap<Integer, Deck>();
     }
 
     public void putRoll(Integer gameId,Roll roll) {
@@ -55,7 +55,7 @@ public class MapGameRepository{
      * @param Deck deck linked to the game
      */
     public void putDeck(Game game, Deck deck){
-        deckMap.put(game, deck);
+        deckMap.put(game.getId(), deck);
     }
 
     /**
@@ -64,8 +64,8 @@ public class MapGameRepository{
      * @return Deck linked to the game or null if the game has not deck assigned
      */
     public Deck getDeck(Game game){
-        if(deckMap.containsKey(game)){
-            return deckMap.get(game);
+        if(deckMap.containsKey(game.getId())){
+            return deckMap.get(game.getId());
         }else{
             return null;
         }

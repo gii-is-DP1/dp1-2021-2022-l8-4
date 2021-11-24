@@ -105,7 +105,7 @@ public class GameController {
         List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
         Roll roll = MapGameRepository.getInstance().getRoll(gameId);
 
-        String actualPlayerTurn = gameService.actualTurn(gameId).getMonsterName().toString();
+        Player actualPlayerTurn = gameService.actualTurn(gameId);
         modelMap.addAttribute("actualPlayerTurn", actualPlayerTurn);
 
         Boolean isPlayerTurn = gameService.isPlayerTurn(gameId);
@@ -164,6 +164,9 @@ public class GameController {
         Game game = gameService.findGameById(gameId);
         if (!game.isStarted()) {
             String view = "games/lobby";
+
+            Boolean isCreator = game.getCreator() == userService.authenticatedUser();
+            modelMap.addAttribute("isCreator", isCreator);
 
             modelMap.addAttribute("availableMonsters", game.availableMonsters());
             modelMap.addAttribute("game", game);

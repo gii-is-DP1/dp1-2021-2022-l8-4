@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.gamecard;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -25,13 +24,13 @@ import lombok.Setter;
 
     @Getter
     @Setter
-    @ManyToOne(optional=false, cascade = CascadeType.ALL)
+    @ManyToOne(optional=false)
     @JoinColumn(name="game_id")
     private Game game;
 
     @Getter
     @Setter
-    @ManyToOne(optional=false, cascade = CascadeType.ALL)
+    @ManyToOne(optional=false)
     @JoinColumn(name="card_id")
     private Card card;
 

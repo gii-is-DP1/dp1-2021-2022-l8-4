@@ -33,8 +33,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="/games/${game.id}/lobby" >Unirse
-                                                </a>
+                                                <a href="/games/${game.id}/lobby" ><button type="button" >Unirse</button></a>
                                             </td>
                                         </tr>
                                     </c:forEach>

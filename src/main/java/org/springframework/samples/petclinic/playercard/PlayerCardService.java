@@ -76,7 +76,7 @@ public class PlayerCardService {
             gameCard.setSold(true);
 
             //Show new cards
-            //gameCardService.showCards(game);
+            gameCardService.showCards(game);
             }
         }   
     }
