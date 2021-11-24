@@ -10,8 +10,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.board.Board;
-import org.springframework.samples.petclinic.board.BoardService;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
@@ -29,9 +27,6 @@ public class GameService {
     
     @Autowired
     private GameRepository gameRepository;
-
-    @Autowired
-    private BoardService boardService;
 
     @Autowired
     private UserService userService;
@@ -120,9 +115,8 @@ public class GameService {
             game.setTurn(1);
             game.setStartTime(LocalDateTime.now());
 
-            Board board = new Board();
-            boardService.saveBoard(board);
-            game.setBoard(board);
+            //Here we should initialize the deck order
+
             saveGame(game);
             started=true;
         }

@@ -7,11 +7,10 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.board.Board;
-import org.springframework.samples.petclinic.boardcard.BoardCard;
-import org.springframework.samples.petclinic.boardcard.BoardCardService;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.game.Game;
+import org.springframework.samples.petclinic.gamecard.GameCard;
+import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class PlayerCardService {
     private PlayerCardRepository playerCardRepository;
 
     @Autowired
-    private BoardCardService boardCardService;
+    private GameCardService gameCardService;
 
     @Autowired
     private PlayerService playerService;
@@ -54,8 +53,7 @@ public class PlayerCardService {
     public void buyCard(Player player, Card card){
         //Retrieve the game linked to the player to check if the card is available to buy
         Game game = player.getGame();
-        Board board = game.getBoard();
-        Set<Card> availableCards = boardCardService.findAvailableCardsByBoard(board);
+        Set<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
         if(availableCards.contains(card) 
             && game.isOnGoing()
             && !player.isDead()){
@@ -73,8 +71,8 @@ public class PlayerCardService {
             savePlayerCard(playerCard);
 
             //Update status of the card
-            BoardCard boardCard = boardCardService.findByBoardCard(board, card);
-            boardCard.setSold(true);
+            GameCard gameCard = gameCardService.findByGameCard(game, card);
+            gameCard.setSold(true);
             }
         }   
     }
