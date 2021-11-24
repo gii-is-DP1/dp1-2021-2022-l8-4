@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.boardcard.BoardCardService;
 import org.springframework.samples.petclinic.card.Card;
 
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
@@ -39,7 +39,7 @@ public class GameController {
     private PlayerService playerService;
 
     @Autowired
-    private BoardCardService boardCardService;
+    private GameCardService gameCardService;
 
     @Autowired
     private UserService userService;
@@ -118,7 +118,7 @@ public class GameController {
         modelMap.addAttribute("game", game);
         modelMap.addAttribute("roll", roll);
         // Retrieve data from board_card association and generate a list of cards
-        Set<Card> cards = boardCardService.findAvailableCardsByBoard(game.getBoard());
+        List<Card> cards = gameCardService.findAvailableCardsByGame(game);
         modelMap.addAttribute("cards", cards);
         modelMap.addAttribute("turnList", turnList);
 
@@ -171,7 +171,7 @@ public class GameController {
             modelMap.addAttribute("newPlayer", new Player());
             return view;
         }
-        return "redirect:/games";
+        return "redirect:/games/" + game.getId() + "/playing";
     }
 
     @PostMapping("/{gameId}/lobby")

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * @author Carlos Varela Soult
  */
 public class BoardServiceTests {
-    
+    /*
     @Autowired
     private BoardService boardService;
 
@@ -83,5 +83,5 @@ public class BoardServiceTests {
         assertThat(board.getTokyoBayStatus()).isEqualTo(oldTokyoBayStatus);
     }
 
-
+*/
 }

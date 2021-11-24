@@ -50,7 +50,7 @@ public class CardServiceTest {
     @Test
     public void testCountWithInitialData(){
         int count = cardService.cardCount();
-        assertEquals(count, 1);
+        assertEquals(count, 10);
     }
 
     @Test
