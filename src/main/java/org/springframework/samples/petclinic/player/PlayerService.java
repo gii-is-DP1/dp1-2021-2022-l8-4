@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
+import org.springframework.samples.petclinic.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 
 /**
@@ -36,7 +37,7 @@ public class PlayerService {
     public int playerCount(){
         return (int) playerRepository.count();
     } 
-
+/*
     @Transactional(rollbackFor = DuplicatedMonsterNameException.class)
     public void savePlayer(Player player) throws DuplicatedMonsterNameException {
         Player otherPlayer=getPlayerwithIdDifferent(player.getMonsterName().toString(), player.getId());
@@ -46,6 +47,9 @@ public class PlayerService {
                 playerRepository.save(player);   
         playerRepository.save(player);
     }
+    
+*/
+
     public Player getPlayerwithIdDifferent(String monsterName,Integer id) {
 		monsterName = monsterName.toLowerCase();
 		for (Player player : playerRepository.findAll()) {
@@ -57,6 +61,30 @@ public class PlayerService {
 		}
 		return null;
 	}
+
+    @Transactional
+    public void savePlayer(Player player){
+        playerRepository.save(player);
+    }
+
+    @Transactional
+    public void joinGame(User user, Player player, Game game){
+        MonsterName monsterName = player.getMonsterName();
+        if(game.hasRoom()
+            && !game.isStarted()
+            && game.monsterAvailable(monsterName)
+            && !user.hasActivePlayer()){
+            
+                player.setGame(game);
+                player.setUser(user);
+                player.setEnergyPoints(0);
+                player.setLifePoints(10);
+                player.setVictoryPoints(0);
+                player.setLocation(LocationType.fueraTokyo);
+
+                savePlayer(player);
+        }
+    }
 
     @Transactional
 	public Player findPlayerById(int id) throws DataAccessException {
@@ -185,4 +213,7 @@ public class PlayerService {
                 player.setLifePoints(0);
                 }
     }
+
+    
+
 }

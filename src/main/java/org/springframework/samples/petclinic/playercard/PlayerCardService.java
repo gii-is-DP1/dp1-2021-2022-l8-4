@@ -11,6 +11,7 @@ import org.springframework.samples.petclinic.board.Board;
 import org.springframework.samples.petclinic.boardcard.BoardCard;
 import org.springframework.samples.petclinic.boardcard.BoardCardService;
 import org.springframework.samples.petclinic.card.Card;
+import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.stereotype.Service;
@@ -44,12 +45,20 @@ public class PlayerCardService {
         playerCardRepository.save(playerCard);
     }
     
+    /**
+     * Check if the player is eligible to buy the card then buys it if it is possible
+     * @param player buying the card
+     * @param card card that the player wants to buy
+     */
     @Transactional
     public void buyCard(Player player, Card card){
         //Retrieve the game linked to the player to check if the card is available to buy
-        Board board = player.getGame().getBoard();
+        Game game = player.getGame();
+        Board board = game.getBoard();
         Set<Card> availableCards = boardCardService.findAvailableCardsByBoard(board);
-        if(availableCards.contains(card)){
+        if(availableCards.contains(card) 
+            && game.isOnGoing()
+            && !player.isDead()){
 
             //Check if the player has enough energy
             Integer energyPoints = player.getEnergyPoints();

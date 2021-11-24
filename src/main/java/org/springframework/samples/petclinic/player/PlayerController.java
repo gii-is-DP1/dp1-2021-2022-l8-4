@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.playercard.PlayerCardService;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,9 @@ public class PlayerController {
     @Autowired
     private CardService cardService;
 
+    @Autowired
+    private UserService userService;
+
 
     @GetMapping()
     public String cardsList(ModelMap modelMap){
@@ -40,9 +44,11 @@ public class PlayerController {
     @GetMapping("/{playerId}/cards/{cardId}/buy")
     public String buyCard(ModelMap modelMap, @PathVariable("playerId") int playerId, @PathVariable("cardId") int cardId){
         Player player = playerService.findPlayerById(playerId);
-        Card card = cardService.findCardById(cardId);
-        playerCardService.buyCard(player, card);
-        return "redirect:/games/" + player.getGame().getId() + "/roll";
+        if(userService.authenticatedUser().getPlayers().contains(player)){ 
+            Card card = cardService.findCardById(cardId);
+            playerCardService.buyCard(player, card);
+        }
+        return "redirect:/games/" + player.getGame().getId() + "/playing";
     }
 
 

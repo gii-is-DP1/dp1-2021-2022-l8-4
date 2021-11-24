@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.game;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,9 +11,12 @@ import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
+import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,14 +24,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- *  @author Ricardo Nadal Garcia 
- *  @author Jose Maria Delgado Sanchez
+ * @author Ricardo Nadal Garcia
+ * @author Jose Maria Delgado Sanchez
  */
 
- @Controller
- @RequestMapping("/games")
+@Controller
+@RequestMapping("/games")
 public class GameController {
-    
+
     @Autowired
     private GameService gameService;
 
@@ -39,88 +41,168 @@ public class GameController {
     @Autowired
     private BoardCardService boardCardService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping()
-    public String gameList(ModelMap modelMap){
-        String view ="games/gamesList";
-        Iterable<Game> games= gameService.findAll();
+    public String gameListNotFinished(ModelMap modelMap) {
+        String view = "games/gamesList";
+        Iterable<Game> games = gameService.findAllNotFinished();
+        modelMap.addAttribute("games", games);
+        return view;
+    }
+
+    @GetMapping("/lobbies")
+    public String lobbies(ModelMap modelMap) {
+        String view = "games/lobbiesList";
+        List<Game> lobbies = gameService.findLobbies();
+        modelMap.addAttribute("lobbies", lobbies);
+        return view;
+    }
+
+    @GetMapping("/finished")
+    public String gameListFinished(ModelMap modelMap) {
+        String view = "games/gamesListFinished";
+        Iterable<Game> games = gameService.findAllFinished();
         modelMap.addAttribute("games", games);
         return view;
     }
 
     @GetMapping("/{gameId}/players")
     public String gamePlayers(ModelMap modelMap, @PathVariable("gameId") int gameId) {
-        String view="games/playersList";
-        Iterable<Player> players= gameService.findPlayerList(gameId);
-        Game game=gameService.findGameById(gameId);
-        modelMap.addAttribute("players",players);
-        modelMap.addAttribute("game",game);
+        String view = "games/playersList";
+        Iterable<Player> players = gameService.findPlayerList(gameId);
+        Game game = gameService.findGameById(gameId);
+        modelMap.addAttribute("players", players);
+        modelMap.addAttribute("game", game);
         return view;
     }
 
-    @GetMapping("/{gameId}/roll") //PREGUNTAR AL PROFESOR RESPECTO QUE HACER CON EL TEMA DE ROLL, COMO LO OBTENGO AQUI PARA LOS DEMAS JUGADORES 
-    public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId){
-        String view ="games/roll";
+    @GetMapping("/{gameId}/finished")
+    public String gameFinished(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+        String view = "games/gameFinished";
+        Iterable<Player> players = gameService.findPlayerList(gameId);
+        Game game = gameService.findGameById(gameId);
+        modelMap.addAttribute("players", players);
+        modelMap.addAttribute("game", game);
+        return view;
+    }
 
-        Iterable<Player> players= gameService.findPlayerList(gameId);
-        Game game=gameService.findGameById(gameId);
+    @GetMapping("/{gameId}/playing")
+    public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+        String view = "games/playing";
+        Game game = gameService.findGameById(gameId);
 
-        if(MapGameRepository.getInstance().getTurnList(gameId) == null) {
-            List<Integer> turnList=game.initialTurnList();
+        if (game.isFinished()) {
+            return "redirect:/games/{gameId}/finished";
+        }
+        Iterable<Player> players = gameService.findPlayerList(gameId);
+        if (MapGameRepository.getInstance().getTurnList(gameId) == null) {
+            List<Integer> turnList = gameService.initialTurnList(gameId);
             MapGameRepository.getInstance().putTurnList(gameId, turnList);
         }
-       
 
-        
-        
-        List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
-        Roll roll=MapGameRepository.getInstance().getRoll(gameId);
+        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+        Roll roll = MapGameRepository.getInstance().getRoll(gameId);
 
-        modelMap.addAttribute("players",players);
-        modelMap.addAttribute("game",game);
-        modelMap.addAttribute("roll",roll);
+        String actualPlayerTurn = gameService.actualTurn(gameId).getMonsterName().toString();
+        modelMap.addAttribute("actualPlayerTurn", actualPlayerTurn);
 
-        //Retrieve data from board_card association and generate a list of cards
+        Boolean isPlayerTurn = gameService.isPlayerTurn(gameId);
+        modelMap.addAttribute("isPlayerTurn", isPlayerTurn);
+
+        Boolean isPlayerInGame = gameService.isPlayerInGame(gameId);
+        modelMap.addAttribute("isPlayerInGame", isPlayerInGame);
+
+        modelMap.addAttribute("players", players);
+        modelMap.addAttribute("game", game);
+        modelMap.addAttribute("roll", roll);
+        // Retrieve data from board_card association and generate a list of cards
         Set<Card> cards = boardCardService.findAvailableCardsByBoard(game.getBoard());
-        
         modelMap.addAttribute("cards", cards);
-        
-        modelMap.addAttribute("turnList",turnList);
+        modelMap.addAttribute("turnList", turnList);
 
         return view;
     }
 
-    @PostMapping("/{gameId}/roll")
-    public String rollKeep(@ModelAttribute("newTurn") Boolean nuevoTurno,@ModelAttribute("roll") Roll roll,BindingResult result,ModelMap modelMap, @PathVariable("gameId") int gameId) throws DuplicatedMonsterNameException  {
-        
-        List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
-        
+    @PostMapping("/{gameId}/playing")
+    public String rollKeep(@ModelAttribute("newTurn") Boolean nuevoTurno, @ModelAttribute("roll") Roll roll,
+            BindingResult result, ModelMap modelMap, @PathVariable("gameId") int gameId)
+            throws DuplicatedMonsterNameException {
+        if (gameService.isPlayerTurn(gameId)) {
+            if (nuevoTurno) {
+                gameService.nuevoTurno(gameId);
+            } else {
+                gameService.turnRoll(roll, gameId);
+                if (roll.getRollAmount() == roll.getMaxThrows()) {
+                    Integer playerIdActualTurn = gameService.actualTurnPlayerId(gameId);
+                    playerService.useRoll(gameId, playerIdActualTurn, roll);
 
-        if(nuevoTurno){
-            gameService.nuevoTurno(gameId);
-            roll=new Roll();
-
-        } else{
-            gameService.turnRoll(roll);
-            if(roll.getRollAmount()==roll.getMaxThrows()) {
-                Integer playerIdActualTurn=gameService.actualTurnPlayerId(turnList, gameId);
-                playerService.useRoll(gameId,playerIdActualTurn,roll);
+                }
             }
         }
-        
-        
-        
-        
 
-        MapGameRepository.getInstance().putRoll(gameId,roll);
-       
-
-        return "redirect:/games/{gameId}/roll";
+        return "redirect:/games/{gameId}/playing";
     }
-    
 
-        
+    @GetMapping("/new")
+    public String newGame(ModelMap modelMap) {
+        String view = "games/newGame";
+        modelMap.addAttribute("newGame", new Game());
+        return view;
+    }
 
-        
-        
-       
+    @PostMapping("/new")
+    public String createNewGame(@ModelAttribute("newGame") Game newGame, ModelMap modelMap) {
+        User user = userService.authenticatedUser();
+        gameService.createNewGame(user, newGame);
+        return "redirect:/games/" + newGame.getId() + "/lobby";
+    }
+
+    @GetMapping("/{gameId}/lobby")
+    public String gameLobby(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+        Game game = gameService.findGameById(gameId);
+        if (!game.isStarted()) {
+            String view = "games/lobby";
+
+            modelMap.addAttribute("availableMonsters", game.availableMonsters());
+            modelMap.addAttribute("game", game);
+            modelMap.addAttribute("players", game.getPlayers());
+            modelMap.addAttribute("newPlayer", new Player());
+            return view;
+        }
+        return "redirect:/games";
+    }
+
+    @PostMapping("/{gameId}/lobby")
+    public String joinGame(@ModelAttribute("newPlayer") Player newPlayer, ModelMap modelMap,
+            @PathVariable("gameId") int gameId) {
+
+        User user = userService.authenticatedUser();
+        Game game = gameService.findGameById(gameId);
+        playerService.joinGame(user, newPlayer, game);
+
+        return "redirect:/games/" + game.getId() + "/lobby";
+    }
+
+    @DeleteMapping("/{gameId}/lobby")
+    public String deleteGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+        User user = userService.authenticatedUser();
+        Game game = gameService.findGameById(gameId);
+        gameService.deleteGameByCreator(user, game);
+        return "redirect:/games";
+    }
+
+    @GetMapping("/{gameId}/start")
+    public String startGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+        User user = userService.authenticatedUser();
+        Game game = gameService.findGameById(gameId);
+        Boolean started = gameService.startGameByCreator(user, game);
+        if (started) {
+            return "redirect:/games/" + game.getId() + "/playing";
+        } else {
+            return "redirect:/games/" + game.getId() + "/lobby";
+        }
+    }
+
 }

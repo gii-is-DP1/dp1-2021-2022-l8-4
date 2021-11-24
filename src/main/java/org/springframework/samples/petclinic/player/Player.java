@@ -1,7 +1,5 @@
 package org.springframework.samples.petclinic.player;
 
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -82,17 +80,19 @@ public class Player extends BaseEntity {
     @ManyToOne(optional=false)
     @JoinColumn(name="user_id")
     private User user;
-    
-    
-
-    @Transient
-    public DiceValues[] keep;
 
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player" , fetch = FetchType.EAGER)
     private Set<PlayerStatus> playerStatus; 
     
+    /**
+     * Give the player the opportunity to kill himself and stop playing
+     */
+    public void surrender(){
+        this.lifePoints=0;
+    }
+
     protected Set<PlayerStatus> getPlayerStatusInternal() {
 		if (this.playerStatus == null) {
 			this.playerStatus = new HashSet<>();

@@ -2,22 +2,28 @@ package org.springframework.samples.petclinic.game;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.board.Board;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.player.MonsterName;
 import org.springframework.samples.petclinic.player.Player;
+import org.springframework.samples.petclinic.user.User;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,85 +39,132 @@ import lombok.Setter;
  @Table(name = "games")
  public class Game extends NamedEntity{
 
-    @NotEmpty
-  
-    @Column(name="creator")
-    private String creator;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User creator;
 
     @NotNull
-   
     @Min(0)
     @Column(name="turn")
     private Integer turn;
 
-    
     @Column(name="winner")
     private String winner;
 
-    @NotNull
-    
     @Column(name="start_time")
     private LocalDateTime startTime;
 
-    @NotNull
-    
+
     @Column(name="end_time")
     private LocalDateTime endTime;
 
+    @NotNull
+    @Min(2)
+    @Max(6)
+    @Column(name = "max_number_of_players")
+    private Integer maxNumberOfPlayers;
+
     
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
-    @Getter
-    @Setter
+
     @OneToOne
     private Board board;
 
     
-
-    public List<Integer> initialTurnList(){
-       List<Integer> listaTurnos=new ArrayList<Integer>();
-       for(Player player:this.players) {
-          listaTurnos.add(player.getId());
-       }
-       Collections.shuffle(listaTurnos);
-       return listaTurnos;
+    /**
+     * @return true if the game has started
+     */
+    public Boolean isStarted(){
+       return this.turn !=0;
     }
 
-    public Player actualTurn(List<Integer> turnList){
-      
-      List<Player> jugadores=getPlayers();
-      Player jugadorActual= actualTurnPosicionLista(turnList, getTurn(), jugadores);
-      
-      return jugadorActual;
-      
-  }
+   /**
+   * @return true if the game still on going
+   */
+    public Boolean isOnGoing(){
+      return isStarted() && !isFinished();
+   }
 
-  private Player actualTurnPosicionLista(List<Integer> turnList,Integer posicionLista,List<Player> jugadores) {
-      Integer numeroTurno = posicionLista % (jugadores.size());
-      
-      for(Player player:players) {
-         if(player.getId()==turnList.get(numeroTurno) && player.isDead()) {
-            numeroTurno++;
-            return actualTurnPosicionLista(turnList, numeroTurno, jugadores);
-         } else if(player.getId()==turnList.get(numeroTurno)){
-            return player;
-         }
-      }
-      return null;
-  }
+    /**
+     * @return true if the game has enough players to start
+     */
+    public Boolean hasEnoughPlayers(){
+       Integer nPlayers = this.players.size();
+      return  nPlayers >= 2 && nPlayers <= this.maxNumberOfPlayers;
+   }
 
-  public Integer playersAlive(){
-     Integer vivos=0;
+
+    /**
+     * @return true if the game has room for more players
+     */
+    public Boolean hasRoom(){
+       return this.players.size() < this.maxNumberOfPlayers;
+    }
+
+    /**
+     * @return true if the monster is still available in the game
+     */
+    public Boolean monsterAvailable(MonsterName monsterName){
+       return !this.players.stream()
+                        .map(p -> p.getMonsterName())
+                        .filter(pm -> pm == monsterName)
+                        .findAny()
+                        .isPresent();
+    }
+
+    /**
+     * @return a Set containing the available monster to pick
+     */
+    public Set<MonsterName> availableMonsters(){
+       MonsterName[] monsters = MonsterName.values();
+       Set<MonsterName> allMonsters = new HashSet<>(monsters.length);
+       Set<MonsterName> availableMonsters = new HashSet<MonsterName>(monsters.length);
+       Set<MonsterName> actualPlayersMonster = this.players.stream()
+                                                         .map(p -> p.getMonsterName())
+                                                         .collect(Collectors.toSet());
+      
+       for(int i=0;i<monsters.length;i++){
+         allMonsters.add(monsters[i]);
+       }
+
+       availableMonsters = allMonsters.stream()
+                                    .filter(x -> !actualPlayersMonster.contains(x))
+                                    .collect(Collectors.toSet());
+
+       return availableMonsters;
+    }
+ 
+
+  public List<Player> playersAlive(){
+     List<Player> vivos=new ArrayList<Player>();
      for(Player player:this.players) {
          if(!player.isDead()){
-            vivos++;
+            vivos.add(player);
          }
      }
      return vivos;
   }
+  
+  public Boolean isFinished(){
+     return this.winner!=null && !this.winner.isEmpty() ;
+     }
 
   public Integer playersAmount(){
      return this.players.size();
   }
+  
+  public List<Player> playersWithMaxVictoryPoints() {
+     List<Player> playerList=new ArrayList<Player>();
+     Integer maxPoints=20;
+     for(Player player:this.players) {
+        if(player.getVictoryPoints()>=maxPoints) {
+            playerList.add(player);
+        }
+     }
+     return playerList;
+  }
+
+
  }

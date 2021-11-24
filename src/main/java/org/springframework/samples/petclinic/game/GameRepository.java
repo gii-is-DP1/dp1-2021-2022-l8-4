@@ -15,10 +15,17 @@ import org.springframework.stereotype.Repository;
 public interface GameRepository extends CrudRepository<Game, Integer>{
 
     /**
-	 * Retrieve all <code>PetType</code>s from the data store.
+	 * Retrieve not finished <code>Game</code>s from the data store.
 	 * @return a <code>Collection</code> of <code>Game</code>s
 	 */
-	@Query("SELECT game FROM Game game WHERE game.winner IS NULL")
+	@Query("SELECT game FROM Game game WHERE game.winner IS NULL AND turn > 0")
 	List<Game> findOnGoingGames() throws DataAccessException;
+
+	/**
+	 * Retrieve lobbies <code>Game</code>s from the data store.
+	 * @return a <code>Collection</code> of <code>Game</code>s
+	 */
+	@Query("SELECT game FROM Game game WHERE game.turn IS 0")
+	List<Game> findLobbies() throws DataAccessException;
     
 }

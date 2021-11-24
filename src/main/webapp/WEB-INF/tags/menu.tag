@@ -29,6 +29,16 @@
 					<li><a href="<c:url value="/users/new" />">Register</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
+
+					<petclinic:menuItem active="${name eq 'lobbiesList'}" url="/games/lobbies">
+						<span class="" aria-hidden="true"></span>
+						<span>Unirse a partida</span>
+					</petclinic:menuItem>
+					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new">
+						<span class="" aria-hidden="true"></span>
+						<span>Nueva partida</span>
+					</petclinic:menuItem>
+
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
 							<strong><sec:authentication property="name" /></strong> <span
