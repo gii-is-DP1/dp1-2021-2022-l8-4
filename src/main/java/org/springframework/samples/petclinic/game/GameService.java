@@ -10,8 +10,10 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
@@ -33,6 +35,12 @@ public class GameService {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private CardService cardService;
+
+    @Autowired
+    private GameCardService gameCardService;
     
     @Transactional
     public Iterable<Game> findAll(){
@@ -109,13 +117,15 @@ public class GameService {
     /**
 	 * @return True if the game could be started, false if the game cannot be started yet
 	 */
+    @Transactional
     public Boolean startGameByCreator(User creator, Game game){
         Boolean started=false;
         if(creator.isCreator(game) && game.hasEnoughPlayers() && !game.isStarted()){
             game.setTurn(1);
             game.setStartTime(LocalDateTime.now());
 
-            //Here we should initialize the deck order
+            cardService.newDeck(game);
+            gameCardService.showCards(game);
 
             saveGame(game);
             started=true;

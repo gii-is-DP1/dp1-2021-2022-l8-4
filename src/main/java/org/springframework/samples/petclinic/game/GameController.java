@@ -118,7 +118,7 @@ public class GameController {
         modelMap.addAttribute("game", game);
         modelMap.addAttribute("roll", roll);
         // Retrieve data from board_card association and generate a list of cards
-        Set<Card> cards = gameCardService.findAvailableCardsByGame(game);
+        List<Card> cards = gameCardService.findAvailableCardsByGame(game);
         modelMap.addAttribute("cards", cards);
         modelMap.addAttribute("turnList", turnList);
 
@@ -171,7 +171,7 @@ public class GameController {
             modelMap.addAttribute("newPlayer", new Player());
             return view;
         }
-        return "redirect:/games";
+        return "redirect:/games/" + game.getId() + "/playing";
     }
 
     @PostMapping("/{gameId}/lobby")

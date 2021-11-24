@@ -39,4 +39,5 @@ import lombok.Setter;
     @Getter
     @Column(name="sold")
     private Boolean sold;
+
  }

@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.playercard;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,7 @@ public class PlayerCardService {
     public void buyCard(Player player, Card card){
         //Retrieve the game linked to the player to check if the card is available to buy
         Game game = player.getGame();
-        Set<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
+        List<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
         if(availableCards.contains(card) 
             && game.isOnGoing()
             && !player.isDead()){
@@ -73,6 +74,9 @@ public class PlayerCardService {
             //Update status of the card
             GameCard gameCard = gameCardService.findByGameCard(game, card);
             gameCard.setSold(true);
+
+            //Show new cards
+            //gameCardService.showCards(game);
             }
         }   
     }

@@ -101,6 +101,7 @@
                             <table id="playersTable" class="table table-striped">
                                 <thead>
                                     <tr>
+                                     <th style="width: 150px;">Username</th>
                                         <th style="width: 150px;">Monster Name</th>
                                         <th style="width: 120px;">Life Points</th>
                                         <th style="width: 120px">Victory Points</th>
@@ -111,6 +112,10 @@
                                 <tbody>
                                     <c:forEach items="${players}" var="player">
                                         <tr>
+                                             <td>
+                                                <c:out value="${player.user.username}" />
+                                                </a>
+                                            </td>
                                             <td>
                                                 <c:out value="${player.monsterName}" />
                                                 </a>

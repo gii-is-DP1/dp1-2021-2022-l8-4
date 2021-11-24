@@ -71,7 +71,7 @@ import lombok.Setter;
     @Setter
     @Getter
     @OneToMany(mappedBy = "game")
-    private List<GameCard> gameCard;
+    private List<GameCard> gameCards;
 
     
     /**
