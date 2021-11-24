@@ -120,6 +120,8 @@ public class PlayerService {
         return  listaJugadores;
     }
 
+    
+
     @Transactional
     public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) throws DuplicatedMonsterNameException {
         List<Player> listaJugadoresEnPartida=findPlayerByGame(gameId);
@@ -164,9 +166,11 @@ public class PlayerService {
 
         if(tokyoCityEmpty && damage > 0) {
             playerActualTurn.setLocation(LocationType.ciudadTokyo);
+            playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + 1);
             damage--;
         } else if(bayInPlay && tokyoBayEmpty && damage > 0) {
             playerActualTurn.setLocation(LocationType.bahiaTokyo);
+            playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + 1);
             damage--;
         }
         //Los efectos de los dados
@@ -227,6 +231,16 @@ public class PlayerService {
             } else {
                 player.setLifePoints(0);
                 }
+    }
+
+    @Transactional
+    public void startTurn(Integer playerId){
+        Player player=findPlayerById(playerId);
+        if(player.getLocation().equals(LocationType.ciudadTokyo) || player.getLocation().equals(LocationType.bahiaTokyo)) {
+            player.setVictoryPoints(player.getVictoryPoints() + 2);
+            savePlayer(player);
+        }
+
     }
 
     
