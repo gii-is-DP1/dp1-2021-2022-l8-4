@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.samples.petclinic.boardcard.BoardCard;
+import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.playercard.PlayerCard;
 
@@ -37,7 +37,7 @@ public class Card extends NamedEntity{
     private CardType type;
 
     @OneToMany(mappedBy = "card")
-    private List<BoardCard> boardCard;
+    private List<GameCard> gameCard;
 
     @OneToMany(mappedBy = "card")
     private List<PlayerCard> playerCard;
