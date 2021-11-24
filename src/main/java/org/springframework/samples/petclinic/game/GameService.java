@@ -15,6 +15,7 @@ import org.springframework.samples.petclinic.board.BoardService;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.player.Player;
+import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class GameService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PlayerService playerService;
     
     @Transactional
     public Iterable<Game> findAll(){
@@ -145,6 +149,7 @@ public class GameService {
         MapGameRepository.getInstance().putRoll(gameId, new Roll());
         game.setTurn(game.getTurn()+1);
         saveGame(game);
+        playerService.startTurn(actualTurnPlayerId(gameId));
     }
 
     public Integer actualTurnPlayerId(Integer gameId){
