@@ -123,7 +123,9 @@ public class PlayerService {
     @Transactional
     public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) throws DuplicatedMonsterNameException {
         List<Player> listaJugadoresEnPartida=findPlayerByGame(gameId);
-
+        Player playerActualTurn = findPlayerById(playerIdActualTurn);
+        Boolean tokyoCityEmpty=Boolean.FALSE;
+        Boolean tokyoBayEmpty=Boolean.FALSE;
         
         Integer heal=0;
         Integer damage=0;
@@ -155,11 +157,24 @@ public class PlayerService {
                 break;
             }
         }
+        //Si tokyo tiene espacio
+        Boolean bayInPlay=listaJugadoresEnPartida.stream().filter(p-> !p.isDead()).count() > 4;
+        tokyoCityEmpty= !listaJugadoresEnPartida.stream().anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
+        tokyoBayEmpty=  !listaJugadoresEnPartida.stream().anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
 
+        if(tokyoCityEmpty && damage > 0) {
+            playerActualTurn.setLocation(LocationType.ciudadTokyo);
+            damage--;
+        } else if(bayInPlay && tokyoBayEmpty && damage > 0) {
+            playerActualTurn.setLocation(LocationType.bahiaTokyo);
+            damage--;
+        }
+        //Los efectos de los dados
         for(Player player:listaJugadoresEnPartida) {
             Integer playerMaxHealth=10; //Por ahora lo dejo asi, la idea es que sea 10 default o 12 si tiene la carta (max health Atributo de player?)
             Integer playerMinHealth=0; 
-            Player playerActualTurn = findPlayerById(playerIdActualTurn);
+            
+
             if(playerIdActualTurn == player.getId()){
                 //CURACION
                 if(player.getLocation()==LocationType.fueraTokyo){
