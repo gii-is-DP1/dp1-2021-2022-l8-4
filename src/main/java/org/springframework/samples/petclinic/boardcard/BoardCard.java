@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.boardcard;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -24,13 +25,13 @@ import lombok.Setter;
 
     @Getter
     @Setter
-    @ManyToOne(optional=false)
+    @ManyToOne(optional=false, cascade = CascadeType.ALL)
     @JoinColumn(name="board_id")
     private Board board;
 
     @Getter
     @Setter
-    @ManyToOne(optional=false)
+    @ManyToOne(optional=false, cascade = CascadeType.ALL)
     @JoinColumn(name="card_id")
     private Card card;
 
