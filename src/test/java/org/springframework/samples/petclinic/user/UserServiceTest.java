@@ -24,8 +24,6 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    //TODOLos demás tests
-
     @Test
     public void testGetCurrentUserId() {
         Integer currentUserId = userService.getCurrentUserId("user2");
@@ -53,7 +51,7 @@ public class UserServiceTest {
         user = this.userService.findUserById(1);
         assertThat(user.get().getUsername()).isEqualTo(newName);
     }
-
+    
     @Test
     public void testFindUserById() {
         Optional<User> user = userService.findUserById(1);
