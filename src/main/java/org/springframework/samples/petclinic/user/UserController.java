@@ -25,8 +25,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
     
-   private static final String VIEW_WELCOME = "welcome";
-   private static final String VIEWS_USERS_CREATE_UPDATE_FORM = "users/createOrUpdateUsersForm";
+    private static final String VIEWS_USERS_CREATE_UPDATE_FORM = "users/createOrUpdateUsersForm";
 
 	@GetMapping()
     public String usersList(ModelMap modelMap){
@@ -57,7 +56,7 @@ public class UserController {
             userService.saveUser(user);
             modelMap.addAttribute("message","User succesfully created!");
             usersList(modelMap);
-            return VIEW_WELCOME;
+            return "redirect:/login";
         }
     } 
 
