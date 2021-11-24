@@ -80,11 +80,6 @@ public class Player extends BaseEntity {
     @ManyToOne(optional=false)
     @JoinColumn(name="user_id")
     private User user;
-    
-    
-
-    @Transient
-    public DiceValues[] keep;
 
 
 
