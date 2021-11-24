@@ -13,13 +13,12 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.samples.petclinic.board.Board;
+import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.player.MonsterName;
 import org.springframework.samples.petclinic.player.Player;
@@ -69,8 +68,10 @@ import lombok.Setter;
     private List<Player> players;
 
 
-    @OneToOne
-    private Board board;
+    @Setter
+    @Getter
+    @OneToMany(mappedBy = "game")
+    private List<GameCard> gameCards;
 
     
     /**
