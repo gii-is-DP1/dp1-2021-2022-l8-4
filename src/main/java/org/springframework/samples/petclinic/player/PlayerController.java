@@ -51,5 +51,14 @@ public class PlayerController {
         return "redirect:/games/" + player.getGame().getId() + "/playing";
     }
 
+    @GetMapping("/{playerId}/surrender") 
+    public String surrender(ModelMap modelMap, @PathVariable("playerId") int playerId) {
+        
+        playerService.surrender(playerId);
+        return "redirect:/";
+        
+    }
+    
+
 
 }

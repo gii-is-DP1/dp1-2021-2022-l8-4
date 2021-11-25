@@ -91,7 +91,12 @@ public class GameController {
     @GetMapping("/{gameId}/playing")
     public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         String view = "games/playing";
+
+        gameService.endGame(gameId);
+        
         Game game = gameService.findGameById(gameId);
+
+        
 
         if (game.isFinished()) {
             return "redirect:/games/{gameId}/finished";
@@ -113,6 +118,9 @@ public class GameController {
 
         Boolean isPlayerInGame = gameService.isPlayerInGame(gameId);
         modelMap.addAttribute("isPlayerInGame", isPlayerInGame);
+
+        Player actualPlayer=playerService.actualPlayer(gameId);
+        modelMap.addAttribute("actualPlayer", actualPlayer);
 
         modelMap.addAttribute("players", players);
         modelMap.addAttribute("game", game);
@@ -207,5 +215,6 @@ public class GameController {
             return "redirect:/games/" + game.getId() + "/lobby";
         }
     }
+    
 
 }
