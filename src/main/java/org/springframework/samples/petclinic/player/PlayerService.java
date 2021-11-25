@@ -238,6 +238,7 @@ public class PlayerService {
                 player.setLifePoints(sumaVidaQuitada);
             } else {
                 player.setLifePoints(0);
+                player.setLocation(LocationType.fueraTokyo);
                 }
     }
 
