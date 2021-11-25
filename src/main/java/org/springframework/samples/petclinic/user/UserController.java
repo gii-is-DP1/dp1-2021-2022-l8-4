@@ -91,5 +91,13 @@ public class UserController {
 			return "redirect:/users";
 		}
 	}
-    
+
+    @PostMapping(value = "/profile/{userId}")
+    public String usersProfile(@PathVariable("userId") int userId){
+        ModelMap modelMap = new ModelMap();
+        String view ="users/profile";
+        Optional<User> user= this.userService.findUserById(userId);
+        modelMap.addAttribute("user", user.get());
+        return view;
+    }
 }

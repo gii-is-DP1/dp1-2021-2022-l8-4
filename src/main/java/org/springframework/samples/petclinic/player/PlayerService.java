@@ -9,8 +9,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
+import org.springframework.samples.petclinic.game.GameService;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
 import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,13 @@ public class PlayerService {
     
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
     private PlayerStatusRepository playerStatusRepository;
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private GameService gameService;
 
     @Transactional
     public Iterable<Player> findAll(){
@@ -120,10 +128,14 @@ public class PlayerService {
         return  listaJugadores;
     }
 
+    
+
     @Transactional
     public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) throws DuplicatedMonsterNameException {
         List<Player> listaJugadoresEnPartida=findPlayerByGame(gameId);
-
+        Player playerActualTurn = findPlayerById(playerIdActualTurn);
+        Boolean tokyoCityEmpty=Boolean.FALSE;
+        Boolean tokyoBayEmpty=Boolean.FALSE;
         
         Integer heal=0;
         Integer damage=0;
@@ -155,11 +167,26 @@ public class PlayerService {
                 break;
             }
         }
+        //Si tokyo tiene espacio
+        Boolean bayInPlay=listaJugadoresEnPartida.stream().filter(p-> !p.isDead()).count() > 4;
+        tokyoCityEmpty= !listaJugadoresEnPartida.stream().anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
+        tokyoBayEmpty=  !listaJugadoresEnPartida.stream().anyMatch(p -> p.getLocation().equals(LocationType.bahiaTokyo));
 
+        if(tokyoCityEmpty && damage > 0) {
+            playerActualTurn.setLocation(LocationType.ciudadTokyo);
+            playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + 1);
+            damage--;
+        } else if(bayInPlay && tokyoBayEmpty && damage > 0) {
+            playerActualTurn.setLocation(LocationType.bahiaTokyo);
+            playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + 1);
+            damage--;
+        }
+        //Los efectos de los dados
         for(Player player:listaJugadoresEnPartida) {
             Integer playerMaxHealth=10; //Por ahora lo dejo asi, la idea es que sea 10 default o 12 si tiene la carta (max health Atributo de player?)
             Integer playerMinHealth=0; 
-            Player playerActualTurn = findPlayerById(playerIdActualTurn);
+            
+
             if(playerIdActualTurn == player.getId()){
                 //CURACION
                 if(player.getLocation()==LocationType.fueraTokyo){
@@ -213,6 +240,38 @@ public class PlayerService {
                 player.setLifePoints(0);
                 }
     }
+
+    @Transactional
+    public void startTurn(Integer playerId){
+        Player player=findPlayerById(playerId);
+        if(player.getLocation().equals(LocationType.ciudadTokyo) || player.getLocation().equals(LocationType.bahiaTokyo)) {
+            player.setVictoryPoints(player.getVictoryPoints() + 2);
+            savePlayer(player);
+        }
+    }
+
+    @Transactional
+    public Player actualPlayer(Integer gameId) {
+        Game game=gameService.findGameById(gameId);
+        User user=userService.authenticatedUser();
+        return game.getPlayers()
+                    .stream()
+                    .filter(p -> p.getUser().getId().equals(user.getId()))
+                    .findAny()
+                    .get();
+    }
+
+    @Transactional
+    public void surrender(Integer playerId) {
+        Player player=findPlayerById(playerId);       
+        User user=userService.authenticatedUser();
+        if(player.getUser().getId() == user.getId()) {
+            player.surrender();
+            savePlayer(player);
+        }
+    }
+
+
 
     
 

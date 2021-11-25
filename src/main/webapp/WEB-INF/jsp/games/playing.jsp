@@ -7,7 +7,13 @@
                         <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
                         <petclinic:layout pageName="dices">
-
+                            <c:if test="${isPlayerInGame}">
+                                <a href="/players/${actualPlayer.getId()}/surrender">
+                                    <button type="button">
+                                        SALIR DE LA PARTIDA
+                                    </button>
+                                </a>
+                            </c:if>
                             <c:if test="${!isPlayerInGame}">
                                 <h1>MODO ESPECTADOR</h1>
                             </c:if>
@@ -23,7 +29,7 @@
                             </h2>
                             <h2>
                                 Es el turno de:
-                                <c:out value="${actualPlayerTurn}" />
+                                <c:out value="${actualPlayerTurn.monsterName} (${actualPlayerTurn.user.username})" />
                             </h2> 
 
                             <h1>Tirada de dados</h1>
@@ -101,6 +107,7 @@
                             <table id="playersTable" class="table table-striped">
                                 <thead>
                                     <tr>
+                                     <th style="width: 150px;">Username</th>
                                         <th style="width: 150px;">Monster Name</th>
                                         <th style="width: 120px;">Life Points</th>
                                         <th style="width: 120px">Victory Points</th>
@@ -111,6 +118,10 @@
                                 <tbody>
                                     <c:forEach items="${players}" var="player">
                                         <tr>
+                                             <td>
+                                                <c:out value="${player.user.username}" />
+                                                </a>
+                                            </td>
                                             <td>
                                                 <c:out value="${player.monsterName}" />
                                                 </a>
@@ -135,12 +146,15 @@
                             </table>
 
 
+                            <h2>Card Shop</h2>
+
                             <table id="cardsTable" class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width: 150px;">Card Name</th>
                                         <th style="width: 120px;">Cost</th>
                                         <th style="width: 120px">Type</th>
+                                        <th style="width: 120px"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -157,6 +171,11 @@
                                             <td>
                                                 <c:out value="${card.type}" />
                                                 </a>
+                                            </td>
+                                            <td>
+                                            <c:if test="${isPlayerTurn}">
+                                                <a href="/players/${actualPlayerTurn.id}/cards/${card.id}/buy"><button type="button" >Comprar</button></a>
+                                            </c:if>
                                             </td>
                                         </tr>
                                     </c:forEach>

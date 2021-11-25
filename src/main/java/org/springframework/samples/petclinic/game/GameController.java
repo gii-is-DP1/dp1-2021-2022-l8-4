@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.boardcard.BoardCardService;
 import org.springframework.samples.petclinic.card.Card;
 
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
@@ -39,7 +39,7 @@ public class GameController {
     private PlayerService playerService;
 
     @Autowired
-    private BoardCardService boardCardService;
+    private GameCardService gameCardService;
 
     @Autowired
     private UserService userService;
@@ -91,7 +91,12 @@ public class GameController {
     @GetMapping("/{gameId}/playing")
     public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         String view = "games/playing";
+
+        gameService.endGame(gameId);
+        
         Game game = gameService.findGameById(gameId);
+
+        
 
         if (game.isFinished()) {
             return "redirect:/games/{gameId}/finished";
@@ -105,7 +110,7 @@ public class GameController {
         List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
         Roll roll = MapGameRepository.getInstance().getRoll(gameId);
 
-        String actualPlayerTurn = gameService.actualTurn(gameId).getMonsterName().toString();
+        Player actualPlayerTurn = gameService.actualTurn(gameId);
         modelMap.addAttribute("actualPlayerTurn", actualPlayerTurn);
 
         Boolean isPlayerTurn = gameService.isPlayerTurn(gameId);
@@ -114,11 +119,14 @@ public class GameController {
         Boolean isPlayerInGame = gameService.isPlayerInGame(gameId);
         modelMap.addAttribute("isPlayerInGame", isPlayerInGame);
 
+        Player actualPlayer=playerService.actualPlayer(gameId);
+        modelMap.addAttribute("actualPlayer", actualPlayer);
+
         modelMap.addAttribute("players", players);
         modelMap.addAttribute("game", game);
         modelMap.addAttribute("roll", roll);
         // Retrieve data from board_card association and generate a list of cards
-        Set<Card> cards = boardCardService.findAvailableCardsByBoard(game.getBoard());
+        List<Card> cards = gameCardService.findAvailableCardsByGame(game);
         modelMap.addAttribute("cards", cards);
         modelMap.addAttribute("turnList", turnList);
 
@@ -165,13 +173,16 @@ public class GameController {
         if (!game.isStarted()) {
             String view = "games/lobby";
 
+            Boolean isCreator = game.getCreator() == userService.authenticatedUser();
+            modelMap.addAttribute("isCreator", isCreator);
+
             modelMap.addAttribute("availableMonsters", game.availableMonsters());
             modelMap.addAttribute("game", game);
             modelMap.addAttribute("players", game.getPlayers());
             modelMap.addAttribute("newPlayer", new Player());
             return view;
         }
-        return "redirect:/games";
+        return "redirect:/games/" + game.getId() + "/playing";
     }
 
     @PostMapping("/{gameId}/lobby")
@@ -204,5 +215,6 @@ public class GameController {
             return "redirect:/games/" + game.getId() + "/lobby";
         }
     }
+    
 
 }

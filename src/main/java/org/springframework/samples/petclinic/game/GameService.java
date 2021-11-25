@@ -10,14 +10,17 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.board.Board;
-import org.springframework.samples.petclinic.board.BoardService;
+import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
+import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
+
+import net.bytebuddy.asm.Advice.Local;
 
 /**
  * @author Jose Maria Delgado Sanchez
@@ -30,10 +33,16 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    private BoardService boardService;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    private PlayerService playerService;
+
+    @Autowired
+    private CardService cardService;
+
+    @Autowired
+    private GameCardService gameCardService;
     
     @Transactional
     public Iterable<Game> findAll(){
@@ -110,15 +119,16 @@ public class GameService {
     /**
 	 * @return True if the game could be started, false if the game cannot be started yet
 	 */
+    @Transactional
     public Boolean startGameByCreator(User creator, Game game){
         Boolean started=false;
         if(creator.isCreator(game) && game.hasEnoughPlayers() && !game.isStarted()){
             game.setTurn(1);
             game.setStartTime(LocalDateTime.now());
 
-            Board board = new Board();
-            boardService.saveBoard(board);
-            game.setBoard(board);
+            cardService.newDeck(game);
+            gameCardService.showCards(game);
+
             saveGame(game);
             started=true;
         }
@@ -145,6 +155,7 @@ public class GameService {
         MapGameRepository.getInstance().putRoll(gameId, new Roll());
         game.setTurn(game.getTurn()+1);
         saveGame(game);
+        playerService.startTurn(actualTurnPlayerId(gameId));
     }
 
     public Integer actualTurnPlayerId(Integer gameId){
@@ -178,10 +189,10 @@ public class GameService {
         Game game = findGameById(gameId);
         if(game.playersWithMaxVictoryPoints().size() != 0) {
             game.setWinner(game.playersWithMaxVictoryPoints().get(0).getUser().getUsername());
-            
+            game.setEndTime(LocalDateTime.now());
         } else if(game.playersAlive().size() == 1){
-            
-             game.setWinner(game.playersAlive().get(0).getUser().getUsername()); 
+            game.setEndTime(LocalDateTime.now());
+            game.setWinner(game.playersAlive().get(0).getUser().getUsername()); 
         }
         saveGame(game);
     }
