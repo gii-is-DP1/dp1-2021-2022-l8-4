@@ -90,6 +90,9 @@ public class Player extends BaseEntity {
      * Give the player the opportunity to kill himself and stop playing
      */
     public void surrender(){
+        if(location.equals(LocationType.bahiaTokyo) || location.equals(LocationType.ciudadTokyo)) {
+            setLocation(LocationType.fueraTokyo);
+        }
         this.lifePoints=0;
     }
 
