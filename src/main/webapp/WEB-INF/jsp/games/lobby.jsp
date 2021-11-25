@@ -69,9 +69,13 @@
                                     <input type="submit" value="Unirse a partida"/>
                                 </tr>
                             </form:form>
+                            
+                            <c:if test="${isCreator}">
                                 <form action="/games/${game.id}/lobby" method="delete">
                                     <button type="submit" >Borrar partida</button>
                                 </form>
+                                <a href="/games/${game.id}/start"><button type="button" >Iniciar partida</button></a>
+                            </c:if>
 
 
                         </petclinic:layout>

@@ -23,7 +23,7 @@
                             </h2>
                             <h2>
                                 Es el turno de:
-                                <c:out value="${actualPlayerTurn}" />
+                                <c:out value="${actualPlayerTurn.monsterName} (${actualPlayerTurn.user.username})" />
                             </h2> 
 
                             <h1>Tirada de dados</h1>
@@ -140,12 +140,15 @@
                             </table>
 
 
+                            <h2>Card Shop</h2>
+
                             <table id="cardsTable" class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width: 150px;">Card Name</th>
                                         <th style="width: 120px;">Cost</th>
                                         <th style="width: 120px">Type</th>
+                                        <th style="width: 120px"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -162,6 +165,11 @@
                                             <td>
                                                 <c:out value="${card.type}" />
                                                 </a>
+                                            </td>
+                                            <td>
+                                            <c:if test="${isPlayerTurn}">
+                                                <a href="/players/${actualPlayerTurn.id}/cards/${card.id}/buy"><button type="button" >Comprar</button></a>
+                                            </c:if>
                                             </td>
                                         </tr>
                                     </c:forEach>
