@@ -171,7 +171,7 @@ public class GameController {
         if (!game.isStarted()) {
             String view = "games/lobby";
 
-            responde.addHeader("Refresh", "1");
+            responde.addHeader("Refresh", "10");
 
             Boolean isCreator = game.getCreator() == userService.authenticatedUser();
             modelMap.addAttribute("isCreator", isCreator);
