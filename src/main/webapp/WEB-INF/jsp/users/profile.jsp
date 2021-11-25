@@ -6,19 +6,13 @@
 
 
 <petclinic:layout pageName="users">
-
     <table class="table table-striped">
             <tr>
-            <td style="border-top: transparent; padding-left: 5%;"><b><c:out value="${user.username}"/></b></td>
-            <td style="border-top: transparent; float: right;">
-                <spring:url value="/users/{userId}/edit" var="userid">
-                <spring:param name="userId" value="${user.id}"/>
-                </spring:url>
-            </td>
+            <td><b><c:out value="${user.username}"/></b></td>
             </tr>
-            <tr style="background-color: #f9f9f9; border-top: transparent;">
-                <td style="border-top: transparent; padding-left: 5%;"><c:out value="${user.email}"/></td>
-                <td style="border-top: transparent;"></td>
+            <tr>
+                <td><c:out value="${user.email}"/></td>
+                <td></td>
             </tr>
     </table>
 </petclinic:layout>

@@ -3,7 +3,9 @@ package org.springframework.samples.petclinic.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ public class UserServiceTest {
         user.setPassword("rosmolarr");
         userService.saveUser(user);
         assertThat(user.getId()).isNotNull();
+        Integer id = userService.findUserByUsername("rosmolarr").getId();
+        assertEquals(user.getId(), id);
+        
     }
 
     @Test
@@ -58,6 +63,8 @@ public class UserServiceTest {
         assertEquals(user.get().getEmail(), "user1@email.com");
         assertEquals(user.get().getPassword(), "u53r1");
         assertEquals(user.get().getUsername(), "user1");
+        assertEquals(user.get().isEnabled(), true);
+        
     }
 
     @Test
@@ -71,5 +78,15 @@ public class UserServiceTest {
 		user = this.userService.findUserById(1);
 		assertThat(user.get().getUsername()).isEqualTo(newName);
 	}
+
+    @Test
+	public void testCountUsers() throws Exception {
+        assertEquals(userService.userCount(), 4);
+        //Hacer algo para que en vez de coger 4
+        //se haga userService.findAll().count o algo del estilo
+        //asi siempre funciona y probamos los dos
+	}
+
+
 
 }
