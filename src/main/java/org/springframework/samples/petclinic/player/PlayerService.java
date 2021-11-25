@@ -9,8 +9,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
+import org.springframework.samples.petclinic.game.GameService;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
 import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,13 @@ public class PlayerService {
     
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
     private PlayerStatusRepository playerStatusRepository;
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private GameService gameService;
 
     @Transactional
     public Iterable<Player> findAll(){
@@ -230,6 +238,7 @@ public class PlayerService {
                 player.setLifePoints(sumaVidaQuitada);
             } else {
                 player.setLifePoints(0);
+                player.setLocation(LocationType.fueraTokyo);
                 }
     }
 
@@ -240,8 +249,30 @@ public class PlayerService {
             player.setVictoryPoints(player.getVictoryPoints() + 2);
             savePlayer(player);
         }
-
     }
+
+    @Transactional
+    public Player actualPlayer(Integer gameId) {
+        Game game=gameService.findGameById(gameId);
+        User user=userService.authenticatedUser();
+        return game.getPlayers()
+                    .stream()
+                    .filter(p -> p.getUser().getId().equals(user.getId()))
+                    .findAny()
+                    .get();
+    }
+
+    @Transactional
+    public void surrender(Integer playerId) {
+        Player player=findPlayerById(playerId);       
+        User user=userService.authenticatedUser();
+        if(player.getUser().getId() == user.getId()) {
+            player.surrender();
+            savePlayer(player);
+        }
+    }
+
+
 
     
 

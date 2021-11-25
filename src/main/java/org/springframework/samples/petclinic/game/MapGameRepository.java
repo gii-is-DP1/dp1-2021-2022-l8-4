@@ -7,6 +7,10 @@ import java.util.Map;
 import org.springframework.samples.petclinic.card.Deck;
 import org.springframework.samples.petclinic.dice.Roll;
 
+/**
+ * @author Ricardo Nadal Garcia
+ */
+
 public class MapGameRepository{
     Map<Integer,Roll> rollMap;
     Map<Integer, List<Integer>> turnListMap;

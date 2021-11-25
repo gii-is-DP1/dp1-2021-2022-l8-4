@@ -20,6 +20,8 @@ import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 
+import net.bytebuddy.asm.Advice.Local;
+
 /**
  * @author Jose Maria Delgado Sanchez
  * @author Ricardo Nadal Garcia
@@ -187,10 +189,10 @@ public class GameService {
         Game game = findGameById(gameId);
         if(game.playersWithMaxVictoryPoints().size() != 0) {
             game.setWinner(game.playersWithMaxVictoryPoints().get(0).getUser().getUsername());
-            
+            game.setEndTime(LocalDateTime.now());
         } else if(game.playersAlive().size() == 1){
-            
-             game.setWinner(game.playersAlive().get(0).getUser().getUsername()); 
+            game.setEndTime(LocalDateTime.now());
+            game.setWinner(game.playersAlive().get(0).getUser().getUsername()); 
         }
         saveGame(game);
     }
