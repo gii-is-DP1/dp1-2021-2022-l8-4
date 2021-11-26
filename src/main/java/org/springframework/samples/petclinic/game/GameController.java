@@ -169,8 +169,12 @@ public class GameController {
     @PostMapping("/new")
     public String createNewGame(@ModelAttribute("newGame") Game newGame, ModelMap modelMap) {
         User user = userService.authenticatedUser();
-        gameService.createNewGame(user, newGame);
-        return "redirect:/games/" + newGame.getId() + "/lobby";
+        Game game = gameService.createNewGame(user, newGame);
+        if(game instanceof Game){
+            return "redirect:/games/" + game.getId() + "/lobby";
+        }else{
+            return "redirect:/games/new";
+        } 
     }
 
     @GetMapping("/{gameId}/lobby")

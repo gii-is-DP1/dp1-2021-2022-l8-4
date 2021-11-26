@@ -29,9 +29,6 @@ public class PlayerController {
     @Autowired
     private CardService cardService;
 
-    @Autowired
-    private UserService userService;
-
     @GetMapping()
     public String cardsList(ModelMap modelMap) {
         String view = "players/playersList";
@@ -44,10 +41,8 @@ public class PlayerController {
     public String buyCard(ModelMap modelMap, @PathVariable("playerId") int playerId,
             @PathVariable("cardId") int cardId) {
         Player player = playerService.findPlayerById(playerId);
-        if (userService.authenticatedUser().getPlayers().contains(player)) {
-            Card card = cardService.findCardById(cardId);
-            playerCardService.buyCard(player, card);
-        }
+        Card card = cardService.findCardById(cardId);
+        playerCardService.buyCard(player, card);
         return "redirect:/games/" + player.getGame().getId() + "/playing";
     }
 
