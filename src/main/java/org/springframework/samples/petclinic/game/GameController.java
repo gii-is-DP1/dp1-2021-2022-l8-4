@@ -3,6 +3,8 @@ package org.springframework.samples.petclinic.game;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.card.Card;
 
@@ -89,7 +91,7 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}/playing")
-    public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+    public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse responde) {
         String view = "games/playing";
 
         gameService.endGame(gameId);
@@ -115,6 +117,10 @@ public class GameController {
 
         Boolean isPlayerTurn = gameService.isPlayerTurn(gameId);
         modelMap.addAttribute("isPlayerTurn", isPlayerTurn);
+
+        if(!isPlayerTurn){
+            responde.addHeader("Refresh", "1");
+        }
 
         Boolean isPlayerInGame = gameService.isPlayerInGame(gameId);
         modelMap.addAttribute("isPlayerInGame", isPlayerInGame);
@@ -168,10 +174,12 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}/lobby")
-    public String gameLobby(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+    public String gameLobby(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse responde) {
         Game game = gameService.findGameById(gameId);
         if (!game.isStarted()) {
             String view = "games/lobby";
+
+            responde.addHeader("Refresh", "10");
 
             Boolean isCreator = game.getCreator() == userService.authenticatedUser();
             modelMap.addAttribute("isCreator", isCreator);
