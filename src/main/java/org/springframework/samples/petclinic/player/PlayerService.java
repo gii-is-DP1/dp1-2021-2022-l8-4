@@ -131,7 +131,7 @@ public class PlayerService {
     
 
     @Transactional
-    public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) throws DuplicatedMonsterNameException {
+    public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {
         List<Player> listaJugadoresEnPartida=findPlayerByGame(gameId);
         Player playerActualTurn = findPlayerById(playerIdActualTurn);
         Boolean tokyoCityEmpty=Boolean.FALSE;

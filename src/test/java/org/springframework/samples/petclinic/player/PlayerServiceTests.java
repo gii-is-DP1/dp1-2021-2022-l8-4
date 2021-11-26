@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -135,12 +136,9 @@ public class PlayerServiceTests {
         player1.setLifePoints(1);
         roll.setValues(valoresCuracion);
         playerService.savePlayer(player1);
-        try {
-            playerService.useRoll(game1.getId(), player1.getId(), roll);
-        } catch (DuplicatedMonsterNameException e) {
-            
-            e.printStackTrace();
-        }
+        
+        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        
         assertEquals(player1.getLifePoints(),7);
     }
 
@@ -155,12 +153,9 @@ public class PlayerServiceTests {
         player1.setLifePoints(1);
         roll.setValues(valoresCuracion);
         playerService.savePlayer(player1);
-        try {
-            playerService.useRoll(game1.getId(), player1.getId(), roll);
-        } catch (DuplicatedMonsterNameException e) {
-            
-            e.printStackTrace();
-        }
+        
+        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        
         assertEquals(player1.getLifePoints(),1);
     }
 
@@ -173,12 +168,8 @@ public class PlayerServiceTests {
         }
         roll.setValues(damageValues);
         
-        try {
-            playerService.useRoll(game1.getId(), player1.getId(), roll);
-        } catch (DuplicatedMonsterNameException e) {
-            
-            e.printStackTrace();
-        }
+        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        
         assertEquals(player2.getLifePoints(),4);
     }
 
@@ -191,18 +182,14 @@ public class PlayerServiceTests {
         }
         roll.setValues(damageValues);
         
-        try {
-            playerService.useRoll(game1.getId(), player2.getId(), roll);
-        } catch (DuplicatedMonsterNameException e) {
-            
-            e.printStackTrace();
-        }
+        playerService.useRoll(game1.getId(), player2.getId(), roll);
+        
         assertEquals(player1.getLifePoints(),4);
     }
 
     @Test
 	@Transactional
-	public void shouldUpdateMonsterName() throws Exception {
+	public void shouldUpdateMonsterName() {
 		Player player2 = this.playerService.findPlayerById(2);
 
 		MonsterName newName = MonsterName.Alien;
@@ -223,12 +210,8 @@ public class PlayerServiceTests {
         
         roll.setValues(onesValues);
         
-        try {
-            playerService.useRoll(game1.getId(), player1.getId(), roll);
-        } catch (DuplicatedMonsterNameException e) {
-            
-            e.printStackTrace();
-        }
+        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        
         assertEquals(player1.getVictoryPoints(),4);
     }
 
@@ -242,12 +225,8 @@ public class PlayerServiceTests {
         
         roll.setValues(twosValues);
         
-        try {
-            playerService.useRoll(game1.getId(), player1.getId(), roll);
-        } catch (DuplicatedMonsterNameException e) {
-            
-            e.printStackTrace();
-        }
+        playerService.useRoll(game1.getId(), player1.getId(), roll);
+
         assertEquals(player1.getVictoryPoints(),5);
     }
 
@@ -261,12 +240,8 @@ public class PlayerServiceTests {
         
         roll.setValues(threesValues);
         
-        try {
-            playerService.useRoll(game1.getId(), player1.getId(), roll);
-        } catch (DuplicatedMonsterNameException e) {
-            
-            e.printStackTrace();
-        }
+        playerService.useRoll(game1.getId(), player1.getId(), roll);
+
         assertEquals(player1.getVictoryPoints(),6);
     }
 
@@ -280,20 +255,46 @@ public class PlayerServiceTests {
         
         roll.setValues(energyValues);
         
-        try {
-            playerService.useRoll(game1.getId(), player1.getId(), roll);
-        } catch (DuplicatedMonsterNameException e) {
-            
-            e.printStackTrace();
-        }
+        playerService.useRoll(game1.getId(), player1.getId(), roll);
+
         assertEquals(player1.getEnergyPoints(),6);
+    }
+
+    @Test
+    public void startTurnInTokyoTest() {
+        assertEquals(player2.getVictoryPoints(), 0);
+        playerService.startTurn(player2.getId());
+        assertEquals(player2.getVictoryPoints(), 2);
+    }
+
+    @Test
+    public void startTurnOutOfTokyoTest() {
+        assertEquals(player1.getVictoryPoints(), 0);
+        playerService.startTurn(player1.getId());
+        assertEquals(player1.getVictoryPoints(), 0);
+    }
+
+    @Test 
+    public void testEnterTokyoRoll(){
+        Roll roll=new Roll();
+        player2.setLocation(LocationType.fueraTokyo);
+        List<DiceValues> damageValues=new ArrayList<DiceValues>();
+        for(int i=0;i<6;i++){
+            damageValues.add(DiceValues.ATTACK);
+        }
+        roll.setValues(damageValues);
+        
+        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        
+        assertEquals(player1.getLocation(),LocationType.ciudadTokyo);
     }
 
 
     
 
-/*
+
     @Test
+    @Disabled
 	@Transactional
 	public void shouldInsertPlayerIntoDatabaseAndGenerateId() {
         Game game1 = this.gameService.findGameById(1);
@@ -306,18 +307,17 @@ public class PlayerServiceTests {
         player.setLocation(LocationType.fueraTokyo);
         player.setGame(game1);
         player.setUser(user1);
-            try {
-                this.playerService.savePlayer(player);;
-            } catch (DuplicatedMonsterNameException ex) {
-                Logger.getLogger(PlayerServiceTests.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
+        this.playerService.savePlayer(player);;
+            
 		// checks that id has been generated
 		assertThat(player.getId()).isNotNull();
 	}
-    */
+    
 
-/* ESTA COMENTADO POR EL TEMA DE THROW EXCEPTION 
-    /*@Test
+
+    @Test
+    @Disabled
 	@Transactional
 	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){
         Game game1 = this.gameService.findGameById(1);
@@ -330,11 +330,9 @@ public class PlayerServiceTests {
         player.setLocation(LocationType.fueraTokyo);
         player.setGame(game1);
         player.setUser(user1);
-            try {
-                this.playerService.savePlayer(player);;
-            } catch (DuplicatedMonsterNameException ex) {
-                ex.printStackTrace();
-            }
+           
+        this.playerService.savePlayer(player);;
+            
 
         Player anotherPlayerWithTheSameName = new Player();		
 		anotherPlayerWithTheSameName.setMonsterName(MonsterName.GigaZaur);
@@ -343,13 +341,13 @@ public class PlayerServiceTests {
         anotherPlayerWithTheSameName.setVictoryPoints(0);
         anotherPlayerWithTheSameName.setEnergyPoints(0);
         anotherPlayerWithTheSameName.setLocation(LocationType.fueraTokyo);
-		Assertions.assertThrows(DuplicatedMonsterNameException.class, () ->{
-			playerService.savePlayer(anotherPlayerWithTheSameName);
-		});	
+		
+		}
 
-	}
+	
   
-    /*@Test
+    @Test
+    @Disabled
 	@Transactional
 	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() {
         Game game1 = this.gameService.findGameById(1);
@@ -372,29 +370,11 @@ public class PlayerServiceTests {
         anotherPlayer.setEnergyPoints(0);
         anotherPlayer.setLocation(LocationType.fueraTokyo);
 
-        try {
-            this.playerService.savePlayer(player);
-            this.playerService.savePlayer(anotherPlayer);
-        } catch (DuplicatedMonsterNameException ex) {
-            ex.printStackTrace();
-        }
         
-		Assertions.assertThrows(DuplicatedMonsterNameException.class, () ->{
-			anotherPlayer.setMonsterName(MonsterName.GigaZaur);;
-			playerService.savePlayer(anotherPlayer);
-		});		
+        this.playerService.savePlayer(player);
+        this.playerService.savePlayer(anotherPlayer);
+        
+		}		
 	}
-*/
-/*
-    @Test
-	void shouldFindPlayerStatusByPlayerId() throws Exception {
-		List<PlayerStatus> lsStatus = this.playerService.findPlayerStatus(1);
-		assertThat(lsStatus.size()).isEqualTo(2);
-		PlayerStatus[] pStatusArray = lsStatus.toArray(new PlayerStatus[lsStatus.size()]);
-		assertThat(pStatusArray[0].getAmount()).isNotNull();
-		assertThat(pStatusArray[0].getStatus()).isNotNull();
-		assertThat(pStatusArray[0].getAmount()).isEqualTo(1);
-		assertThat(pStatusArray[0].getStatus()).isEqualTo(StatusType.Reductor);
-	}*/
-    
-}
+
+
