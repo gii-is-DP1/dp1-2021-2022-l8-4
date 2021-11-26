@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/players")
 public class PlayerController {
-    
+
     @Autowired
     private PlayerService playerService;
 
@@ -32,33 +32,29 @@ public class PlayerController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping()
-    public String cardsList(ModelMap modelMap){
-        String view ="players/playersList";
-        Iterable<Player> players= playerService.findAll();
+    public String cardsList(ModelMap modelMap) {
+        String view = "players/playersList";
+        Iterable<Player> players = playerService.findAll();
         modelMap.addAttribute("players", players);
         return view;
     }
 
     @GetMapping("/{playerId}/cards/{cardId}/buy")
-    public String buyCard(ModelMap modelMap, @PathVariable("playerId") int playerId, @PathVariable("cardId") int cardId){
+    public String buyCard(ModelMap modelMap, @PathVariable("playerId") int playerId,
+            @PathVariable("cardId") int cardId) {
         Player player = playerService.findPlayerById(playerId);
-        if(userService.authenticatedUser().getPlayers().contains(player)){ 
+        if (userService.authenticatedUser().getPlayers().contains(player)) {
             Card card = cardService.findCardById(cardId);
             playerCardService.buyCard(player, card);
         }
         return "redirect:/games/" + player.getGame().getId() + "/playing";
     }
 
-    @GetMapping("/{playerId}/surrender") 
+    @GetMapping("/{playerId}/surrender")
     public String surrender(ModelMap modelMap, @PathVariable("playerId") int playerId) {
-        
         playerService.surrender(playerId);
         return "redirect:/";
-        
     }
-    
-
 
 }

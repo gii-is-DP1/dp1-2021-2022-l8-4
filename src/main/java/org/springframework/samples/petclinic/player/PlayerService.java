@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.player;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,19 +44,13 @@ public class PlayerService {
     public int playerCount(){
         return (int) playerRepository.count();
     } 
-/*
-    @Transactional(rollbackFor = DuplicatedMonsterNameException.class)
-    public void savePlayer(Player player) throws DuplicatedMonsterNameException {
-        Player otherPlayer=getPlayerwithIdDifferent(player.getMonsterName().toString(), player.getId());
-            if (StringUtils.hasLength(player.getMonsterName().toString()) &&  (otherPlayer!= null && otherPlayer.getId()!=player.getId())) {            	
-            	throw new DuplicatedMonsterNameException();
-            }else
-                playerRepository.save(player);   
+
+    @Transactional
+    public void savePlayer(Player player){
         playerRepository.save(player);
     }
-    
-*/
 
+    @Transactional
     public Player getPlayerwithIdDifferent(String monsterName,Integer id) {
 		monsterName = monsterName.toLowerCase();
 		for (Player player : playerRepository.findAll()) {
@@ -70,27 +63,28 @@ public class PlayerService {
 		return null;
 	}
 
+    /**
+     * Join a user to a game associating a player
+     * @param user
+     * @param player
+     * @param game
+     */
     @Transactional
-    public void savePlayer(Player player){
-        playerRepository.save(player);
-    }
-
-    @Transactional
-    public void joinGame(User user, Player player, Game game){
-        MonsterName monsterName = player.getMonsterName();
+    public void joinGame(User user, Player newPlayer, Game game){
+        MonsterName monsterName = newPlayer.getMonsterName();
         if(game.hasRoom()
             && !game.isStarted()
             && game.monsterAvailable(monsterName)
             && !user.hasActivePlayer()){
             
-                player.setGame(game);
-                player.setUser(user);
-                player.setEnergyPoints(0);
-                player.setLifePoints(10);
-                player.setVictoryPoints(0);
-                player.setLocation(LocationType.fueraTokyo);
+                newPlayer.setGame(game);
+                newPlayer.setUser(user);
+                newPlayer.setEnergyPoints(0);
+                newPlayer.setLifePoints(10);
+                newPlayer.setVictoryPoints(0);
+                newPlayer.setLocation(LocationType.fueraTokyo);
 
-                savePlayer(player);
+                savePlayer(newPlayer);
         }
     }
 

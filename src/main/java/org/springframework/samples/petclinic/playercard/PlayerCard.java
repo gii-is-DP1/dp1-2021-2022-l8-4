@@ -17,32 +17,34 @@ import lombok.Setter;
 /**
  * @author José Maria Delgado Sanchez
  */
+@Getter
+@Setter
 @Entity
-@Table(name="players_cards",
-uniqueConstraints = @UniqueConstraint(name = "uniquePlayerCard", columnNames = {"player_id", "card_id"}))
+@Table(name = "players_cards", uniqueConstraints = @UniqueConstraint(name = "uniquePlayerCard", columnNames = {
+        "player_id", "card_id" }))
 public class PlayerCard extends BaseEntity {
 
-    @Getter
-    @Setter
-    @ManyToOne(optional=false) 
-    @JoinColumn(name="player_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "player_id")
     private Player player;
 
-    @Getter
-    @Setter
-    @ManyToOne(optional=false)
-    @JoinColumn(name="card_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "card_id")
     private Card card;
 
-    @Setter
-    @Getter
-    @Column(name="discarded")
+    @Column(name = "discarded")
     private Boolean discarded;
 
-    public PlayerCard(Player player, Card card){
+    /**
+     * Constructor for PlayerCard, discarded false by default
+     * 
+     * @param player
+     * @param card
+     */
+    public PlayerCard(Player player, Card card) {
         this.player = player;
         this.card = card;
         this.discarded = false;
     }
-    
+
 }

@@ -32,52 +32,57 @@ public class PlayerCardService {
     private PlayerService playerService;
 
     @Transactional
-    public Set<Card> findAvailableCardsByPlayer(Player player) {
-        return playerService.findPlayerById(player.getId()).getPlayerCard()
-                                            .stream()
-                                            .filter(x -> x.getDiscarded() == false)
-                                            .map(x -> x.getCard())
-                                            .collect(Collectors.toSet());
-    }
-
-    @Transactional
-    public void savePlayerCard(PlayerCard playerCard) throws DataAccessException{
+    public void savePlayerCard(PlayerCard playerCard) throws DataAccessException {
         playerCardRepository.save(playerCard);
     }
-    
+
     /**
-     * Check if the player is eligible to buy the card then buys it if it is possible
+     * Find cards that can be use by a player
+     * 
+     * @param player player
+     * @return Set of cards that the player has not used yet
+     */
+    @Transactional
+    // THIS CAN BE IMPLEMENTED IN A REPOSITORY METHOD
+    public Set<Card> findAvailableCardsByPlayer(Player player) {
+        return playerService.findPlayerById(player.getId()).getPlayerCard().stream()
+                .filter(x -> x.getDiscarded() == false).map(x -> x.getCard()).collect(Collectors.toSet());
+    }
+
+    /**
+     * Check if the player is eligible to buy the card then buys it if it is
+     * possible
+     * 
      * @param player buying the card
      * @param card card that the player wants to buy
      */
     @Transactional
-    public void buyCard(Player player, Card card){
-        //Retrieve the game linked to the player to check if the card is available to buy
+    public void buyCard(Player player, Card card) {
+        // Retrieve the game linked to the player to check if the card is available to
+        // buy
         Game game = player.getGame();
         List<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
-        if(availableCards.contains(card) 
-            && game.isOnGoing()
-            && !player.isDead()){
+        if (availableCards.contains(card) && game.isOnGoing() && !player.isDead()) {
 
-            //Check if the player has enough energy
+            // Check if the player has enough energy
             Integer energyPoints = player.getEnergyPoints();
             Integer cost = card.getCost();
-            if(energyPoints >= cost){
-            
-            //Calculate new energyPoints value
-            player.setEnergyPoints(energyPoints-cost);
+            if (energyPoints >= cost) {
 
-            //Create a PlayerCard object and save it
-            PlayerCard playerCard = new PlayerCard(player, card);
-            savePlayerCard(playerCard);
+                // Calculate new energyPoints value
+                player.setEnergyPoints(energyPoints - cost);
 
-            //Update status of the card
-            GameCard gameCard = gameCardService.findByGameCard(game, card);
-            gameCard.setSold(true);
+                // Create a PlayerCard object and save it
+                PlayerCard playerCard = new PlayerCard(player, card);
+                savePlayerCard(playerCard);
 
-            //Show new cards
-            gameCardService.showCards(game);
+                // Update status of the card
+                GameCard gameCard = gameCardService.findByGameCard(game, card);
+                gameCard.setSold(true);
+
+                // Show new cards
+                gameCardService.showCards(game);
             }
-        }   
+        }
     }
 }
