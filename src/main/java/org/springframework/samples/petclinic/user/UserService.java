@@ -52,10 +52,24 @@ public class UserService {
 		authoritiesRepository.save(authority);
 	}
 
+	 /**
+     * Find user given id
+     * 
+     * @param id
+     * @return User
+     */
+
 	@Transactional
 	public Optional<User> findUserById(int id) throws DataAccessException {
 		return userRepository.findById(id);
 	}
+
+	 /**
+     * Find authenticated user given username
+     * 
+     * @param currentUserUsername
+     * @return UserId
+     */
 
 	@Transactional
 	public Integer getCurrentUserId(String currentUserUsername) {
@@ -63,6 +77,13 @@ public class UserService {
 		Integer currentUserId = currentUser.getId();
 		return currentUserId;
 	}
+
+	 /**
+     * Find user given username
+     * 
+     * @param username
+     * @return User
+     */
 
 	@Transactional
 	public User findUserByUsername(String username) {

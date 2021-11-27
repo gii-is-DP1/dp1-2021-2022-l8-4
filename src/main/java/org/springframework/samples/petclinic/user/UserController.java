@@ -34,10 +34,7 @@ public class UserController {
         modelMap.addAttribute("users", users);
         return view;
     }
-
-    /**
-     * FORMULARIO PARA USUARIOS
-     */    
+  
     @GetMapping(path = "/new")
     public String initCreationForm(ModelMap modelMap) {
         String view = VIEWS_USERS_CREATE_UPDATE_FORM;
