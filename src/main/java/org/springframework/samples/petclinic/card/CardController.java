@@ -29,16 +29,15 @@ public class CardController {
 
     private static final String VIEWS_CARDS_CREATE_OR_UPDATE_FORM = "cards/createOrUpdateCardForm";
 
-    
-	@ModelAttribute("cardTypes")
-	public Collection<CardType> populateCardTypes() {
-		return this.cardService.findCardTypes();
-	}
+    @ModelAttribute("cardTypes")
+    public Collection<CardType> populateCardTypes() {
+        return this.cardService.findCardTypes();
+    }
 
     @GetMapping()
-    public String cardsList(ModelMap modelMap){
-        String view ="cards/cardsList";
-        Iterable<Card> cards= cardService.findAll();
+    public String cardsList(ModelMap modelMap) {
+        String view = "cards/cardsList";
+        Iterable<Card> cards = cardService.findAll();
         modelMap.addAttribute("cards", cards);
         return view;
     }
@@ -52,48 +51,40 @@ public class CardController {
 
     @PostMapping(path = "/new")
     public String processCreationForm(@Valid Card card, BindingResult result, ModelMap modelMap) {
-        String view="cards/cardsList";
-        if (result.hasErrors()){
+        String view = "cards/cardsList";
+        if (result.hasErrors()) {
 
-            modelMap.addAttribute("card",card);
+            modelMap.addAttribute("card", card);
             return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
 
-        }else {
-            //creating card
+        } else {
+            // creating card
             cardService.saveCard(card);
-            modelMap.addAttribute("message","Card succesfully saved!");
+            modelMap.addAttribute("message", "Card succesfully saved!");
             view = cardsList(modelMap);
         }
         return view;
-    } 
+    }
 
     @GetMapping(value = "/{cardId}/edit")
-	public String initUpdateForm(@PathVariable("cardId") int cardId, ModelMap modelMap) {
-		Card card = this.cardService.findCardById(cardId);
-		modelMap.put("card", card);
-		return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
-	}
+    public String initUpdateForm(@PathVariable("cardId") int cardId, ModelMap modelMap) {
+        Card card = this.cardService.findCardById(cardId);
+        modelMap.put("card", card);
+        return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
+    }
 
-    /**
-     *
-     * @param card
-     * @param result
-     * @param cardId
-     * @param model
-     * @return
-     */
     @PostMapping(value = "/{cardId}/edit")
-	public String processUpdateForm(@Valid Card card, BindingResult result, @PathVariable("cardId") int cardId, ModelMap modelMap) {
-		if (result.hasErrors()) {
-			modelMap.put("card", card);
-			return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
-		}
-		else {
-                        Card cardToUpdate=this.cardService.findCardById(cardId);
-			BeanUtils.copyProperties(card, cardToUpdate, "id");                                                                                                    
-                    this.cardService.saveCard(cardToUpdate);                    
-			return "redirect:/cards";
-		}
-	}
+    public String processUpdateForm(@Valid Card card, BindingResult result, @PathVariable("cardId") int cardId,
+            ModelMap modelMap) {
+        if (result.hasErrors()) {
+            modelMap.put("card", card);
+            return VIEWS_CARDS_CREATE_OR_UPDATE_FORM;
+        } else {
+            Card cardToUpdate = this.cardService.findCardById(cardId);
+            BeanUtils.copyProperties(card, cardToUpdate, "id");
+            this.cardService.saveCard(cardToUpdate);
+            return "redirect:/cards";
+        }
+    }
 
 }

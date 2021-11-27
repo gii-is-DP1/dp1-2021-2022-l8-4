@@ -17,26 +17,22 @@ import lombok.Setter;
 /**
  * @author José Maria Delgado Sanchez
  */
- @Entity
- @Table(name="games_cards",
- uniqueConstraints = @UniqueConstraint(name = "uniqueGameCard", columnNames = {"game_id", "card_id"}))
- public class GameCard extends BaseEntity{
+@Getter
+@Setter
+@Entity
+@Table(name = "games_cards", uniqueConstraints = @UniqueConstraint(name = "uniqueGameCard", columnNames = { "game_id",
+      "card_id" }))
+public class GameCard extends BaseEntity {
 
-    @Getter
-    @Setter
-    @ManyToOne(optional=false)
-    @JoinColumn(name="game_id")
-    private Game game;
+   @ManyToOne(optional = false)
+   @JoinColumn(name = "game_id")
+   private Game game;
 
-    @Getter
-    @Setter
-    @ManyToOne(optional=false)
-    @JoinColumn(name="card_id")
-    private Card card;
+   @ManyToOne(optional = false)
+   @JoinColumn(name = "card_id")
+   private Card card;
 
-    @Setter
-    @Getter
-    @Column(name="sold")
-    private Boolean sold;
+   @Column(name = "sold")
+   private Boolean sold;
 
- }
+}

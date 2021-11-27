@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.player.Player;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class UserService {
 	private AuthoritiesRepository authoritiesRepository;
 
 	@Autowired
-	public UserService(UserRepository userRepository){
+	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
@@ -64,7 +65,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public User findUserByUsername(String username){
+	public User findUserByUsername(String username) {
 		int userId = getCurrentUserId(username);
 		return findUserById(userId).get();
 	}
@@ -83,13 +84,31 @@ public class UserService {
 		String currentUsername = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null) {
-			if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
-				org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+			if (authentication.isAuthenticated()
+					&& authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
+				org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication
+						.getPrincipal();
 				currentUsername = user.getUsername();
 				currentUser = findUserByUsername(currentUsername);
 			}
 		}
 		return currentUser;
+	}
+
+	/**
+	 * Check if the authenticated user is playing as the specific player
+	 * 
+	 * @return true if the logged user is playing as the player
+	 */
+	@Transactional
+	public Boolean isAuthUserPlayingAsPlayer(Player player) {
+		User user = authenticatedUser();
+		if (user instanceof User) {
+			return user.getPlayers().stream().map(p -> p.getId()).filter(id -> id == player.getId()).findAny()
+					.isPresent();
+		} else {
+			return false;
+		}
 	}
 
 }
