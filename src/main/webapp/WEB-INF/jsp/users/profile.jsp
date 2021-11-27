@@ -14,5 +14,11 @@
                 <td><c:out value="${user.email}"/></td>
                 <td></td>
             </tr>
+            <td>
+                <spring:url value="/users/{userId}/edit" var="userid">
+                    <spring:param name="userId" value="${user.id}"/>
+                </spring:url>
+                <a href="${fn:escapeXml(userid)}">edit user</a>
+            </td>
     </table>
 </petclinic:layout>

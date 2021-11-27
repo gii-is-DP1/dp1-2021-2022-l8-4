@@ -69,6 +69,10 @@ public class UserService {
 		return findUserById(userId).get();
 	}
 
+	@Transactional
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
 
 	/**
 	 * @return Autheticated User if logged in or null if no one is logged in

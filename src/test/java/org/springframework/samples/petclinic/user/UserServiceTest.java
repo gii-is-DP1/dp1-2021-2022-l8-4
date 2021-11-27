@@ -3,9 +3,10 @@ package org.springframework.samples.petclinic.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashSet;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,10 +82,41 @@ public class UserServiceTest {
 
     @Test
 	public void testCountUsers() throws Exception {
-        assertEquals(userService.userCount(), 4);
-        //Hacer algo para que en vez de coger 4
-        //se haga userService.findAll().count o algo del estilo
-        //asi siempre funciona y probamos los dos
+        Integer contador1 = userService.userCount();
+        Integer numero = 4;
+    
+        assertEquals(contador1, numero);
+        User user = new User();
+        user.setUsername("user4");
+        user.setEmail("user4@correo.com");
+        user.setPassword("user4");
+        userService.saveUser(user);
+
+        Integer contador2NewUser = userService.userCount();
+        numero = 5;
+        assertEquals(contador2NewUser, numero);
+
+	}
+
+    @Test
+	public void testFindAllUsers() throws Exception {
+        List<User> listcont= new ArrayList<>();
+        userService.findAll().forEach(listcont::add);
+        Integer numero = 4;
+        Integer contadorFind = listcont.size();
+        assertEquals(contadorFind, numero);
+
+        User user = new User();
+        user.setUsername("user4");
+        user.setEmail("user4@correo.com");
+        user.setPassword("user4");
+        userService.saveUser(user);
+
+        List<User> listcont2= new ArrayList<>();
+        userService.findAll().forEach(listcont2::add);
+        Integer contadorFind2 = listcont2.size();
+        numero = 5;
+        assertEquals(contadorFind2, numero);
 	}
 
 
