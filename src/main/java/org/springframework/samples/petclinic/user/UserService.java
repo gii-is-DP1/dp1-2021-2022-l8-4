@@ -9,6 +9,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 
 /**
  * @author Sara Cruz
@@ -86,6 +91,15 @@ public class UserService {
 			}
 		}
 		return currentUser;
+	}
+
+	/**
+	 * @return Obtains a page of users from userRepository
+	 */
+	@Transactional
+	public Page<User> getPageOfUsers(int pageNumber) {
+		Pageable pageable = PageRequest.of(pageNumber,5,Sort.by(Order.asc("username")));
+		return userRepository.findAllUsersByPage(pageable);
 	}
 
 }

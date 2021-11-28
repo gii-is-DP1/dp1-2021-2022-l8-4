@@ -6,6 +6,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * @author Sara Cruz
  * @author Rosa Molina
+ * @author Carlos Varela Soult
  */
 @Controller
 @RequestMapping("/users")
@@ -29,11 +35,16 @@ public class UserController {
 
 	@GetMapping()
     public String usersList(ModelMap modelMap){
-        String view ="users/usersList";
-        Iterable<User> users= userService.findAll();
-        modelMap.addAttribute("users", users);
+        String view = "users/usersList";
+        Page<User> pages = userService.getPageOfUsers(0);
+        modelMap.addAttribute("totalPages", pages.getTotalPages());
+        modelMap.addAttribute("totalElements", pages.getTotalElements());
+        modelMap.addAttribute("number", pages.getNumber());
+        modelMap.addAttribute("users", pages.getContent());
+        modelMap.addAttribute("size", pages.getContent().size());
         return view;
     }
+
 
     /**
      * FORMULARIO PARA USUARIOS
