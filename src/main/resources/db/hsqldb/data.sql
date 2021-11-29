@@ -11,18 +11,41 @@ INSERT INTO cards(id,cost,name,type) VALUES(8,4,'Tren de cercanias',1);
 INSERT INTO cards(id,cost,name,type) VALUES(9,3,'Destruccion total',1); 
 INSERT INTO cards(id,cost,name,type) VALUES(10,3,'Bazar de la esquina',1); 
 
-
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
-
 INSERT INTO users(id,username,email,password,enabled) VALUES (2,'user2','user2@email.com','u53r2', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (2,2,'user');
-
 INSERT INTO users(id,username,email,password,enabled) VALUES (3,'user3','user3@email.com','u53r3', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (3,3,'admin');
-
 INSERT INTO users(id,username,email,password,enabled) VALUES (4,'fire','fire@email.com','fire', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (4,4,'admin');
+
+INSERT INTO users(id,username,email,password,enabled) VALUES (5,'aba','aba@email.com','aba', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (5,5,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (6,'abb','abb@email.com','abb', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (6,6,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (7,'abc','abc@email.com','abc', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (7,7,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (8,'abd','abd@email.com','abd', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (8,8,'user');
+
+INSERT INTO users(id,username,email,password,enabled) VALUES (9,'abe','abe@email.com','abe', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (9,9,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (10,'abf','abf@email.com','abf', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (10,10,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (11,'abg','abg@email.com','abg', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (11,11,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (12,'abh','abh@email.com','abh', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (12,12,'user');
+
+INSERT INTO users(id,username,email,password,enabled) VALUES (13,'abi','abi@email.com','abi', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (13,13,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (14,'abj','abj@email.com','abj', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (14,14,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (15,'abk','abk@email.com','abk', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (15,15,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (16,'abl','abl@email.com','abl', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (16,16,'user');
 
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (1,'Partida tremenda',1,'3',null,'2020-11-01T10:00:00','2020-11-01T11:00:00',6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (2,'Partida tremenda ya jugada',2,'15','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00',6);
