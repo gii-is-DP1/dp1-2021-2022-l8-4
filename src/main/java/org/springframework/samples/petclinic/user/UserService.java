@@ -122,7 +122,8 @@ public class UserService {
 	}
 
 	/**
-	 * @return Obtains a page of users from userRepository
+	 * @param pageNumber
+	 * @return Obtains a page of 5 users from userRepository
 	 */
 	@Transactional
 	public Page<User> getPageOfUsers(int pageNumber) {
@@ -132,7 +133,6 @@ public class UserService {
 	
 	/*
 	 * Check if the authenticated user is playing as the specific player
-	 * 
 	 * @return true if the logged user is playing as the player
 	 */
 	@Transactional

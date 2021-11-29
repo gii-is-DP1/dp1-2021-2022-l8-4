@@ -18,73 +18,65 @@
             </thead>
             <tbody>
                 <c:choose>
-                <c:when test="${users.size() > 0}">
-                    <c:forEach items="${users}" var="user">
+                    <c:when test="${users.size() > 0}">
+                        <c:forEach items="${users}" var="user">
+                            <tr>
+                                <td>
+                                    <c:out value="${user.username}"/>
+                                </td>
+                                <td>
+                                    <c:out value="${user.email}"/>
+                                </td>
+                                <td>
+                                    <c:out value="${user.password}"/>
+                                </td>
+                                <td>
+                                    <spring:url value="/users/{userId}/edit" var="userid">
+                                        <spring:param name="userId" value="${user.id}"/>
+                                    </spring:url>
+                                    <a href="${fn:escapeXml(userid)}">edit user</a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
                         <tr>
-                            <td>
-                                <c:out value="${user.username}"/>
-                            </td>
-                            <td>
-                                <c:out value="${user.email}"/>
-                            </td>
-                            <td>
-                                <c:out value="${user.password}"/>
-                            </td>
-                            <td>
-                                <spring:url value="/users/{userId}/edit" var="userid">
-                                    <spring:param name="userId" value="${user.id}"/>
-                                </spring:url>
-                                <a href="${fn:escapeXml(userid)}">edit user</a>
-                            </td>
+                            <td colspan="5">No users available</td>
                         </tr>
-                    </c:forEach>
-                </c:when>
-                <c:otherwise>
-                    <tr>
-                        <td colspan="5">No users available</td>
-                    </tr>
-                </c:otherwise>
+                    </c:otherwise>
                 </c:choose>
 
-                <c:if test="${users.size() > 0}">
-                    <div class="panel">
-                        ${size} users on page ${number+1}/${totalPages}
-                    </div>
-                    <ul class="pagination">
-                        <c:forEach begin="0" end="${totalPages-1}" var="page">
-                            <li class="page-item">
-                                <a href="users?page=${page+1}" class="page-link">
-                                    ${page+1}
-                                </a>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                </c:if>
+                <c:choose>
+                    <c:when test="${size==1}">
+                        <div class="panel">
+                            ${size} user on page ${number+1}/${totalPages}
+                        </div>
+                        <ul class="pagination">
+                            <c:forEach begin="0" end="${totalPages-1}" var="page">
+                                <li class="page-item">
+                                    <a href="users?page=${page+1}" class="page-link">
+                                        ${page+1}
+                                    </a>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="panel">
+                            ${size} users on page ${number+1}/${totalPages}
+                        </div>
+                        <ul class="pagination">
+                            <c:forEach begin="0" end="${totalPages-1}" var="page">
+                                <li class="page-item">
+                                    <a href="users?page=${page+1}" class="page-link">
+                                        ${page+1}
+                                    </a>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </c:otherwise>
+                </c:choose>
             </tbody>
         </table>
-
-
-
-<!--
-        <c:forEach items="${users}" var="user">
-            <tr>
-                <td>
-                    <c:out value="${user.username}"/>
-                </td>
-                <td>
-                    <c:out value="${user.email}"/>
-                </td>
-                <td>
-                    <c:out value="${user.password}"/>
-                </td>
-                <td>
-                    <spring:url value="/users/{userId}/edit" var="userid">
-                        <spring:param name="userId" value="${user.id}"/>
-                    </spring:url>
-                    <a href="${fn:escapeXml(userid)}">edit user</a>
-                </td>
-            </tr>
-        </c:forEach>
--->
 </petclinic:layout>
 
