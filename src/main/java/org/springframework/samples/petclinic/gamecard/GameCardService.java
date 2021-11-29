@@ -28,41 +28,53 @@ public class GameCardService {
     private CardService cardService;
 
     @Transactional
-    public List<Card> findAvailableCardsByGame(Game game){
-        return StreamSupport
-                    .stream(findAll().spliterator(), false)
-                    .filter(x -> x.getSold() == Boolean.FALSE && x.getGame().getId() == game.getId())
-                    .map(x -> x.getCard())
-                    .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public Iterable<GameCard> findAll(){
+    public Iterable<GameCard> findAll() {
         return gameCardRepository.findAll();
     }
 
     @Transactional
-    public void saveGameCard(GameCard gameCard) throws DataAccessException{
+    public void saveGameCard(GameCard gameCard) throws DataAccessException {
         gameCardRepository.save(gameCard);
     }
 
+    /**
+     * Find available cards to buy in a game
+     * 
+     * @param game
+     * @return List of cards available to buy in a game
+     */
+    @Transactional
+    public List<Card> findAvailableCardsByGame(Game game) {
+        return StreamSupport.stream(findAll().spliterator(), Boolean.FALSE)
+                .filter(x -> x.getSold() == Boolean.FALSE && x.getGame().getId() == game.getId()).map(x -> x.getCard())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieve GameCard association given a card and a game from the data store.
+     * 
+     * @param game
+     * @param card
+     * @return GameCard object associated
+     */
     @Transactional
     public GameCard findByGameCard(Game game, Card card) throws DataAccessException {
-        return gameCardRepository.findByGameCards(game, card);
+        return gameCardRepository.findByGameCards(game.getId(), card.getId());
     }
 
     /**
      * Always shows 3 cards in the game's shop if there are cards left in the deck
-     * @param Game
+     * 
+     * @param game
      */
     @Transactional
-    public void showCards(Game game){
+    public void showCards(Game game) {
         Integer maxCardsOnSale = 3;
         Integer availableCards = findAvailableCardsByGame(game).size();
-        if(availableCards < maxCardsOnSale){
+        if (availableCards < maxCardsOnSale) {
             Deck deck = MapGameRepository.getInstance().getDeck(game);
-            if(deck != null){
-                if(!deck.isEmpty()){
+            if (deck != null) {
+                if (!deck.isEmpty()) {
                     Card card = cardService.nextCard(game);
                     GameCard gameCard = new GameCard();
                     gameCard.setCard(card);
@@ -70,12 +82,11 @@ public class GameCardService {
                     gameCard.setSold(false);
                     saveGameCard(gameCard);
 
-                    //Recursive call
+                    // Recursive call
                     showCards(game);
-                } 
+                }
             }
         }
     }
-
 
 }

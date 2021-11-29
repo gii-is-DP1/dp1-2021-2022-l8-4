@@ -44,11 +44,7 @@ public class UserController {
         modelMap.addAttribute("size", pages.getContent().size());
         return view;
     }
-
-
-    /**
-     * FORMULARIO PARA USUARIOS
-     */    
+  
     @GetMapping(path = "/new")
     public String initCreationForm(ModelMap modelMap) {
         String view = VIEWS_USERS_CREATE_UPDATE_FORM;
@@ -103,12 +99,24 @@ public class UserController {
 		}
 	}
 
-    @PostMapping(value = "/profile/{userId}")
-    public String usersProfile(@PathVariable("userId") int userId){
-        ModelMap modelMap = new ModelMap();
+    @GetMapping(value = "/profile/{userId}")
+    public String usersProfile(@PathVariable("userId") int userId, ModelMap modelMap){
         String view ="users/profile";
         Optional<User> user= this.userService.findUserById(userId);
         modelMap.addAttribute("user", user.get());
         return view;
+    }
+
+    @GetMapping(path="/delete/{userId}")
+    public String deleteUser(@PathVariable("userId") int userId, ModelMap modelMap) {
+        Optional<User> user = userService.findUserById(userId);
+        if (user.isPresent()) {
+           userService.deleteUser(user.get());
+           modelMap.addAttribute("message", "user succesfully deleted");
+        }
+        else {
+           modelMap.addAttribute("message", "user not found");
+        }
+       return "redirect:/users";
     }
 }
