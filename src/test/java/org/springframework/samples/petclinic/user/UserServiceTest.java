@@ -3,6 +3,9 @@ package org.springframework.samples.petclinic.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -38,6 +41,9 @@ public class UserServiceTest {
         user.setPassword("rosmolarr");
         userService.saveUser(user);
         assertThat(user.getId()).isNotNull();
+        Integer id = userService.findUserByUsername("rosmolarr").getId();
+        assertEquals(user.getId(), id);
+        
     }
 
     @Test
@@ -58,6 +64,8 @@ public class UserServiceTest {
         assertEquals(user.get().getEmail(), "user1@email.com");
         assertEquals(user.get().getPassword(), "u53r1");
         assertEquals(user.get().getUsername(), "user1");
+        assertEquals(user.get().isEnabled(), true);
+        
     }
 
     @Test
@@ -71,5 +79,46 @@ public class UserServiceTest {
 		user = this.userService.findUserById(1);
 		assertThat(user.get().getUsername()).isEqualTo(newName);
 	}
+
+    @Test
+	public void testCountUsers() throws Exception {
+        Integer contador1 = userService.userCount();
+        Integer numero = 9;
+    
+        assertEquals(contador1, numero);
+        User user = new User();
+        user.setUsername("user4");
+        user.setEmail("user4@correo.com");
+        user.setPassword("user4");
+        userService.saveUser(user);
+
+        Integer contador2NewUser = userService.userCount();
+        numero = 10;
+        assertEquals(contador2NewUser, numero);
+
+	}
+
+    @Test
+	public void testFindAllUsers() throws Exception {
+        List<User> listcont= new ArrayList<>();
+        userService.findAll().forEach(listcont::add);
+        Integer numero = 9;
+        Integer contadorFind = listcont.size();
+        assertEquals(contadorFind, numero);
+
+        User user = new User();
+        user.setUsername("user4");
+        user.setEmail("user4@correo.com");
+        user.setPassword("user4");
+        userService.saveUser(user);
+
+        List<User> listcont2= new ArrayList<>();
+        userService.findAll().forEach(listcont2::add);
+        Integer contadorFind2 = listcont2.size();
+        numero = 10;
+        assertEquals(contadorFind2, numero);
+	}
+
+
 
 }

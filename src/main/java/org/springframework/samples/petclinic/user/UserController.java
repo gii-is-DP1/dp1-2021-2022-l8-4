@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Sara Cruz
  * @author Rosa Molina
+ * @author Carlos Varela Soult
  */
 @Controller
 @RequestMapping("/users")
@@ -27,17 +30,23 @@ public class UserController {
     
     private static final String VIEWS_USERS_CREATE_UPDATE_FORM = "users/createOrUpdateUsersForm";
 
+    /**
+     * @param modelMap
+     * @param page
+     * @return View of paginated list of users
+     */
 	@GetMapping()
-    public String usersList(ModelMap modelMap){
-        String view ="users/usersList";
-        Iterable<User> users= userService.findAll();
-        modelMap.addAttribute("users", users);
+    public String usersList(ModelMap modelMap, @RequestParam(value="page") int page){
+        String view = "users/usersList";
+        Page<User> pages = userService.getPageOfUsers(page-1);
+        modelMap.addAttribute("totalPages", pages.getTotalPages());
+        modelMap.addAttribute("totalElements", pages.getTotalElements());
+        modelMap.addAttribute("number", pages.getNumber());
+        modelMap.addAttribute("users", pages.getContent());
+        modelMap.addAttribute("size", pages.getContent().size());
         return view;
     }
-
-    /**
-     * FORMULARIO PARA USUARIOS
-     */    
+  
     @GetMapping(path = "/new")
     public String initCreationForm(ModelMap modelMap) {
         String view = VIEWS_USERS_CREATE_UPDATE_FORM;
@@ -55,7 +64,6 @@ public class UserController {
             //creating user
             userService.saveUser(user);
             modelMap.addAttribute("message","User succesfully created!");
-            usersList(modelMap);
             return "redirect:/login";
         }
     } 
@@ -88,16 +96,28 @@ public class UserController {
 			BeanUtils.copyProperties(user, userToUpdate.get(), "id");                                                                                               
             this.userService.saveUser(userToUpdate.get());      
             modelMap.addAttribute("message","User succesfully edited!");              
-			return "redirect:/users";
+			return "redirect:/users?page=1";
 		}
 	}
 
-    @PostMapping(value = "/profile/{userId}")
-    public String usersProfile(@PathVariable("userId") int userId){
-        ModelMap modelMap = new ModelMap();
+    @GetMapping(value = "/profile/{userId}")
+    public String usersProfile(@PathVariable("userId") int userId, ModelMap modelMap){
         String view ="users/profile";
         Optional<User> user= this.userService.findUserById(userId);
         modelMap.addAttribute("user", user.get());
         return view;
+    }
+
+    @GetMapping(path="/delete/{userId}")
+    public String deleteUser(@PathVariable("userId") int userId, ModelMap modelMap) {
+        Optional<User> user = userService.findUserById(userId);
+        if (user.isPresent()) {
+           userService.deleteUser(user.get());
+           modelMap.addAttribute("message", "user succesfully deleted");
+        }
+        else {
+           modelMap.addAttribute("message", "user not found");
+        }
+       return "redirect:/users?page=1";
     }
 }

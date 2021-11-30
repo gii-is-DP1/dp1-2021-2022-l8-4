@@ -8,6 +8,6 @@ import org.springframework.data.repository.CrudRepository;
  * @author Jose Maria Delgado Sanchez
  */
 @Repository
-public interface PlayerCardRepository extends CrudRepository<PlayerCard, Integer>{
-    
+public interface PlayerCardRepository extends CrudRepository<PlayerCard, Integer> {
+
 }

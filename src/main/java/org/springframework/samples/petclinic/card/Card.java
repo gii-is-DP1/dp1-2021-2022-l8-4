@@ -26,14 +26,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "cards")
-public class Card extends NamedEntity{
+public class Card extends NamedEntity {
 
     @NotNull
-    @Column(name="cost")
+    @Column(name = "cost")
     private Integer cost;
 
-    @Enumerated(value=EnumType.ORDINAL)
-    @Column(name="type")
+    @Enumerated(value = EnumType.ORDINAL)
+    @Column(name = "type")
     private CardType type;
 
     @OneToMany(mappedBy = "card")
@@ -41,5 +41,5 @@ public class Card extends NamedEntity{
 
     @OneToMany(mappedBy = "card")
     private List<PlayerCard> playerCard;
-    
+
 }

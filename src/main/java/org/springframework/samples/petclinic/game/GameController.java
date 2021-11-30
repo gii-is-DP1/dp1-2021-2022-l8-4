@@ -140,21 +140,10 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/playing")
-    public String rollKeep(@ModelAttribute("newTurn") Boolean nuevoTurno, @ModelAttribute("roll") Roll roll,
-            BindingResult result, ModelMap modelMap, @PathVariable("gameId") int gameId)
-            throws DuplicatedMonsterNameException {
-        if (gameService.isPlayerTurn(gameId)) {
-            if (nuevoTurno) {
-                gameService.nuevoTurno(gameId);
-            } else {
-                gameService.turnRoll(roll, gameId);
-                if (roll.getRollAmount() == roll.getMaxThrows()) {
-                    Integer playerIdActualTurn = gameService.actualTurnPlayerId(gameId);
-                    playerService.useRoll(gameId, playerIdActualTurn, roll);
+    public String rollKeep(@ModelAttribute("newTurn") Boolean newTurn, @ModelAttribute("roll") Roll roll,
+             @PathVariable("gameId") int gameId) {
 
-                }
-            }
-        }
+        gameService.handleTurnAction(gameId,newTurn,roll);
 
         return "redirect:/games/{gameId}/playing";
     }
@@ -169,8 +158,12 @@ public class GameController {
     @PostMapping("/new")
     public String createNewGame(@ModelAttribute("newGame") Game newGame, ModelMap modelMap) {
         User user = userService.authenticatedUser();
-        gameService.createNewGame(user, newGame);
-        return "redirect:/games/" + newGame.getId() + "/lobby";
+        Game game = gameService.createNewGame(user, newGame);
+        if(game instanceof Game){
+            return "redirect:/games/" + game.getId() + "/lobby";
+        }else{
+            return "redirect:/games/new";
+        } 
     }
 
     @GetMapping("/{gameId}/lobby")
@@ -179,7 +172,7 @@ public class GameController {
         if (!game.isStarted()) {
             String view = "games/lobby";
 
-            responde.addHeader("Refresh", "1");
+            responde.addHeader("Refresh", "10");
 
             Boolean isCreator = game.getCreator() == userService.authenticatedUser();
             modelMap.addAttribute("isCreator", isCreator);

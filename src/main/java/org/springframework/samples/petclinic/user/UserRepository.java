@@ -1,6 +1,6 @@
 package org.springframework.samples.petclinic.user;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -11,13 +11,19 @@ import org.springframework.data.jpa.repository.Query;
 * @author Carlos Varela Soult
 */
 
-public interface UserRepository extends CrudRepository<User, Integer>{
+public interface UserRepository extends PagingAndSortingRepository<User, Integer>{
 
-    // H9 - Listado de usuarios registrados por paginación
+    /**
+     * @param pageable
+     * @return Obtains a page of users
+     */
     @Query(value="SELECT * FROM USERS", nativeQuery=true)
-    Page<User> findUserByPage(Pageable pageable);
+    Page<User> findAllUsersByPage(Pageable pageable);
 
-    // Obtener currentUser a partir de username
+    /**
+     * @param username
+     * @return Obtains currentUser from username
+     */
     @Query(value="SELECT * FROM USERS WHERE username=?", nativeQuery=true)
     User findCurrentUser(String username);
     

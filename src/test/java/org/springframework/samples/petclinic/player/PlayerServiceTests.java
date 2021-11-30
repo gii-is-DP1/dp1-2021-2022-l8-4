@@ -54,9 +54,9 @@ public class PlayerServiceTests {
         userService.saveUser(user1);
 
         user2=new User();
-        user2.setUsername("UsuarioDePrueba");
-        user2.setEmail("usuarioDePrueba@gmail.com");
-        user2.setPassword("contraseñaDePrueba");
+        user2.setUsername("UsuarioDePrueba2");
+        user2.setEmail("usuarioDePrueba2@gmail.com");
+        user2.setPassword("contraseñaDePrueba2");
         userService.saveUser(user2);
 
         game1=new Game();
