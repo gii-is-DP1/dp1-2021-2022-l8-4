@@ -49,6 +49,7 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
+    /* Esto actualmente no sirve para nada asi que ya me direis, era para lo de Noelia que hizo del throwExceptionDuplicatedMonsterName
     @Transactional
     public Player getPlayerwithIdDifferent(String monsterName, Integer id) {
         monsterName = monsterName.toLowerCase();
@@ -61,6 +62,9 @@ public class PlayerService {
         }
         return null;
     }
+
+    */
+
 
     /**
      * Join user to a game associating a new player to both. A player can only join
@@ -112,21 +116,10 @@ public class PlayerService {
         return ct;
     }
 
-    @Transactional
-    public List<Player> findPlayerByGame(Integer gameId) {
-        Iterable<Player> allPlayers = findAll();
-        List<Player> listaJugadores = new ArrayList<Player>();
-        for (Player player : allPlayers) {
-            if (player.getGame().getId() == gameId) {
-                listaJugadores.add(player);
-            }
-        }
-        return listaJugadores;
-    }
 
     @Transactional
     public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {
-        List<Player> listaJugadoresEnPartida=findPlayerByGame(gameId);
+        List<Player> listaJugadoresEnPartida=gameService.findGameById(gameId).getPlayers();
         Player playerActualTurn = findPlayerById(playerIdActualTurn);
         Boolean tokyoCityEmpty = Boolean.FALSE;
         Boolean tokyoBayEmpty = Boolean.FALSE;

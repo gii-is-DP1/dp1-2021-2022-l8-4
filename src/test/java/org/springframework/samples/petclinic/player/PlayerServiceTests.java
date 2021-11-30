@@ -2,9 +2,12 @@ package org.springframework.samples.petclinic.player;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
@@ -65,6 +68,7 @@ public class PlayerServiceTests {
         gameService.saveGame(game1);
 
         player1=new Player();
+        player1.setMonsterName(MonsterName.Alien);
         player1.setUser(user1);
         player1.setGame(game1);
         player1.setEnergyPoints(0);
@@ -74,6 +78,7 @@ public class PlayerServiceTests {
         playerService.savePlayer(player1);
         
         player2=new Player();
+        player2.setMonsterName(MonsterName.CyberBunny);
         player2.setUser(user2);
         player2.setGame(game1);
         player2.setEnergyPoints(0);
@@ -92,6 +97,8 @@ public class PlayerServiceTests {
         assertEquals(playerId, playerTest.getId());
     }
 
+  
+
     @Test
     public void testFindPlayerWithCorrectId(){
         Player player4 = playerService.findPlayerById(4);
@@ -101,6 +108,12 @@ public class PlayerServiceTests {
         assertThat(player4.getEnergyPoints()).isEqualTo(2);
         assertThat(player4.getLocation().toString()).startsWith("bahiaTokyo");
         assertThat(player4.getGame().getId()).isEqualTo(1);
+    }
+
+    @Test
+    public void testCountPlayers() {
+        Integer size=(int) StreamSupport.stream(playerService.findAll().spliterator(),false).count();
+        assertEquals(size,playerService.playerCount());
     }
 
 
@@ -124,6 +137,31 @@ public class PlayerServiceTests {
         playerService.savePlayer(playerTest);
         int countAdd=playerService.playerCount();
         assertEquals(countInitial + 1, countAdd);
+    }
+
+    @Test
+    @Disabled
+    public void testJoinGame(){
+        User testUser=new User();
+        testUser.setUsername("UsuarioDePruebaJoin");
+        testUser.setEmail("usuarioDePruebaJoin@gmail.com");
+        testUser.setPassword("contraseñaDePruebaJoin");
+        testUser.setGames(new HashSet<Game>());
+        userService.saveUser(testUser);
+
+        Game gameTest=new Game();
+        List<Player> playersList=new ArrayList<Player>();
+        gameTest.setTurn(0);
+        gameTest.setPlayers(playersList);
+    
+        gameTest.setMaxNumberOfPlayers(3);
+        gameService.saveGame(gameTest);
+
+        Player newPlayer=new Player();
+        newPlayer.setMonsterName(MonsterName.King); 
+
+        playerService.joinGame(testUser, newPlayer, gameTest);
+        assertEquals(1, gameTest.getPlayers().size());
     }
 
     @Test 
@@ -293,11 +331,10 @@ public class PlayerServiceTests {
     
 
 
-    @Test
-    @Disabled
+    @Test   
 	@Transactional
 	public void shouldInsertPlayerIntoDatabaseAndGenerateId() {
-        Game game1 = this.gameService.findGameById(1);
+        
         User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
 		player.setMonsterName(MonsterName.GigaZaur);
@@ -316,14 +353,14 @@ public class PlayerServiceTests {
     
 
 
+
     @Test
     @Disabled
 	@Transactional
-	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){
-        Game game1 = this.gameService.findGameById(1);
+	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){ //Actualmente no comprueba esto en la base de datos, solo lo hace al hacer JoinGame
         User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
-		player.setMonsterName(MonsterName.GigaZaur);
+		player.setMonsterName(MonsterName.Alien);
         player.setLifePoints(10);
         player.setVictoryPoints(2);
         player.setEnergyPoints(6);
@@ -331,17 +368,9 @@ public class PlayerServiceTests {
         player.setGame(game1);
         player.setUser(user1);
            
-        this.playerService.savePlayer(player);;
-            
+        this.playerService.savePlayer(player);
+      //  assertThrows(expectedType, executable)    
 
-        Player anotherPlayerWithTheSameName = new Player();		
-		anotherPlayerWithTheSameName.setMonsterName(MonsterName.GigaZaur);
-		anotherPlayerWithTheSameName.setGame(game1);
-        anotherPlayerWithTheSameName.setLifePoints(10);
-        anotherPlayerWithTheSameName.setVictoryPoints(0);
-        anotherPlayerWithTheSameName.setEnergyPoints(0);
-        anotherPlayerWithTheSameName.setLocation(LocationType.fueraTokyo);
-		
 		}
 
 	
@@ -349,8 +378,7 @@ public class PlayerServiceTests {
     @Test
     @Disabled
 	@Transactional
-	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() {
-        Game game1 = this.gameService.findGameById(1);
+	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() { //Actualmente no comprueba esto en la base de datos, solo lo hace al hacer JoinGame
         User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
 		player.setMonsterName(MonsterName.GigaZaur);
