@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.playercard.PlayerCard;
@@ -82,6 +84,17 @@ public class Player extends BaseEntity {
             setLocation(LocationType.fueraTokyo);
         }
         this.lifePoints = 0;
+    }
+
+    /**
+     * Get a list of cards the has not been used yet by the player
+     * @return list of available cards
+     */
+    public List<Card> getAvailableCards(){
+        return this.playerCard.stream()
+                    .filter(pc -> pc.getDiscarded().equals(Boolean.FALSE))
+                    .map(pc -> pc.getCard())
+                    .collect(Collectors.toList());
     }
 
     protected Set<PlayerStatus> getPlayerStatusInternal() {

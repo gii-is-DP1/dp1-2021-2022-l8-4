@@ -18,6 +18,16 @@
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
 
+				<petclinic:menuItem active="${name eq 'home'}" url="/" title="home page">
+					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+					<span>Home</span>
+				</petclinic:menuItem>
+
+				<petclinic:menuItem active="${name eq 'users'}" url="/users"
+					title="list users">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<span>Users list</span>
+				</petclinic:menuItem>
 			</ul>
 
 

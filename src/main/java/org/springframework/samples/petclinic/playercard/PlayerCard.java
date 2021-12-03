@@ -36,6 +36,12 @@ public class PlayerCard extends BaseEntity {
     private Boolean discarded;
 
     /**
+     * Default constructor for PlayerCard
+     */
+    public PlayerCard() {
+    }
+
+    /**
      * Constructor for PlayerCard, discarded false by default
      * 
      * @param player
