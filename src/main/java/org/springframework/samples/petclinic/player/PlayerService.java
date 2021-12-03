@@ -29,7 +29,6 @@ public class PlayerService {
     private PlayerStatusRepository playerStatusRepository;
     @Autowired
     private UserService userService;
-
     @Autowired
     private GameService gameService;
 
@@ -78,7 +77,10 @@ public class PlayerService {
     @Transactional
     public void joinGame(User user, Player newPlayer, Game game) {
         MonsterName monsterName = newPlayer.getMonsterName();
-        if (game.hasRoom() && !game.isStarted() && game.monsterAvailable(monsterName) && !user.hasActivePlayer()
+        if (game.hasRoom() && 
+        !game.isStarted() && 
+        game.monsterAvailable(monsterName) &&
+         !user.hasActivePlayer()
                 && monsterName != null) {
 
             newPlayer.setGame(game);
