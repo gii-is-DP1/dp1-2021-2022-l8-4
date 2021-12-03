@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.achievement;
+package org.springframework.samples.petclinic.modules.statistics.achievement;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
