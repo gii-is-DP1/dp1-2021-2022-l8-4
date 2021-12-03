@@ -148,7 +148,7 @@ import lombok.Setter;
      return vivos;
   }
   
-  public Boolean isFinished(){
+  public Boolean isFinished(){ 
      
      return this.winner!=null && !this.winner.isEmpty() ;
      }
