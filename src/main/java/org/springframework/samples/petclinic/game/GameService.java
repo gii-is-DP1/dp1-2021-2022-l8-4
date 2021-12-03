@@ -258,4 +258,21 @@ public class GameService {
         return result;
     }
 
+    @Transactional
+    public void handleTurnAction(Integer gameId, Boolean newTurn,Roll roll) {
+        if (isPlayerTurn(gameId)) {
+            if (newTurn) {
+                nuevoTurno(gameId);
+            } else {
+                turnRoll(roll, gameId);
+                if (roll.getRollAmount() == roll.getMaxThrows()) {
+                    Integer playerIdActualTurn = actualTurnPlayerId(gameId);
+                    playerService.useRoll(gameId, playerIdActualTurn, roll);
+
+                }
+            }
+        }
+
+    }
+
 }

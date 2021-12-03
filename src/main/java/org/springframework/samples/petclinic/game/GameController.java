@@ -140,21 +140,10 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/playing")
-    public String rollKeep(@ModelAttribute("newTurn") Boolean nuevoTurno, @ModelAttribute("roll") Roll roll,
-            BindingResult result, ModelMap modelMap, @PathVariable("gameId") int gameId)
-            throws DuplicatedMonsterNameException {
-        if (gameService.isPlayerTurn(gameId)) {
-            if (nuevoTurno) {
-                gameService.nuevoTurno(gameId);
-            } else {
-                gameService.turnRoll(roll, gameId);
-                if (roll.getRollAmount() == roll.getMaxThrows()) {
-                    Integer playerIdActualTurn = gameService.actualTurnPlayerId(gameId);
-                    playerService.useRoll(gameId, playerIdActualTurn, roll);
+    public String rollKeep(@ModelAttribute("newTurn") Boolean newTurn, @ModelAttribute("roll") Roll roll,
+             @PathVariable("gameId") int gameId) {
 
-                }
-            }
-        }
+        gameService.handleTurnAction(gameId,newTurn,roll);
 
         return "redirect:/games/{gameId}/playing";
     }
