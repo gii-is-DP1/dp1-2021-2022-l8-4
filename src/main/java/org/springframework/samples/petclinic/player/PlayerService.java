@@ -29,7 +29,6 @@ public class PlayerService {
     private PlayerStatusRepository playerStatusRepository;
     @Autowired
     private UserService userService;
-
     @Autowired
     private GameService gameService;
 
@@ -49,6 +48,7 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
+    /* Esto actualmente no sirve para nada asi que ya me direis, era para lo de Noelia que hizo del throwExceptionDuplicatedMonsterName
     @Transactional
     public Player getPlayerwithIdDifferent(String monsterName, Integer id) {
         monsterName = monsterName.toLowerCase();
@@ -62,6 +62,9 @@ public class PlayerService {
         return null;
     }
 
+    */
+
+
     /**
      * Join user to a game associating a new player to both. A player can only join
      * a game if the game has not started, has room for new players and the user is
@@ -74,7 +77,10 @@ public class PlayerService {
     @Transactional
     public void joinGame(User user, Player newPlayer, Game game) {
         MonsterName monsterName = newPlayer.getMonsterName();
-        if (game.hasRoom() && !game.isStarted() && game.monsterAvailable(monsterName) && !user.hasActivePlayer()
+        if (game.hasRoom() && 
+        !game.isStarted() && 
+        game.monsterAvailable(monsterName) &&
+         !user.hasActivePlayer()
                 && monsterName != null) {
 
             newPlayer.setGame(game);
@@ -112,21 +118,10 @@ public class PlayerService {
         return ct;
     }
 
-    @Transactional
-    public List<Player> findPlayerByGame(Integer gameId) {
-        Iterable<Player> allPlayers = findAll();
-        List<Player> listaJugadores = new ArrayList<Player>();
-        for (Player player : allPlayers) {
-            if (player.getGame().getId() == gameId) {
-                listaJugadores.add(player);
-            }
-        }
-        return listaJugadores;
-    }
 
     @Transactional
-    public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) throws DuplicatedMonsterNameException {
-        List<Player> listaJugadoresEnPartida = findPlayerByGame(gameId);
+    public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {
+        List<Player> listaJugadoresEnPartida=gameService.findGameById(gameId).getPlayers();
         Player playerActualTurn = findPlayerById(playerIdActualTurn);
         Boolean tokyoCityEmpty = Boolean.FALSE;
         Boolean tokyoBayEmpty = Boolean.FALSE;
