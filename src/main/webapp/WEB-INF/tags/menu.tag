@@ -23,7 +23,7 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'users'}" url="/users"
+				<petclinic:menuItem active="${name eq 'users'}" url="/users?page=1"
 					title="list users">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span>Users list</span>
@@ -67,15 +67,15 @@
 											<p class="text-left">
 												<strong><sec:authentication property="name" /></strong>
 											</p>
-											<p class="text-left">
-												<a href="<c:url value="/logout" />"
-													class="btn btn-primary btn-block btn-sm">Logout</a>
-											</p>
 										</div>
 										<div class="col-lg-8">
 											<p class="text-left">
 												<a href="<c:url value="/users/" />"
-													class="btn btn-primary btn-block btn-sm">Edit profile</a>
+													class="btn btn-primary btn-block btn-sm">Profile</a>
+											</p>
+											<p class="text-left">
+												<a href="<c:url value="/logout" />"
+													class="btn btn-primary btn-block btn-sm">Logout</a>
 											</p>
 										</div>
 									</div>

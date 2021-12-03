@@ -10,6 +10,11 @@ import org.springframework.samples.petclinic.player.Player;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 
 /**
  * @author Sara Cruz
@@ -117,8 +122,17 @@ public class UserService {
 	}
 
 	/**
+	 * @param pageNumber
+	 * @return Obtains a page of 5 users from userRepository
+	 */
+	@Transactional
+	public Page<User> getPageOfUsers(int pageNumber) {
+		Pageable pageable = PageRequest.of(pageNumber,5,Sort.by(Order.asc("username")));
+		return userRepository.findAllUsersByPage(pageable);
+	}
+	
+	/*
 	 * Check if the authenticated user is playing as the specific player
-	 * 
 	 * @return true if the logged user is playing as the player
 	 */
 	@Transactional
