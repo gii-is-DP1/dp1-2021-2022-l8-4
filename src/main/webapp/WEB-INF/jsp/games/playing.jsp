@@ -147,6 +147,11 @@
                                                         <br>
                                                     </c:forEach>
                                                 </td>
+                                                <td>
+                                                    <c:if test="${hasBeenHurt}"> 
+                                                        <a href="/games/${gameId}/exitTokyo"><button type="button" >Salir de Tokyo</button></a>
+                                                    </c:if>
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>

@@ -76,6 +76,8 @@ public class Player extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player", fetch = FetchType.EAGER)
     private Set<PlayerStatus> playerStatus;
 
+    @Column(name = "recently_hurt" ,columnDefinition = "boolean default false")
+    private Boolean recentlyHurt;
     /**
      * Reduce player's life points to 0 and remove the player from the on going game
      */
@@ -84,6 +86,10 @@ public class Player extends BaseEntity {
             setLocation(LocationType.fueraTokyo);
         }
         this.lifePoints = 0;
+    }
+
+    public Player() {
+        this.recentlyHurt = Boolean.FALSE;
     }
 
     /**

@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.game;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,7 +11,6 @@ import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
-import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -145,6 +143,12 @@ public class GameController {
 
         gameService.handleTurnAction(gameId,newTurn,roll);
 
+        return "redirect:/games/{gameId}/playing";
+    }
+
+    @GetMapping("/{gameId}/exitTokyo")
+    public String exitTokyo(ModelMap modelMap,@PathVariable("gameId") int gameId) {
+        gameService.handleExitTokyo(gameId);
         return "redirect:/games/{gameId}/playing";
     }
 
