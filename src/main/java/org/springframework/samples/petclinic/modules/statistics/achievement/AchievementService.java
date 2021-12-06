@@ -22,11 +22,6 @@ public class AchievementService{
     }
 
     @Transactional
-    public int achievementsCount() {
-        return (int) achievementRepository.count();
-    }
-
-    @Transactional
     public void saveAchievement(Achievement achievement) {
         achievementRepository.save(achievement);
     }

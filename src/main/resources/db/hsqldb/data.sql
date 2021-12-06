@@ -1,4 +1,4 @@
-INSERT INTO achievements(id,name,reward_points,condition) VALUES (1,'Mi primera partida',10,TRUE);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (1,'Mi primera partida','Juega tu primera partida',10,0,1);
 
 INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
 INSERT INTO cards(id,cost,name,type) VALUES(2,3,'Ataque acido',1); 

@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.game;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +53,6 @@ import lombok.Setter;
 
     @Column(name="start_time")
     private LocalDateTime startTime;
-
 
     @Column(name="end_time")
     private LocalDateTime endTime;

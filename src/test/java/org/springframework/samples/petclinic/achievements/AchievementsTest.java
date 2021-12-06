@@ -18,10 +18,6 @@ public class AchievementsTest {
     @Autowired
     private AchievementService achievementsService;
 
-    @Test
-    public void testCountWithInitialData() {
-        int count = achievementsService.achievementsCount();
-        assertEquals(count, 1);
-    }
+
 
 }
