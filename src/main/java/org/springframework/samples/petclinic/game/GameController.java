@@ -104,6 +104,7 @@ public class GameController {
             return "redirect:/games/{gameId}/finished";
         }
         Iterable<Player> players = gameService.findPlayerList(gameId);
+        
         if (MapGameRepository.getInstance().getTurnList(gameId) == null) {
             List<Integer> turnList = gameService.initialTurnList(gameId);
             MapGameRepository.getInstance().putTurnList(gameId, turnList);

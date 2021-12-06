@@ -155,19 +155,45 @@ public class GameService {
         MapGameRepository.getInstance().putRoll(gameId, roll);
     }
 
+    @Transactional
     public void nuevoTurno(int gameId) {
         Game game = findGameById(gameId);
         MapGameRepository.getInstance().putRoll(gameId, new Roll());
+
         game.setTurn(game.getTurn() + 1);
+
+        nextPositionTurn(gameId);
+
         saveGame(game);
         playerService.startTurn(actualTurnPlayerId(gameId));
     }
 
+    @Transactional
+    public void nextPositionTurn(Integer gameId) {
+        List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
+
+        Boolean finished=Boolean.FALSE;
+
+        while(!finished) {
+            Player player=playerService.findPlayerById(turnList.get(1));
+            if(!player.isDead()) {
+                turnList.add(turnList.remove(0));
+                MapGameRepository.getInstance().putTurnList(gameId, turnList);
+                break;
+            } else{
+                turnList.remove(1);
+            }
+        }
+            
+    }
+
+    @Transactional
     public Integer actualTurnPlayerId(Integer gameId) {
         Player player = actualTurn(gameId);
         return player.getId();
     }
 
+    @Transactional
     public List<Game> findAllFinished() {
         Iterable<Game> resultSinFiltrar = findAll();
         List<Game> resultadoFiltrado = new ArrayList<Game>();
@@ -179,6 +205,7 @@ public class GameService {
         return resultadoFiltrado;
     }
 
+    @Transactional  
     public List<Game> findAllNotFinished() {
         Iterable<Game> resultSinFiltrar = findAll();
         List<Game> resultadoFiltrado = new ArrayList<Game>();
@@ -190,6 +217,7 @@ public class GameService {
         return resultadoFiltrado;
     }
 
+    @Transactional
     public void endGame(Integer gameId) {
         Game game = findGameById(gameId);
         if (game.playersWithMaxVictoryPoints().size() != 0) {
@@ -202,6 +230,7 @@ public class GameService {
         saveGame(game);
     }
 
+    @Transactional
     public List<Integer> initialTurnList(Integer gameId) {
         List<Integer> listaTurnos = new ArrayList<Integer>();
         List<Player> jugadores = findPlayerList(gameId);
@@ -212,28 +241,29 @@ public class GameService {
         return listaTurnos;
     }
 
+    @Transactional
     public Player actualTurn(Integer gameId) {
-        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
-        Game game = findGameById(gameId);
-        List<Player> jugadores = game.getPlayers();
-        Player actualPlayer = actualTurnPositionList(turnList, game.getTurn(), jugadores);
-
+        
+        Player actualPlayer=new Player();
+        Boolean finished=Boolean.FALSE;
+        while(!finished) {
+            List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+            actualPlayer=playerService.findPlayerById(turnList.get(0));
+            if(!actualPlayer.isDead()){
+                break;
+            } else{
+                turnList.remove(0);
+                MapGameRepository.getInstance().putTurnList(gameId, turnList);
+            }
+        }
+            
+        
+        
+        
         return actualPlayer;
     }
 
-    private Player actualTurnPositionList(List<Integer> turnList, Integer listPosition, List<Player> players) {
-        Integer turnNum = listPosition % (players.size());
-
-        for (Player player : players) {
-            if (player.getId() == turnList.get(turnNum) && player.isDead()) {
-                turnNum++;
-                return actualTurnPositionList(turnList, turnNum, players);
-            } else if (player.getId() == turnList.get(turnNum)) {
-                return player;
-            }
-        }
-        return null;
-    }
+    
 
     @Transactional
     public Boolean isPlayerTurn(Integer gameId) {

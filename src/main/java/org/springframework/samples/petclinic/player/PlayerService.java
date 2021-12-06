@@ -121,8 +121,9 @@ public class PlayerService {
 
     @Transactional
     public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {
-        List<Player> listaJugadoresEnPartida=gameService.findGameById(gameId).getPlayers();
         Player playerActualTurn = findPlayerById(playerIdActualTurn);
+        List<Player> listaJugadoresEnPartida=playerActualTurn.getGame().getPlayers();
+        
         Boolean tokyoCityEmpty = Boolean.FALSE;
         Boolean tokyoBayEmpty = Boolean.FALSE;
 
@@ -176,17 +177,13 @@ public class PlayerService {
         for (Player player : listaJugadoresEnPartida) {
             Integer playerMaxHealth = 10; // Por ahora lo dejo asi, la idea es que sea 10 default o 12 si tiene la carta
                                           // (max health Atributo de player?)
-            Integer playerMinHealth = 0;
+            
 
             if (playerIdActualTurn == player.getId()) {
                 // CURACION
                 if (player.getLocation() == LocationType.fueraTokyo) {
                     Integer sumaVida = player.getLifePoints() + heal;
-                    if (sumaVida <= playerMaxHealth) {
-                        player.setLifePoints(sumaVida);
-                    } else {
-                        player.setLifePoints(playerMaxHealth);
-                    }
+                    healDamage(player, sumaVida);
                 }
                 // ENERGIAS
                 Integer sumaEnergias = player.getEnergyPoints() + energys;
@@ -212,15 +209,15 @@ public class PlayerService {
                 // Daño a los otros jugadores estando fuera de tokyo
                 if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
                     if (player.getLocation() == LocationType.ciudadTokyo) {
-                        restarVida(player, damage, playerMinHealth);
+                        damagePlayer(player, damage);
                     } else if (player.getLocation() == LocationType.bahiaTokyo) {
-                        restarVida(player, damage, playerMinHealth);
+                        damagePlayer(player, damage);
                     }
                     // Daño a otros jugadores estando en Tokyo (ciudad o bahía)
                 } else if (playerActualTurn.getLocation() == LocationType.bahiaTokyo
                         || playerActualTurn.getLocation() == LocationType.ciudadTokyo) {
                     if (player.getLocation() == LocationType.fueraTokyo) {
-                        restarVida(player, damage, playerMinHealth);
+                        damagePlayer(player, damage);
                     }
                 }
             }
@@ -229,13 +226,33 @@ public class PlayerService {
     }
 
     @Transactional
-    public void restarVida(Player player, Integer damage, Integer playerMinHealth) {
-        Integer sumaVidaQuitada = player.getLifePoints() - damage;
-        if (playerMinHealth < sumaVidaQuitada) {
-            player.setLifePoints(sumaVidaQuitada);
+    public void healDamage(Player player, Integer healPoints) {
+        Integer playerMaxHealth=player.getMaxHealth();
+        if (healPoints <= playerMaxHealth) {
+            player.setLifePoints(healPoints);
+        } else {
+            player.setLifePoints(playerMaxHealth);
+        }
+    }
+
+    @Transactional
+    public void damagePlayer(Player player, Integer damage) {
+        Integer damagedLife = player.getLifePoints() - damage;
+        if (0 < damagedLife) {
+            player.setLifePoints(damagedLife);
         } else {
             player.setLifePoints(0);
             player.setLocation(LocationType.fueraTokyo);
+        }
+    }
+
+    @Transactional
+    public void substractVictoryPointsPlayer(Player player, Integer victoryPoints) {
+        Integer victoryPointsNew = player.getLifePoints() - victoryPoints;
+        if (0 < victoryPointsNew) {
+            player.setVictoryPoints(victoryPointsNew);
+        } else {
+            player.setVictoryPoints(0);
         }
     }
 

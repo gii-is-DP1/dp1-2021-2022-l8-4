@@ -131,4 +131,8 @@ public class Player extends BaseEntity {
         return this.lifePoints <= 0;
     }
 
+    public Integer getMaxHealth() {
+        return 10; //Cuando se haga lo de la carta de vida maxima esto se cambia 
+    }
+
 }
