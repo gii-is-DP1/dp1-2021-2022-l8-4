@@ -29,7 +29,6 @@ public class PlayerService {
     private PlayerStatusRepository playerStatusRepository;
     @Autowired
     private UserService userService;
-
     @Autowired
     private GameService gameService;
 
@@ -49,6 +48,7 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
+    /* Esto actualmente no sirve para nada asi que ya me direis, era para lo de Noelia que hizo del throwExceptionDuplicatedMonsterName
     @Transactional
     public Player getPlayerwithIdDifferent(String monsterName, Integer id) {
         monsterName = monsterName.toLowerCase();
@@ -62,6 +62,9 @@ public class PlayerService {
         return null;
     }
 
+    */
+
+
     /**
      * Join user to a game associating a new player to both. A player can only join
      * a game if the game has not started, has room for new players and the user is
@@ -74,7 +77,10 @@ public class PlayerService {
     @Transactional
     public void joinGame(User user, Player newPlayer, Game game) {
         MonsterName monsterName = newPlayer.getMonsterName();
-        if (game.hasRoom() && !game.isStarted() && game.monsterAvailable(monsterName) && !user.hasActivePlayer()
+        if (game.hasRoom() && 
+        !game.isStarted() && 
+        game.monsterAvailable(monsterName) &&
+         !user.hasActivePlayer()
                 && monsterName != null) {
 
             newPlayer.setGame(game);
@@ -112,21 +118,10 @@ public class PlayerService {
         return ct;
     }
 
-    @Transactional
-    public List<Player> findPlayerByGame(Integer gameId) {
-        Iterable<Player> allPlayers = findAll();
-        List<Player> listaJugadores = new ArrayList<Player>();
-        for (Player player : allPlayers) {
-            if (player.getGame().getId() == gameId) {
-                listaJugadores.add(player);
-            }
-        }
-        return listaJugadores;
-    }
 
     @Transactional
-    public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) throws DuplicatedMonsterNameException {
-        List<Player> listaJugadoresEnPartida = findPlayerByGame(gameId);
+    public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {
+        List<Player> listaJugadoresEnPartida=gameService.findGameById(gameId).getPlayers();
         Player playerActualTurn = findPlayerById(playerIdActualTurn);
         Boolean tokyoCityEmpty = Boolean.FALSE;
         Boolean tokyoBayEmpty = Boolean.FALSE;
@@ -216,10 +211,11 @@ public class PlayerService {
             } else {
                 // Daño a los otros jugadores estando fuera de tokyo
                 if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
-                    if (player.getLocation() == LocationType.ciudadTokyo) {
+                    if (player.getLocation() == LocationType.ciudadTokyo || player.getLocation() == LocationType.bahiaTokyo) {
                         restarVida(player, damage, playerMinHealth);
-                    } else if (player.getLocation() == LocationType.bahiaTokyo) {
-                        restarVida(player, damage, playerMinHealth);
+                        if(damage>1){ //Si se hace daño a otros jugadores (no se usa el daño para entrar a tokyo)
+                            player.setRecentlyHurt(Boolean.TRUE);
+                        }
                     }
                     // Daño a otros jugadores estando en Tokyo (ciudad o bahía)
                 } else if (playerActualTurn.getLocation() == LocationType.bahiaTokyo
@@ -269,6 +265,26 @@ public class PlayerService {
             player.surrender();
             savePlayer(player);
         }
+    }
+
+    public Boolean isRecentlyHurt(Integer gameId){
+        User user = userService.authenticatedUser();
+        Player player = gameService.playerInGameByUser(user, gameId);
+        Boolean result = Boolean.FALSE;
+        if(player.getRecentlyHurt()==Boolean.TRUE){
+            result = Boolean.TRUE;
+        }
+        return result;
+    }
+
+    public Boolean isInTokyo(Integer gameId){
+        User user = userService.authenticatedUser();
+        Player player = gameService.playerInGameByUser(user, gameId);
+        Boolean result = Boolean.FALSE;
+        if(player.getLocation()==LocationType.bahiaTokyo || player.getLocation() == LocationType.ciudadTokyo){
+            result = Boolean.TRUE;
+        }
+        return result;
     }
 
 }

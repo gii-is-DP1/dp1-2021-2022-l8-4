@@ -11,7 +11,6 @@ import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
-import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -139,22 +138,17 @@ public class GameController {
     }
 
     @PostMapping("/{gameId}/playing")
-    public String rollKeep(@ModelAttribute("newTurn") Boolean nuevoTurno, @ModelAttribute("roll") Roll roll,
-            BindingResult result, ModelMap modelMap, @PathVariable("gameId") int gameId)
-            throws DuplicatedMonsterNameException {
-        if (gameService.isPlayerTurn(gameId)) {
-            if (nuevoTurno) {
-                gameService.nuevoTurno(gameId);
-            } else {
-                gameService.turnRoll(roll, gameId);
-                if (roll.getRollAmount() == roll.getMaxThrows()) {
-                    Integer playerIdActualTurn = gameService.actualTurnPlayerId(gameId);
-                    playerService.useRoll(gameId, playerIdActualTurn, roll);
+    public String rollKeep(@ModelAttribute("newTurn") Boolean newTurn, @ModelAttribute("roll") Roll roll,
+             @PathVariable("gameId") int gameId) {
 
-                }
-            }
-        }
+        gameService.handleTurnAction(gameId,newTurn,roll);
 
+        return "redirect:/games/{gameId}/playing";
+    }
+
+    @GetMapping("/{gameId}/exitTokyo")
+    public String exitTokyo(ModelMap modelMap,@PathVariable("gameId") int gameId) {
+        gameService.handleExitTokyo(gameId);
         return "redirect:/games/{gameId}/playing";
     }
 

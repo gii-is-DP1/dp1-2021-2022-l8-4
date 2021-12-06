@@ -57,7 +57,7 @@ public class User extends BaseEntity {
      * @return true if the user has an active player in a game/lobby
      */
     public Boolean hasActivePlayer() {
-        if (this.players.isEmpty()) {
+        if (  this.players == null || this.players.isEmpty()) {
             return false;
         } else {
             return this.players.stream()
