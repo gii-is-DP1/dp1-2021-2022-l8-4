@@ -2,14 +2,14 @@ INSERT INTO achievements(id,name,reward_points,condition) VALUES (1,'Mi primera 
 
 INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
 INSERT INTO cards(id,cost,name,type) VALUES(2,3,'Ataque acido',1); 
-INSERT INTO cards(id,cost,name,type) VALUES(3,5,'Apartamentos',1); 
+INSERT INTO cards(id,cost,name,type) VALUES(3,5,'Apartamentos',0); 
 INSERT INTO cards(id,cost,name,type) VALUES(4,4,'Armadura de chapa',1); 
 INSERT INTO cards(id,cost,name,type) VALUES(5,4,'Habitante subterraneo',1); 
 INSERT INTO cards(id,cost,name,type) VALUES(6,5,'Madriguera',1); 
 INSERT INTO cards(id,cost,name,type) VALUES(7,3,'Camuflaje',1); 
-INSERT INTO cards(id,cost,name,type) VALUES(8,4,'Tren de cercanias',1); 
+INSERT INTO cards(id,cost,name,type) VALUES(8,4,'Tren de cercanias',0); 
 INSERT INTO cards(id,cost,name,type) VALUES(9,3,'Destruccion total',1); 
-INSERT INTO cards(id,cost,name,type) VALUES(10,3,'Bazar de la esquina',1); 
+INSERT INTO cards(id,cost,name,type) VALUES(10,3,'Bazar de la esquina',0); 
 
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
