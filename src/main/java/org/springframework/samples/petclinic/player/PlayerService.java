@@ -208,10 +208,11 @@ public class PlayerService {
             } else {
                 // Daño a los otros jugadores estando fuera de tokyo
                 if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
-                    if (player.getLocation() == LocationType.ciudadTokyo) {
+                    if (player.getLocation() == LocationType.ciudadTokyo || player.getLocation() == LocationType.bahiaTokyo) {
                         damagePlayer(player, damage);
-                    } else if (player.getLocation() == LocationType.bahiaTokyo) {
-                        damagePlayer(player, damage);
+                        if(damage>=1){ //Si se hace daño a otros jugadores
+                            player.setRecentlyHurt(Boolean.TRUE);
+                        }
                     }
                     // Daño a otros jugadores estando en Tokyo (ciudad o bahía)
                 } else if (playerActualTurn.getLocation() == LocationType.bahiaTokyo
@@ -281,6 +282,26 @@ public class PlayerService {
             player.surrender();
             savePlayer(player);
         }
+    }
+
+    public Boolean isRecentlyHurt(Integer gameId){
+        User user = userService.authenticatedUser();
+        Player player = gameService.playerInGameByUser(user, gameId);
+        Boolean result = Boolean.FALSE;
+        if(player.getRecentlyHurt()==Boolean.TRUE){
+            result = Boolean.TRUE;
+        }
+        return result;
+    }
+
+    public Boolean isInTokyo(Integer gameId){
+        User user = userService.authenticatedUser();
+        Player player = gameService.playerInGameByUser(user, gameId);
+        Boolean result = Boolean.FALSE;
+        if(player.getLocation()==LocationType.bahiaTokyo || player.getLocation() == LocationType.ciudadTokyo){
+            result = Boolean.TRUE;
+        }
+        return result;
     }
 
 }
