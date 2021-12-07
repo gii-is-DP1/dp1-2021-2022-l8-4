@@ -9,7 +9,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.card.Card;
+import org.springframework.samples.petclinic.card.CardType;
 import org.springframework.samples.petclinic.game.Game;
+import org.springframework.samples.petclinic.game.GameService;
 import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
@@ -31,6 +33,9 @@ public class PlayerCardService {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private GameService gameService;
 
     @Autowired
     private UserService userService;
@@ -88,9 +93,87 @@ public class PlayerCardService {
                 GameCard gameCard = gameCardService.findByGameCard(game, card);
                 gameCard.setSold(Boolean.TRUE);
 
+
+                //Check if cards is used when bought
+               useCardDiscardType(card,player);
+               
                 // Show new cards
                 gameCardService.showCards(game);
             }
         }
+    }
+
+    private void useCardDiscardType(Card card,Player player) {
+        if(card.getType().equals(CardType.DESCARTAR)){
+
+        }
+    }
+
+
+    //ALL THE CARDS:
+
+    public void ApartmentBuilding(Player player){
+        player.setVictoryPoints(player.getVictoryPoints() + 3);
+        playerService.savePlayer(player);
+    }
+
+    public void CommuterTrain(Player player){
+        player.setVictoryPoints(player.getVictoryPoints() + 2);
+        playerService.savePlayer(player);
+    }
+
+    public void CornerStore(Player player){
+        player.setVictoryPoints(player.getVictoryPoints() + 3);
+        playerService.savePlayer(player);
+    }
+
+    public void Energize(Player player){
+        player.setVictoryPoints(player.getEnergyPoints() + 9);
+        playerService.savePlayer(player);
+    }
+
+    public void FireBlast(Player player){
+        for(Player play:player.getGame().getPlayers()) {
+            if(!player.equals(play)) {
+                playerService.damagePlayer(play, 2);
+                playerService.savePlayer(play);
+            }
+        }
+    }
+
+    public void EvacuationOrders(Player player){
+        for(Player play:player.getGame().getPlayers()) {
+            if(!player.equals(play)) {
+                playerService.substractVictoryPointsPlayer(play, 5);
+                playerService.savePlayer(play);
+            }
+        }
+    }
+
+    public void GasRefinery(Player player) {
+        player.setVictoryPoints(player.getVictoryPoints() + 2);
+        playerService.savePlayer(player);
+        for(Player play:player.getGame().getPlayers()) {
+            playerService.damagePlayer(play, 3);
+            playerService.savePlayer(play);
+        }
+    }
+
+    public void Heal(Player player) {
+        playerService.healDamage(player, 2);
+        playerService.savePlayer(player);
+    }
+
+    public void HighAltitude(Player player) {
+        for(Player play:player.getGame().getPlayers()) {
+            playerService.damagePlayer(play, 3);
+            playerService.savePlayer(play);
+        }
+    }
+
+    public void JetFighters(Player player) {
+        playerService.damagePlayer(player, 5);
+        player.setVictoryPoints(player.getVictoryPoints() + 5);
+        playerService.savePlayer(player);
     }
 }
