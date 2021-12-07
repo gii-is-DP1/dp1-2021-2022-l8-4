@@ -14,6 +14,8 @@ import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
+import org.springframework.samples.petclinic.modules.statistics.achievement.Achievement;
+import org.springframework.samples.petclinic.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.petclinic.player.LocationType;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
@@ -42,6 +44,9 @@ public class GameService {
 
     @Autowired
     private GameCardService gameCardService;
+
+    @Autowired
+    private AchievementService achievementService;
 
     @Transactional
     public Iterable<Game> findAll() {
@@ -228,6 +233,13 @@ public class GameService {
             game.setEndTime(LocalDateTime.now());
             game.setWinner(game.playersAlive().get(0).getUser().getUsername());
         }
+
+        // Check achievements for every user when the game is finished
+        if (game.isFinished()) {
+            game.getPlayers().stream()
+                    .forEach(p -> achievementService.checkAchievements(p.getUser()));
+        }
+
         saveGame(game);
     }
 
@@ -290,7 +302,7 @@ public class GameService {
     }
 
     @Transactional
-    public void handleTurnAction(Integer gameId, Boolean newTurn,Roll roll) {
+    public void handleTurnAction(Integer gameId, Boolean newTurn, Roll roll) {
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
                 nuevoTurno(gameId);
@@ -305,15 +317,17 @@ public class GameService {
         }
 
     }
+
     /**
-     * @return True if the player has been attacked in the actual turn 
+     * @return True if the player has been attacked in the actual turn
      */
     @Transactional
-    public Boolean hasBeenHurt(Integer gameId){
+    public Boolean hasBeenHurt(Integer gameId) {
         Boolean result = playerService.isRecentlyHurt(gameId);
         return result;
     }
-    public void changePosition(Integer gameId){
+
+    public void changePosition(Integer gameId) {
         Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));
         User user = userService.authenticatedUser();
         Player player = playerInGameByUser(user, gameId);
@@ -324,17 +338,17 @@ public class GameService {
         playerService.savePlayer(playerActualTurn);
     }
 
-    public void isRecentlyHurtToFalse(Integer gameId){
+    public void isRecentlyHurtToFalse(Integer gameId) {
         List<Player> lsplayer = findPlayerList(gameId);
-        for( Player player : lsplayer){
+        for (Player player : lsplayer) {
             player.setRecentlyHurt(Boolean.FALSE);
             playerService.savePlayer(player);
         }
     }
 
-    @Transactional 
-    public void handleExitTokyo(Integer gameId){
-        if(playerService.isRecentlyHurt(gameId) && playerService.isInTokyo(gameId)){
+    @Transactional
+    public void handleExitTokyo(Integer gameId) {
+        if (playerService.isRecentlyHurt(gameId) && playerService.isInTokyo(gameId)) {
             changePosition(gameId);
             isRecentlyHurtToFalse(gameId);
         }
