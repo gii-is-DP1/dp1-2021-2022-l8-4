@@ -26,10 +26,12 @@ import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 /** 
  *@author Noelia López Durán
  *@author Ricardo Nadal Garcia
  */
+
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 
 
@@ -61,7 +63,6 @@ public class PlayerServiceTests {
         user2.setEmail("usuarioDePrueba2@gmail.com");
         user2.setPassword("contraseñaDePrueba2");
         userService.saveUser(user2);
-
     
         game1=new Game();
         game1.setName("Partida prueba");
@@ -93,10 +94,9 @@ public class PlayerServiceTests {
         playerService.savePlayer(player2);
 
         //Esto lo hago ya que la lista de players no se guarda al hacer saveplayer como deberia (solo ocurre en el test)
-        List<Player> players=gameBefore.getPlayers();
-        players.add(player1);
-        players.add(player2);
-        gameBefore.setPlayers(players);
+       
+        gameBefore.getPlayers().add(player1);
+        gameBefore.getPlayers().add(player2);
         gameService.saveGame(gameBefore);
         
 
@@ -182,9 +182,8 @@ public class PlayerServiceTests {
     }
 
     @Test
-    @Disabled
     public void testHealRoll(){
-        Game game=gameService.findGameById(game1.getId());
+        Game game=gameService.findGameById(game1.getId()); //El problema es que no se guardan los players en la lista de players al crearlos, cuando debería
         Roll roll=new Roll();
         List<DiceValues> valoresCuracion=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -200,7 +199,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled
     public void testHealRollInTokyo() {
         Roll roll=new Roll();
         List<DiceValues> valoresCuracion=new ArrayList<DiceValues>();
@@ -218,7 +216,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testDamageToTokyoRoll(){
         Roll roll=new Roll();
         List<DiceValues> damageValues=new ArrayList<DiceValues>();
@@ -233,7 +230,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testDamageFromTokyoRoll(){
         Roll roll=new Roll();
         List<DiceValues> damageValues=new ArrayList<DiceValues>();
@@ -261,7 +257,6 @@ public class PlayerServiceTests {
 	}
 
     @Test 
-    @Disabled 
     public void testOnesRoll(){
         Roll roll=new Roll();
         List<DiceValues> onesValues=new ArrayList<DiceValues>();
@@ -277,7 +272,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testTwosRoll(){
         Roll roll=new Roll();
         List<DiceValues> twosValues=new ArrayList<DiceValues>();
@@ -293,7 +287,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testThreesRoll(){
         Roll roll=new Roll();
         List<DiceValues> threesValues=new ArrayList<DiceValues>();
@@ -309,7 +302,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testEnergyRoll(){
         Roll roll=new Roll();
         List<DiceValues> energyValues=new ArrayList<DiceValues>();
@@ -339,7 +331,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testEnterTokyoRoll(){
         Roll roll=new Roll();
         player2.setLocation(LocationType.fueraTokyo);
