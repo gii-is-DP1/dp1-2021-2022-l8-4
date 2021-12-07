@@ -1,9 +1,12 @@
 package org.springframework.samples.petclinic.modules.statistics.achievement;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +14,8 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.modules.statistics.metrics.MetricType;
+import org.springframework.samples.petclinic.user.User;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,6 +46,9 @@ public class Achievement extends NamedEntity {
    @Min(0)
    @Column(name="goal")
    private Long goal;
+
+   @ManyToMany(mappedBy = "achievements")
+   private Set<User> users;
 
    public Boolean isObtained(Long score){
       return score != null && goal<=score;
