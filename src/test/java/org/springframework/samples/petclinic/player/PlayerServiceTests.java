@@ -74,7 +74,7 @@ public class PlayerServiceTests {
 
         Game gameBefore = gameService.findGameById(game1.getId());
         player1=new Player();
-        player1.setMonsterName(MonsterName.Alien);
+        player1.setMonster(Monster.alien);
         player1.setUser(user1);
         player1.setGame(gameBefore);
         player1.setEnergyPoints(0);
@@ -84,7 +84,7 @@ public class PlayerServiceTests {
         playerService.savePlayer(player1);
         
         player2=new Player();
-        player2.setMonsterName(MonsterName.CyberBunny);
+        player2.setMonster(Monster.cyberBunny);
         player2.setUser(user2);
         player2.setGame(gameBefore);
         player2.setEnergyPoints(0);
@@ -117,7 +117,7 @@ public class PlayerServiceTests {
     @Test
     public void testFindPlayerWithCorrectId(){
         Player player4 = playerService.findPlayerById(4);
-        assertThat(player4.getMonsterName().toString()).startsWith("CyberBunny");
+        assertThat(player4.getMonster().getName()).startsWith("CyberBunny");
 		assertThat(player4.getLifePoints()).isEqualTo(0);
         assertThat(player4.getVictoryPoints()).isEqualTo(8);
         assertThat(player4.getEnergyPoints()).isEqualTo(2);
@@ -175,7 +175,7 @@ public class PlayerServiceTests {
         gameService.saveGame(gameTest);
 
         Player newPlayer=new Player();
-        newPlayer.setMonsterName(MonsterName.King); 
+        newPlayer.setMonster(Monster.king); 
 
         playerService.joinGame(testUser, newPlayer, gameTest);
         assertEquals(1, gameTest.getPlayers().size()); //No se mete no se por que
@@ -248,12 +248,12 @@ public class PlayerServiceTests {
 	public void shouldUpdateMonsterName() {
 		Player player2 = this.playerService.findPlayerById(2);
 
-		MonsterName newName = MonsterName.Alien;
-		player2.setMonsterName(newName);
+		Monster newName = Monster.alien;
+		player2.setMonster(newName);
 		this.playerService.savePlayer(player2);
 
 		player2 = this.playerService.findPlayerById(2);
-		assertThat(player2.getMonsterName()).isEqualTo(newName);
+		assertThat(player2.getMonster()).isEqualTo(newName);
 	}
 
     @Test 
@@ -355,7 +355,7 @@ public class PlayerServiceTests {
         
         User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
-		player.setMonsterName(MonsterName.GigaZaur);
+		player.setMonster(Monster.gigaZaur);
         player.setLifePoints(10);
         player.setVictoryPoints(2);
         player.setEnergyPoints(6);
@@ -378,7 +378,7 @@ public class PlayerServiceTests {
 	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){ //Actualmente no comprueba esto en la base de datos, solo lo hace al hacer JoinGame
         User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
-		player.setMonsterName(MonsterName.Alien);
+		player.setMonster(Monster.alien);
         player.setLifePoints(10);
         player.setVictoryPoints(2);
         player.setEnergyPoints(6);
@@ -399,7 +399,7 @@ public class PlayerServiceTests {
 	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() { //Actualmente no comprueba esto en la base de datos, solo lo hace al hacer JoinGame
         User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
-		player.setMonsterName(MonsterName.GigaZaur);
+		player.setMonster(Monster.gigaZaur);
         player.setLifePoints(10);
         player.setVictoryPoints(2);
         player.setEnergyPoints(6);
@@ -408,7 +408,7 @@ public class PlayerServiceTests {
         player.setUser(user1);
 
         Player anotherPlayer = new Player();		
-		anotherPlayer.setMonsterName(MonsterName.Alien);
+		anotherPlayer.setMonster(Monster.alien);
 		anotherPlayer.setGame(game1);
         anotherPlayer.setUser(user1);
         anotherPlayer.setLifePoints(10);

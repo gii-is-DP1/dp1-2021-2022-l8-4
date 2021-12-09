@@ -15,7 +15,6 @@ import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -96,8 +95,6 @@ public class GameController {
         
         Game game = gameService.findGameById(gameId);
 
-        
-
         if (game.isFinished()) {
             return "redirect:/games/{gameId}/finished";
         }
@@ -110,6 +107,9 @@ public class GameController {
 
         List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
         Roll roll = MapGameRepository.getInstance().getRoll(gameId);
+
+        List<Player> orderedPlayers= gameService.playersOrder(turnList);
+        modelMap.addAttribute("orderedPlayers", orderedPlayers);
 
         Player actualPlayerTurn = gameService.actualTurn(gameId);
         modelMap.addAttribute("actualPlayerTurn", actualPlayerTurn);

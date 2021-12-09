@@ -39,8 +39,8 @@
                             <table id="playersTable" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th style="width: 150px;">Username</th>
-                                        <th style="width: 120px;">Monstername</th>
+                                        <th style="width: 150px;">Usuario</th>
+                                        <th style="width: 120px;">Monstruo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -51,7 +51,8 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <c:out value="${player.monsterName}" />
+                                                <img src="${player.monster.getIcon()}" width="40" height="40">
+                                                <c:out value="${player.monster.getName()}" />
                                                 </a>
                                             </td>
                                         </tr>
@@ -62,7 +63,7 @@
                             <form:form modelAttribute="newPlayer">
                                 <tr>
                                     <td>Selecciona tu monstruo</td>
-                                    <td><form:radiobuttons path="monsterName" items="${availableMonsters}"/></td>
+                                    <td><form:radiobuttons path="monster" items="${availableMonsters}" itemLabel="name"/></td>
                                 </tr>
 
                                 <tr>
