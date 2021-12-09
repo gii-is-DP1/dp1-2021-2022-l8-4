@@ -43,7 +43,7 @@ public class Player extends BaseEntity {
 
     @Enumerated(value = EnumType.ORDINAL)
     @Column(name = "monster_name")
-    private MonsterName monsterName;
+    private Monster monster;
 
     @NotNull
     @Column(name = "life_points")

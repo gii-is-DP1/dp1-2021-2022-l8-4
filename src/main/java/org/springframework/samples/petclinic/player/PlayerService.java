@@ -75,12 +75,12 @@ public class PlayerService {
      */
     @Transactional
     public void joinGame(User user, Player newPlayer, Game game) {
-        MonsterName monsterName = newPlayer.getMonsterName();
+        Monster monster = newPlayer.getMonster();
         if (game.hasRoom() && 
         !game.isStarted() && 
-        game.monsterAvailable(monsterName) &&
+        game.monsterAvailable(monster) &&
          !user.hasActivePlayer()
-                && monsterName != null) {
+                && monster != null) {
 
             newPlayer.setGame(game);
             newPlayer.setUser(user);

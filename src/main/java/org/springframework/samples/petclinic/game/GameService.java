@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -176,21 +177,21 @@ public class GameService {
 
     @Transactional
     public void nextPositionTurn(Integer gameId) {
-        List<Integer> turnList=MapGameRepository.getInstance().getTurnList(gameId);
+        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
 
-        Boolean finished=Boolean.FALSE;
+        Boolean finished = Boolean.FALSE;
 
-        while(!finished) {
-            Player player=playerService.findPlayerById(turnList.get(1));
-            if(!player.isDead()) {
+        while (!finished) {
+            Player player = playerService.findPlayerById(turnList.get(1));
+            if (!player.isDead()) {
                 turnList.add(turnList.remove(0));
                 MapGameRepository.getInstance().putTurnList(gameId, turnList);
                 break;
-            } else{
+            } else {
                 turnList.remove(1);
             }
         }
-            
+
     }
 
     @Transactional
@@ -211,7 +212,7 @@ public class GameService {
         return resultadoFiltrado;
     }
 
-    @Transactional  
+    @Transactional
     public List<Game> findAllNotFinished() {
         Iterable<Game> resultSinFiltrar = findAll();
         List<Game> resultadoFiltrado = new ArrayList<Game>();
@@ -256,27 +257,22 @@ public class GameService {
 
     @Transactional
     public Player actualTurn(Integer gameId) {
-        
-        Player actualPlayer=new Player();
-        Boolean finished=Boolean.FALSE;
-        while(!finished) {
+
+        Player actualPlayer = new Player();
+        Boolean finished = Boolean.FALSE;
+        while (!finished) {
             List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
-            actualPlayer=playerService.findPlayerById(turnList.get(0));
-            if(!actualPlayer.isDead()){
+            actualPlayer = playerService.findPlayerById(turnList.get(0));
+            if (!actualPlayer.isDead()) {
                 break;
-            } else{
+            } else {
                 turnList.remove(0);
                 MapGameRepository.getInstance().putTurnList(gameId, turnList);
             }
         }
-            
-        
-        
-        
+
         return actualPlayer;
     }
-
-    
 
     @Transactional
     public Boolean isPlayerTurn(Integer gameId) {
@@ -354,4 +350,13 @@ public class GameService {
         }
     }
 
+    /**
+     * 
+     * @param turnList
+     * @return list of players
+     */
+    @Transactional
+    public List<Player> playersOrder(List<Integer> turnList) {
+        return turnList.stream().map(id -> playerService.findPlayerById(id)).collect(Collectors.toList());
+    }
 }
