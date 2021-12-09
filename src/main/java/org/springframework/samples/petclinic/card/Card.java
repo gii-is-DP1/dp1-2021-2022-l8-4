@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.gamecard.GameCard;
+import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.playercard.PlayerCard;
 
@@ -26,7 +27,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "cards")
-public class Card extends NamedEntity {
+public class Card extends BaseEntity {
 
     @NotNull
     @Column(name = "cost")
@@ -35,6 +36,10 @@ public class Card extends NamedEntity {
     @Enumerated(value = EnumType.ORDINAL)
     @Column(name = "type")
     private CardType type;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name="card_enum")
+    private CardEnum cardEnum;
 
     @OneToMany(mappedBy = "card")
     private List<GameCard> gameCard;

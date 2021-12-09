@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.playercard;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -103,9 +104,10 @@ public class PlayerCardService {
         }
     }
 
+    @Transactional
     private void useCardDiscardType(Card card,Player player) {
         if(card.getType().equals(CardType.DESCARTAR)){
-
+            card.getCardEnum().effect(player);
         }
     }
 
@@ -176,4 +178,12 @@ public class PlayerCardService {
         player.setVictoryPoints(player.getVictoryPoints() + 5);
         playerService.savePlayer(player);
     }
+
+    /*
+    public static  Consumer<Object> apartmentBuilding = (Object playerObj) -> {
+        Player player=(Player) playerObj;
+        player.setVictoryPoints(player.getVictoryPoints() + 3);
+        playerService.savePlayer(player);
+    };
+    */
 }
