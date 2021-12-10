@@ -1,7 +1,9 @@
 package org.springframework.samples.petclinic.player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -118,6 +120,8 @@ public class PlayerService {
     }
 
 
+
+
     @Transactional
     public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {
         Player playerActualTurn = findPlayerById(playerIdActualTurn);
@@ -126,36 +130,18 @@ public class PlayerService {
         Boolean tokyoCityEmpty = Boolean.FALSE;
         Boolean tokyoBayEmpty = Boolean.FALSE;
 
-        Integer heal = 0;
-        Integer damage = 0;
-        Integer energys = 0;
-        Integer ones = 0;
-        Integer twos = 0;
-        Integer threes = 0;
+        //useCards(playerActualTurn);
 
-        for (DiceValues valorDado : roll.getValues()) {
-            switch (valorDado) { // Lo estoy dejando de esta manera tan extensa por si luego hay que tener en
-                                 // cuenta las cartas para cada tipo de dado
-            case HEAL:
-                heal++;
-                break;
-            case ATTACK:
-                damage++;
-                break;
-            case ENERGY:
-                energys++;
-                break;
-            case ONE:
-                ones++;
-                break;
-            case TWO:
-                twos++;
-                break;
-            case THREE:
-                threes++;
-                break;
-            }
-        }
+        Map<String,Integer> rollCount=countRollValues(roll);
+
+        Integer heal = rollCount.get("heal");
+        Integer damage = rollCount.get("damage");
+        Integer energys = rollCount.get("energys");
+        Integer ones =rollCount.get("ones");
+        Integer twos = rollCount.get("twos");
+        Integer threes = rollCount.get("threes");
+
+
         // Si tokyo tiene espacio
         Boolean bayInPlay = listaJugadoresEnPartida.stream().filter(p -> !p.isDead()).count() > 4;
         tokyoCityEmpty = !listaJugadoresEnPartida.stream()
@@ -207,6 +193,55 @@ public class PlayerService {
             savePlayer(player);
         }
     }
+
+/*
+   private void useCards(Player player) {
+       for(CardEnum card:player.get)
+    }
+*/
+
+@Transactional
+   public Map<String,Integer> countRollValues(Roll roll){
+    Integer heal = 0;
+    Integer damage = 0;
+    Integer energys = 0;
+    Integer ones = 0;
+    Integer twos = 0;
+    Integer threes = 0;
+    Map<String,Integer> rollValues=new HashMap<String,Integer>();
+
+    for (DiceValues valorDado : roll.getValues()) {
+        switch (valorDado) { // Lo estoy dejando de esta manera tan extensa por si luego hay que tener en
+                             // cuenta las cartas para cada tipo de dado
+        case HEAL:
+            heal++;
+            break;
+        case ATTACK:
+            damage++;
+            break;
+        case ENERGY:
+            energys++;
+            break;
+        case ONE:
+            ones++;
+            break;
+        case TWO:
+            twos++;
+            break;
+        case THREE:
+            threes++;
+            break;
+        }
+    }
+    rollValues.put("heal", heal);
+    rollValues.put("damage", damage);
+    rollValues.put("energys", energys);
+    rollValues.put("ones", ones);
+    rollValues.put("twos", twos);
+    rollValues.put("threes", threes);
+
+    return rollValues;
+   }
 
     @Transactional
     public void healDamage(Player player, Integer healPoints) {
