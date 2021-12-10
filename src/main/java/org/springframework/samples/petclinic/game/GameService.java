@@ -314,14 +314,6 @@ public class GameService {
 
     }
 
-    /**
-     * @return True if the player has been attacked in the actual turn
-     */
-    @Transactional
-    public Boolean hasBeenHurt(Integer gameId) {
-        Boolean result = playerService.isRecentlyHurt(gameId);
-        return result;
-    }
 
     public void changePosition(Integer gameId) {
         Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));

@@ -319,7 +319,9 @@ public class PlayerService {
             savePlayer(player);
         }
     }
-
+    /**
+     * @return True if the player has been hurt (the property recentlyhurt of the player equals true)
+     */
     public Boolean isRecentlyHurt(Integer gameId){
         User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
@@ -329,7 +331,9 @@ public class PlayerService {
         }
         return result;
     }
-
+    /**
+     * @return True if the player is in TokyoCity or TokyoBay.
+     */
     public Boolean isInTokyo(Integer gameId){
         User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
