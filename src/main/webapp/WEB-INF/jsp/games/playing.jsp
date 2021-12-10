@@ -159,7 +159,7 @@
                                                         </td>
                                                         <td>
                                                             <c:forEach items="${player.getAvailableCards()}" var="card">
-                                                                <c:out value="${card.name}" />
+                                                                <c:out value="${card.cardEnum.getName()}" />
                                                                 <br>
                                                             </c:forEach>
                                                         </td>
@@ -194,7 +194,7 @@
                                         <c:forEach items="${cards}" var="card">
                                             <tr>
                                                 <td>
-                                                    <c:out value="${card.name}" />
+                                                    <c:out value="${card.cardEnum.getName()}" />
                                                     </a>
                                                 </td>
                                                 <td>
