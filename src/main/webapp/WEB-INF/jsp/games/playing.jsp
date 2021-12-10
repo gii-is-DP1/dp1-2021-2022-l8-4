@@ -114,6 +114,7 @@
                                             <th style="width: 120px">Energy Points</th>
                                             <th style="width: 150px">Location</th>
                                             <th style="width: 150px">Cards</th>
+                                            <th style="width: 150px">Salir de tokyo</th>
                                         </tr>
                                     </thead>
                                     <tbody>

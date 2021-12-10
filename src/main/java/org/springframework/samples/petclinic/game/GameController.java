@@ -126,6 +126,9 @@ public class GameController {
         Player actualPlayer=playerService.actualPlayer(gameId);
         modelMap.addAttribute("actualPlayer", actualPlayer);
 
+        Boolean hasBeenHurt = gameService.hasBeenHurt(gameId);
+        modelMap.addAttribute("hasBeenHurt", hasBeenHurt);
+
         modelMap.addAttribute("players", players);
         modelMap.addAttribute("game", game);
         modelMap.addAttribute("roll", roll);
