@@ -164,7 +164,7 @@
                                                             </c:forEach>
                                                         </td>
                                                         <td>
-                                                            <c:if test="${hasBeenHurt}"> 
+                                                            <c:if test="${player.getRecentlyHurt()&&AuthenticatedPlayer==player}"> 
                                                                 <a href="/games/${gameId}/exitTokyo"><button type="button" >Salir de Tokyo</button></a>
                                                             </c:if>
                                                         </td>
