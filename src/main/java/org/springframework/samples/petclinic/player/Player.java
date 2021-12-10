@@ -43,7 +43,7 @@ public class Player extends BaseEntity {
 
     @Enumerated(value = EnumType.ORDINAL)
     @Column(name = "monster_name")
-    private MonsterName monsterName;
+    private Monster monster;
 
     @NotNull
     @Column(name = "life_points")
@@ -135,6 +135,10 @@ public class Player extends BaseEntity {
 
     public Boolean isDead() {
         return this.lifePoints <= 0;
+    }
+
+    public Integer getMaxHealth() {
+        return 10; //Cuando se haga lo de la carta de vida maxima esto se cambia 
     }
 
 }

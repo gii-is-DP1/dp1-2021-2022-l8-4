@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.playercard;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -9,7 +10,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.card.Card;
+import org.springframework.samples.petclinic.card.CardType;
 import org.springframework.samples.petclinic.game.Game;
+import org.springframework.samples.petclinic.game.GameService;
 import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
@@ -31,6 +34,9 @@ public class PlayerCardService {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private GameService gameService;
 
     @Autowired
     private UserService userService;
@@ -88,9 +94,26 @@ public class PlayerCardService {
                 GameCard gameCard = gameCardService.findByGameCard(game, card);
                 gameCard.setSold(Boolean.TRUE);
 
+
+                //Check if cards is used when bought
+               useCardDiscardType(card,player);
+               
                 // Show new cards
                 gameCardService.showCards(game);
             }
         }
     }
+
+    @Transactional
+    private void useCardDiscardType(Card card,Player player) {
+        if(card.getType().equals(CardType.DESCARTAR)){
+            card.getCardEnum().effect(player,playerService);
+        }
+    }
+
+
+    
+
+
+   
 }

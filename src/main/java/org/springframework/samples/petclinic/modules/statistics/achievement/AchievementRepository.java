@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.achievement;
+package org.springframework.samples.petclinic.modules.statistics.achievement;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

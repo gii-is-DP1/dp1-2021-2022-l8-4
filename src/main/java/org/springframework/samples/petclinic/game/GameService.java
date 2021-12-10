@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -14,6 +15,8 @@ import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
+import org.springframework.samples.petclinic.modules.statistics.achievement.Achievement;
+import org.springframework.samples.petclinic.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.petclinic.player.LocationType;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
@@ -42,6 +45,9 @@ public class GameService {
 
     @Autowired
     private GameCardService gameCardService;
+
+    @Autowired
+    private AchievementService achievementService;
 
     @Transactional
     public Iterable<Game> findAll() {
@@ -156,19 +162,45 @@ public class GameService {
         MapGameRepository.getInstance().putRoll(gameId, roll);
     }
 
+    @Transactional
     public void nuevoTurno(int gameId) {
         Game game = findGameById(gameId);
         MapGameRepository.getInstance().putRoll(gameId, new Roll());
+
         game.setTurn(game.getTurn() + 1);
+
+        nextPositionTurn(gameId);
+
         saveGame(game);
         playerService.startTurn(actualTurnPlayerId(gameId));
     }
 
+    @Transactional
+    public void nextPositionTurn(Integer gameId) {
+        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+
+        Boolean finished = Boolean.FALSE;
+
+        while (!finished) {
+            Player player = playerService.findPlayerById(turnList.get(1));
+            if (!player.isDead()) {
+                turnList.add(turnList.remove(0));
+                MapGameRepository.getInstance().putTurnList(gameId, turnList);
+                break;
+            } else {
+                turnList.remove(1);
+            }
+        }
+
+    }
+
+    @Transactional
     public Integer actualTurnPlayerId(Integer gameId) {
         Player player = actualTurn(gameId);
         return player.getId();
     }
 
+    @Transactional
     public List<Game> findAllFinished() {
         Iterable<Game> resultSinFiltrar = findAll();
         List<Game> resultadoFiltrado = new ArrayList<Game>();
@@ -180,6 +212,7 @@ public class GameService {
         return resultadoFiltrado;
     }
 
+    @Transactional
     public List<Game> findAllNotFinished() {
         Iterable<Game> resultSinFiltrar = findAll();
         List<Game> resultadoFiltrado = new ArrayList<Game>();
@@ -191,6 +224,7 @@ public class GameService {
         return resultadoFiltrado;
     }
 
+    @Transactional
     public void endGame(Integer gameId) {
         Game game = findGameById(gameId);
         if (game.playersWithMaxVictoryPoints().size() != 0) {
@@ -200,9 +234,17 @@ public class GameService {
             game.setEndTime(LocalDateTime.now());
             game.setWinner(game.playersAlive().get(0).getUser().getUsername());
         }
+
+        // Check achievements for every user when the game is finished
+        if (game.isFinished()) {
+            game.getPlayers().stream()
+                    .forEach(p -> achievementService.checkAchievements(p.getUser()));
+        }
+
         saveGame(game);
     }
 
+    @Transactional
     public List<Integer> initialTurnList(Integer gameId) {
         List<Integer> listaTurnos = new ArrayList<Integer>();
         List<Player> jugadores = findPlayerList(gameId);
@@ -213,27 +255,23 @@ public class GameService {
         return listaTurnos;
     }
 
+    @Transactional
     public Player actualTurn(Integer gameId) {
-        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
-        Game game = findGameById(gameId);
-        List<Player> jugadores = game.getPlayers();
-        Player actualPlayer = actualTurnPositionList(turnList, game.getTurn(), jugadores);
 
-        return actualPlayer;
-    }
-
-    private Player actualTurnPositionList(List<Integer> turnList, Integer listPosition, List<Player> players) {
-        Integer turnNum = listPosition % (players.size());
-
-        for (Player player : players) {
-            if (player.getId() == turnList.get(turnNum) && player.isDead()) {
-                turnNum++;
-                return actualTurnPositionList(turnList, turnNum, players);
-            } else if (player.getId() == turnList.get(turnNum)) {
-                return player;
+        Player actualPlayer = new Player();
+        Boolean finished = Boolean.FALSE;
+        while (!finished) {
+            List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+            actualPlayer = playerService.findPlayerById(turnList.get(0));
+            if (!actualPlayer.isDead()) {
+                break;
+            } else {
+                turnList.remove(0);
+                MapGameRepository.getInstance().putTurnList(gameId, turnList);
             }
         }
-        return null;
+
+        return actualPlayer;
     }
 
     @Transactional
@@ -260,7 +298,7 @@ public class GameService {
     }
 
     @Transactional
-    public void handleTurnAction(Integer gameId, Boolean newTurn,Roll roll) {
+    public void handleTurnAction(Integer gameId, Boolean newTurn, Roll roll) {
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
                 nuevoTurno(gameId);
@@ -275,15 +313,17 @@ public class GameService {
         }
 
     }
+
     /**
-     * @return True if the player has been attacked in the actual turn 
+     * @return True if the player has been attacked in the actual turn
      */
     @Transactional
-    public Boolean hasBeenHurt(Integer gameId){
+    public Boolean hasBeenHurt(Integer gameId) {
         Boolean result = playerService.isRecentlyHurt(gameId);
         return result;
     }
-    public void changePosition(Integer gameId){
+
+    public void changePosition(Integer gameId) {
         Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));
         User user = userService.authenticatedUser();
         Player player = playerInGameByUser(user, gameId);
@@ -294,20 +334,29 @@ public class GameService {
         playerService.savePlayer(playerActualTurn);
     }
 
-    public void isRecentlyHurtToFalse(Integer gameId){
+    public void isRecentlyHurtToFalse(Integer gameId) {
         List<Player> lsplayer = findPlayerList(gameId);
-        for( Player player : lsplayer){
+        for (Player player : lsplayer) {
             player.setRecentlyHurt(Boolean.FALSE);
             playerService.savePlayer(player);
         }
     }
 
-    @Transactional 
-    public void handleExitTokyo(Integer gameId){
-        if(playerService.isRecentlyHurt(gameId) && playerService.isInTokyo(gameId)){
+    @Transactional
+    public void handleExitTokyo(Integer gameId) {
+        if (playerService.isRecentlyHurt(gameId) && playerService.isInTokyo(gameId)) {
             changePosition(gameId);
             isRecentlyHurtToFalse(gameId);
         }
     }
 
+    /**
+     * 
+     * @param turnList
+     * @return list of players
+     */
+    @Transactional
+    public List<Player> playersOrder(List<Integer> turnList) {
+        return turnList.stream().map(id -> playerService.findPlayerById(id)).collect(Collectors.toList());
+    }
 }

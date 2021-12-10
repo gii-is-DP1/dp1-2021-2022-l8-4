@@ -29,7 +29,8 @@
                                 </h2>
                                 <h2>
                                     Es el turno de:
-                                    <c:out value="${actualPlayerTurn.monsterName} (${actualPlayerTurn.user.username})" />
+                                    <img src="${actualPlayerTurn.monster.getIcon()}" width="40" height="40">
+                                    <c:out value="${actualPlayerTurn.monster.getName()} (${actualPlayerTurn.user.username})" />
                                 </h2>
 
                                 <h1>Tirada de dados</h1>
@@ -77,7 +78,7 @@
                                 <table id="dicesTable" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th style="width: 150px;">Value</th>
+                                            <th style="width: 150px;">Tirada</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -85,6 +86,7 @@
                                             <c:forEach items="${roll.values}" var="dice">
 
                                                 <td>
+                                                    <img src="${dice.getIcon()}" width="30" height="30">
                                                     <c:out value="${dice}" />
                                                 </td>
 
@@ -101,62 +103,80 @@
 
 
 
+                            <div class="container-fluid">
+                                <div class="row">
 
-                                <h2>Players</h2>
+                                    <div class="col-1 col-sm-1  align-self-center">
+                                        <h2>Turnos</h2>
+                                            <c:forEach items="${orderedPlayers}" var="ordererPlayer">
+                                                <div class="row" >
+                                                    <img src="${ordererPlayer.monster.getIcon()}" width="50" height="50" style="margin-left: 20px;">
+                                                    </a>
+                                                </div>
+                                            </c:forEach>
+                                    </div>
 
-                                <table id="playersTable" class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 150px;">Username</th>
-                                            <th style="width: 150px;">Monster Name</th>
-                                            <th style="width: 120px;">Life Points</th>
-                                            <th style="width: 120px">Victory Points</th>
-                                            <th style="width: 120px">Energy Points</th>
-                                            <th style="width: 150px">Location</th>
-                                            <th style="width: 150px">Cards</th>
-                                            <th style="width: 150px">Salir de tokyo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach items="${players}" var="player">
-                                            <tr>
-                                                <td>
-                                                    <c:out value="${player.user.username}" />
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${player.monsterName}" />
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${player.lifePoints}" />
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${player.victoryPoints}" />
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${player.energyPoints}" />
-                                                </td>
-                                                <td>
-                                                    <c:out value="${player.location}" />
-                                                </td>
-                                                <td>
-                                                    <c:forEach items="${player.getAvailableCards()}" var="card">
-                                                        <c:out value="${card.name}" />
-                                                        <br>
-                                                    </c:forEach>
-                                                </td>
-                                                <td>
-                                                    <c:if test="${hasBeenHurt}"> 
-                                                        <a href="/games/${gameId}/exitTokyo"><button type="button" >Salir de Tokyo</button></a>
-                                                    </c:if>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
+                                    <div class="col-11 col-lg-11">
+                                        <h2>Players</h2>
+
+                                        <table id="playersTable" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 150px;">Username</th>
+                                                    <th style="width: 150px;">Monster Name</th>
+                                                    <th style="width: 120px;">Life Points</th>
+                                                    <th style="width: 120px">Victory Points</th>
+                                                    <th style="width: 120px">Energy Points</th>
+                                                    <th style="width: 150px">Location</th>
+                                                    <th style="width: 150px">Cards</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="${players}" var="player">
+                                                    <tr>
+                                                        <td>
+                                                            <c:out value="${player.user.username}" />
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <img src="${player.monster.getIcon()}" width="40" height="40">
+                                                            <c:out value="${player.monster.getName()}" />
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <c:out value="${player.lifePoints}" />
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <c:out value="${player.victoryPoints}" />
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <c:out value="${player.energyPoints}" />
+                                                        </td>
+                                                        <td>
+                                                            <c:out value="${player.location}" />
+                                                        </td>
+                                                        <td>
+                                                            <c:forEach items="${player.getAvailableCards()}" var="card">
+                                                                <c:out value="${card.cardEnum.getName()}" />
+                                                                <br>
+                                                            </c:forEach>
+                                                        </td>
+                                                        <td>
+                                                            <c:if test="${hasBeenHurt}"> 
+                                                                <a href="/games/${gameId}/exitTokyo"><button type="button" >Salir de Tokyo</button></a>
+                                                            </c:if>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>                                
+
+                                </div>
+                            </div>
+
 
 
                                 <h2>Card Shop</h2>
@@ -174,7 +194,7 @@
                                         <c:forEach items="${cards}" var="card">
                                             <tr>
                                                 <td>
-                                                    <c:out value="${card.name}" />
+                                                    <c:out value="${card.cardEnum.getName()}" />
                                                     </a>
                                                 </td>
                                                 <td>

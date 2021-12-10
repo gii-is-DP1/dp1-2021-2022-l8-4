@@ -27,12 +27,14 @@ import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-
 /** 
  *@author Noelia López Durán
  *@author Ricardo Nadal Garcia
  */
+
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+
+
 public class PlayerServiceTests {
     
     @Autowired
@@ -61,16 +63,20 @@ public class PlayerServiceTests {
         user2.setEmail("usuarioDePrueba2@gmail.com");
         user2.setPassword("contraseñaDePrueba2");
         userService.saveUser(user2);
-
+    
         game1=new Game();
-        game1.setTurn(1);
+        game1.setName("Partida prueba");
+        game1.setCreator(user1);
+        game1.setTurn(0);
+        game1.setPlayers(new ArrayList<Player>());
         game1.setMaxNumberOfPlayers(3);
         gameService.saveGame(game1);
 
+        Game gameBefore = gameService.findGameById(game1.getId());
         player1=new Player();
-        player1.setMonsterName(MonsterName.Alien);
+        player1.setMonster(Monster.alien);
         player1.setUser(user1);
-        player1.setGame(game1);
+        player1.setGame(gameBefore);
         player1.setEnergyPoints(0);
         player1.setLifePoints(10);
         player1.setVictoryPoints(0);
@@ -78,15 +84,20 @@ public class PlayerServiceTests {
         playerService.savePlayer(player1);
         
         player2=new Player();
-        player2.setMonsterName(MonsterName.CyberBunny);
+        player2.setMonster(Monster.cyberBunny);
         player2.setUser(user2);
-        player2.setGame(game1);
+        player2.setGame(gameBefore);
         player2.setEnergyPoints(0);
         player2.setLifePoints(10);
         player2.setVictoryPoints(0);
         player2.setLocation(LocationType.ciudadTokyo);
         playerService.savePlayer(player2);
 
+        //Esto lo hago ya que la lista de players no se guarda al hacer saveplayer como deberia (solo ocurre en el test)
+       
+        gameBefore.getPlayers().add(player1);
+        gameBefore.getPlayers().add(player2);
+        gameService.saveGame(gameBefore);
         
 
 
@@ -99,12 +110,14 @@ public class PlayerServiceTests {
         assertEquals(playerId, playerTest.getId());
     }
 
+    
+
   
 
     @Test
     public void testFindPlayerWithCorrectId(){
         Player player4 = playerService.findPlayerById(4);
-        assertThat(player4.getMonsterName().toString()).startsWith("CyberBunny");
+        assertThat(player4.getMonster().getName()).startsWith("CyberBunny");
 		assertThat(player4.getLifePoints()).isEqualTo(0);
         assertThat(player4.getVictoryPoints()).isEqualTo(8);
         assertThat(player4.getEnergyPoints()).isEqualTo(2);
@@ -123,6 +136,7 @@ public class PlayerServiceTests {
     public void testAddPlayer(){
         int countInitial=playerService.playerCount();
         Game game2=new Game();
+        game2.setName("Partida prueb2");
         game2.setTurn(0);
         game2.setMaxNumberOfPlayers(3);
         gameService.saveGame(game2);
@@ -141,6 +155,7 @@ public class PlayerServiceTests {
         assertEquals(countInitial + 1, countAdd);
     }
 
+    
     @Test
     @Disabled
     public void testJoinGame(){
@@ -160,15 +175,15 @@ public class PlayerServiceTests {
         gameService.saveGame(gameTest);
 
         Player newPlayer=new Player();
-        newPlayer.setMonsterName(MonsterName.King); 
+        newPlayer.setMonster(Monster.king); 
 
         playerService.joinGame(testUser, newPlayer, gameTest);
         assertEquals(1, gameTest.getPlayers().size()); //No se mete no se por que
     }
 
     @Test
-    @Disabled 
     public void testHealRoll(){
+        Game game=gameService.findGameById(game1.getId()); //El problema es que no se guardan los players en la lista de players al crearlos, cuando debería
         Roll roll=new Roll();
         List<DiceValues> valoresCuracion=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -178,13 +193,12 @@ public class PlayerServiceTests {
         roll.setValues(valoresCuracion);
         playerService.savePlayer(player1);
         
-        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        playerService.useRoll(game.getId(), player1.getId(), roll);
         
         assertEquals(player1.getLifePoints(),7);
     }
 
     @Test 
-    @Disabled 
     public void testHealRollInTokyo() {
         Roll roll=new Roll();
         List<DiceValues> valoresCuracion=new ArrayList<DiceValues>();
@@ -202,7 +216,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testDamageToTokyoRoll(){
         Roll roll=new Roll();
         List<DiceValues> damageValues=new ArrayList<DiceValues>();
@@ -217,7 +230,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testDamageFromTokyoRoll(){
         Roll roll=new Roll();
         List<DiceValues> damageValues=new ArrayList<DiceValues>();
@@ -236,16 +248,15 @@ public class PlayerServiceTests {
 	public void shouldUpdateMonsterName() {
 		Player player2 = this.playerService.findPlayerById(2);
 
-		MonsterName newName = MonsterName.Alien;
-		player2.setMonsterName(newName);
+		Monster newName = Monster.alien;
+		player2.setMonster(newName);
 		this.playerService.savePlayer(player2);
 
 		player2 = this.playerService.findPlayerById(2);
-		assertThat(player2.getMonsterName()).isEqualTo(newName);
+		assertThat(player2.getMonster()).isEqualTo(newName);
 	}
 
     @Test 
-    @Disabled 
     public void testOnesRoll(){
         Roll roll=new Roll();
         List<DiceValues> onesValues=new ArrayList<DiceValues>();
@@ -261,7 +272,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testTwosRoll(){
         Roll roll=new Roll();
         List<DiceValues> twosValues=new ArrayList<DiceValues>();
@@ -277,7 +287,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testThreesRoll(){
         Roll roll=new Roll();
         List<DiceValues> threesValues=new ArrayList<DiceValues>();
@@ -293,7 +302,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testEnergyRoll(){
         Roll roll=new Roll();
         List<DiceValues> energyValues=new ArrayList<DiceValues>();
@@ -323,7 +331,6 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    @Disabled 
     public void testEnterTokyoRoll(){
         Roll roll=new Roll();
         player2.setLocation(LocationType.fueraTokyo);
@@ -348,7 +355,7 @@ public class PlayerServiceTests {
         
         User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
-		player.setMonsterName(MonsterName.GigaZaur);
+		player.setMonster(Monster.gigaZaur);
         player.setLifePoints(10);
         player.setVictoryPoints(2);
         player.setEnergyPoints(6);
@@ -371,7 +378,7 @@ public class PlayerServiceTests {
 	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){ //Actualmente no comprueba esto en la base de datos, solo lo hace al hacer JoinGame
         User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
-		player.setMonsterName(MonsterName.Alien);
+		player.setMonster(Monster.alien);
         player.setLifePoints(10);
         player.setVictoryPoints(2);
         player.setEnergyPoints(6);
@@ -392,7 +399,7 @@ public class PlayerServiceTests {
 	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() { //Actualmente no comprueba esto en la base de datos, solo lo hace al hacer JoinGame
         User user1 = this.userService.findUserById(1).get();
 		Player player = new Player();
-		player.setMonsterName(MonsterName.GigaZaur);
+		player.setMonster(Monster.gigaZaur);
         player.setLifePoints(10);
         player.setVictoryPoints(2);
         player.setEnergyPoints(6);
@@ -401,7 +408,7 @@ public class PlayerServiceTests {
         player.setUser(user1);
 
         Player anotherPlayer = new Player();		
-		anotherPlayer.setMonsterName(MonsterName.Alien);
+		anotherPlayer.setMonster(Monster.alien);
 		anotherPlayer.setGame(game1);
         anotherPlayer.setUser(user1);
         anotherPlayer.setLifePoints(10);
