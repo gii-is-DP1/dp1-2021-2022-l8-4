@@ -29,9 +29,13 @@ public class PlayerService {
     private PlayerStatusRepository playerStatusRepository;
     @Autowired
     private UserService userService;
-
     @Autowired
     private GameService gameService;
+
+    @Autowired
+	public PlayerService(PlayerRepository playerRepository) {
+		this.playerRepository = playerRepository;
+	}
 
     @Transactional
     public Iterable<Player> findAll() {

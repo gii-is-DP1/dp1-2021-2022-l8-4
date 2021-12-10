@@ -3,15 +3,22 @@ package org.springframework.samples.petclinic.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.Page;
+import org.springframework.samples.petclinic.player.Player;
+import org.springframework.samples.petclinic.player.PlayerRepository;
+import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,11 +28,19 @@ import org.springframework.stereotype.Service;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     
-    @Autowired
+    @Mock
+    private UserRepository userRepository;
     private UserService userService;
+    private PlayerRepository playerRepository;
+    private PlayerService playerService;
+    @BeforeEach
+    void setup() {
+        playerService = new PlayerService(playerRepository);
+        userService = new UserService(userRepository);
+    }
 
     @Test
     public void testGetCurrentUserId() {
@@ -118,6 +133,27 @@ public class UserServiceTest {
         numero = 10;
         assertEquals(contadorFind2, numero);
 	}
+
+    @Test
+    public void testGetPageOfUsers() {
+        int countUsers=0;
+        int pageId=0;
+        Page<User> page = userService.getPageOfUsers(pageId);
+        while(pageId<page.getTotalPages()) {
+            page = userService.getPageOfUsers(pageId);
+            countUsers = (int) page.getContent().stream().count();
+            assertThat(countUsers).isLessThanOrEqualTo(page.getSize());
+            pageId = pageId+1;
+        }
+    }
+
+    @Test
+    public void isAuthUserPlayingAsPlayer() {
+        User currentUser = userService.authenticatedUser();
+        Integer gameId = gameService.
+        Player currentPlayer = playerService.actualPlayer(1);
+        assertThat(currentUser).isEqualTo(currentPlayer.getUser());
+    }
 
 
 
