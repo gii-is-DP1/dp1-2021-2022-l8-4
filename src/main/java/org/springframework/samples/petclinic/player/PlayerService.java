@@ -174,35 +174,18 @@ public class PlayerService {
         }
         // Los efectos de los dados
         for (Player player : listaJugadoresEnPartida) {
-            Integer playerMaxHealth = 10; // Por ahora lo dejo asi, la idea es que sea 10 default o 12 si tiene la carta
-                                          // (max health Atributo de player?)
-            
-
             if (playerIdActualTurn == player.getId()) {
                 // CURACION
                 if (player.getLocation() == LocationType.fueraTokyo) {
-                    Integer sumaVida = player.getLifePoints() + heal;
-                    healDamage(player, sumaVida);
+                    healDamage(player, heal);
                 }
                 // ENERGIAS
                 Integer sumaEnergias = player.getEnergyPoints() + energys;
                 player.setEnergyPoints(sumaEnergias);
 
                 // PUNTUACION
-                Integer sumaTotal = 0;
-                Integer sumaOnes = (ones - 2);
-                if (sumaOnes > 0) {
-                    sumaTotal += sumaOnes;
-                }
-                Integer sumaTwos = (twos - 1);
-                if (twos - 2 > 0) {
-                    sumaTotal += sumaTwos;
-                }
-                Integer sumaThrees = threes;
-                if (threes - 2 > 0) {
-                    sumaTotal += sumaThrees;
-                }
-                player.setVictoryPoints(player.getVictoryPoints() + sumaTotal);
+                Integer totalPoints=calculatePoints(ones, twos, threes);
+                player.setVictoryPoints(player.getVictoryPoints() + totalPoints);
 
             } else {
                 // Daño a los otros jugadores estando fuera de tokyo
@@ -227,12 +210,31 @@ public class PlayerService {
 
     @Transactional
     public void healDamage(Player player, Integer healPoints) {
+        healPoints=player.getLifePoints()+healPoints;
         Integer playerMaxHealth=player.getMaxHealth();
         if (healPoints <= playerMaxHealth) {
             player.setLifePoints(healPoints);
         } else {
             player.setLifePoints(playerMaxHealth);
         }
+    }
+
+    @Transactional
+    public Integer calculatePoints(Integer ones,Integer twos, Integer threes) {
+        Integer result = 0;
+        Integer sumOnes = (ones - 2);
+        if (sumOnes > 0) {
+            result += sumOnes;
+            }
+        Integer sumTwos = (twos - 1);
+        if (twos - 2 > 0) {
+            result += sumTwos;
+        }
+        Integer sumThrees = threes;
+        if (threes - 2 > 0) {
+            result += sumThrees;
+        }
+        return result;
     }
 
     @Transactional
@@ -282,7 +284,9 @@ public class PlayerService {
             savePlayer(player);
         }
     }
-
+    /**
+     * @return True if the player has been hurt (the property recentlyhurt of the player equals true)
+     */
     public Boolean isRecentlyHurt(Integer gameId){
         User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
@@ -292,7 +296,9 @@ public class PlayerService {
         }
         return result;
     }
-
+    /**
+     * @return True if the player is in TokyoCity or TokyoBay.
+     */
     public Boolean isInTokyo(Integer gameId){
         User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
