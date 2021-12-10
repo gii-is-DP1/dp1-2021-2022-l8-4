@@ -1,8 +1,18 @@
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (1,'Mi primera partida','Juega tu primera partida',10,0,1);
 
-INSERT INTO cards(id,cost,card_enum,type) VALUES(1,4,'apartmentBuilding',0);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(2,0,'cornerStore',0); 
-INSERT INTO cards(id,cost,card_enum,type) VALUES(3,0,'cornerStore',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(1,5,'apartmentBuilding',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(2,3,'cornerStore',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(3,4,'commuterTrain',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(4,8,'energize',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(5,3,'fireBlast',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(6,7,'evacuationOrders',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(7,7,'evacuationOrders',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(8,3,'heal',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(9,6,'gasRefinery',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(10,4,'highAltitudeBombing',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(11,5,'jetFighters',0);
+
+
 
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');

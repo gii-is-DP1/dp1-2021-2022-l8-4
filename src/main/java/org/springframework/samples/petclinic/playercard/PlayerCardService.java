@@ -107,83 +107,13 @@ public class PlayerCardService {
     @Transactional
     private void useCardDiscardType(Card card,Player player) {
         if(card.getType().equals(CardType.DESCARTAR)){
-            card.getCardEnum().effect(player);
+            card.getCardEnum().effect(player,playerService);
         }
     }
 
 
-    //ALL THE CARDS:
+    
 
-    public void ApartmentBuilding(Player player){
-        player.setVictoryPoints(player.getVictoryPoints() + 3);
-        playerService.savePlayer(player);
-    }
 
-    public void CommuterTrain(Player player){
-        player.setVictoryPoints(player.getVictoryPoints() + 2);
-        playerService.savePlayer(player);
-    }
-
-    public void CornerStore(Player player){
-        player.setVictoryPoints(player.getVictoryPoints() + 3);
-        playerService.savePlayer(player);
-    }
-
-    public void Energize(Player player){
-        player.setVictoryPoints(player.getEnergyPoints() + 9);
-        playerService.savePlayer(player);
-    }
-
-    public void FireBlast(Player player){
-        for(Player play:player.getGame().getPlayers()) {
-            if(!player.equals(play)) {
-                playerService.damagePlayer(play, 2);
-                playerService.savePlayer(play);
-            }
-        }
-    }
-
-    public void EvacuationOrders(Player player){
-        for(Player play:player.getGame().getPlayers()) {
-            if(!player.equals(play)) {
-                playerService.substractVictoryPointsPlayer(play, 5);
-                playerService.savePlayer(play);
-            }
-        }
-    }
-
-    public void GasRefinery(Player player) {
-        player.setVictoryPoints(player.getVictoryPoints() + 2);
-        playerService.savePlayer(player);
-        for(Player play:player.getGame().getPlayers()) {
-            playerService.damagePlayer(play, 3);
-            playerService.savePlayer(play);
-        }
-    }
-
-    public void Heal(Player player) {
-        playerService.healDamage(player, 2);
-        playerService.savePlayer(player);
-    }
-
-    public void HighAltitude(Player player) {
-        for(Player play:player.getGame().getPlayers()) {
-            playerService.damagePlayer(play, 3);
-            playerService.savePlayer(play);
-        }
-    }
-
-    public void JetFighters(Player player) {
-        playerService.damagePlayer(player, 5);
-        player.setVictoryPoints(player.getVictoryPoints() + 5);
-        playerService.savePlayer(player);
-    }
-
-    /*
-    public static  Consumer<Object> apartmentBuilding = (Object playerObj) -> {
-        Player player=(Player) playerObj;
-        player.setVictoryPoints(player.getVictoryPoints() + 3);
-        playerService.savePlayer(player);
-    };
-    */
+   
 }
