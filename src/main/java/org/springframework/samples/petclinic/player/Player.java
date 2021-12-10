@@ -43,7 +43,7 @@ public class Player extends BaseEntity {
 
     @Enumerated(value = EnumType.ORDINAL)
     @Column(name = "monster_name")
-    private MonsterName monsterName;
+    private Monster monster;
 
     @NotNull
     @Column(name = "life_points")
@@ -76,6 +76,8 @@ public class Player extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player", fetch = FetchType.EAGER)
     private Set<PlayerStatus> playerStatus;
 
+    @Column(name = "recently_hurt" ,columnDefinition = "boolean default false")
+    private Boolean recentlyHurt;
     /**
      * Reduce player's life points to 0 and remove the player from the on going game
      */
@@ -84,6 +86,10 @@ public class Player extends BaseEntity {
             setLocation(LocationType.fueraTokyo);
         }
         this.lifePoints = 0;
+    }
+
+    public Player() {
+        this.recentlyHurt = Boolean.FALSE;
     }
 
     /**
@@ -129,6 +135,10 @@ public class Player extends BaseEntity {
 
     public Boolean isDead() {
         return this.lifePoints <= 0;
+    }
+
+    public Integer getMaxHealth() {
+        return 10; //Cuando se haga lo de la carta de vida maxima esto se cambia 
     }
 
 }

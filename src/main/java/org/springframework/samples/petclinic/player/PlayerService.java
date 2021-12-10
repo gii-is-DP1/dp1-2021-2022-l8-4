@@ -9,7 +9,6 @@ import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GameService;
-import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
@@ -53,6 +52,7 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
+    /* Esto actualmente no sirve para nada asi que ya me direis, era para lo de Noelia que hizo del throwExceptionDuplicatedMonsterName
     @Transactional
     public Player getPlayerwithIdDifferent(String monsterName, Integer id) {
         monsterName = monsterName.toLowerCase();
@@ -66,6 +66,9 @@ public class PlayerService {
         return null;
     }
 
+    */
+
+
     /**
      * Join user to a game associating a new player to both. A player can only join
      * a game if the game has not started, has room for new players and the user is
@@ -77,9 +80,12 @@ public class PlayerService {
      */
     @Transactional
     public void joinGame(User user, Player newPlayer, Game game) {
-        MonsterName monsterName = newPlayer.getMonsterName();
-        if (game.hasRoom() && !game.isStarted() && game.monsterAvailable(monsterName) && !user.hasActivePlayer()
-                && monsterName != null) {
+        Monster monster = newPlayer.getMonster();
+        if (game.hasRoom() && 
+        !game.isStarted() && 
+        game.monsterAvailable(monster) &&
+         !user.hasActivePlayer()
+                && monster != null) {
 
             newPlayer.setGame(game);
             newPlayer.setUser(user);
@@ -116,22 +122,12 @@ public class PlayerService {
         return ct;
     }
 
-    @Transactional
-    public List<Player> findPlayerByGame(Integer gameId) {
-        Iterable<Player> allPlayers = findAll();
-        List<Player> listaJugadores = new ArrayList<Player>();
-        for (Player player : allPlayers) {
-            if (player.getGame().getId() == gameId) {
-                listaJugadores.add(player);
-            }
-        }
-        return listaJugadores;
-    }
 
     @Transactional
-    public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) throws DuplicatedMonsterNameException {
-        List<Player> listaJugadoresEnPartida = findPlayerByGame(gameId);
+    public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {
         Player playerActualTurn = findPlayerById(playerIdActualTurn);
+        List<Player> listaJugadoresEnPartida=playerActualTurn.getGame().getPlayers();
+        
         Boolean tokyoCityEmpty = Boolean.FALSE;
         Boolean tokyoBayEmpty = Boolean.FALSE;
 
@@ -185,17 +181,13 @@ public class PlayerService {
         for (Player player : listaJugadoresEnPartida) {
             Integer playerMaxHealth = 10; // Por ahora lo dejo asi, la idea es que sea 10 default o 12 si tiene la carta
                                           // (max health Atributo de player?)
-            Integer playerMinHealth = 0;
+            
 
             if (playerIdActualTurn == player.getId()) {
                 // CURACION
                 if (player.getLocation() == LocationType.fueraTokyo) {
                     Integer sumaVida = player.getLifePoints() + heal;
-                    if (sumaVida <= playerMaxHealth) {
-                        player.setLifePoints(sumaVida);
-                    } else {
-                        player.setLifePoints(playerMaxHealth);
-                    }
+                    healDamage(player, sumaVida);
                 }
                 // ENERGIAS
                 Integer sumaEnergias = player.getEnergyPoints() + energys;
@@ -220,16 +212,17 @@ public class PlayerService {
             } else {
                 // Daño a los otros jugadores estando fuera de tokyo
                 if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
-                    if (player.getLocation() == LocationType.ciudadTokyo) {
-                        restarVida(player, damage, playerMinHealth);
-                    } else if (player.getLocation() == LocationType.bahiaTokyo) {
-                        restarVida(player, damage, playerMinHealth);
+                    if (player.getLocation() == LocationType.ciudadTokyo || player.getLocation() == LocationType.bahiaTokyo) {
+                        damagePlayer(player, damage);
+                        if(damage>=1){ //Si se hace daño a otros jugadores
+                            player.setRecentlyHurt(Boolean.TRUE);
+                        }
                     }
                     // Daño a otros jugadores estando en Tokyo (ciudad o bahía)
                 } else if (playerActualTurn.getLocation() == LocationType.bahiaTokyo
                         || playerActualTurn.getLocation() == LocationType.ciudadTokyo) {
                     if (player.getLocation() == LocationType.fueraTokyo) {
-                        restarVida(player, damage, playerMinHealth);
+                        damagePlayer(player, damage);
                     }
                 }
             }
@@ -238,13 +231,33 @@ public class PlayerService {
     }
 
     @Transactional
-    public void restarVida(Player player, Integer damage, Integer playerMinHealth) {
-        Integer sumaVidaQuitada = player.getLifePoints() - damage;
-        if (playerMinHealth < sumaVidaQuitada) {
-            player.setLifePoints(sumaVidaQuitada);
+    public void healDamage(Player player, Integer healPoints) {
+        Integer playerMaxHealth=player.getMaxHealth();
+        if (healPoints <= playerMaxHealth) {
+            player.setLifePoints(healPoints);
+        } else {
+            player.setLifePoints(playerMaxHealth);
+        }
+    }
+
+    @Transactional
+    public void damagePlayer(Player player, Integer damage) {
+        Integer damagedLife = player.getLifePoints() - damage;
+        if (0 < damagedLife) {
+            player.setLifePoints(damagedLife);
         } else {
             player.setLifePoints(0);
             player.setLocation(LocationType.fueraTokyo);
+        }
+    }
+
+    @Transactional
+    public void substractVictoryPointsPlayer(Player player, Integer victoryPoints) {
+        Integer victoryPointsNew = player.getLifePoints() - victoryPoints;
+        if (0 < victoryPointsNew) {
+            player.setVictoryPoints(victoryPointsNew);
+        } else {
+            player.setVictoryPoints(0);
         }
     }
 
@@ -273,6 +286,26 @@ public class PlayerService {
             player.surrender();
             savePlayer(player);
         }
+    }
+
+    public Boolean isRecentlyHurt(Integer gameId){
+        User user = userService.authenticatedUser();
+        Player player = gameService.playerInGameByUser(user, gameId);
+        Boolean result = Boolean.FALSE;
+        if(player.getRecentlyHurt()==Boolean.TRUE){
+            result = Boolean.TRUE;
+        }
+        return result;
+    }
+
+    public Boolean isInTokyo(Integer gameId){
+        User user = userService.authenticatedUser();
+        Player player = gameService.playerInGameByUser(user, gameId);
+        Boolean result = Boolean.FALSE;
+        if(player.getLocation()==LocationType.bahiaTokyo || player.getLocation() == LocationType.ciudadTokyo){
+            result = Boolean.TRUE;
+        }
+        return result;
     }
 
 }

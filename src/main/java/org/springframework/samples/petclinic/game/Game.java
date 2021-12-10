@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.model.NamedEntity;
-import org.springframework.samples.petclinic.player.MonsterName;
+import org.springframework.samples.petclinic.player.Monster;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.user.User;
 
@@ -52,7 +52,6 @@ import lombok.Setter;
 
     @Column(name="start_time")
     private LocalDateTime startTime;
-
 
     @Column(name="end_time")
     private LocalDateTime endTime;
@@ -107,9 +106,9 @@ import lombok.Setter;
     /**
      * @return true if the monster is still available in the game
      */
-    public Boolean monsterAvailable(MonsterName monsterName){
+    public Boolean monsterAvailable(Monster monsterName){
        return !this.players.stream()
-                        .map(p -> p.getMonsterName())
+                        .map(p -> p.getMonster())
                         .filter(pm -> pm == monsterName)
                         .findAny()
                         .isPresent();
@@ -118,12 +117,12 @@ import lombok.Setter;
     /**
      * @return a Set containing the available monster to pick
      */
-    public Set<MonsterName> availableMonsters(){
-       MonsterName[] monsters = MonsterName.values();
-       Set<MonsterName> allMonsters = new HashSet<>(monsters.length);
-       Set<MonsterName> availableMonsters = new HashSet<MonsterName>(monsters.length);
-       Set<MonsterName> actualPlayersMonster = this.players.stream()
-                                                         .map(p -> p.getMonsterName())
+    public Set<Monster> availableMonsters(){
+       Monster[] monsters = Monster.values();
+       Set<Monster> allMonsters = new HashSet<>(monsters.length);
+       Set<Monster> availableMonsters = new HashSet<Monster>(monsters.length);
+       Set<Monster> actualPlayersMonster = this.players.stream()
+                                                         .map(p -> p.getMonster())
                                                          .collect(Collectors.toSet());
       
        for(int i=0;i<monsters.length;i++){
@@ -148,7 +147,7 @@ import lombok.Setter;
      return vivos;
   }
   
-  public Boolean isFinished(){
+  public Boolean isFinished(){ 
      
      return this.winner!=null && !this.winner.isEmpty() ;
      }

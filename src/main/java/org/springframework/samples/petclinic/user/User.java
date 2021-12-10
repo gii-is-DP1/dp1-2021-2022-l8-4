@@ -5,6 +5,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -13,6 +16,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.modules.statistics.achievement.Achievement;
 import org.springframework.samples.petclinic.player.Player;
 
 import lombok.Getter;
@@ -53,11 +57,17 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "creator")
     private Set<Game> games;
 
+    @ManyToMany
+    @JoinTable(name = "users_achievements",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "achievement_id"))
+    private Set<Achievement> achievements;
+
     /**
      * @return true if the user has an active player in a game/lobby
      */
     public Boolean hasActivePlayer() {
-        if (this.players.isEmpty()) {
+        if (  this.players == null || this.players.isEmpty()) {
             return false;
         } else {
             return this.players.stream()
