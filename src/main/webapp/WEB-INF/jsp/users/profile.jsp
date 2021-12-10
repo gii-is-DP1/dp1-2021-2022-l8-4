@@ -29,25 +29,45 @@
     <table style="width: 66%; background-color: white; margin-left: 17%; margin-top: 3%;">
         <thead>
             <tr>
-                <th style="width: 150px;">Games played</th>
+                <th style="width: 150px;">Partidas jugadas</th>
             </tr>
         </thead>
         <tbody>
-                <tr style="border: 1px black;border-style: groove;border-radius: 5px; display: flex; margin-bottom: 2%;">
+            <c:forEach items="${user.players}" var="player">
+                <tr>
                     <td>
-                        JUEGO TO GUAPO NOSEQUE
+                        <c:out value="${player.game.name}" />
+                        </a>
                     </td>
                 </tr>
-                <tr style="border: 1px black;border-style: groove;border-radius: 5px; display: flex; margin-bottom: 2%;">
+            </c:forEach>
+        </tbody>
+    </table>
+
+
+    <table style="width: 66%; background-color: white; margin-left: 17%; margin-top: 3%;">
+        <thead>
+            <tr>
+                <th style="width: 150px;">Logros</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach items="${user.achievements}" var="achievement">
+                <tr>
                     <td>
-                        hola2ASDFFFFFFFFFFFFFFFFFFFFFF
+                        <c:out value="${achievement.name}" />
+                        </a>
+                    </td>
+                    <td>
+                        <c:out value="${achievement.description}" />
+                        </a>
+                    </td>
+                    <td>
+                        <c:out value="${achievement.rewardPoints}" />
+                        Puntos</a>
                     </td>
                 </tr>
-                <tr style="border: 1px black;border-style: groove;border-radius: 5px; display: flex; margin-bottom: 2%;">
-                    <td>
-                        hola3SDDDDDDDDDDDDDDDDDDDDDDDDD
-                    </td>
-                </tr>
+            </c:forEach>
         </tbody>
     </table>
 
