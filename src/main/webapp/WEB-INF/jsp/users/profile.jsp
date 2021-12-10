@@ -26,7 +26,7 @@
             
     </table>
     
-    <table style="width: 66%; background-color: white; margin-left: 17%; margin-top: 3%;">
+    <table style="border: 10px white solid; width: 66%; background-color: white; margin-left: 17%; margin-top: 3%;">
         <thead>
             <tr>
                 <th style="width: 150px;">Partidas jugadas</th>
@@ -34,18 +34,34 @@
         </thead>
         <tbody>
             <c:forEach items="${user.players}" var="player">
-                <tr>
-                    <td>
-                        <c:out value="${player.game.name}" />
-                        </a>
-                    </td>
-                </tr>
+                <c:if test="${player.game.isFinished()}">
+                    <tr style="border: 1px #7800bd ;border-style: groove;border-radius: 5px; display: flex; margin-bottom: 2%;">
+                        <td style="width: 50px;padding-top: 3px; padding-bottom: 3px;">
+                            <c:choose>
+                                <c:when test="${player.game.winner==user.username}">
+                                    <img class="img-responsive" src="/resources/images/trofeo.png"/>
+                                </c:when>    
+                                <c:otherwise>
+                                    <img class="img-responsive" src="/resources/images/game-over.png" />
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td style="padding-top: 18px; padding-bottom: 6px; padding-right: 12px;">
+                            <c:out value="${player.game.name}" />
+                            </a>
+                        </td>
+                        <td style="padding-top: 18px; padding-bottom: 6px;">
+                            <c:out value="${player.game.endTime}" />
+                            </a>
+                        </td>
+                    </tr>             
+                </c:if>
             </c:forEach>
         </tbody>
     </table>
 
 
-    <table style="width: 66%; background-color: white; margin-left: 17%; margin-top: 3%;">
+    <table style="border: 10px white solid; width: 66%; background-color: white; margin-left: 17%; margin-top: 3%;">
         <thead>
             <tr>
                 <th style="width: 150px;">Logros</th>
@@ -53,16 +69,19 @@
         </thead>
         <tbody>
             <c:forEach items="${user.achievements}" var="achievement">
-                <tr>
-                    <td>
+                <tr style="border: 1px #7800bd ;border-style: groove;border-radius: 5px; display: flex; margin-bottom: 2%;">
+                    <td style="width: 40px; padding-top: 5px;">
+                        <img class="img-responsive" src="/resources/images/medalla.png"/>    
+                    </td>
+                    <td style="padding-top: 15px; padding-bottom: 6px; padding-right: 12px; padding-left: 12px;">
                         <c:out value="${achievement.name}" />
                         </a>
                     </td>
-                    <td>
+                    <td style="padding-top: 15px; padding-bottom: 6px; padding-right: 12px;">
                         <c:out value="${achievement.description}" />
                         </a>
                     </td>
-                    <td>
+                    <td style="padding-top: 15px; padding-bottom: 6px;">
                         <c:out value="${achievement.rewardPoints}" />
                         Puntos</a>
                     </td>
