@@ -14,6 +14,6 @@ public interface MetricRepository extends CrudRepository<Game, Integer> {
 	 * Retrieve finished games count grouped by user.
 	 * @return a <code>Integer</code>
 	 */
-    @Query("SELECT player.user AS user, COUNT(player) AS score FROM Player player WHERE player.game.winner IS NOT NULL GROUP BY player.user.id ORDER BY count(player) DESC")
-    List<Metric> gamesPlayed() throws DataAccessException;
+    @Query("SELECT player.user.id AS user, COUNT(player) AS score FROM Player player WHERE player.game.winner IS NOT NULL GROUP BY player.user.id ORDER BY count(player) DESC")
+    List<Long[]> gamesPlayed() throws DataAccessException;
 }

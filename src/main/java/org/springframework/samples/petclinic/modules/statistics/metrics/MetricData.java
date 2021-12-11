@@ -7,11 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Metric {
+public class MetricData {
     private User user;
     private Long score;
 
-    public Metric(User user, Long score){
+    public MetricData(User user, Long score){
         this.user = user;
         this.score = score;
     }

@@ -8,7 +8,19 @@
 
                         <petclinic:layout pageName="gamesPlayedMetric">
 
-                        <h2>P</h2>
+                        <form:form modelAttribute="metricToDisplay" class="form-horizontal" >
+                            <div class="form-group has-feedback">
+                                <form:select itemLabel="name" path="metric" items="${metrics}" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button class="btn btn-default" type="submit">Buscar por metrica</button>
+                                </div>
+                            </div>
+                        </form:form>
+
+                        <h2>${actualMetric.getName()}</h2>
 
                             <table id="metricTable" class="table table-striped">
                                 <thead>
@@ -32,7 +44,5 @@
                                     </c:forEach>
                                 </tbody>
                             </table>
-
-                            <a href="/achievements/new"><button type="button" >Nuevo logro</button></a>
 
                         </petclinic:layout>

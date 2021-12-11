@@ -1,9 +1,9 @@
 package org.springframework.samples.petclinic.modules.statistics.metrics;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.user.User;
@@ -24,8 +24,9 @@ public class MetricService {
      * 
      * @return Map or Users with their associated score of games played ordered
      */
-    public List<Metric> gamesPlayed(){       
-        return metricRepository.gamesPlayed();
+    @Transactional
+    public List<MetricData> gamesPlayed(){       
+        return parseMetricData(metricRepository.gamesPlayed());
     }
 
     /**
@@ -33,17 +34,38 @@ public class MetricService {
      * @param data
      * @return Parsed data from the repository query
      */
-    public List<Metric> parseMetricData(List<Long[]> data){
-        List<Metric> parsedData = new ArrayList<Metric>();
+    @Transactional
+    public List<MetricData> parseMetricData(List<Long[]> data){
+        List<MetricData> parsedData = new ArrayList<MetricData>();
 
         for(Long[] pair: data){
             User user = userService.findUserById(pair[0].intValue()).get();
             Long score = pair[1];
-            Metric metric = new Metric(user,score);
+            MetricData metric = new MetricData(user,score);
            parsedData.add(metric);
         }  
         return parsedData;
     }
 
+
+    @Transactional
+    public List<MetricData> statisticsByMetricType(MetricType metric){
+        List<MetricData> statistics = new ArrayList<MetricData>();
+
+        switch(metric){
+            case gamesPlayed:
+                statistics = gamesPlayed();
+                break;
+            case cardsUsed:      
+            
+                break;
+            case wins:
+                
+                break;
+            default:
+                break;
+        }
+        return statistics;
+    }
 
 }
