@@ -16,13 +16,14 @@ public class CurrentUserController {
 
     @ModelAttribute("user")
     public int getCurrentUser() {
-        int currentUserId;
+        int currentUserId =0;
         User currentUser = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth!=null && auth.isAuthenticated())
+        if (auth!=null && auth.isAuthenticated() && !(auth.getPrincipal() instanceof String)){            
             currentUser = (User) auth.getPrincipal();
             String cUsername = currentUser.getUsername();
             currentUserId = userService.findUserByUsername(cUsername).getId();
+        }
         return currentUserId;
 }
 
