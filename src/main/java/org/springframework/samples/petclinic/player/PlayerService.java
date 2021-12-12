@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.card.Card;
+import org.springframework.samples.petclinic.card.CardEnum;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
@@ -32,6 +34,8 @@ public class PlayerService {
     private UserService userService;
     @Autowired
     private GameService gameService;
+    @Autowired
+    private PlayerService playerService;
 
     @Transactional
     public Iterable<Player> findAll() {
@@ -130,16 +134,17 @@ public class PlayerService {
         Boolean tokyoCityEmpty = Boolean.FALSE;
         Boolean tokyoBayEmpty = Boolean.FALSE;
 
-        //useCards(playerActualTurn);
+        useCards(playerActualTurn);
 
-        Map<String,Integer> rollCount=countRollValues(roll);
+        Map<String,Integer> rollCount=countRollValues(roll.getValues());
+        Map<String,Integer> cardValuesCount=countRollValues(roll.getCardExtraValues());
 
-        Integer heal = rollCount.get("heal");
-        Integer damage = rollCount.get("damage");
-        Integer energys = rollCount.get("energys");
-        Integer ones =rollCount.get("ones");
-        Integer twos = rollCount.get("twos");
-        Integer threes = rollCount.get("threes");
+        Integer heal = rollCount.get("heal") + cardValuesCount.get("heal");
+        Integer damage = rollCount.get("damage") + cardValuesCount.get("damage");
+        Integer energys = rollCount.get("energys") + cardValuesCount.get("energys");
+        Integer ones =rollCount.get("ones") + cardValuesCount.get("ones");
+        Integer twos = rollCount.get("twos") + cardValuesCount.get("twos");
+        Integer threes = rollCount.get("threes") +  cardValuesCount.get("threes");
 
 
         // Si tokyo tiene espacio
@@ -194,14 +199,18 @@ public class PlayerService {
         }
     }
 
-/*
+
    private void useCards(Player player) {
-       for(CardEnum card:player.get)
+        for(Card card:player.getAvailableCards()) {
+            card.getCardEnum().effect(player, playerService);
+        }
     }
-*/
+
+
+
 
 @Transactional
-   public Map<String,Integer> countRollValues(Roll roll){
+   public Map<String,Integer> countRollValues(List<DiceValues> values){
     Integer heal = 0;
     Integer damage = 0;
     Integer energys = 0;
@@ -210,7 +219,7 @@ public class PlayerService {
     Integer threes = 0;
     Map<String,Integer> rollValues=new HashMap<String,Integer>();
 
-    for (DiceValues valorDado : roll.getValues()) {
+    for (DiceValues valorDado : values) {
         switch (valorDado) { // Lo estoy dejando de esta manera tan extensa por si luego hay que tener en
                              // cuenta las cartas para cada tipo de dado
         case HEAL:

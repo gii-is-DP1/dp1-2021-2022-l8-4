@@ -141,4 +141,12 @@ public class Player extends BaseEntity {
         return this.recentlyHurt;
     }
 
+    public Boolean isOutOfTokyo(){
+        return this.location == LocationType.fueraTokyo;
+    }
+
+    public Boolean isInTokyo(){
+        return this.location == LocationType.ciudadTokyo || this.location== LocationType.bahiaTokyo;
+    }
+
 }
