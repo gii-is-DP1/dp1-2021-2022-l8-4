@@ -44,7 +44,7 @@
 
 
 
-                                        <c:if test="${!roll.rollFinished()}">
+                                        <c:if test="${!roll.isFinished()}">
                                             <c:if test="${roll.rollAmount != 0}">
                                                 <table>
                                                     <tr>
@@ -67,7 +67,7 @@
                                         <input type="hidden" value="${roll.rollAmount}" name="rollAmount"></input>
                                         <input type="hidden" value="${turnList}" name="turnList"></input>
 
-                                        <c:if test="${roll.rollFinished()}">
+                                        <c:if test="${roll.isFinished()}">
                                             <h2>FINAL TURNO</h2>
                                             <input type="hidden" value="True" name="newTurn"></input>
                                             <input type="submit" value="FINALIZAR TURNO">
