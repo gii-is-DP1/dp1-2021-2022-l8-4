@@ -11,6 +11,7 @@ INSERT INTO cards(id,cost,card_enum,type) VALUES(8,3,'heal',0);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(9,6,'gasRefinery',0);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(10,4,'highAltitudeBombing',0);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(11,5,'jetFighters',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(12,3,'nationalGuard',0);
 
 
 

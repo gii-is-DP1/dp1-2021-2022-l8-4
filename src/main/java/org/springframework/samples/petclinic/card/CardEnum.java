@@ -10,7 +10,7 @@ import org.springframework.samples.petclinic.playercard.PlayerCardService;
 
 
 
-public enum CardEnum{
+public enum CardEnum{ //Primero estan todas las de descarte al usarlo
     apartmentBuilding("Bloque de apartamentos") {
 
         @Override
@@ -108,6 +108,17 @@ public enum CardEnum{
             
         }        
     },
+
+    nationalGuard("Guarda Nacional") {
+
+        @Override
+        public void effect(Player player,PlayerService playerService){
+            playerService.damagePlayer(player, 2);
+            player.setVictoryPoints(player.getVictoryPoints() + 2);
+            playerService.savePlayer(player);
+            
+        }        
+    },
     
 
     cornerStore("Bazar de la esquina") {
@@ -116,6 +127,13 @@ public enum CardEnum{
         public void effect(Player player,PlayerService playerService){
             player.setVictoryPoints(player.getVictoryPoints() + 1);
             playerService.savePlayer(player);
+            
+        }
+    },
+    acidAttack("Ataque acido") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
             
         }
     };
