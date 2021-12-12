@@ -184,6 +184,16 @@
                                 <table id="cardsTable" class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <c:if test="${isPlayerTurn}">
+                                                    <a href="/players/${actualPlayerTurn.id}/cards/discard">
+                                                        <button type="button" >
+                                                            Descartar cartas de la tienda por 2 
+                                                            <img src="/resources/images/diceValues/energy.png" width="50" height="50"> 
+                                                        </button>
+                                                    </a>
+                                            </c:if>
+                                        </tr>
+                                        <tr>
                                             <th style="width: 150px;">Card Name</th>
                                             <th style="width: 120px;">Cost</th>
                                             <th style="width: 120px">Type</th>

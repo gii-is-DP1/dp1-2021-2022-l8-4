@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Jose Maria Delgado Sanchez
+ * @author Ricardo Nadal Garcia
  */
 @Service
 public class PlayerCardService {
@@ -35,8 +36,6 @@ public class PlayerCardService {
     @Autowired
     private PlayerService playerService;
 
-    @Autowired
-    private GameService gameService;
 
     @Autowired
     private UserService userService;
@@ -108,6 +107,33 @@ public class PlayerCardService {
     private void useCardDiscardType(Card card,Player player) {
         if(card.getType().equals(CardType.DESCARTAR)){
             card.getCardEnum().effect(player,playerService);
+        }
+    }
+
+    @Transactional
+    public void discardShopCards(Player player) {
+        Game game = player.getGame();
+        List<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
+        if (game.isOnGoing() && !player.isDead()
+                && userService.isAuthUserPlayingAsPlayer(player)) {
+
+            // Check if the player has enough energy
+            Integer energyPoints = player.getEnergyPoints();
+            Integer cost = 2;
+            if (energyPoints >= cost) {
+
+                // Calculate new energyPoints value
+                player.setEnergyPoints(energyPoints - cost);
+
+                // Update status of the cards
+                for(Card card:availableCards){
+                    GameCard gameCard = gameCardService.findByGameCard(game, card);
+                    gameCard.setSold(Boolean.TRUE);
+                }
+               
+                // Show new cards
+                gameCardService.showCards(game);
+            }
         }
     }
 
