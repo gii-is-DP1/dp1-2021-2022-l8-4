@@ -20,13 +20,13 @@
 
 				<petclinic:menuItem active="${name eq 'home'}" url="/" title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-					<span>Home</span>
+					<span>Inicio</span>
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'users'}" url="/users?page=1"
 					title="list users">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Users list</span>
+					<span>Lista de usuarios</span>
 				</petclinic:menuItem>
 			</ul>
 
@@ -45,6 +45,10 @@
 					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new">
 						<span class="" aria-hidden="true"></span>
 						<span>Nueva partida</span>
+					</petclinic:menuItem>
+					<petclinic:menuItem active="${name eq 'stadistics'}" url="/stadistics">
+						<span class="" aria-hidden="true"></span>
+						<span>Estadisticas</span>
 					</petclinic:menuItem>
 
 					<li class="dropdown"><a href="#" class="dropdown-toggle"

@@ -6,7 +6,7 @@
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
                 <petclinic:layout pageName="home">
-                    <h2><fmt:message key="Bienvenid@"/></h2>
+                    <h2><fmt:message key="welcome"/></h2>
                     <div class="row">
                         <h2>Project ${title}</h2>
                         <p><h2> Group ${group} </h2></p>
