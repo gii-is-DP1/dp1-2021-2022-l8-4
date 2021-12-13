@@ -301,7 +301,7 @@ public class GameService {
     }
 
     @Transactional
-    public void handleTurnAction(Integer gameId, Boolean newTurn, Roll roll) {
+    public void handleTurnAction(Integer gameId, Boolean newTurn, Roll keepInfo) {
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
                 isRecentlyHurtToFalse(gameId);
@@ -309,12 +309,11 @@ public class GameService {
             } else {
 
                 Roll rollData=MapGameRepository.getInstance().getRoll(gameId); //Esto es temporal, pretendo poner mejor rol por que esta mal hecho
-                rollData.setKeep(roll.getKeep());
-
+                rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
-                if (roll.getRollAmount() == roll.getMaxThrows()) {
+                if (rollData.getRollAmount() == rollData.getMaxThrows()) {
                     Integer playerIdActualTurn = actualTurnPlayerId(gameId);
-                    playerService.useRoll(gameId, playerIdActualTurn, roll);
+                    playerService.useRoll(gameId, playerIdActualTurn, rollData);
 
                 }
             }
