@@ -130,7 +130,7 @@ public class PlayerCardService {
 
             // Check if the player has enough energy
             Integer energyPoints = player.getEnergyPoints();
-            Integer cost = 2;
+            Integer cost = 0; //LO VOY A CAMBIAR A 0 PARA TESTING, DEBERIA SER 2
             if (energyPoints >= cost) {
 
                 // Calculate new energyPoints value

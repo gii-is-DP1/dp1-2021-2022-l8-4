@@ -151,7 +151,8 @@ public class GameService {
     public void turnRoll(Roll roll, Integer gameId) {
         if (roll.getRollAmount() == null || roll.getRollAmount() == 0) {
             roll.rollDiceInitial();
-        } else if (roll.getRollAmount() < roll.getMaxThrows() && roll.getKeep().length != 6) {
+            
+        } else if (roll.getRollAmount() < roll.getMaxThrows() && roll.getKeep().length != roll.getMaxThrows()) {
             List<DiceValues> valoresConservados = Arrays.asList(roll.getKeep());
             roll.rollDiceNext(valoresConservados);
         } else if (roll.getRollAmount() < roll.getMaxThrows()) {
@@ -167,10 +168,12 @@ public class GameService {
         Game game = findGameById(gameId);
         MapGameRepository.getInstance().putRoll(gameId, new Roll());
 
+        
         game.setTurn(game.getTurn() + 1);
 
         nextPositionTurn(gameId);
-
+        
+        playerService.useCards(actualTurn(gameId));
         saveGame(game);
         playerService.startTurn(actualTurnPlayerId(gameId));
     }
@@ -302,7 +305,12 @@ public class GameService {
             if (newTurn) {
                 nuevoTurno(gameId);
             } else {
-                turnRoll(roll, gameId);
+
+                Roll rollData=MapGameRepository.getInstance().getRoll(gameId); //Esto es temporal, pretendo poner mejor rol por que esta mal hecho
+                rollData.setKeep(roll.getKeep());
+                rollData.setRollAmount(roll.getRollAmount());
+
+                turnRoll(rollData, gameId);
                 if (roll.getRollAmount() == roll.getMaxThrows()) {
                     Integer playerIdActualTurn = actualTurnPlayerId(gameId);
                     playerService.useRoll(gameId, playerIdActualTurn, roll);

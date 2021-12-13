@@ -30,8 +30,6 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
         
     },
     commuterTrain("Tren de cercanias") {
-
-
         @Override
         public void effect(Player player,PlayerService playerService){
             player.setVictoryPoints(player.getVictoryPoints() + 2);
@@ -49,9 +47,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
         }        
     },
     fireBlast("Bola de fuego") {
-
         
-
         @Override
         public void effect(Player player,PlayerService playerService){
             for(Player play:player.getGame().getPlayers()) {
@@ -205,6 +201,30 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
                     roll.setCardExtraValues(dices);
                     MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
                 }
+            }
+        }  
+    },
+    extraHead("Segunda cabeza") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.getRollAmount() == 0 ) {
+                List<DiceValues> dices=roll.getValues();
+                dices.add(DiceValues.HEAL);
+                roll.setValues(dices);
+                MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
+            }
+        }  
+    },
+    giantBrain("Cerebro galaxia") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.getRollAmount() == 0 )  {                
+                roll.setMaxThrows(roll.getMaxThrows()+1);;
+                MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
             }
         }  
     };

@@ -200,7 +200,7 @@ public class PlayerService {
     }
 
 
-   private void useCards(Player player) {
+   public void useCards(Player player) {
         for(Card card:player.getAvailableCards()) {
             card.getCardEnum().effect(player, playerService);
         }
@@ -307,9 +307,12 @@ public class PlayerService {
         Player player = findPlayerById(playerId);
         if (player.getLocation().equals(LocationType.ciudadTokyo)
                 || player.getLocation().equals(LocationType.bahiaTokyo)) {
+
             player.setVictoryPoints(player.getVictoryPoints() + 2);
+            
             savePlayer(player);
         }
+        
     }
 
     @Transactional
