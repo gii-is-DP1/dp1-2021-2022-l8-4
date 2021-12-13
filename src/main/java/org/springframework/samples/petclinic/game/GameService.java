@@ -302,6 +302,7 @@ public class GameService {
     public void handleTurnAction(Integer gameId, Boolean newTurn, Roll roll) {
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
+                isRecentlyHurtToFalse(gameId);
                 nuevoTurno(gameId);
             } else {
                 turnRoll(roll, gameId);
