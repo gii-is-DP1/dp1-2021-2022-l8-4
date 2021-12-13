@@ -19,7 +19,7 @@ import org.springframework.samples.petclinic.playercard.PlayerCardService;
  */
 
 public enum CardEnum{ //Primero estan todas las de descarte al usarlo
-    apartmentBuilding("Bloque de apartamentos") {
+    apartmentBuilding("Bloque de apartamentos","Otorga 3 puntos de victoria") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -29,7 +29,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
 
         
     },
-    commuterTrain("Tren de cercanias") {
+    commuterTrain("Tren de cercanias","Otorga 2 puntos de victoria") {
 
 
         @Override
@@ -40,7 +40,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
 
         
     },
-    energize("Energizado") {
+    energize("Energizado","Otorga 9 puntos de energía") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -48,7 +48,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             playerService.savePlayer(player);
         }        
     },
-    fireBlast("Bola de fuego") {
+    fireBlast("Bola de fuego","Todos los monstruos enemigos reciben 2 puntos de daño") {
 
         
 
@@ -62,7 +62,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }        
     },
-    evacuationOrders("Ordenes de evacuacion") {
+    evacuationOrders("Ordenes de evacuacion","Todos los monstruos enemigos pierden 5 puntos de victoria") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -74,14 +74,14 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }        
     },
-    heal("Curacion") {
+    heal("Curacion","Tu monstruo se cura 2 puntos de vida") {
         @Override
         public void effect(Player player,PlayerService playerService){
             playerService.healDamage(player, 2);
             playerService.savePlayer(player);
         }        
     },
-    gasRefinery("Refineria de gas") {
+    gasRefinery("Refineria de gas","Obtienes 2 puntos de victoria y todos los monstruos enemigos reciben 3 puntos de daño") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -95,7 +95,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
         }        
     },
 
-    highAltitudeBombing("Bombardeo de Gran Altura") {
+    highAltitudeBombing("Bombardeo de Gran Altura","Todos los monstruos(incluyéndote a ti) reciben 3 puntos de daño") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -106,7 +106,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
         }        
     },
 
-    jetFighters("Caza de combate") {
+    jetFighters("Caza de combate","Obtienes 5 puntos de victoria y pierdes 4 puntos de vida") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -117,7 +117,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
         }        
     },
 
-    nationalGuard("Guarda Nacional") {
+    nationalGuard("Guarda Nacional","Obtienes 2 puntos de victoria y pierdes 2 puntos de vida") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -129,7 +129,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
     },
     
 
-    cornerStore("Bazar de la esquina") {
+    cornerStore("Bazar de la esquina","Otorga 1 puntos de victoria") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -138,7 +138,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             
         }
     },
-    acidAttack("Ataque ácido") {
+    acidAttack("Ataque ácido","Obtienes en cada turno un dado de daño extra") {
 
         @Override 
         public void effect(Player player, PlayerService playerService) {
@@ -151,7 +151,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }  
     },
-    alphaMonster("Monstruo alfa") {
+    alphaMonster("Monstruo alfa","Obtienes un punto de victoria cuando consigues al menos 1 dado de daño") {
 
         @Override 
         public void effect(Player player, PlayerService playerService) {
@@ -165,7 +165,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }  
     },
-    fireBreathing("Aliento de fuego") {
+    fireBreathing("Aliento de fuego","Otorga 1 puntos de victoria") {
 
         @Override 
         public void effect(Player player, PlayerService playerService) {
@@ -192,7 +192,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }  
     },
-    friendOfChildren("Amigo de los niños") {
+    friendOfChildren("Amigo de los niños","Si en tu turno obtienes al menos 1 punto de energía, ganas 1 punto de energía extra") {
 
         @Override 
         public void effect(Player player, PlayerService playerService) {
@@ -212,13 +212,19 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
     public abstract void effect(Player player,PlayerService playerService);
 
     private final String name;
+    private final String description;
     
-    private CardEnum(String name) {
+    private CardEnum(String name,String description) {
         this.name=name;
+        this.description=description;
     }
 
     public String getName(){
         return this.name;
+    }
+
+    public String getDescription(){
+        return this.description;
     }
 
     
