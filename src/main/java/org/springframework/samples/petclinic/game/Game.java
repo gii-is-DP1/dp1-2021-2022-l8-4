@@ -148,9 +148,10 @@ import lombok.Setter;
   }
   
   public Boolean isFinished(){ 
-     
      return this.winner!=null && !this.winner.isEmpty() ;
-     }
+  }
+
+
 
   public Integer playersAmount(){
      return this.players.size();

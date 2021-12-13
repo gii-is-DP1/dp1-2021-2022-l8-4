@@ -96,6 +96,7 @@ public class GameService {
      *                must not be emtpy
      * @return Game object if the game was succesfully created, otherwise null
      */
+    
     @Transactional
     public Game createNewGame(User creator, Game newGame) {
         if (!newGame.getName().isEmpty() && newGame.getMaxNumberOfPlayers() != null) {
@@ -303,6 +304,7 @@ public class GameService {
     public void handleTurnAction(Integer gameId, Boolean newTurn, Roll roll) {
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
+                isRecentlyHurtToFalse(gameId);
                 nuevoTurno(gameId);
             } else {
 
