@@ -89,8 +89,10 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             playerService.savePlayer(player);
 
             for(Player play:player.getGame().getPlayers()) {
-                playerService.damagePlayer(play,3);
-                playerService.savePlayer(play);
+                if(!player.equals(play)){
+                    playerService.damagePlayer(play,3);
+                    playerService.savePlayer(play);
+                }
             }
         }        
     },
@@ -165,7 +167,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }  
     },
-    fireBreathing("Aliento de fuego","Otorga 1 puntos de victoria") {
+    fireBreathing("Aliento de fuego","Dañas a tus monstruos vecinos cuando consigues almenos 1 dado de daño") {
 
         @Override 
         public void effect(Player player, PlayerService playerService) {
@@ -207,6 +209,19 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
                 }
             }
         }  
+    },
+    Gourmet("Gourmet","Cuando consigas 3 o más dados 'ONE', recibirás 2 puntos de victoria extra"){
+        @Override
+        public void effect(Player player, PlayerService playerService){
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.isFinished()) {
+                Map<String,Integer> rollValues=playerService.countRollValues(roll.getValues());
+                if(rollValues.get("ones") > 2) {
+                    player.setVictoryPoints(player.getVictoryPoints()+2);
+                    playerService.savePlayer(player);
+                }
+            }
+        }
     };
     
     public abstract void effect(Player player,PlayerService playerService);
