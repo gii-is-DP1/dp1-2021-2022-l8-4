@@ -184,7 +184,7 @@
                                 <table id="cardsTable" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <c:if test="${isPlayerTurn}">
+                                            <c:if test="${isPlayerTurn && roll.isFinished()}">
                                                     <a href="/players/${actualPlayerTurn.id}/cards/discard">
                                                         <button type="button" >
                                                             Descartar cartas de la tienda por 2 
@@ -216,7 +216,7 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <c:if test="${isPlayerTurn}">
+                                                    <c:if test="${isPlayerTurn && roll.isFinished()}">
                                                         <a href="/players/${actualPlayerTurn.id}/cards/${card.id}/buy"><button type="button" >Comprar</button></a>
                                                     </c:if>
                                                 </td>

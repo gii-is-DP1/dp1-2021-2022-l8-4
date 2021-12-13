@@ -51,7 +51,6 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
     fireBlast("Bola de fuego","Todos los monstruos enemigos reciben 2 puntos de daño") {
 
         
-
         @Override
         public void effect(Player player,PlayerService playerService){
             for(Player play:player.getGame().getPlayers()) {
@@ -205,6 +204,30 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
                     roll.setCardExtraValues(dices);
                     MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
                 }
+            }
+        }  
+    },
+    extraHead("Segunda cabeza","placeholder") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.getRollAmount() == 0 ) {
+                List<DiceValues> dices=roll.getValues();
+                dices.add(DiceValues.HEAL);
+                roll.setValues(dices);
+                MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
+            }
+        }  
+    },
+    giantBrain("Cerebro galaxia","placeholder") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.getRollAmount() == 0 )  {                
+                roll.setMaxThrows(roll.getMaxThrows()+1);;
+                MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
             }
         }  
     };
