@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.samples.petclinic.modules.statistics.achievement.AchievementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+    @Autowired
+    private AchievementService achievementService;
     
     private static final String VIEWS_USERS_CREATE_UPDATE_FORM = "users/createOrUpdateUsersForm";
 
@@ -103,8 +107,11 @@ public class UserController {
     @GetMapping(value = "/profile/{userId}")
     public String usersProfile(@PathVariable("userId") int userId, ModelMap modelMap){
         String view ="users/profile";
-        Optional<User> user= this.userService.findUserById(userId);
-        modelMap.addAttribute("user", user.get());
+        User user= this.userService.findUserById(userId).get();
+
+        achievementService.checkAchievements(user);
+
+        modelMap.addAttribute("user", user);
         return view;
     }
 

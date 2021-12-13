@@ -96,6 +96,7 @@ public class GameService {
      *                must not be emtpy
      * @return Game object if the game was succesfully created, otherwise null
      */
+    
     @Transactional
     public Game createNewGame(User creator, Game newGame) {
         if (!newGame.getName().isEmpty() && newGame.getMaxNumberOfPlayers() != null) {

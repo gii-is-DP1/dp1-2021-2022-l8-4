@@ -1,16 +1,24 @@
 package org.springframework.samples.petclinic.card;
 
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.dice.DiceValues;
+import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.game.MapGameRepository;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.playercard.PlayerCardService;
 
 
+/**
+ * @author Ricardo Nadal Garcia
+ */
 
-public enum CardEnum{
+public enum CardEnum{ //Primero estan todas las de descarte al usarlo
     apartmentBuilding("Bloque de apartamentos") {
 
         @Override
@@ -108,6 +116,17 @@ public enum CardEnum{
             
         }        
     },
+
+    nationalGuard("Guarda Nacional") {
+
+        @Override
+        public void effect(Player player,PlayerService playerService){
+            playerService.damagePlayer(player, 2);
+            player.setVictoryPoints(player.getVictoryPoints() + 2);
+            playerService.savePlayer(player);
+            
+        }        
+    },
     
 
     cornerStore("Bazar de la esquina") {
@@ -118,6 +137,76 @@ public enum CardEnum{
             playerService.savePlayer(player);
             
         }
+    },
+    acidAttack("Ataque ácido") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.isFinished()) {
+                List<DiceValues> dices= roll.getCardExtraValues();
+                dices.add(DiceValues.ATTACK);
+                roll.setCardExtraValues(dices);
+                MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
+            }
+        }  
+    },
+    alphaMonster("Monstruo alfa") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.isFinished()) {
+                Map<String,Integer> rollValues=playerService.countRollValues(roll.getValues());
+                if(rollValues.get("damage") > 0) {
+                    player.setVictoryPoints(player.getVictoryPoints()+1);
+                    playerService.savePlayer(player);
+                }
+            }
+        }  
+    },
+    fireBreathing("Aliento de fuego") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.isFinished()) {
+                Map<String,Integer> rollValues=playerService.countRollValues(roll.getValues());
+                if(rollValues.get("damage") > 0) {
+                    if(player.isInTokyo()){
+                         for(Player playTokyo:player.getGame().playersInTokyo()){
+                             if(player.getId()!=playTokyo.getId()){
+                                 playerService.damagePlayer(playTokyo, 1);
+                                 playerService.savePlayer(player);
+                             }
+                         }
+                    } else{
+                        for(Player playOutTokyo:player.getGame().playersOutOfTokyo()) {
+                            if(player.getId() != playOutTokyo.getId()){
+                                playerService.damagePlayer(playOutTokyo, 1);
+                                playerService.savePlayer(player);
+                            }
+                        }
+                    }
+                }
+            }
+        }  
+    },
+    friendOfChildren("Amigo de los niños") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.isFinished()) {
+                Map<String,Integer> rollValues=playerService.countRollValues(roll.getValues());
+                if(rollValues.get("energy") > 0) {
+                    List<DiceValues> dices= roll.getCardExtraValues();
+                    dices.add(DiceValues.ENERGY);
+                    roll.setCardExtraValues(dices);
+                    MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
+                }
+            }
+        }  
     };
     
     public abstract void effect(Player player,PlayerService playerService);
