@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.playercard.PlayerCardService;
 
 /**
  * @author Ricardo Nadal Garcia
+ * @author Noelia López Durán
  */
 
 public enum CardEnum{ //Primero estan todas las de descarte al usarlo
@@ -108,7 +109,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
         }        
     },
 
-    jetFighters("Caza de combate","Obtienes 5 puntos de victoria y pierdes 4 puntos de vida") {
+    jetFighters("Caza de combate","Obtienes 5 puntos de victoria pero pierdes 4 puntos de vida") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -119,7 +120,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
         }        
     },
 
-    nationalGuard("Guarda Nacional","Obtienes 2 puntos de victoria y pierdes 2 puntos de vida") {
+    nationalGuard("Guarda Nacional","Obtienes 2 puntos de victoria pero pierdes 2 puntos de vida") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -131,7 +132,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
     },
     
 
-    cornerStore("Bazar de la esquina","Otorga 1 puntos de victoria") {
+    cornerStore("Bazar de la esquina","Otorga 1 punto de victoria") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
@@ -210,7 +211,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }  
     },
-    Gourmet("Gourmet","Cuando consigas 3 o más dados 'ONE', recibirás 2 puntos de victoria extra"){
+    gourmet("Gourmet","Cuando consigas 3 o más dados 'ONE', recibirás 2 puntos de victoria extra"){
         @Override
         public void effect(Player player, PlayerService playerService){
             Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
