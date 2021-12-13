@@ -240,7 +240,6 @@ public class GameService {
             game.getPlayers().stream()
                     .forEach(p -> achievementService.checkAchievements(p.getUser()));
         }
-
         saveGame(game);
     }
 

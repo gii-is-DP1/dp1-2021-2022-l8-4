@@ -141,7 +141,7 @@ public class PlayerService {
 
         Integer heal = rollCount.get("heal") + cardValuesCount.get("heal");
         Integer damage = rollCount.get("damage") + cardValuesCount.get("damage");
-        Integer energys = rollCount.get("energys") + cardValuesCount.get("energys");
+        Integer energys = rollCount.get("energy") + cardValuesCount.get("energy");
         Integer ones =rollCount.get("ones") + cardValuesCount.get("ones");
         Integer twos = rollCount.get("twos") + cardValuesCount.get("twos");
         Integer threes = rollCount.get("threes") +  cardValuesCount.get("threes");
@@ -244,7 +244,7 @@ public class PlayerService {
     }
     rollValues.put("heal", heal);
     rollValues.put("damage", damage);
-    rollValues.put("energys", energys);
+    rollValues.put("energy", energys);
     rollValues.put("ones", ones);
     rollValues.put("twos", twos);
     rollValues.put("threes", threes);
@@ -325,6 +325,7 @@ public class PlayerService {
         User user = userService.authenticatedUser();
         if (player.getUser().getId() == user.getId()) {
             player.surrender();
+            gameService.endGame(player.getGame().getId());
             savePlayer(player);
         }
     }
@@ -353,4 +354,5 @@ public class PlayerService {
         return result;
     }
 
+   
 }
