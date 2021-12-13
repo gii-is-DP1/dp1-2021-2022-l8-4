@@ -308,7 +308,6 @@ public class GameService {
 
                 Roll rollData=MapGameRepository.getInstance().getRoll(gameId); //Esto es temporal, pretendo poner mejor rol por que esta mal hecho
                 rollData.setKeep(roll.getKeep());
-                rollData.setRollAmount(roll.getRollAmount());
 
                 turnRoll(rollData, gameId);
                 if (roll.getRollAmount() == roll.getMaxThrows()) {
