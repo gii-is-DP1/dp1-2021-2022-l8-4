@@ -73,7 +73,7 @@
 										</div>
 										<div class="col-lg-8">
 											<p class="text-left">
-												<a href="<c:url value="/users/profile/${user}" />"
+												<a href="<c:url value="/users/profile/${currentUser.id}" />"
 													class="btn btn-primary btn-block btn-sm">Perfil</a>
 											</p>
 											<p class="text-left">

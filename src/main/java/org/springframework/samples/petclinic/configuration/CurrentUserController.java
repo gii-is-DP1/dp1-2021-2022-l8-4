@@ -14,18 +14,17 @@ public class CurrentUserController {
     @Autowired
 	private UserService userService;
 
-    @ModelAttribute("user")
-    public int getCurrentUser() {
-        int currentUserId =0;
+    @ModelAttribute("currentUser")
+    public org.springframework.samples.petclinic.user.User getCurrentUser() {
+        org.springframework.samples.petclinic.user.User currentUserKot =null;
         User currentUser = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth!=null && auth.isAuthenticated() && !(auth.getPrincipal() instanceof String)){            
             currentUser = (User) auth.getPrincipal();
             String cUsername = currentUser.getUsername();
-            currentUserId = userService.findUserByUsername(cUsername).getId();
+            currentUserKot = userService.findUserByUsername(cUsername);
         }
-        return currentUserId;
+        return currentUserKot;
 }
-
     
 }
