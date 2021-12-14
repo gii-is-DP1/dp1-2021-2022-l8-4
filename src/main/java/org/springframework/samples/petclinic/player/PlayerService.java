@@ -204,7 +204,7 @@ public class PlayerService {
    public void useCards(Player player) {
         for(Card card:player.getAvailableCards()) {
             if(card.getType() != CardType.DESCARTAR) {
-            card.getCardEnum().effect(player, playerService);
+                card.getCardEnum().effect(player, playerService);
             }
         }
     }

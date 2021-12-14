@@ -139,7 +139,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
         }
     },
 
-    evenBigger("Coloso","La vida maxima de tu monstruo pasa a ser 12 y se cura 2 puntos de vida.") {
+    evenBigger("Coloso","La vida maxima de tu monstruo pasa a ser 12 y se cura 2 puntos de vida") {
 
         @Override
         public void effect(Player player,PlayerService playerService){
