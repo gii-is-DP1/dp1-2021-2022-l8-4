@@ -79,9 +79,4 @@ public class Roll {
     public Boolean isFinished() {
         return this.rollAmount >= this.maxThrows;
     }
-
-    
-
-
-    
 }
