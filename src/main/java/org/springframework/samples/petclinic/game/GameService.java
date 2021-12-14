@@ -306,6 +306,7 @@ public class GameService {
             if (newTurn) {
                 isRecentlyHurtToFalse(gameId);
                 nuevoTurno(gameId);
+                playerService.checkplayers(gameId);
             } else {
 
                 Roll rollData=MapGameRepository.getInstance().getRoll(gameId); //Esto es temporal, pretendo poner mejor rol por que esta mal hecho

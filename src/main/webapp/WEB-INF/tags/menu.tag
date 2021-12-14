@@ -51,6 +51,10 @@
 						<span class="" aria-hidden="true"></span>
 						<span>Nueva partida</span>
 					</petclinic:menuItem>
+					<petclinic:menuItem active="${name eq 'stadistics'}" url="/stadistics">
+						<span class="" aria-hidden="true"></span>
+						<span>Estadisticas</span>
+					</petclinic:menuItem>
 
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
@@ -73,7 +77,7 @@
 										</div>
 										<div class="col-lg-8">
 											<p class="text-left">
-												<a href="<c:url value="/users/" />"
+												<a href="<c:url value="/users/profile/${currentUser.id}" />"
 													class="btn btn-primary btn-block btn-sm">Perfil</a>
 											</p>
 											<p class="text-left">

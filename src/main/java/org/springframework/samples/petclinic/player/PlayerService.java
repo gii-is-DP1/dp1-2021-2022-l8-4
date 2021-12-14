@@ -360,5 +360,17 @@ public class PlayerService {
         return result;
     }
 
+    public void checkplayers(Integer gameId){
+        Game game = gameService.findGameById(gameId);
+        Integer numplayers = game.getMaxNumberOfPlayers();
+        if(numplayers<5){
+            List<Player> lsplayersAlive = game.playersAlive();
+            for(Player player : lsplayersAlive){
+                if(player.getLocation()==LocationType.bahiaTokyo){
+                    player.setLocation(LocationType.fueraTokyo);
+                }
+            }
+        }
+    }
    
 }
