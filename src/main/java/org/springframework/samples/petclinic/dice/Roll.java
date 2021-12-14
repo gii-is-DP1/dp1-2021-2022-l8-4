@@ -34,7 +34,7 @@ public class Roll {
     public Roll() {
         this.maxThrows=3;
         this.rollAmount=0;
-        this.keep=new DiceValues[8];
+        this.keep=new DiceValues[0];
         this.cardExtraValues=new ArrayList<DiceValues>();
 
         List<DiceValues> dadosDeTodo=new ArrayList<DiceValues>();
@@ -74,6 +74,8 @@ public class Roll {
         }
         
         this.values=resultado; 
+        this.keep=new DiceValues[0];
+
     }
 
     public Boolean isFinished() {

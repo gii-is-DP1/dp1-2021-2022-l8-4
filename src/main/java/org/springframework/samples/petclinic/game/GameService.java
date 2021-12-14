@@ -153,7 +153,7 @@ public class GameService {
         if (roll.getRollAmount() == null || roll.getRollAmount() == 0) {
             roll.rollDiceInitial();
             
-        } else if (roll.getRollAmount() < roll.getMaxThrows() && roll.getKeep().length != roll.getMaxThrows()) {
+        } else if (roll.getRollAmount() < roll.getMaxThrows() && roll.getKeep().length < roll.getValues().size()) {
             List<DiceValues> valoresConservados = Arrays.asList(roll.getKeep());
             roll.rollDiceNext(valoresConservados);
         } else if (roll.getRollAmount() < roll.getMaxThrows()) {
