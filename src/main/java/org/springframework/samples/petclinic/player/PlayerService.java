@@ -155,6 +155,12 @@ public class PlayerService {
         tokyoBayEmpty = !listaJugadoresEnPartida.stream()
                 .anyMatch(p -> p.getLocation().equals(LocationType.bahiaTokyo));
 
+
+        // CURACION
+        if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
+            healDamage(playerActualTurn, heal);
+        }
+
         if (tokyoCityEmpty && damage > 0) {
             playerActualTurn.setLocation(LocationType.ciudadTokyo);
             playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + 1);
@@ -167,10 +173,7 @@ public class PlayerService {
         // Los efectos de los dados
         for (Player player : listaJugadoresEnPartida) {
             if (playerIdActualTurn == player.getId()) {
-                // CURACION
-                if (player.getLocation() == LocationType.fueraTokyo) {
-                    healDamage(player, heal);
-                }
+                
                 // ENERGIAS
                 Integer sumaEnergias = player.getEnergyPoints() + energys;
                 player.setEnergyPoints(sumaEnergias);
