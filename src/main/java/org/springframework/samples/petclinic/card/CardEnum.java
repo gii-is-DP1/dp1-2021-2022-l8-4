@@ -11,6 +11,7 @@ import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.MapGameRepository;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
+import org.springframework.samples.petclinic.player.PlayerStatus;
 import org.springframework.samples.petclinic.playercard.PlayerCardService;
 
 
@@ -137,6 +138,16 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             
         }
     },
+
+    evenBigger("Coloso","La vida maxima de tu monstruo pasa a ser 12 y se cura 2 puntos de vida.") {
+
+        @Override
+        public void effect(Player player,PlayerService playerService){
+            playerService.healDamage(player, 2);
+            playerService.savePlayer(player);
+            
+        }
+    },
     acidAttack("Ataque ácido","Obtienes en cada turno un dado de daño extra") {
 
         @Override 
@@ -228,6 +239,21 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             if(roll.getRollAmount() == 0 )  {                
                 roll.setMaxThrows(roll.getMaxThrows()+1);;
                 MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
+            }
+        }  
+    },
+    completeDestruction("Destrucion total","Si obtienes un dado de cada tipo obtienes 9 puntos de victoria adicionales") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.isFinished() )  {
+                Map<String,Integer> rollValues=playerService.countRollValues(roll.getValues());
+                if(rollValues.get("heal") > 0 && rollValues.get("damage") > 0 && rollValues.get("energy") > 0 
+                    && rollValues.get("ones") > 0 && rollValues.get("twos") > 0 && rollValues.get("threes") > 0) {
+                        player.setVictoryPoints(player.getVictoryPoints() + 9);
+                        playerService.savePlayer(player);
+                }
             }
         }  
     };

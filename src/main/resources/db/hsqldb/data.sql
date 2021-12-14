@@ -16,9 +16,11 @@ INSERT INTO cards(id,cost,card_enum,type) VALUES(13,6,'acidAttack',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(14,3,'alphaMonster',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(15,4,'fireBreathing',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(16,3,'friendOfChildren',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(17,0,'extraHead',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(18,0,'extraHead',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(19,0,'giantBrain',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(17,7,'extraHead',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(18,7,'extraHead',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(19,5,'giantBrain',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(20,3,'completeDestruction',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(21,4,'evenBigger',0);
 
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');

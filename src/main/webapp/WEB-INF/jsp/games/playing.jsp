@@ -144,7 +144,7 @@
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <c:out value="${player.lifePoints}" />
+                                                            <c:out value="${player.lifePoints}" /> / <c:out value="${player.getMaxHealth()}" />
                                                             </a>
                                                         </td>
                                                         <td>

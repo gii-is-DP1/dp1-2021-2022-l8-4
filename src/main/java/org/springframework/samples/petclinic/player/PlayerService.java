@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardEnum;
+import org.springframework.samples.petclinic.card.CardType;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
@@ -202,7 +203,9 @@ public class PlayerService {
 
    public void useCards(Player player) {
         for(Card card:player.getAvailableCards()) {
+            if(card.getType() != CardType.DESCARTAR) {
             card.getCardEnum().effect(player, playerService);
+            }
         }
     }
 
