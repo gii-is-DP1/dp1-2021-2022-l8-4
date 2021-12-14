@@ -8,7 +8,16 @@
    
 <petclinic:layout pageName="Users">
     <jsp:body>
-        <h2>Edit user</h2>
+        <h2>
+            <c:choose>
+                <c:when test="${user['new']}">
+                    New User
+                </c:when>
+                <c:otherwise>
+                    Edit User
+                </c:otherwise>
+            </c:choose>
+        </h2>
         <form:form modelAttribute="user" class="form-horizontal" >
             <div class="form-group has-feedback">
                 <petclinic:inputField label="Username" name="username"/>

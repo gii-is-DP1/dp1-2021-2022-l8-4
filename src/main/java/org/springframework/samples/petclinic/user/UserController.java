@@ -76,7 +76,7 @@ public class UserController {
     @GetMapping(value = "/{userId}/edit")
 	public String initUpdateForm(@PathVariable("userId") int userId, ModelMap modelMap) {
 		Optional<User> user = this.userService.findUserById(userId);
-		modelMap.put("user", user);
+		modelMap.put("user", user.get());
 		return VIEWS_USERS_CREATE_UPDATE_FORM;
 	}
 
