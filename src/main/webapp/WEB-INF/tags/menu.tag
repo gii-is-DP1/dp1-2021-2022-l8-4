@@ -23,18 +23,23 @@
 					<span>Inicio</span>
 				</petclinic:menuItem>
 
+				<petclinic:menuItem active="${name eq 'rules'}" url="/rules" title="rules">
+					<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+					<span>Reglas</span>
+				</petclinic:menuItem>
+
 				<petclinic:menuItem active="${name eq 'users'}" url="/users?page=1"
 					title="list users">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Lista de usuarios</span>
+					<span>Lista de Usuarios</span>
 				</petclinic:menuItem>
 			</ul>
 
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar Sesión</a></li>
+					<li><a href="<c:url value="/users/new" />">Registrarse</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 
@@ -72,12 +77,12 @@
 										</div>
 										<div class="col-lg-8">
 											<p class="text-left">
-												<a href="<c:url value="/users/" />"
-													class="btn btn-primary btn-block btn-sm">Profile</a>
+												<a href="<c:url value="/users/profile/${currentUser.id}" />"
+													class="btn btn-primary btn-block btn-sm">Perfil</a>
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/logout" />"
-													class="btn btn-primary btn-block btn-sm">Logout</a>
+													class="btn btn-primary btn-block btn-sm">Salir</a>
 											</p>
 										</div>
 									</div>

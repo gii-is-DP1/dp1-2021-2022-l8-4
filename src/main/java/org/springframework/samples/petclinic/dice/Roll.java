@@ -44,7 +44,7 @@ public class Roll {
         dadosDeTodo.add(DiceValues.ATTACK);
         dadosDeTodo.add(DiceValues.ENERGY);
         dadosDeTodo.add(DiceValues.HEAL);
-        rollDice(dadosDeTodo);
+        this.values=dadosDeTodo;
         
     }
    
@@ -63,7 +63,7 @@ public class Roll {
     
     public void rollDice(List<DiceValues> dadosConservados) {
         List<DiceValues> resultado=new ArrayList<DiceValues>();
-        Integer tiradas=6;
+        Integer tiradas=values.size();
         int i;
         int max=5;
         int min=0;
@@ -79,9 +79,4 @@ public class Roll {
     public Boolean isFinished() {
         return this.rollAmount >= this.maxThrows;
     }
-
-    
-
-
-    
 }

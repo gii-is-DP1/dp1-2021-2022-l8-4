@@ -2,8 +2,6 @@ package org.springframework.samples.petclinic.card;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.dice.DiceValues;
@@ -52,7 +50,6 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
     fireBlast("Bola de fuego","Todos los monstruos enemigos reciben 2 puntos de daño") {
 
         
-
         @Override
         public void effect(Player player,PlayerService playerService){
             for(Player play:player.getGame().getPlayers()) {
@@ -141,6 +138,16 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             
         }
     },
+
+    evenBigger("Coloso","La vida maxima de tu monstruo pasa a ser 12 y se cura 2 puntos de vida.") {
+
+        @Override
+        public void effect(Player player,PlayerService playerService){
+            playerService.healDamage(player, 2);
+            playerService.savePlayer(player);
+            
+        }
+    },
     acidAttack("Ataque ácido","Obtienes en cada turno un dado de daño extra") {
 
         @Override 
@@ -211,7 +218,45 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }  
     },
-    gourmet("Gourmet","Cuando consigas 3 o más dados 'ONE', recibirás 2 puntos de victoria extra"){
+    extraHead("Segunda cabeza","placeholder") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.getRollAmount() == 0 ) {
+                List<DiceValues> dices=roll.getValues();
+                dices.add(DiceValues.HEAL);
+                roll.setValues(dices);
+                MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
+            }
+        }  
+    },
+    giantBrain("Cerebro galaxia","placeholder") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.getRollAmount() == 0 )  {                
+                roll.setMaxThrows(roll.getMaxThrows()+1);;
+                MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
+            }
+        }  
+    },
+    completeDestruction("Destrucion total","Si obtienes un dado de cada tipo obtienes 9 puntos de victoria adicionales") {
+
+        @Override 
+        public void effect(Player player, PlayerService playerService) {
+            Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            if(roll.isFinished() )  {
+                Map<String,Integer> rollValues=playerService.countRollValues(roll.getValues());
+                if(rollValues.get("heal") > 0 && rollValues.get("damage") > 0 && rollValues.get("energy") > 0 
+                    && rollValues.get("ones") > 0 && rollValues.get("twos") > 0 && rollValues.get("threes") > 0) {
+                        player.setVictoryPoints(player.getVictoryPoints() + 9);
+                        playerService.savePlayer(player);
+                }
+            }
+        }  
+    },gourmet("Gourmet","Cuando consigas 3 o más dados 'ONE', recibirás 2 puntos de victoria extra"){
         @Override
         public void effect(Player player, PlayerService playerService){
             Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
