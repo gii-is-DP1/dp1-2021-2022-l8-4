@@ -218,7 +218,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }  
     },
-    extraHead("Segunda cabeza","placeholder") {
+    extraHead("Segunda cabeza","Obtienes un dado extra") {
 
         @Override 
         public void effect(Player player, PlayerService playerService) {
@@ -231,7 +231,7 @@ public enum CardEnum{ //Primero estan todas las de descarte al usarlo
             }
         }  
     },
-    giantBrain("Cerebro galaxia","placeholder") {
+    giantBrain("Cerebro galaxia","Obtienes una tirada extra cada turno") {
 
         @Override 
         public void effect(Player player, PlayerService playerService) {
