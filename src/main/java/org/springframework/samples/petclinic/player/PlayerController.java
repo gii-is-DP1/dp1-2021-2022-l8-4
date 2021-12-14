@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardService;
+import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.playercard.PlayerCardService;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,9 @@ public class PlayerController {
     private PlayerCardService playerCardService;
 
     @Autowired
+    private GameCardService gameCardService;
+
+    @Autowired
     private CardService cardService;
 
     @GetMapping()
@@ -43,6 +47,13 @@ public class PlayerController {
         Player player = playerService.findPlayerById(playerId);
         Card card = cardService.findCardById(cardId);
         playerCardService.buyCard(player, card);
+        return "redirect:/games/" + player.getGame().getId() + "/playing";
+    }
+
+    @GetMapping("/{playerId}/cards/discard")
+    public String discardAllCards(ModelMap modelMap, @PathVariable("playerId") int playerId) {
+        Player player = playerService.findPlayerById(playerId);
+        playerCardService.discardShopCards(player);
         return "redirect:/games/" + player.getGame().getId() + "/playing";
     }
 

@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.playercard;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardType;
+import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GameService;
+import org.springframework.samples.petclinic.game.MapGameRepository;
 import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Jose Maria Delgado Sanchez
+ * @author Ricardo Nadal Garcia
  */
 @Service
 public class PlayerCardService {
@@ -32,10 +36,11 @@ public class PlayerCardService {
     private GameCardService gameCardService;
 
     @Autowired
-    private PlayerService playerService;
+    private GameService gameService;
 
     @Autowired
-    private GameService gameService;
+    private PlayerService playerService;
+
 
     @Autowired
     private UserService userService;
@@ -73,10 +78,13 @@ public class PlayerCardService {
     public void buyCard(Player player, Card card) {
         // Retrieve the game linked to the player to check if the card is available to
         // buy
+        Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
         Game game = player.getGame();
         List<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
         if (availableCards.contains(card) && game.isOnGoing() && !player.isDead()
-                && userService.isAuthUserPlayingAsPlayer(player)) {
+                && userService.isAuthUserPlayingAsPlayer(player) 
+                && gameService.isPlayerTurn(player.getGame().getId())
+                && roll.isFinished()) {
 
             // Check if the player has enough energy
             Integer energyPoints = player.getEnergyPoints();
@@ -103,77 +111,46 @@ public class PlayerCardService {
         }
     }
 
+    @Transactional
     private void useCardDiscardType(Card card,Player player) {
         if(card.getType().equals(CardType.DESCARTAR)){
-
+            card.getCardEnum().effect(player,playerService);
         }
     }
 
+    @Transactional
+    public void discardShopCards(Player player) {
+        Game game = player.getGame();
+        Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+        List<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
+        if (game.isOnGoing() && !player.isDead()
+                && userService.isAuthUserPlayingAsPlayer(player) 
+                && gameService.isPlayerTurn(player.getGame().getId()) 
+                && roll.isFinished()){
 
-    //ALL THE CARDS:
+            // Check if the player has enough energy
+            Integer energyPoints = player.getEnergyPoints();
+            Integer cost = 0; //LO VOY A CAMBIAR A 0 PARA TESTING, DEBERIA SER 2
+            if (energyPoints >= cost) {
 
-    public void ApartmentBuilding(Player player){
-        player.setVictoryPoints(player.getVictoryPoints() + 3);
-        playerService.savePlayer(player);
-    }
+                // Calculate new energyPoints value
+                player.setEnergyPoints(energyPoints - cost);
 
-    public void CommuterTrain(Player player){
-        player.setVictoryPoints(player.getVictoryPoints() + 2);
-        playerService.savePlayer(player);
-    }
-
-    public void CornerStore(Player player){
-        player.setVictoryPoints(player.getVictoryPoints() + 3);
-        playerService.savePlayer(player);
-    }
-
-    public void Energize(Player player){
-        player.setVictoryPoints(player.getEnergyPoints() + 9);
-        playerService.savePlayer(player);
-    }
-
-    public void FireBlast(Player player){
-        for(Player play:player.getGame().getPlayers()) {
-            if(!player.equals(play)) {
-                playerService.damagePlayer(play, 2);
-                playerService.savePlayer(play);
+                // Update status of the cards
+                for(Card card:availableCards){
+                    GameCard gameCard = gameCardService.findByGameCard(game, card);
+                    gameCard.setSold(Boolean.TRUE);
+                }
+               
+                // Show new cards
+                gameCardService.showCards(game);
             }
         }
     }
 
-    public void EvacuationOrders(Player player){
-        for(Player play:player.getGame().getPlayers()) {
-            if(!player.equals(play)) {
-                playerService.substractVictoryPointsPlayer(play, 5);
-                playerService.savePlayer(play);
-            }
-        }
-    }
 
-    public void GasRefinery(Player player) {
-        player.setVictoryPoints(player.getVictoryPoints() + 2);
-        playerService.savePlayer(player);
-        for(Player play:player.getGame().getPlayers()) {
-            playerService.damagePlayer(play, 3);
-            playerService.savePlayer(play);
-        }
-    }
+    
 
-    public void Heal(Player player) {
-        playerService.healDamage(player, 2);
-        playerService.savePlayer(player);
-    }
 
-    public void HighAltitude(Player player) {
-        for(Player play:player.getGame().getPlayers()) {
-            playerService.damagePlayer(play, 3);
-            playerService.savePlayer(play);
-        }
-    }
-
-    public void JetFighters(Player player) {
-        playerService.damagePlayer(player, 5);
-        player.setVictoryPoints(player.getVictoryPoints() + 5);
-        playerService.savePlayer(player);
-    }
+   
 }

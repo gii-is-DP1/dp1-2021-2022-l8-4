@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WelcomeController {
 	
-	
+
 	  @GetMapping({"/","/welcome"})
 	  public String welcome(Map<String, Object> model) {	    
 		List<Person> persons = new ArrayList<Person>();
@@ -44,4 +44,5 @@ public class WelcomeController {
 		model.put("group", "3 l8-4");
 	    return "welcome";
 	  }
+
 }

@@ -88,10 +88,6 @@ public class Player extends BaseEntity {
         this.lifePoints = 0;
     }
 
-    public Player() {
-        this.recentlyHurt = Boolean.FALSE;
-    }
-
     /**
      * Get a list of cards the has not been used yet by the player
      * @return list of available cards
@@ -139,6 +135,18 @@ public class Player extends BaseEntity {
 
     public Integer getMaxHealth() {
         return 10; //Cuando se haga lo de la carta de vida maxima esto se cambia 
+    }
+
+    public Boolean getRecentlyHurt(){
+        return this.recentlyHurt;
+    }
+
+    public Boolean isOutOfTokyo(){
+        return this.location == LocationType.fueraTokyo;
+    }
+
+    public Boolean isInTokyo(){
+        return this.location == LocationType.ciudadTokyo || this.location== LocationType.bahiaTokyo;
     }
 
 }
