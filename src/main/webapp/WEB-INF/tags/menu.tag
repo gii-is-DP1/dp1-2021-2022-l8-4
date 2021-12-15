@@ -50,7 +50,7 @@
 						<span>Nueva partida</span>
 					</petclinic:menuItem>
 					
-					<petclinic:menuItem active="${name eq 'newGame'}" url="/statistics">
+					<petclinic:menuItem active="${name eq 'statistics'}" url="/statistics">
 						<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
 						<span>Estadisticas</span>
 					</petclinic:menuItem>
@@ -64,16 +64,6 @@
 							<li>
 								<div class="navbar-login">
 									<div class="row">
-										<div class="col-lg-4">
-											<p class="text-center">
-												<span class="glyphicon glyphicon-user icon-size"></span>
-											</p>
-										</div>
-										<div class="col-lg-8">
-											<p class="text-left">
-												<strong><sec:authentication property="name" /></strong>
-											</p>
-										</div>
 										<div class="col-lg-8">
 											<p class="text-left">
 												<a href="<c:url value="/users/profile/${currentUser.id}" />"
