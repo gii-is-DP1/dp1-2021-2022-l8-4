@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.configuration.CurrentUserController;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +31,8 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private AuthoritiesRepository authoritiesRepository;
+	@Autowired
+	private CurrentUserController currentUserController;
 
 	@Autowired
 	public UserService(UserRepository userRepository) {
@@ -137,7 +140,7 @@ public class UserService {
 	 */
 	@Transactional
 	public Boolean isAuthUserPlayingAsPlayer(Player player) {
-		User user = authenticatedUser();
+		User user = currentUserController.getCurrentUser();
 		if (user instanceof User) {
 			return user.getPlayers().stream().map(p -> p.getId()).filter(id -> id == player.getId()).findAny()
 					.isPresent();

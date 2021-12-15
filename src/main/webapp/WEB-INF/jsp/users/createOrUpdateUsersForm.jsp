@@ -20,7 +20,14 @@
         </h2>
         <form:form modelAttribute="user" class="form-horizontal" >
             <div class="form-group has-feedback">
-                <petclinic:inputField label="Username" name="username"/>
+                <c:choose>
+                    <c:when test="${user['new']}">
+                        <petclinic:inputField label="Username" name="username"/>
+                    </c:when>
+                    <c:otherwise>
+                        <petclinic:inputFieldReadOnly label="Username" name="username"/>
+                    </c:otherwise>
+                </c:choose>
                 <petclinic:inputField label="Email" name="email"/>
                 <petclinic:inputField label="Password" name="password"/>
             </div>

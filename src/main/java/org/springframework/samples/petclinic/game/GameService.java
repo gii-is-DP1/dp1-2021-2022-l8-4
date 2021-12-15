@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.card.CardService;
+import org.springframework.samples.petclinic.configuration.CurrentUserController;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
@@ -21,7 +22,6 @@ import org.springframework.samples.petclinic.player.LocationType;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
-import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,7 +35,7 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    private UserService userService;
+    private CurrentUserController currentUserController;
 
     @Autowired
     private PlayerService playerService;
@@ -279,7 +279,7 @@ public class GameService {
 
     @Transactional
     public Boolean isPlayerTurn(Integer gameId) {
-        User user = userService.authenticatedUser();
+        User user = currentUserController.getCurrentUser();
         Boolean result = Boolean.FALSE;
         if (user != null) {
             result = actualTurn(gameId).getUser().getId() == user.getId();
@@ -290,7 +290,7 @@ public class GameService {
     @Transactional
     public Boolean isPlayerInGame(Integer gameId) {
         Game game = findGameById(gameId);
-        User user = userService.authenticatedUser();
+        User user = currentUserController.getCurrentUser();
         Boolean result = Boolean.FALSE;
         if (user != null) {
             for (Player player : game.getPlayers()) {
@@ -325,7 +325,7 @@ public class GameService {
 
     public void changePosition(Integer gameId) {
         Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));
-        User user = userService.authenticatedUser();
+        User user = currentUserController.getCurrentUser();
         Player player = playerInGameByUser(user, gameId);
         LocationType LeavingTokyoLocation = player.getLocation();
         playerActualTurn.setLocation(LeavingTokyoLocation);
