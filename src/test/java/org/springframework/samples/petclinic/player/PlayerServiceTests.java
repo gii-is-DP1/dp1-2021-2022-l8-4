@@ -22,6 +22,7 @@ import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GameService;
 import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
+import org.springframework.samples.petclinic.playercard.PlayerCard;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,7 @@ public class PlayerServiceTests {
 
         Game gameBefore = gameService.findGameById(game1.getId());
         player1=new Player();
+        player1.setPlayerCard(new ArrayList<PlayerCard>());
         player1.setMonster(Monster.alien);
         player1.setUser(user1);
         player1.setGame(gameBefore);
@@ -84,6 +86,7 @@ public class PlayerServiceTests {
         playerService.savePlayer(player1);
         
         player2=new Player();
+        player2.setPlayerCard(new ArrayList<PlayerCard>());
         player2.setMonster(Monster.cyberBunny);
         player2.setUser(user2);
         player2.setGame(gameBefore);

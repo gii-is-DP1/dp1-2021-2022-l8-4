@@ -21,6 +21,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.card.Card;
+import org.springframework.samples.petclinic.card.CardEnum;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.playercard.PlayerCard;
@@ -49,6 +50,7 @@ public class Player extends BaseEntity {
     @Column(name = "life_points")
     private Integer lifePoints;
 
+    
     @NotNull
     @Min(0)
     @Column(name = "victory_points")
@@ -134,11 +136,26 @@ public class Player extends BaseEntity {
     }
 
     public Integer getMaxHealth() {
-        return 10; //Cuando se haga lo de la carta de vida maxima esto se cambia 
+        Integer maxHealth=10;
+        if(this.playerCard.stream()
+                        .filter(x -> x.getPlayer().getId() == this.id) 
+                        .map(x -> x.getCard().getCardEnum())
+                        .anyMatch(x -> x.equals(CardEnum.evenBigger))){
+                            maxHealth=12;
+                        }
+        return maxHealth; //Cuando se haga lo de la carta de vida maxima esto se cambia 
     }
 
     public Boolean getRecentlyHurt(){
         return this.recentlyHurt;
+    }
+
+    public Boolean isOutOfTokyo(){
+        return this.location == LocationType.fueraTokyo;
+    }
+
+    public Boolean isInTokyo(){
+        return this.location == LocationType.ciudadTokyo || this.location== LocationType.bahiaTokyo;
     }
 
 }

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.Map;
+
 
 /**
 /* @author Jose Maria Delgado Sanchez
@@ -45,5 +47,8 @@ public class MetricControler {
         modelMap.addAttribute("metricToDisplay", new Achievement());
         modelMap.addAttribute("rows", rows);
         return view;
+    @GetMapping("/statistics")
+    public String rules(Map<String, Object> model) {	    
+      return "modules/metrics/statistics";
     }
 }

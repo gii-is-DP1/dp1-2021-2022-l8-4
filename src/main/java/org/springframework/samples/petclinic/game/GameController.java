@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * @author Ricardo Nadal Garcia
  * @author Jose Maria Delgado Sanchez
+ * @author Noelia López Durán
  */
 
 @Controller

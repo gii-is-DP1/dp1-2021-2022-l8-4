@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.dice;
 import java.util.ArrayList;
 import java.util.List;
 
+import javassist.expr.NewArray;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,8 @@ public class Roll {
    
     private List<DiceValues> values;
 
+    private List<DiceValues> cardExtraValues; //For values that are obtained through card effects
+
     
     private Integer maxThrows;
 
@@ -31,7 +34,8 @@ public class Roll {
     public Roll() {
         this.maxThrows=3;
         this.rollAmount=0;
-        this.keep=new DiceValues[8];
+        this.keep=new DiceValues[0];
+        this.cardExtraValues=new ArrayList<DiceValues>();
 
         List<DiceValues> dadosDeTodo=new ArrayList<DiceValues>();
         dadosDeTodo.add(DiceValues.ONE);
@@ -40,7 +44,7 @@ public class Roll {
         dadosDeTodo.add(DiceValues.ATTACK);
         dadosDeTodo.add(DiceValues.ENERGY);
         dadosDeTodo.add(DiceValues.HEAL);
-        rollDice(dadosDeTodo);
+        this.values=dadosDeTodo;
         
     }
    
@@ -59,7 +63,7 @@ public class Roll {
     
     public void rollDice(List<DiceValues> dadosConservados) {
         List<DiceValues> resultado=new ArrayList<DiceValues>();
-        Integer tiradas=6;
+        Integer tiradas=values.size();
         int i;
         int max=5;
         int min=0;
@@ -70,14 +74,11 @@ public class Roll {
         }
         
         this.values=resultado; 
+        this.keep=new DiceValues[0];
+
     }
 
-    public Boolean rollFinished() {
+    public Boolean isFinished() {
         return this.rollAmount >= this.maxThrows;
     }
-
-    
-
-
-    
 }

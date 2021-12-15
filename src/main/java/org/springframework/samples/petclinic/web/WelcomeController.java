@@ -40,8 +40,9 @@ public class WelcomeController {
 		persons.add(sara);
 		persons.add(rosa);
 		model.put("persons", persons);
-		model.put("title", "DP1 Pract1");
+		model.put("title", "DP1 King of Tokyo");
 		model.put("group", "3 l8-4");
 	    return "welcome";
 	  }
+
 }

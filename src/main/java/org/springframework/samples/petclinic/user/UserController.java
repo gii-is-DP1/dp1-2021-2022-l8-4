@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.samples.petclinic.configuration.CurrentUserController;
 import org.springframework.samples.petclinic.modules.statistics.achievement.AchievementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -76,7 +77,7 @@ public class UserController {
     @GetMapping(value = "/{userId}/edit")
 	public String initUpdateForm(@PathVariable("userId") int userId, ModelMap modelMap) {
 		Optional<User> user = this.userService.findUserById(userId);
-		modelMap.put("user", user);
+		modelMap.put("user", user.get());
 		return VIEWS_USERS_CREATE_UPDATE_FORM;
 	}
 
@@ -99,8 +100,8 @@ public class UserController {
             Optional<User> userToUpdate=this.userService.findUserById(userId);
 			BeanUtils.copyProperties(user, userToUpdate.get(), "id");                                                                                               
             this.userService.saveUser(userToUpdate.get());      
-            modelMap.addAttribute("message","User succesfully edited!");              
-			return "redirect:/users?page=1";
+            modelMap.addAttribute("message","User succesfully edited!"); 
+			return "redirect:/users/profile/{userId}";
 		}
 	}
 
