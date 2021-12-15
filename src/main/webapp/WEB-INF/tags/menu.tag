@@ -38,21 +38,20 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Iniciar Sesión</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar Sesion</a></li>
 					<li><a href="<c:url value="/users/new" />">Registrarse</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 
 					<petclinic:menuItem active="${name eq 'lobbiesList'}" url="/games/lobbies">
-						<span class="" aria-hidden="true"></span>
 						<span>Unirse a partida</span>
 					</petclinic:menuItem>
 					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new">
-						<span class="" aria-hidden="true"></span>
 						<span>Nueva partida</span>
 					</petclinic:menuItem>
-					<petclinic:menuItem active="${name eq 'stadistics'}" url="/stadistics">
-						<span class="" aria-hidden="true"></span>
+					
+					<petclinic:menuItem active="${name eq 'newGame'}" url="/statistics">
+						<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
 						<span>Estadisticas</span>
 					</petclinic:menuItem>
 
