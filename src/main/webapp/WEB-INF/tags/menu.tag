@@ -50,7 +50,7 @@
 						<span>Nueva partida</span>
 					</petclinic:menuItem>
 					
-					<petclinic:menuItem active="${name eq 'newGame'}" url="/statistics">
+					<petclinic:menuItem active="${name eq 'statistics'}" url="/statistics">
 						<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
 						<span>Estadisticas</span>
 					</petclinic:menuItem>
