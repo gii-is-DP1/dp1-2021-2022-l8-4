@@ -47,6 +47,9 @@ public class MetricControler {
         modelMap.addAttribute("metricToDisplay", new Achievement());
         modelMap.addAttribute("rows", rows);
         return view;
+
+    }
+    
     @GetMapping("/statistics")
     public String rules(Map<String, Object> model) {	    
       return "modules/metrics/statistics";
