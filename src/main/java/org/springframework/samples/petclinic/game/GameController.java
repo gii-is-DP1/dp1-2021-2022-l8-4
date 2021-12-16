@@ -6,12 +6,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.configuration.CurrentUserController;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +41,7 @@ public class GameController {
     private GameCardService gameCardService;
 
     @Autowired
-    private CurrentUserController currentUserController;
+    private UserService userService;
 
     @GetMapping()
     public String gameListNotFinished(ModelMap modelMap) {
@@ -127,7 +127,7 @@ public class GameController {
         Player actualPlayer=playerService.actualPlayer(gameId);
         modelMap.addAttribute("actualPlayer", actualPlayer);
 
-        Player AuthenticatedPlayer = gameService.playerInGameByUser(currentUserController.getCurrentUser(), gameId);
+        Player AuthenticatedPlayer = gameService.playerInGameByUser(userService.authenticatedUser(), gameId);
         modelMap.addAttribute("AuthenticatedPlayer", AuthenticatedPlayer);
 
         modelMap.addAttribute("players", players);
@@ -165,7 +165,7 @@ public class GameController {
 
     @PostMapping("/new")
     public String createNewGame(@ModelAttribute("newGame") Game newGame, ModelMap modelMap) {
-        User user = currentUserController.getCurrentUser();
+        User user = userService.authenticatedUser();
         Game game = gameService.createNewGame(user, newGame);
         if(game instanceof Game){
             return "redirect:/games/" + game.getId() + "/lobby";
@@ -182,7 +182,7 @@ public class GameController {
 
             responde.addHeader("Refresh", "10");
 
-            Boolean isCreator = game.getCreator() == currentUserController.getCurrentUser();
+            Boolean isCreator = game.getCreator() == userService.authenticatedUser();
             modelMap.addAttribute("isCreator", isCreator);
 
             modelMap.addAttribute("availableMonsters", game.availableMonsters());
@@ -198,7 +198,7 @@ public class GameController {
     public String joinGame(@ModelAttribute("newPlayer") Player newPlayer, ModelMap modelMap,
             @PathVariable("gameId") int gameId) {
 
-        User user = currentUserController.getCurrentUser();
+        User user = userService.authenticatedUser();
         Game game = gameService.findGameById(gameId);
         playerService.joinGame(user, newPlayer, game);
 
@@ -207,7 +207,7 @@ public class GameController {
 
     @DeleteMapping("/{gameId}/lobby")
     public String deleteGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
-        User user = currentUserController.getCurrentUser();
+        User user = userService.authenticatedUser();
         Game game = gameService.findGameById(gameId);
         gameService.deleteGameByCreator(user, game);
         return "redirect:/games";
@@ -215,7 +215,7 @@ public class GameController {
 
     @GetMapping("/{gameId}/start")
     public String startGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
-        User user = currentUserController.getCurrentUser();
+        User user = userService.authenticatedUser();
         Game game = gameService.findGameById(gameId);
         Boolean started = gameService.startGameByCreator(user, game);
         if (started) {

@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardEnum;
 import org.springframework.samples.petclinic.card.CardType;
-import org.springframework.samples.petclinic.configuration.CurrentUserController;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
@@ -33,7 +32,7 @@ public class PlayerService {
     @Autowired
     private PlayerStatusRepository playerStatusRepository;
     @Autowired
-    private CurrentUserController currentUserController;
+    private UserService userService;
     @Autowired
     private GameService gameService;
     @Autowired
@@ -322,14 +321,14 @@ public class PlayerService {
     @Transactional
     public Player actualPlayer(Integer gameId) {
         Game game = gameService.findGameById(gameId);
-        User user = currentUserController.getCurrentUser();
+        User user = userService.authenticatedUser();
         return game.getPlayers().stream().filter(p -> p.getUser().getId().equals(user.getId())).findAny().get();
     }
 
     @Transactional
     public void surrender(Integer playerId) {
         Player player = findPlayerById(playerId);
-        User user = currentUserController.getCurrentUser();
+        User user = userService.authenticatedUser();
         if (player.getUser().getId() == user.getId()) {
             player.surrender();
             gameService.endGame(player.getGame().getId());
@@ -340,7 +339,7 @@ public class PlayerService {
      * @return True if the player has been hurt (the property recentlyhurt of the player equals true)
      */
     public Boolean isRecentlyHurt(Integer gameId){
-        User user = currentUserController.getCurrentUser();
+        User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
         Boolean result = Boolean.FALSE;
         if(player.getRecentlyHurt()==Boolean.TRUE){
@@ -352,7 +351,7 @@ public class PlayerService {
      * @return True if the player is in TokyoCity or TokyoBay.
      */
     public Boolean isInTokyo(Integer gameId){
-        User user = currentUserController.getCurrentUser();
+        User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
         Boolean result = Boolean.FALSE;
         if(player.getLocation()==LocationType.bahiaTokyo || player.getLocation() == LocationType.ciudadTokyo){
