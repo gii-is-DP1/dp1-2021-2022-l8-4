@@ -9,7 +9,6 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.modules.statistics.metrics.MetricService;
 import org.springframework.samples.petclinic.modules.statistics.metrics.MetricType;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
@@ -17,7 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * /* @author Carlos Varela Soult
+ * @author Carlos Varela Soult
+ * @author Jose Maria Delgado Sanchez
  */
 
 @Service
@@ -25,9 +25,6 @@ public class AchievementService {
 
     @Autowired
     private AchievementRepository achievementRepository;
-
-    @Autowired
-    private MetricService metricService;
 
     @Autowired
     private UserService userService;
@@ -63,7 +60,7 @@ public class AchievementService {
     public Map<MetricType, Integer> scoresByUser(User user) {
         Map<MetricType, Integer> scores = new HashMap<>();
         for (MetricType metric : MetricType.values()) {
-            Integer score = metricService.getScoreByUser(metric, user);
+            Integer score = getScoreByUser(metric, user);
             scores.putIfAbsent(metric, score);
         }
         return scores;
@@ -84,5 +81,46 @@ public class AchievementService {
 
         user.setAchievements(obtainedAchievements);
         userService.saveUser(user);
+    }
+
+    @Transactional
+    public Integer gamesPlayedByUser(User user) {
+        return achievementRepository.gamesPlayedByUser(user.getId());
+    }
+
+    @Transactional
+    public Integer winsByUser(User user) {
+        return achievementRepository.winsByUser(user.getId());
+    }
+
+    @Transactional
+    public Integer cardsUsedByUser(User user) {
+        return achievementRepository.cardsUsedByUser(user.getId());
+    }
+
+    /**
+     * Given a metric type and a user, returns the score in that metric by the user
+     * 
+     * @param metric type
+     * @return Integer score
+     */
+    @Transactional
+    public Integer getScoreByUser(MetricType metric, User user) {
+        Integer score = null;
+        
+        switch(metric){
+            case gamesPlayed:
+                score = gamesPlayedByUser(user);
+                break;
+            case cardsUsed:
+                score = cardsUsedByUser(user);
+                break;
+            case wins:
+                score = winsByUser(user);
+                break;
+            default:
+                break;
+        }
+        return score;
     }
 }

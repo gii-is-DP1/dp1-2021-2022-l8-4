@@ -11,10 +11,6 @@
                         <spring:url value="/resources/images/principal.png" htmlEscape="true" var="principal" />
                         <img class="img-responsive" src="${principal}" style="width: 45%; margin-left: 27%;"/>
                     </div>
-                    <div class="row">
-                        <h1 style="display: flex;flex-direction: column;justify-content: center;text-align: center;">
-                    Conoce las reglas del juego</h1>
-                    </div>
                     
 
                     <div class="row">
