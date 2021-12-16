@@ -27,12 +27,13 @@
 					<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
 					<span>Reglas</span>
 				</petclinic:menuItem>
-
-				<petclinic:menuItem active="${name eq 'users'}" url="/users?page=1"
-					title="list users">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Lista de Usuarios</span>
-				</petclinic:menuItem>
+				<sec:authorize access="hasRole('admin')">
+					<petclinic:menuItem active="${name eq 'users'}" url="/users?page=1"
+						title="list users">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Lista de Usuarios</span>
+					</petclinic:menuItem>
+				</sec:authorize>
 			</ul>
 
 
