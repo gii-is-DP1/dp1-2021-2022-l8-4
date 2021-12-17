@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -56,6 +57,12 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "creator")
     private Set<Game> games;
+
+    @PreRemove
+    private void setCreatorInGameNull() {
+        games.forEach(game -> game.setCreator(null));
+        players.forEach(player -> player.setUser(null));
+    }
 
     @ManyToMany
     @JoinTable(name = "users_achievements",

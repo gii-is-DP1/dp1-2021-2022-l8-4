@@ -7,18 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
-import org.springframework.samples.petclinic.player.Player;
-import org.springframework.samples.petclinic.player.PlayerRepository;
-import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,19 +21,11 @@ import org.springframework.stereotype.Service;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@ExtendWith(MockitoExtension.class)
+
 public class UserServiceTest {
     
-    @Mock
-    private UserRepository userRepository;
+    @Autowired
     private UserService userService;
-    private PlayerRepository playerRepository;
-    private PlayerService playerService;
-    @BeforeEach
-    void setup() {
-        playerService = new PlayerService(playerRepository);
-        userService = new UserService(userRepository);
-    }
 
     @Test
     public void testGetCurrentUserId() {
@@ -148,13 +133,21 @@ public class UserServiceTest {
     }
 
     @Test
-    public void isAuthUserPlayingAsPlayer() {
-        User currentUser = userService.authenticatedUser();
-        Integer gameId = gameService.
-        Player currentPlayer = playerService.actualPlayer(1);
-        assertThat(currentUser).isEqualTo(currentPlayer.getUser());
+    public void testDeleteUser() {
+        List<User> currentListUsers = new ArrayList<>();
+        List<User> newListUsers = new ArrayList<>();
+
+        userService.findAll().forEach(currentListUsers::add); // size = 9
+        Integer currentCount = currentListUsers.size(); // size=9
+
+        userService.deleteUser(userService.findUserById(1).get()); // size=8
+        
+        for (User user:userService.findAll()) {
+            newListUsers.add(user);
+        }
+
+        Integer newCount = newListUsers.size(); // size=8
+        assertThat(currentCount).isEqualTo(newCount-1);
     }
-
-
 
 }
