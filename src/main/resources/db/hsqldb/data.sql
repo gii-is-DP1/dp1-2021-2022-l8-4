@@ -22,6 +22,14 @@ INSERT INTO cards(id,cost,card_enum,type) VALUES(19,5,'giantBrain',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(20,3,'completeDestruction',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(21,4,'evenBigger',0);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(22,4,'gourmet',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(23,3,'camouflage',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(24,4,'armorPlating',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(25,7,'itHasAChild',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(26,3,'alienMetabolism',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(27,3,'dedicatedNewsTeam',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(28,5,'herbivore',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(29,3,'energyHoarder',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(30,7,'novaBreath',1);
 
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
