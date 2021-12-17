@@ -11,7 +11,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardService;
+import org.springframework.samples.petclinic.card.CardType;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
@@ -174,10 +176,21 @@ public class GameService {
 
         nextPositionTurn(gameId);
         
-        playerService.useCards(actualTurn(gameId));
+        useCardsStartTurn(actualTurn(gameId));
         saveGame(game);
         playerService.startTurn(actualTurnPlayerId(gameId));
     }
+
+
+    @Transactional
+    public void useCardsStartTurn(Player player) {
+        for(Card card:player.getAvailableCards()) {
+            if(card.getType() != CardType.DESCARTAR) {
+                card.getCardEnum().effectStartTurn(player, playerService);
+            }
+        }
+    }
+
 
     @Transactional
     public void nextPositionTurn(Integer gameId) {
@@ -261,20 +274,10 @@ public class GameService {
     @Transactional
     public Player actualTurn(Integer gameId) {
 
-        Player actualPlayer = new Player();
-        Boolean finished = Boolean.FALSE;
-        while (!finished) {
-            List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
-            actualPlayer = playerService.findPlayerById(turnList.get(0));
-            if (!actualPlayer.isDead()) {
-                break;
-            } else {
-                turnList.remove(0);
-                MapGameRepository.getInstance().putTurnList(gameId, turnList);
-            }
-        }
-
-        return actualPlayer;
+    List<Integer> turnList= MapGameRepository.getInstance().getTurnList(gameId);
+    Player actualPlayer = playerService.findPlayerById(turnList.get(0));
+            
+    return actualPlayer;
     }
 
     @Transactional
