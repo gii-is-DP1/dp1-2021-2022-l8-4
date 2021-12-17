@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.modules.statistics.achievement;
 
-import javax.enterprise.inject.Model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.modules.statistics.metrics.MetricType;
@@ -44,4 +43,4 @@ import org.springframework.web.bind.annotation.RequestMapping;
         return "redirect:/achievements/";
     }
 
- }
+}
