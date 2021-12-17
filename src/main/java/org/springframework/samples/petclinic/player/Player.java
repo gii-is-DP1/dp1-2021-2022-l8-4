@@ -108,7 +108,10 @@ public class Player extends BaseEntity {
     protected void setPlayerStatusInternal(Set<PlayerStatus> playerStatus) {
         this.playerStatus = playerStatus;
     }
-
+    /**
+     * @return "ALIVE" if the player's health points is >0 or "DEAD" if the player's health points is <=0
+     *
+     */
     public String monsterStatus() {
         String status = "ALIVE";
         if (this.lifePoints <= 0) {
@@ -131,7 +134,10 @@ public class Player extends BaseEntity {
     public Boolean isDead() {
         return this.lifePoints <= 0;
     }
-
+    /**
+     * @return the maximum health points of a player
+     *
+     */
     public Integer getMaxHealth() {
         Integer maxHealth=10;
         if(this.playerCard.stream()
@@ -147,10 +153,17 @@ public class Player extends BaseEntity {
         return this.recentlyHurt;
     }
 
+    /**
+     * @return whether the player is outside of Tokyo or not.
+     *
+     */
     public Boolean isOutOfTokyo(){
         return this.location == LocationType.fueraTokyo;
     }
-
+    /**
+     * @return whether the player is in Tokyo or TokyoBay or not.
+     *
+     */
     public Boolean isInTokyo(){
         return this.location == LocationType.ciudadTokyo || this.location== LocationType.bahiaTokyo;
     }
