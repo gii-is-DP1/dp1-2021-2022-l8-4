@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
@@ -237,7 +239,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             Roll roll = MapGameRepository.getInstance().getRoll(player.getGame().getId());
 
             roll.setMaxThrows(roll.getMaxThrows() + 1);
-            
+
             MapGameRepository.getInstance().putRoll(player.getGame().getId(), roll);
 
         }
@@ -301,6 +303,70 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
                 damage = 0;
             }
             return damage;
+        }
+    },
+    alienMetabolism("Metabolismo monstruoso",
+            "Cuando compras una carta te cuesta uno de energia menos") {
+
+        @Override
+        public Integer effectBuy(Player player, PlayerService playerService, Integer energy, Integer cost) {
+            energy++;
+            return energy;
+        }
+    },
+    dedicatedNewsTeam("El preferido de la prensa",
+            "Obtienes 1 punto de victoria al comprar una carta") {
+
+        @Override
+        public Integer effectBuy(Player player, PlayerService playerService, Integer energy, Integer cost) {
+            if (energy >= cost) {
+                player.setVictoryPoints(player.getVictoryPoints() + 1);
+            }
+            return energy;
+        }
+    },
+    herbivore("Herbivoro", "Obtienes 1 punto de victoria si no atacas a nadie en un turno") {
+
+        @Override
+        public void effectEndTurn(Player player, PlayerService playerService) {
+            Roll roll = MapGameRepository.getInstance().getRoll(player.getGame().getId());
+            Map<String, Integer> tiradas = playerService.countRollValues(roll.getValues());
+            Map<String, Integer> efectosCartas = playerService.countRollValues(roll.getCardExtraValues());
+
+            if (tiradas.get("damage") + efectosCartas.get("damage") == 0) {
+                player.setVictoryPoints(player.getVictoryPoints() + 1);
+            }
+
+        }
+    },
+    energyHoarder("Acaparador de energia", "Obtienes 1 punto de victoria por cada 6 puntos de energia al final de tu turno") {
+
+        @Override
+        public void effectEndTurn(Player player, PlayerService playerService) {
+
+            Integer energyCount=player.getEnergyPoints();
+            Integer victoryPoints=Math.floorDiv(energyCount, 6);
+            
+            player.setVictoryPoints(player.getVictoryPoints() + victoryPoints);
+            
+
+        }
+    },
+    novaBreath("Aliento nova", "Al atacar dañas a todos los demas jugadores") {
+
+        @Override
+        public void effectAfterRoll(Player playerRolling, PlayerService playerService) {
+            Roll roll = MapGameRepository.getInstance().getRoll(playerRolling.getGame().getId());
+            Map<String, Integer> tiradas = playerService.countRollValues(roll.getValues());
+            Map<String, Integer> efectosCartas = playerService.countRollValues(roll.getCardExtraValues());
+
+            for (Player player : playerRolling.getGame().getPlayers()) {
+                if (player.isInTokyo() &&  playerRolling.isOutOfTokyo() || player.isOutOfTokyo() && playerRolling.isInTokyo()) {
+                    Integer damageTotal=tiradas.get("damage") + efectosCartas.get("damage");
+                    playerService.damagePlayer(player,damageTotal);
+                }
+            }
+
         }
     },
     gourmet("Gourmet", "Cuando consigas 3 o más dados 'ONE', recibirás 2 puntos de victoria extra") {
