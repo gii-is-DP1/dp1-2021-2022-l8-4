@@ -10,10 +10,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardEnum;
 import org.springframework.samples.petclinic.card.CardType;
+import org.springframework.samples.petclinic.card.UseCardsInterface;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GameService;
+import org.springframework.samples.petclinic.game.MapGameRepository;
+import org.springframework.samples.petclinic.playercard.PlayerCard;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
@@ -53,22 +56,6 @@ public class PlayerService {
     public void savePlayer(Player player) {
         playerRepository.save(player);
     }
-
-    /* Esto actualmente no sirve para nada asi que ya me direis, era para lo de Noelia que hizo del throwExceptionDuplicatedMonsterName
-    @Transactional
-    public Player getPlayerwithIdDifferent(String monsterName, Integer id) {
-        monsterName = monsterName.toLowerCase();
-        for (Player player : playerRepository.findAll()) {
-            String compName = player.getMonsterName().toString();
-            compName = compName.toLowerCase();
-            if (compName.equals(monsterName) && player.getId() != id) {
-                return player;
-            }
-        }
-        return null;
-    }
-
-    */
 
 
     /**
@@ -135,7 +122,8 @@ public class PlayerService {
         Boolean tokyoCityEmpty = Boolean.FALSE;
         Boolean tokyoBayEmpty = Boolean.FALSE;
 
-        useCards(playerActualTurn);
+        //Use all the cards that are used when the player does the last roll
+        useCardsInRoll(playerActualTurn);
 
         Map<String,Integer> rollCount=countRollValues(roll.getValues());
         Map<String,Integer> cardValuesCount=countRollValues(roll.getCardExtraValues());
@@ -155,6 +143,12 @@ public class PlayerService {
         tokyoBayEmpty = !listaJugadoresEnPartida.stream()
                 .anyMatch(p -> p.getLocation().equals(LocationType.bahiaTokyo));
 
+
+        // CURACION
+        if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
+            healDamage(playerActualTurn, heal);
+        }
+
         if (tokyoCityEmpty && damage > 0) {
             playerActualTurn.setLocation(LocationType.ciudadTokyo);
             playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + 1);
@@ -167,10 +161,7 @@ public class PlayerService {
         // Los efectos de los dados
         for (Player player : listaJugadoresEnPartida) {
             if (playerIdActualTurn == player.getId()) {
-                // CURACION
-                if (player.getLocation() == LocationType.fueraTokyo) {
-                    healDamage(player, heal);
-                }
+                
                 // ENERGIAS
                 Integer sumaEnergias = player.getEnergyPoints() + energys;
                 player.setEnergyPoints(sumaEnergias);
@@ -201,11 +192,9 @@ public class PlayerService {
     }
 
 
-   public void useCards(Player player) {
+   public void useCardsInRoll(Player player) {
         for(Card card:player.getAvailableCards()) {
-            if(card.getType() != CardType.DESCARTAR) {
-                card.getCardEnum().effect(player, playerService);
-            }
+            card.getCardEnum().effectInRoll(player, playerService);
         }
     }
 
@@ -284,16 +273,36 @@ public class PlayerService {
         return result;
     }
 
+    //This function is called whenever any player is damaged
     @Transactional
     public void damagePlayer(Player player, Integer damage) {
+        damage=useCardsInDamage(player,damage);
         Integer damagedLife = player.getLifePoints() - damage;
+        
         if (0 < damagedLife) {
             player.setLifePoints(damagedLife);
         } else {
             player.setLifePoints(0);
+            List<Integer> turnList=MapGameRepository.getInstance().getTurnList(player.getGame().getId());
+            Integer index=turnList.indexOf(player.getId());
+            if(index>=0) {
+                turnList.remove(player.getId());
+                MapGameRepository.getInstance().putTurnList(player.getGame().getId(), turnList);
+            }
             player.setLocation(LocationType.fueraTokyo);
         }
     }
+
+    //Use all card from a player that are activated 
+    public Integer useCardsInDamage(Player player,Integer damage) {
+        for(Card card:player.getAvailableCards()) {
+            damage=card.getCardEnum().effectDamage(player, playerService, damage);
+        }
+        return damage;
+    }
+    
+
+
 
     @Transactional
     public void substractVictoryPointsPlayer(Player player, Integer victoryPoints) {
@@ -330,7 +339,11 @@ public class PlayerService {
         Player player = findPlayerById(playerId);
         User user = userService.authenticatedUser();
         if (player.getUser().getId() == user.getId()) {
-            player.surrender();
+            
+            List<PlayerCard> playerCards=player.getPlayerCard();
+            playerCards.forEach(card -> card.setDiscarded(Boolean.TRUE));
+            player.setPlayerCard(playerCards);
+            damagePlayer(player, 99);
             gameService.endGame(player.getGame().getId());
             savePlayer(player);
         }
