@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.modules.statistics.achievement.Achievement;
 import org.springframework.samples.petclinic.modules.statistics.achievement.AchievementService;
+import org.springframework.samples.petclinic.modules.statistics.metrics.MetricService;
 import org.springframework.samples.petclinic.modules.statistics.metrics.MetricType;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
@@ -29,7 +30,8 @@ import org.springframework.stereotype.Service;
 public class AchievementsTest {
     @Autowired
     private AchievementService achievementsService;
-
+    @Autowired
+    private MetricService metricService;
     @Autowired
     private UserService userService;
 
