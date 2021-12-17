@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.card.CardEnum;
 import org.springframework.samples.petclinic.card.CardType;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
@@ -53,23 +52,6 @@ public class PlayerService {
     public void savePlayer(Player player) {
         playerRepository.save(player);
     }
-
-    /* Esto actualmente no sirve para nada asi que ya me direis, era para lo de Noelia que hizo del throwExceptionDuplicatedMonsterName
-    @Transactional
-    public Player getPlayerwithIdDifferent(String monsterName, Integer id) {
-        monsterName = monsterName.toLowerCase();
-        for (Player player : playerRepository.findAll()) {
-            String compName = player.getMonsterName().toString();
-            compName = compName.toLowerCase();
-            if (compName.equals(monsterName) && player.getId() != id) {
-                return player;
-            }
-        }
-        return null;
-    }
-
-    */
-
 
     /**
      * Join user to a game associating a new player to both. A player can only join
