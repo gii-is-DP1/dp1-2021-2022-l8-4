@@ -140,7 +140,7 @@ public class Player extends BaseEntity {
                         .anyMatch(x -> x.equals(CardEnum.evenBigger))){
                             maxHealth=12;
                         }
-        return maxHealth; //Cuando se haga lo de la carta de vida maxima esto se cambia 
+        return maxHealth;
     }
 
     public Boolean getRecentlyHurt(){
