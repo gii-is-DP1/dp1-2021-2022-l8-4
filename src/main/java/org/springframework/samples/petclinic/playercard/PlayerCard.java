@@ -32,7 +32,6 @@ public class PlayerCard extends BaseEntity {
     @JoinColumn(name = "card_id")
     private Card card;
 
-    @Column(name = "discarded")
     private Boolean discarded;
 
     /**
