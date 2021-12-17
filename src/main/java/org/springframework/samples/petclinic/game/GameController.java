@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.card.Card;
-
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * @author Ricardo Nadal Garcia
  * @author Jose Maria Delgado Sanchez
+ * @author Noelia López Durán
  */
 
 @Controller
@@ -126,6 +126,9 @@ public class GameController {
 
         Player actualPlayer=playerService.actualPlayer(gameId);
         modelMap.addAttribute("actualPlayer", actualPlayer);
+
+        Player AuthenticatedPlayer = gameService.playerInGameByUser(userService.authenticatedUser(), gameId);
+        modelMap.addAttribute("AuthenticatedPlayer", AuthenticatedPlayer);
 
         modelMap.addAttribute("players", players);
         modelMap.addAttribute("game", game);

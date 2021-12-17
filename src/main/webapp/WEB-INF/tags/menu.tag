@@ -20,31 +20,39 @@
 
 				<petclinic:menuItem active="${name eq 'home'}" url="/" title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-					<span>Home</span>
+					<span>Inicio</span>
+				</petclinic:menuItem>
+
+				<petclinic:menuItem active="${name eq 'rules'}" url="/rules" title="rules">
+					<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+					<span>Reglas</span>
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'users'}" url="/users?page=1"
 					title="list users">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Users list</span>
+					<span>Lista de Usuarios</span>
 				</petclinic:menuItem>
 			</ul>
 
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar Sesion</a></li>
+					<li><a href="<c:url value="/users/new" />">Registrarse</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 
 					<petclinic:menuItem active="${name eq 'lobbiesList'}" url="/games/lobbies">
-						<span class="" aria-hidden="true"></span>
 						<span>Unirse a partida</span>
 					</petclinic:menuItem>
 					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new">
-						<span class="" aria-hidden="true"></span>
 						<span>Nueva partida</span>
+					</petclinic:menuItem>
+					
+					<petclinic:menuItem active="${name eq 'statistics'}" url="/statistics">
+						<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
+						<span>Estadisticas</span>
 					</petclinic:menuItem>
 
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -56,24 +64,14 @@
 							<li>
 								<div class="navbar-login">
 									<div class="row">
-										<div class="col-lg-4">
-											<p class="text-center">
-												<span class="glyphicon glyphicon-user icon-size"></span>
-											</p>
-										</div>
 										<div class="col-lg-8">
 											<p class="text-left">
-												<strong><sec:authentication property="name" /></strong>
-											</p>
-										</div>
-										<div class="col-lg-8">
-											<p class="text-left">
-												<a href="<c:url value="/users/" />"
-													class="btn btn-primary btn-block btn-sm">Profile</a>
+												<a href="<c:url value="/users/profile/${currentUser.id}" />"
+													class="btn btn-primary btn-block btn-sm">Perfil</a>
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/logout" />"
-													class="btn btn-primary btn-block btn-sm">Logout</a>
+													class="btn btn-primary btn-block btn-sm">Salir</a>
 											</p>
 										</div>
 									</div>

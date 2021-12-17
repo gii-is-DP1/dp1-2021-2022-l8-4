@@ -154,9 +154,10 @@ import lombok.Setter;
   }
   
   public Boolean isFinished(){ 
-     
      return this.winner!=null && !this.winner.isEmpty() ;
-     }
+  }
+
+
 
   public Integer playersAmount(){
      return this.players.size();
@@ -172,6 +173,26 @@ import lombok.Setter;
      }
      return playerList;
   }
+
+  public List<Player> playersOutOfTokyo(){
+     List<Player> playerList=new ArrayList<Player>();
+     for(Player player:this.players){
+        if(player.isOutOfTokyo() && !player.isDead()) {
+           playerList.add(player);
+        }
+     }
+     return playerList;
+  }
+
+   public List<Player> playersInTokyo(){
+      List<Player> playerList=new ArrayList<Player>();
+      for(Player player:this.players){
+         if(player.isInTokyo() && !player.isDead()) {
+            playerList.add(player);
+         }
+      }
+      return playerList;
+   }
 
 
  }

@@ -35,7 +35,7 @@ import lombok.Setter;
 public class User extends BaseEntity {
 
     @NotEmpty
-    @Column(name = "username", unique = true)
+    @Column(name = "username", unique = true, updatable = false)
     private String username;
 
     @NotEmpty

@@ -1,10 +1,15 @@
 package org.springframework.samples.petclinic.modules.statistics.metrics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class MetricService {
@@ -12,44 +17,55 @@ public class MetricService {
     @Autowired
     private MetricRepository metricRepository;
 
-    @Transactional
-    public Integer gamesPlayedByUser(User user) {
-        return metricRepository.gamesPlayedByUser(user.getId());
-    }
+    @Autowired
+    private UserService userService;
 
+    /**
+     * 
+     * @return Map or Users with their associated score of games played ordered
+     */
     @Transactional
-    public Integer winsByUser(User user) {
-        return metricRepository.winsByUser(user.getId());
-    }
-
-    @Transactional
-    public Integer cardsUsedByUser(User user) {
-        return metricRepository.cardsUsedByUser(user.getId());
+    public List<MetricData> gamesPlayed(){       
+        return parseMetricData(metricRepository.gamesPlayed());
     }
 
     /**
-     * Given a metric type and a user, returns the score in that metric by the user
      * 
-     * @param metric type
-     * @return Integer score
+     * @param data
+     * @return Parsed data from the repository query
      */
     @Transactional
-    public Integer getScoreByUser(MetricType metric, User user) {
-        Integer score = null;
-        
+    public List<MetricData> parseMetricData(List<Long[]> data){
+        List<MetricData> parsedData = new ArrayList<MetricData>();
+
+        for(Long[] pair: data){
+            User user = userService.findUserById(pair[0].intValue()).get();
+            Long score = pair[1];
+            MetricData metric = new MetricData(user,score);
+           parsedData.add(metric);
+        }  
+        return parsedData;
+    }
+
+
+    @Transactional
+    public List<MetricData> statisticsByMetricType(MetricType metric){
+        List<MetricData> statistics = new ArrayList<MetricData>();
+
         switch(metric){
             case gamesPlayed:
-                score = gamesPlayedByUser(user);
+                statistics = gamesPlayed();
                 break;
-            case cardsUsed:
-                score = cardsUsedByUser(user);
+            case cardsUsed:      
+            
                 break;
             case wins:
-                score = winsByUser(user);
+                
                 break;
             default:
                 break;
         }
-        return score;
+        return statistics;
     }
+
 }

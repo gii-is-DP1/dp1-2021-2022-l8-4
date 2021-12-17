@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.user;
 
+import java.io.Console;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -57,24 +58,24 @@ public class UserService {
 		authoritiesRepository.save(authority);
 	}
 
-	 /**
-     * Find user given id
-     * 
-     * @param id
-     * @return User
-     */
+	/**
+	 * Find user given id
+	 * 
+	 * @param id
+	 * @return User
+	 */
 
 	@Transactional
 	public Optional<User> findUserById(int id) throws DataAccessException {
 		return userRepository.findById(id);
 	}
 
-	 /**
-     * Find authenticated user given username
-     * 
-     * @param currentUserUsername
-     * @return UserId
-     */
+	/**
+	 * Find authenticated user given username
+	 * 
+	 * @param currentUserUsername
+	 * @return UserId
+	 */
 
 	@Transactional
 	public Integer getCurrentUserId(String currentUserUsername) {
@@ -83,12 +84,12 @@ public class UserService {
 		return currentUserId;
 	}
 
-	 /**
-     * Find user given username
-     * 
-     * @param username
-     * @return User
-     */
+	/**
+	 * Find user given username
+	 * 
+	 * @param username
+	 * @return User
+	 */
 
 	@Transactional
 	public User findUserByUsername(String username) {
@@ -97,9 +98,9 @@ public class UserService {
 	}
 
 	@Transactional
-    public void deleteUser(User user) {
-        userRepository.delete(user);
-    }
+	public void deleteUser(User user) {
+		userRepository.delete(user);
+	}
 
 	/**
 	 * @return Autheticated User if logged in or null if no one is logged in
@@ -109,14 +110,12 @@ public class UserService {
 		User currentUser = null;
 		String currentUsername = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null) {
-			if (authentication.isAuthenticated()
-					&& authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
-				org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication
-						.getPrincipal();
-				currentUsername = user.getUsername();
-				currentUser = findUserByUsername(currentUsername);
-			}
+		if (authentication!=null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+			org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication
+					.getPrincipal();
+			currentUsername = user.getUsername();
+			currentUser = findUserByUsername(currentUsername);
+			
 		}
 		return currentUser;
 	}
@@ -127,12 +126,13 @@ public class UserService {
 	 */
 	@Transactional
 	public Page<User> getPageOfUsers(int pageNumber) {
-		Pageable pageable = PageRequest.of(pageNumber,5,Sort.by(Order.asc("username")));
+		Pageable pageable = PageRequest.of(pageNumber, 5, Sort.by(Order.asc("username")));
 		return userRepository.findAllUsersByPage(pageable);
 	}
-	
+
 	/*
 	 * Check if the authenticated user is playing as the specific player
+	 * 
 	 * @return true if the logged user is playing as the player
 	 */
 	@Transactional
@@ -144,6 +144,13 @@ public class UserService {
 		} else {
 			return false;
 		}
+	}
+
+	@Transactional
+	public Boolean isAdmin(int userId){
+		Optional<Authorities> auth = authoritiesRepository.findById(userId);
+		int res = auth.get().authority.compareTo("admin");
+		return res==0 ? true : false;
 	}
 
 }

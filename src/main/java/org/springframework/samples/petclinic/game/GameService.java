@@ -11,7 +11,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardService;
+import org.springframework.samples.petclinic.card.CardType;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
@@ -96,6 +98,7 @@ public class GameService {
      *                must not be emtpy
      * @return Game object if the game was succesfully created, otherwise null
      */
+    
     @Transactional
     public Game createNewGame(User creator, Game newGame) {
         if (!newGame.getName().isEmpty() && newGame.getMaxNumberOfPlayers() != null) {
@@ -151,7 +154,8 @@ public class GameService {
     public void turnRoll(Roll roll, Integer gameId) {
         if (roll.getRollAmount() == null || roll.getRollAmount() == 0) {
             roll.rollDiceInitial();
-        } else if (roll.getRollAmount() < roll.getMaxThrows() && roll.getKeep().length != 6) {
+            
+        } else if (roll.getRollAmount() < roll.getMaxThrows() && roll.getKeep().length < roll.getValues().size()) {
             List<DiceValues> valoresConservados = Arrays.asList(roll.getKeep());
             roll.rollDiceNext(valoresConservados);
         } else if (roll.getRollAmount() < roll.getMaxThrows()) {
@@ -167,13 +171,26 @@ public class GameService {
         Game game = findGameById(gameId);
         MapGameRepository.getInstance().putRoll(gameId, new Roll());
 
+        
         game.setTurn(game.getTurn() + 1);
 
         nextPositionTurn(gameId);
-
+        
+        useCardsStartTurn(actualTurn(gameId));
         saveGame(game);
         playerService.startTurn(actualTurnPlayerId(gameId));
     }
+
+
+    @Transactional
+    public void useCardsStartTurn(Player player) {
+        for(Card card:player.getAvailableCards()) {
+            if(card.getType() != CardType.DESCARTAR) {
+                card.getCardEnum().effectStartTurn(player, playerService);
+            }
+        }
+    }
+
 
     @Transactional
     public void nextPositionTurn(Integer gameId) {
@@ -240,7 +257,6 @@ public class GameService {
             game.getPlayers().stream()
                     .forEach(p -> achievementService.checkAchievements(p.getUser()));
         }
-
         saveGame(game);
     }
 
@@ -258,20 +274,10 @@ public class GameService {
     @Transactional
     public Player actualTurn(Integer gameId) {
 
-        Player actualPlayer = new Player();
-        Boolean finished = Boolean.FALSE;
-        while (!finished) {
-            List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
-            actualPlayer = playerService.findPlayerById(turnList.get(0));
-            if (!actualPlayer.isDead()) {
-                break;
-            } else {
-                turnList.remove(0);
-                MapGameRepository.getInstance().putTurnList(gameId, turnList);
-            }
-        }
-
-        return actualPlayer;
+    List<Integer> turnList= MapGameRepository.getInstance().getTurnList(gameId);
+    Player actualPlayer = playerService.findPlayerById(turnList.get(0));
+            
+    return actualPlayer;
     }
 
     @Transactional
@@ -298,15 +304,20 @@ public class GameService {
     }
 
     @Transactional
-    public void handleTurnAction(Integer gameId, Boolean newTurn, Roll roll) {
+    public void handleTurnAction(Integer gameId, Boolean newTurn, Roll keepInfo) {
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
+                isRecentlyHurtToFalse(gameId);
                 nuevoTurno(gameId);
+                playerService.checkplayers(gameId);
             } else {
-                turnRoll(roll, gameId);
-                if (roll.getRollAmount() == roll.getMaxThrows()) {
+
+                Roll rollData=MapGameRepository.getInstance().getRoll(gameId); //Esto es temporal, pretendo poner mejor rol por que esta mal hecho
+                rollData.setKeep(keepInfo.getKeep());
+                turnRoll(rollData, gameId);
+                if (rollData.getRollAmount() == rollData.getMaxThrows()) {
                     Integer playerIdActualTurn = actualTurnPlayerId(gameId);
-                    playerService.useRoll(gameId, playerIdActualTurn, roll);
+                    playerService.useRoll(gameId, playerIdActualTurn, rollData);
 
                 }
             }
@@ -314,14 +325,6 @@ public class GameService {
 
     }
 
-    /**
-     * @return True if the player has been attacked in the actual turn
-     */
-    @Transactional
-    public Boolean hasBeenHurt(Integer gameId) {
-        Boolean result = playerService.isRecentlyHurt(gameId);
-        return result;
-    }
 
     public void changePosition(Integer gameId) {
         Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));

@@ -1,15 +1,30 @@
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (1,'Mi primera partida','Juega tu primera partida',10,0,1);
 
-INSERT INTO cards(id,cost,name,type) VALUES(1,5,'Monstruo Alfa',1);
-INSERT INTO cards(id,cost,name,type) VALUES(2,3,'Ataque acido',1); 
-INSERT INTO cards(id,cost,name,type) VALUES(3,5,'Apartamentos',0); 
-INSERT INTO cards(id,cost,name,type) VALUES(4,4,'Armadura de chapa',1); 
-INSERT INTO cards(id,cost,name,type) VALUES(5,4,'Habitante subterraneo',1); 
-INSERT INTO cards(id,cost,name,type) VALUES(6,5,'Madriguera',1); 
-INSERT INTO cards(id,cost,name,type) VALUES(7,3,'Camuflaje',1); 
-INSERT INTO cards(id,cost,name,type) VALUES(8,4,'Tren de cercanias',0); 
-INSERT INTO cards(id,cost,name,type) VALUES(9,3,'Destruccion total',1); 
-INSERT INTO cards(id,cost,name,type) VALUES(10,3,'Bazar de la esquina',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(1,5,'apartmentBuilding',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(2,3,'cornerStore',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(3,4,'commuterTrain',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(4,8,'energize',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(5,3,'fireBlast',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(6,7,'evacuationOrders',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(7,7,'evacuationOrders',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(8,3,'heal',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(9,6,'gasRefinery',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(10,4,'highAltitudeBombing',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(11,5,'jetFighters',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(12,3,'nationalGuard',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(13,6,'acidAttack',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(14,5,'alphaMonster',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(15,4,'fireBreathing',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(16,3,'friendOfChildren',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(17,7,'extraHead',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(18,7,'extraHead',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(19,5,'giantBrain',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(20,3,'completeDestruction',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(21,4,'evenBigger',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(22,4,'gourmet',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(23,0,'camouflage',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(24,0,'armorPlating',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(25,0,'itHasAChild',1);
 
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
@@ -33,7 +48,7 @@ INSERT INTO authorities(id,userid,authority) VALUES (9,9,'admin');
 
 
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (1,'Partida tremenda',1,'3',null,'2020-11-01T10:00:00','2020-11-01T11:00:00',6);
-INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (2,'Partida tremenda ya jugada',2,'15','Rick360','2020-11-01T10:00:00','2020-11-01T11:00:00',6);
+INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (2,'Partida tremenda ya jugada',2,'15','user2','2020-11-01T10:00:00','2020-11-01T11:00:00',6);
 
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (1,1,0,2,10,0,1,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (2,5,10,0,10,0,1,2);
