@@ -25,11 +25,11 @@ INSERT INTO cards(id,cost,card_enum,type) VALUES(22,4,'gourmet',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(23,3,'camouflage',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(24,4,'armorPlating',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(25,7,'itHasAChild',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(26,0,'alienMetabolism',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(27,0,'dedicatedNewsTeam',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(28,0,'herbivore',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(29,0,'energyHoarder',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(30,0,'novaBreath',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(26,3,'alienMetabolism',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(27,3,'dedicatedNewsTeam',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(28,5,'herbivore',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(29,3,'energyHoarder',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(30,7,'novaBreath',1);
 
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
@@ -64,7 +64,6 @@ INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,loc
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (7,2,0,8,2,2,2,3);
 
 
-
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (1, 1, 1,1 );
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (2, 1, 0,1 );
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (3, 4, 0,2 );
@@ -72,3 +71,4 @@ INSERT INTO playerStatus(id,player_id,status,amount) VALUES (3, 4, 0,2 );
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (1, 1, 1,FALSE);
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (2, 1, 2,FALSE);
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (3, 1, 3,FALSE);
+
