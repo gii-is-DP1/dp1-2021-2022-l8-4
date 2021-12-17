@@ -1,12 +1,18 @@
 package org.springframework.samples.petclinic.player;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -66,6 +72,9 @@ public class Player extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player", fetch = FetchType.EAGER)
+    private Set<PlayerStatus> playerStatus;
+
     @Column(columnDefinition = "boolean default false")
     private Boolean recentlyHurt;
     /**
@@ -89,6 +98,16 @@ public class Player extends BaseEntity {
                     .collect(Collectors.toList());
     }
 
+    protected Set<PlayerStatus> getPlayerStatusInternal() {
+        if (this.playerStatus == null) {
+            this.playerStatus = new HashSet<>();
+        }
+        return this.playerStatus;
+    }
+
+    protected void setPlayerStatusInternal(Set<PlayerStatus> playerStatus) {
+        this.playerStatus = playerStatus;
+    }
 
     public String monsterStatus() {
         String status = "ALIVE";
@@ -96,6 +115,17 @@ public class Player extends BaseEntity {
             status = "DEAD";
         }
         return status;
+    }
+
+    public List<PlayerStatus> getPlayerStatusList() {
+        List<PlayerStatus> listPlayerStatus = new ArrayList<>(getPlayerStatusInternal());
+        return Collections.unmodifiableList(listPlayerStatus);
+    }
+
+    public void addPlayerStatus(PlayerStatus playerStatus) {
+        getPlayerStatusInternal().add(playerStatus);
+        playerStatus.setPlayer(this);
+
     }
 
     public Boolean isDead() {
@@ -110,7 +140,7 @@ public class Player extends BaseEntity {
                         .anyMatch(x -> x.equals(CardEnum.evenBigger))){
                             maxHealth=12;
                         }
-        return maxHealth;
+        return maxHealth; //Cuando se haga lo de la carta de vida maxima esto se cambia 
     }
 
     public Boolean getRecentlyHurt(){
