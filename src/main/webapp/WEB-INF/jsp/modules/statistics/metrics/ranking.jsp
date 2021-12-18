@@ -6,11 +6,15 @@
                     <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
                         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-                        <petclinic:layout pageName="gamesPlayedMetric">
+                        <petclinic:layout pageName="ranking">
 
-                        <form:form modelAttribute="metricToDisplay" class="form-horizontal" >
+                        <form class="form-horizontal" >
                             <div class="form-group has-feedback">
-                                <form:select itemLabel="name" path="metric" items="${metrics}" />
+                                <select name="metric">
+                                    <c:forEach items="${metrics}" var="m">
+                                        <option value="${m}">${m.getName()}</option>
+                                    </c:forEach>
+                                </select>   
                             </div>
 
                             <div class="form-group">
@@ -18,7 +22,7 @@
                                     <button class="btn btn-default" type="submit">Buscar por metrica</button>
                                 </div>
                             </div>
-                        </form:form>
+                        </form>
 
                         <h2>${actualMetric.getName()}</h2>
 
