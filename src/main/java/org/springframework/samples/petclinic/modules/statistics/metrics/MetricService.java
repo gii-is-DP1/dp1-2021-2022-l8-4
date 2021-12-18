@@ -1,13 +1,10 @@
 package org.springframework.samples.petclinic.modules.statistics.metrics;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.user.User;
-import org.springframework.samples.petclinic.user.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -17,55 +14,38 @@ public class MetricService {
     @Autowired
     private MetricRepository metricRepository;
 
-    @Autowired
-    private UserService userService;
-
     /**
      * 
-     * @return Map or Users with their associated score of games played ordered
+     * @return List of Users with their associated score of games played ordered
      */
     @Transactional
-    public List<MetricData> gamesPlayed(){       
-        return parseMetricData(metricRepository.gamesPlayed());
+    public Page<MetricData> gamesPlayedRanking(int pageNumber, int numberOfElements){
+        PageRequest pageable = PageRequest.of(pageNumber, numberOfElements);    
+        return metricRepository.gamesPlayedRanking(pageable);
     }
 
     /**
      * 
-     * @param data
-     * @return Parsed data from the repository query
+     * @return List of Users with their associated score of wins ordered
      */
     @Transactional
-    public List<MetricData> parseMetricData(List<Long[]> data){
-        List<MetricData> parsedData = new ArrayList<MetricData>();
-
-        for(Long[] pair: data){
-            User user = userService.findUserById(pair[0].intValue()).get();
-            Long score = pair[1];
-            MetricData metric = new MetricData(user,score);
-           parsedData.add(metric);
-        }  
-        return parsedData;
+    public Page<MetricData> winsRanking(int pageNumber, int numberOfElements){    
+        PageRequest pageable = PageRequest.of(pageNumber, numberOfElements);    
+        return metricRepository.winsRanking(pageable);
     }
 
 
     @Transactional
-    public List<MetricData> statisticsByMetricType(MetricType metric){
-        List<MetricData> statistics = new ArrayList<MetricData>();
-
+    public Page<MetricData> rankingByMetricType(MetricType metric, int pageNumber, int numberOfElements){
         switch(metric){
             case gamesPlayed:
-                statistics = gamesPlayed();
-                break;
-            case cardsUsed:      
-            
-                break;
+                return gamesPlayedRanking(pageNumber, numberOfElements);
             case wins:
-                
-                break;
+                return winsRanking(pageNumber, numberOfElements);
             default:
                 break;
         }
-        return statistics;
+        return null;
     }
 
 }
