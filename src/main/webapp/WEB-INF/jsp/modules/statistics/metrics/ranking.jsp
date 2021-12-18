@@ -6,7 +6,7 @@
                     <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
                         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-                        <petclinic:layout pageName="gamesPlayedMetric">
+                        <petclinic:layout pageName="ranking">
 
                         <form class="form-horizontal" >
                             <div class="form-group has-feedback">

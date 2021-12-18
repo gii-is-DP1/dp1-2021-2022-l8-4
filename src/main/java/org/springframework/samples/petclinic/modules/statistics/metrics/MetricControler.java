@@ -16,15 +16,15 @@ import java.util.Map;
 /* @author Jose Maria Delgado Sanchez
 */
 @Controller
-@RequestMapping("/metrics")
+@RequestMapping("/statistics")
 public class MetricControler {
     
     @Autowired
     private MetricService metricService;
 
-    @GetMapping()
+    @GetMapping(path = "/ranking")
     public String getRanking(@RequestParam(value = "metric", defaultValue = "gamesPlayed") MetricType metric, ModelMap modelMap){
-        String view = "modules/statistics/metrics/metrics";
+        String view = "modules/statistics/metrics/ranking";
         List<MetricData> rows = metricService.statisticsByMetricType(metric);
 
         modelMap.addAttribute("metrics", MetricType.values());
@@ -34,8 +34,8 @@ public class MetricControler {
     }
 
     
-    @GetMapping("/statistics")
+    @GetMapping()
     public String rules(Map<String, Object> model) {	    
-      return "modules/metrics/statistics";
+      return "modules/statistics/metrics/statistics";
     }
 }
