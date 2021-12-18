@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.modules.statistics.metrics;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +24,19 @@ public class MetricControler {
     private MetricService metricService;
 
     @GetMapping(path = "/ranking")
-    public String getRanking(@RequestParam(value = "metric", defaultValue = "gamesPlayed") MetricType metric, ModelMap modelMap){
+    public String getRanking(@RequestParam(value = "metric", defaultValue = "gamesPlayed") MetricType metric,@RequestParam(value = "page", defaultValue = "1") int page, ModelMap modelMap){
         String view = "modules/statistics/metrics/ranking";
-        List<MetricData> rows = metricService.statisticsByMetricType(metric);
+        Page<MetricData> pages = metricService.rankingByMetricType(metric,page-1,2);
 
         modelMap.addAttribute("metrics", MetricType.values());
         modelMap.addAttribute("actualMetric", metric);
-        modelMap.addAttribute("rows", rows);
+
+        modelMap.addAttribute("totalPages", pages.getTotalPages());
+        modelMap.addAttribute("totalElements", pages.getTotalElements());
+        modelMap.addAttribute("number", pages.getNumber());
+        modelMap.addAttribute("rows", pages.getContent());
+        modelMap.addAttribute("size", pages.getContent().size());
+        
         return view;
     }
 

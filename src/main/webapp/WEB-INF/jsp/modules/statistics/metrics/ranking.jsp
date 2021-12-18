@@ -33,8 +33,11 @@
                                         <th style="width: 120px;">Score</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
-                                    <c:forEach items="${rows}" var="row">
+                                    <c:choose>
+                                        <c:when test="${rows.size() > 0}">
+                                            <c:forEach items="${rows}" var="row">
                                         <tr>
                                             <td>
                                                 <c:out value="${row.user.username}" />
@@ -46,6 +49,44 @@
                                             </td>
                                         </tr>
                                     </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <tr>
+                                                <td colspan="5">No ranking available</td>
+                                            </tr>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                    <c:choose>
+                                        <c:when test="${size==1}">
+                                            <div class="panel">
+                                                ${size} user on page ${number+1}/${totalPages}
+                                            </div>
+                                            <ul class="pagination">
+                                                <c:forEach begin="0" end="${totalPages-1}" var="page">
+                                                    <li class="page-item">
+                                                        <a href="ranking?metric=${actualMetric}&page=${page+1}" class="page-link">
+                                                            ${page+1}
+                                                        </a>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="panel">
+                                                ${size} users on page ${number+1}/${totalPages}
+                                            </div>
+                                            <ul class="pagination">
+                                                <c:forEach begin="0" end="${totalPages-1}" var="page">
+                                                    <li class="page-item">
+                                                        <a href="ranking?metric=${actualMetric}&page=${page+1}" class="page-link">
+                                                            ${page+1}
+                                                        </a>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </tbody>
                             </table>
 
