@@ -80,15 +80,7 @@ public class Player extends BaseEntity {
 
     @Column(name = "recently_hurt" ,columnDefinition = "boolean default false")
     private Boolean recentlyHurt;
-    /**
-     * Reduce player's life points to 0 and remove the player from the on going game
-     */
-    public void surrender() {
-        if (location.equals(LocationType.bahiaTokyo) || location.equals(LocationType.ciudadTokyo)) {
-            setLocation(LocationType.fueraTokyo);
-        }
-        this.lifePoints = 0;
-    }
+    
 
     /**
      * Get a list of cards the has not been used yet by the player
