@@ -157,6 +157,8 @@
                     
 
                 </div>
+
+                <a href="/statistics/ranking"><button type="button" >Ranking de jugadores</button></a>
                 
             </div>
            
