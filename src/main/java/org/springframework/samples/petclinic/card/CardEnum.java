@@ -361,7 +361,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             Map<String, Integer> efectosCartas = playerService.countRollValues(roll.getCardExtraValues());
 
             for (Player player : playerRolling.getGame().getPlayers()) {
-                if (player.isInTokyo() &&  playerRolling.isOutOfTokyo() || player.isOutOfTokyo() && playerRolling.isInTokyo()) {
+                if (player.getLocation() == playerRolling.getLocation()) {
                     Integer damageTotal=tiradas.get("damage") + efectosCartas.get("damage");
                     playerService.damagePlayer(player,damageTotal);
                 }
