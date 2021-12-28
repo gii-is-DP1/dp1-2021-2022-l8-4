@@ -94,14 +94,16 @@ public class GameController {
         String view = "games/playing";
 
         gameService.endGame(gameId);
-        
+
         Game game = gameService.findGameById(gameId);
 
         if (game.isFinished()) {
             return "redirect:/games/{gameId}/finished";
         }
+
+
         Iterable<Player> players = gameService.findPlayerList(gameId);
-        
+
         if (MapGameRepository.getInstance().getTurnList(gameId) == null) {
             List<Integer> turnList = gameService.initialTurnList(gameId);
             MapGameRepository.getInstance().putTurnList(gameId, turnList);
@@ -110,7 +112,7 @@ public class GameController {
         List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
         Roll roll = MapGameRepository.getInstance().getRoll(gameId);
 
-        List<Player> orderedPlayers= gameService.playersOrder(turnList);
+        List<Player> orderedPlayers = gameService.playersOrder(turnList);
         modelMap.addAttribute("orderedPlayers", orderedPlayers);
 
         Player actualPlayerTurn = gameService.actualTurn(gameId);
@@ -119,14 +121,14 @@ public class GameController {
         Boolean isPlayerTurn = gameService.isPlayerTurn(gameId);
         modelMap.addAttribute("isPlayerTurn", isPlayerTurn);
 
-        if(!isPlayerTurn){
+        if (!isPlayerTurn) {
             responde.addHeader("Refresh", "1");
         }
 
         Boolean isPlayerInGame = gameService.isPlayerInGame(gameId);
         modelMap.addAttribute("isPlayerInGame", isPlayerInGame);
 
-        Player actualPlayer=playerService.actualPlayer(gameId);
+        Player actualPlayer = playerService.actualPlayer(gameId);
         modelMap.addAttribute("actualPlayer", actualPlayer);
 
         Player AuthenticatedPlayer = gameService.playerInGameByUser(userService.authenticatedUser(), gameId);
@@ -145,15 +147,15 @@ public class GameController {
 
     @PostMapping("/{gameId}/playing")
     public String rollKeep(@ModelAttribute("newTurn") Boolean newTurn, @ModelAttribute("roll") Roll roll,
-             @PathVariable("gameId") int gameId) {
+            @PathVariable("gameId") int gameId) {
 
-        gameService.handleTurnAction(gameId,newTurn,roll);
+        gameService.handleTurnAction(gameId, newTurn, roll);
 
         return "redirect:/games/{gameId}/playing";
     }
 
     @GetMapping("/{gameId}/exitTokyo")
-    public String exitTokyo(ModelMap modelMap,@PathVariable("gameId") int gameId) {
+    public String exitTokyo(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         gameService.handleExitTokyo(gameId);
         return "redirect:/games/{gameId}/playing";
     }
@@ -166,28 +168,29 @@ public class GameController {
     }
 
     @PostMapping("/new")
-    public String createNewGame(@ModelAttribute("newGame") @Valid Game newGame, BindingResult result, ModelMap modelMap) {
+    public String createNewGame(@ModelAttribute("newGame") @Valid Game newGame, BindingResult result,
+            ModelMap modelMap) {
         User user = userService.authenticatedUser();
-        
-        if(result.hasErrors() || !user.equals(newGame.getCreator())){
+
+        if (result.hasErrors() || !user.equals(newGame.getCreator())) {
             modelMap.put("newGame", newGame);
             return "games/newGame";
-        }else{
-            gameService.saveGame(newGame);
+        } else {
+            gameService.createNewGame(newGame);
             return "redirect:/games/" + newGame.getId() + "/lobby";
-        } 
+        }
     }
 
     @GetMapping("/{gameId}/lobby")
     public String gameLobby(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse responde) {
         Game game = gameService.findGameById(gameId);
-        if (!game.isStarted()) {
+
+        if (game.isStarted()) {
+            return "redirect:/games/" + game.getId() + "/playing";
+        } else {
             String view = "games/lobby";
 
             responde.addHeader("Refresh", "10");
-
-            Boolean isCreator = game.getCreator() == userService.authenticatedUser();
-            modelMap.addAttribute("isCreator", isCreator);
 
             modelMap.addAttribute("availableMonsters", game.availableMonsters());
             modelMap.addAttribute("game", game);
@@ -195,18 +198,18 @@ public class GameController {
             modelMap.addAttribute("newPlayer", new Player());
             return view;
         }
-        return "redirect:/games/" + game.getId() + "/playing";
     }
 
     @PostMapping("/{gameId}/lobby")
-    public String joinGame(@ModelAttribute("newPlayer") Player newPlayer, ModelMap modelMap,
+    public String joinGame(@ModelAttribute("newPlayer") @Valid Player newPlayer, BindingResult result, ModelMap modelMap,
             @PathVariable("gameId") int gameId) {
-
         User user = userService.authenticatedUser();
-        Game game = gameService.findGameById(gameId);
-        playerService.joinGame(user, newPlayer, game);
 
-        return "redirect:/games/" + game.getId() + "/lobby";
+        if(!result.hasErrors() && user.equals(newPlayer.getUser())){
+            Game game = gameService.findGameById(gameId);
+            playerService.joinGame(newPlayer, game);
+        }
+        return "redirect:/games/" + gameId + "/lobby";
     }
 
     @DeleteMapping("/{gameId}/lobby")
@@ -221,13 +224,16 @@ public class GameController {
     public String startGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         User user = userService.authenticatedUser();
         Game game = gameService.findGameById(gameId);
-        Boolean started = gameService.startGameByCreator(user, game);
-        if (started) {
-            return "redirect:/games/" + game.getId() + "/playing";
-        } else {
-            return "redirect:/games/" + game.getId() + "/lobby";
-        }
+
+        if (user.isCreator(game)) {
+            gameService.startGame(game);
+            if(game.isStarted()){
+                return "redirect:/games/" + game.getId() + "/playing";
+            }
+        } 
+
+        return "redirect:/games/" + game.getId() + "/lobby";
+        
     }
-    
 
 }
