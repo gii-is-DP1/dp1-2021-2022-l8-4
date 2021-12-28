@@ -194,6 +194,9 @@ public class PlayerService {
             }
             savePlayer(player);
         }
+        useCardsAfterRoll(playerActualTurn);
+
+        
     }
 
 
@@ -203,6 +206,13 @@ public class PlayerService {
         }
     }
 
+    public void useCardsAfterRoll(Player player) {
+        for(Card card:player.getAvailableCards()) {
+            card.getCardEnum().effectAfterRoll(player, playerService);
+        }
+    }
+
+   
 
 
 

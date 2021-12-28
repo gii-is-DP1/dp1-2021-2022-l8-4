@@ -302,11 +302,19 @@ public class GameService {
         }
         return result;
     }
+    
+    @Transactional
+    public void useCardsEndTurn(Player player) {
+        for(Card card:player.getAvailableCards()) {
+            card.getCardEnum().effectEndTurn(player, playerService);
+        }
+    }
 
     @Transactional
     public void handleTurnAction(Integer gameId, Boolean newTurn, Roll keepInfo) {
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
+                useCardsEndTurn(playerService.actualPlayer(gameId));
                 isRecentlyHurtToFalse(gameId);
                 nuevoTurno(gameId);
                 playerService.checkplayers(gameId);
@@ -319,11 +327,15 @@ public class GameService {
                     Integer playerIdActualTurn = actualTurnPlayerId(gameId);
                     playerService.useRoll(gameId, playerIdActualTurn, rollData);
 
+                    
                 }
             }
         }
 
     }
+
+    
+
 
 
     public void changePosition(Integer gameId) {
