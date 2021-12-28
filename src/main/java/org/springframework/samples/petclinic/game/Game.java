@@ -39,6 +39,7 @@ import lombok.Setter;
  @Table(name = "games")
  public class Game extends NamedEntity{
 
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User creator;

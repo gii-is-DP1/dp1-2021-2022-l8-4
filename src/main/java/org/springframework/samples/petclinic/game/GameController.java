@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.game;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.card.Card;
@@ -14,6 +15,7 @@ import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -164,13 +166,15 @@ public class GameController {
     }
 
     @PostMapping("/new")
-    public String createNewGame(@ModelAttribute("newGame") Game newGame, ModelMap modelMap) {
+    public String createNewGame(@ModelAttribute("newGame") @Valid Game newGame, BindingResult result, ModelMap modelMap) {
         User user = userService.authenticatedUser();
-        Game game = gameService.createNewGame(user, newGame);
-        if(game instanceof Game){
-            return "redirect:/games/" + game.getId() + "/lobby";
+        
+        if(result.hasErrors() || !user.equals(newGame.getCreator())){
+            modelMap.put("newGame", newGame);
+            return "games/newGame";
         }else{
-            return "redirect:/games/new";
+            gameService.saveGame(newGame);
+            return "redirect:/games/" + newGame.getId() + "/lobby";
         } 
     }
 

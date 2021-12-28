@@ -90,26 +90,6 @@ public class GameService {
         return gameRepository.findLobbies();
     }
 
-    /**
-     * Create a new game in the data base setting its creator.
-     * 
-     * @param creator of the game
-     * @param newGame maxNumberOfPlayers must not be null and between 2 - 6, name
-     *                must not be emtpy
-     * @return Game object if the game was succesfully created, otherwise null
-     */
-    
-    @Transactional
-    public Game createNewGame(User creator, Game newGame) {
-        if (!newGame.getName().isEmpty() && newGame.getMaxNumberOfPlayers() != null) {
-            newGame.setCreator(creator);
-            newGame.setTurn(0);
-            saveGame(newGame);
-            return newGame;
-        } else {
-            return null;
-        }
-    }
 
     /**
      * Delete a game given its creator
