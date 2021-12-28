@@ -6,6 +6,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ public class UserServiceTest {
     
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuthoritiesService authoritiesService;
 
     @Test
     public void testGetCurrentUserId() {
@@ -136,18 +140,41 @@ public class UserServiceTest {
     public void testDeleteUser() {
         List<User> currentListUsers = new ArrayList<>();
         List<User> newListUsers = new ArrayList<>();
+        userService.findAll().forEach(currentListUsers::add);
+        Integer currentCount = currentListUsers.size();
 
-        userService.findAll().forEach(currentListUsers::add); // size = 9
-        Integer currentCount = currentListUsers.size(); // size=9
+        userService.deleteUser(userService.findUserById(1).get());
+        userService.findAll().forEach(newListUsers::add);
+        Integer newCount = newListUsers.size();
+        assertThat(newCount).isEqualTo(currentCount-1);
+    }
 
-        userService.deleteUser(userService.findUserById(1).get()); // size=8
-        
-        for (User user:userService.findAll()) {
-            newListUsers.add(user);
+    @Test
+    public void testIsAdmin() {
+        List<User> listAdmins = new ArrayList<>();
+        List<User> allUsers = new ArrayList<>();
+        List<Authorities> listAuthorities = new ArrayList<>();
+        authoritiesService.findAll().forEach(listAuthorities::add);
+        // Obtains all authorities who are admin
+        listAuthorities.stream()
+                       .filter(auth->auth.getAuthority().equals("admin"))
+                       .collect(Collectors.toList());
+
+        // Obtains all users and iterates over them and their authorities to save
+        // those users who are admin
+        userService.findAll().forEach(allUsers::add);
+        for (Authorities auth:listAuthorities) {
+            for (User user:allUsers) {
+                Set<Authorities> authority = user.getAuthorities();
+                if(authority.toString().contains(auth.getAuthority())) {
+                    listAdmins.add(user);
+                }
+            }
         }
-
-        Integer newCount = newListUsers.size(); // size=8
-        assertThat(currentCount).isEqualTo(newCount-1);
+       
+        // Checks if some user who is admin is in all admins list
+        User userWhoIsAdmin = userService.findUserById(5).get();
+        assertThat(listAdmins.contains(userWhoIsAdmin));
     }
 
 }

@@ -71,7 +71,7 @@ public class Player extends BaseEntity {
     @OneToMany(mappedBy = "player")
     private List<PlayerCard> playerCard;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "user_id")
     private User user;
 
