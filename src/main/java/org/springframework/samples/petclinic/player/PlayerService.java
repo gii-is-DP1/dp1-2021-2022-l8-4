@@ -41,6 +41,11 @@ public class PlayerService {
     @Autowired
     private PlayerService playerService;
 
+    @Autowired
+	public PlayerService(PlayerRepository playerRepository) {
+		this.playerRepository = playerRepository;
+	}
+
     @Transactional
     public Iterable<Player> findAll() {
         Iterable<Player> res = playerRepository.findAll();

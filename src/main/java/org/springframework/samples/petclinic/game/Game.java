@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -71,6 +72,11 @@ import lombok.Setter;
     @Getter
     @OneToMany(mappedBy = "game")
     private List<GameCard> gameCards;
+
+    @PreRemove
+    private void setGameInGameCardsNull() {
+        gameCards.forEach(gc -> gc.setGame(null));
+    }
 
     
     /**
