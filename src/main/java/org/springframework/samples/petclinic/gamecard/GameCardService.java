@@ -13,7 +13,6 @@ import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.card.Deck;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.MapGameRepository;
-import org.springframework.samples.petclinic.player.Player;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,6 +26,9 @@ public class GameCardService {
 
     @Autowired
     private CardService cardService;
+
+    @Autowired
+    private MapGameRepository mapGameRepository;
 
     @Transactional
     public Iterable<GameCard> findAll() {
@@ -73,7 +75,7 @@ public class GameCardService {
         Integer maxCardsOnSale = 3;
         Integer availableCards = findAvailableCardsByGame(game).size();
         if (availableCards < maxCardsOnSale) {
-            Deck deck = MapGameRepository.getInstance().getDeck(game);
+            Deck deck = mapGameRepository.getDeck(game);
             if (deck != null) {
                 if (!deck.isEmpty()) {
                     Card card = cardService.nextCard(game);

@@ -15,7 +15,6 @@ import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
-import org.springframework.samples.petclinic.modules.statistics.achievement.Achievement;
 import org.springframework.samples.petclinic.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.petclinic.player.LocationType;
 import org.springframework.samples.petclinic.player.Player;
@@ -48,6 +47,9 @@ public class GameService {
 
     @Autowired
     private AchievementService achievementService;
+
+    @Autowired
+    private MapGameRepository mapGameRepository;
 
     @Transactional
     public Iterable<Game> findAll() {
@@ -161,13 +163,13 @@ public class GameService {
             roll.rollDiceNext(valoresConservados);
             roll.setRollAmount(roll.getMaxThrows());
         }
-        MapGameRepository.getInstance().putRoll(gameId, roll);
+        mapGameRepository.putRoll(gameId, roll);
     }
 
     @Transactional
     public void nuevoTurno(int gameId) {
         Game game = findGameById(gameId);
-        MapGameRepository.getInstance().putRoll(gameId, new Roll());
+        mapGameRepository.putRoll(gameId, new Roll());
 
         
         game.setTurn(game.getTurn() + 1);
@@ -181,7 +183,7 @@ public class GameService {
 
     @Transactional
     public void nextPositionTurn(Integer gameId) {
-        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+        List<Integer> turnList = mapGameRepository.getTurnList(gameId);
 
         Boolean finished = Boolean.FALSE;
 
@@ -189,7 +191,7 @@ public class GameService {
             Player player = playerService.findPlayerById(turnList.get(1));
             if (!player.isDead()) {
                 turnList.add(turnList.remove(0));
-                MapGameRepository.getInstance().putTurnList(gameId, turnList);
+                mapGameRepository.putTurnList(gameId, turnList);
                 break;
             } else {
                 turnList.remove(1);
@@ -264,13 +266,13 @@ public class GameService {
         Player actualPlayer = new Player();
         Boolean finished = Boolean.FALSE;
         while (!finished) {
-            List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+            List<Integer> turnList = mapGameRepository.getTurnList(gameId);
             actualPlayer = playerService.findPlayerById(turnList.get(0));
             if (!actualPlayer.isDead()) {
                 break;
             } else {
                 turnList.remove(0);
-                MapGameRepository.getInstance().putTurnList(gameId, turnList);
+                mapGameRepository.putTurnList(gameId, turnList);
             }
         }
 
@@ -309,7 +311,7 @@ public class GameService {
                 playerService.checkplayers(gameId);
             } else {
 
-                Roll rollData=MapGameRepository.getInstance().getRoll(gameId); //Esto es temporal, pretendo poner mejor rol por que esta mal hecho
+                Roll rollData=mapGameRepository.getRoll(gameId); //Esto es temporal, pretendo poner mejor rol por que esta mal hecho
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
                 if (rollData.getRollAmount() == rollData.getMaxThrows()) {

@@ -13,6 +13,7 @@ import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GameService;
+import org.springframework.samples.petclinic.game.MapGameRepository;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,8 @@ public class PlayerService {
     private GameService gameService;
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private MapGameRepository mapGameRepository;
 
     @Transactional
     public Iterable<Player> findAll() {
@@ -186,7 +189,7 @@ public class PlayerService {
    public void useCards(Player player) {
         for(Card card:player.getAvailableCards()) {
             if(card.getType() != CardType.DESCARTAR) {
-                card.getCardEnum().effect(player, playerService);
+                card.getCardEnum().effect(player, playerService,mapGameRepository);
             }
         }
     }

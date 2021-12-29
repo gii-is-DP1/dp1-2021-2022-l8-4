@@ -4,11 +4,10 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.hamcrest.core.IsEqual;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.samples.petclinic.configuration.CurrentUserController;
 import org.springframework.samples.petclinic.modules.statistics.achievement.AchievementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

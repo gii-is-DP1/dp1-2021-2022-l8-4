@@ -2,7 +2,6 @@ package org.springframework.samples.petclinic.playercard;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -41,6 +40,8 @@ public class PlayerCardService {
     @Autowired
     private PlayerService playerService;
 
+    @Autowired
+    private MapGameRepository mapGameRepository;
 
     @Autowired
     private UserService userService;
@@ -78,7 +79,7 @@ public class PlayerCardService {
     public void buyCard(Player player, Card card) {
         // Retrieve the game linked to the player to check if the card is available to
         // buy
-        Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+        Roll roll=mapGameRepository.getRoll(player.getGame().getId());
         Game game = player.getGame();
         List<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
         if (availableCards.contains(card) && game.isOnGoing() && !player.isDead()
@@ -114,14 +115,14 @@ public class PlayerCardService {
     @Transactional
     private void useCardDiscardType(Card card,Player player) {
         if(card.getType().equals(CardType.DESCARTAR)){
-            card.getCardEnum().effect(player,playerService);
+            card.getCardEnum().effect(player,playerService,mapGameRepository);
         }
     }
 
     @Transactional
     public void discardShopCards(Player player) {
         Game game = player.getGame();
-        Roll roll=MapGameRepository.getInstance().getRoll(player.getGame().getId());
+        Roll roll=mapGameRepository.getRoll(player.getGame().getId());
         List<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
         if (game.isOnGoing() && !player.isDead()
                 && userService.isAuthUserPlayingAsPlayer(player) 

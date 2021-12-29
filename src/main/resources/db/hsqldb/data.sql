@@ -22,6 +22,7 @@ INSERT INTO cards(id,cost,card_enum,type) VALUES(19,5,'giantBrain',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(20,3,'completeDestruction',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(21,4,'evenBigger',0);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(22,4,'gourmet',1);
+
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
 INSERT INTO users(id,username,email,password,enabled) VALUES (2,'user2','user2@email.com','u53r2', TRUE);
@@ -30,7 +31,6 @@ INSERT INTO users(id,username,email,password,enabled) VALUES (3,'user3','user3@e
 INSERT INTO authorities(id,userid,authority) VALUES (3,3,'user');
 INSERT INTO users(id,username,email,password,enabled) VALUES (4,'Fire','fire@email.com','fire', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (4,4,'admin');
-
 INSERT INTO users(id,username,email,password,enabled) VALUES (5,'Rosa','rosa@email.com','rosa', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (5,5,'admin');
 INSERT INTO users(id,username,email,password,enabled) VALUES (6,'Noelia','noelia@email.com','noelia', TRUE);
@@ -41,10 +41,24 @@ INSERT INTO users(id,username,email,password,enabled) VALUES (8,'Sara','sara@ema
 INSERT INTO authorities(id,userid,authority) VALUES (8,8,'admin');
 INSERT INTO users(id,username,email,password,enabled) VALUES (9,'Carlos','carlos@email.com','carlos', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (9,9,'admin');
+INSERT INTO users(id,username,email,password,enabled) VALUES (10,'master1','master1@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (10,10,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (11,'Lilia','lilia97@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (11,11,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (12,'kaipo9','kaipo9@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (12,12,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (13,'jugador1','jugador1@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (13,13,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (14,'rodri77','rodri77@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (14,14,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (15,'chapa2','chapa2@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (15,15,'user');
 
 
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (1,'Partida tremenda',1,'3',null,'2020-11-01T10:00:00','2020-11-01T11:00:00',6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (2,'Partida tremenda ya jugada',2,'15','user2','2020-11-01T10:00:00','2020-11-01T11:00:00',6);
+INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (3,'Partida Test Empezada',10,'1',null,'2020-11-10T10:30:00',null,6);
+
 
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (1,1,0,2,10,0,1,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (2,5,10,0,10,0,1,2);
@@ -53,8 +67,13 @@ INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,loc
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (5,3,10,0,0,1,2,1);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (6,4,0,8,2,1,2,2);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (7,2,0,8,2,2,2,3);
-
-
+-- Players para tests 
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (8,0,10,0,0,0,3,10);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (9,1,10,0,0,0,3,11);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (10,2,10,0,0,0,3,12);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (11,3,10,0,0,0,3,13);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (12,4,10,0,0,0,3,14);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (13,5,10,0,0,0,3,15);
 
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (1, 1, 1,1 );
 INSERT INTO playerStatus(id,player_id,status,amount) VALUES (2, 1, 0,1 );
