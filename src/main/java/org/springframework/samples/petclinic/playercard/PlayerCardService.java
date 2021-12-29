@@ -116,7 +116,7 @@ public class PlayerCardService {
     //Use all card from a player that are activated when you buy a card
     public Integer useCardsWhenBuy(Player player,Integer energy,Integer cost) {
         for(Card card:player.getAvailableCards()) {
-            energy=card.getCardEnum().effectBuy(player, playerService, energy,cost);
+            energy=card.getCardEnum().effectBuy(player, playerService, energy,cost,mapGameRepository);
         }
         return energy;
     }
