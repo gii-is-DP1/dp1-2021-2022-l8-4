@@ -8,20 +8,22 @@
 
                         <petclinic:layout pageName="newGameForm">
                             
-                            <form:form modelAttribute="newGame">
-                                <tr class="form-group">
-                                    <td>Nombre de la partida</td>
-                                    <form:input path="name"/>
-                                </tr>
-
-                                <tr>
-                                    <td>Numero maximo de jugadores</td>
-                                    <td><form:radiobuttons path="maxNumberOfPlayers" items="${[2,3,4,5,6]}"/></td>
-                                </tr>
-                                
-                                <tr>
-                                    <input type="submit" value="Crear nueva partida"/>
-                                </tr>
-                            </form:form>
+                                <form:form modelAttribute="newGame" style="margin-bottom:20%">
+                                    <div class="col-lg-8" style="margin-left: 37%;">
+                                        <div class="row" style="display: initial;">
+                                                Nombre de la partida
+                                                <form:input path="name" style="margin-left: 5%;"/>
+                                        </div>
+                                        
+                                        <div class="row" style="display: initial;">
+                                            Numero maximo de jugadores
+                                            <form:radiobuttons path="maxNumberOfPlayers" items="${[ 2, 3, 4, 5, 6]}"  style="margin-left: 2%;"/>
+                                        </div>
+                        
+                                        <div class="row" style="display: initial;">
+                                            <input type="submit" value="Crear nueva partida"/>
+                                        </div>
+                                    </div>  
+                                </form:form>
 
                         </petclinic:layout>

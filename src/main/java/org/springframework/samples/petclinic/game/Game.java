@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.game;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.springframework.samples.petclinic.user.User;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.bytebuddy.asm.Advice.Local;
 
 /**
  * @author José Maria Delgado Sanchez
@@ -188,5 +190,12 @@ import lombok.Setter;
       return playerList;
    }
 
+   public Integer getDuration(){
+      Integer hour = this.endTime.getHour() - this.startTime.getHour();
+      Integer minute = this.endTime.getMinute() - this.startTime.getMinute();
+      Integer second = this.endTime.getSecond() - this.startTime.getSecond();
+      Integer duration = (hour*60) + (minute) + (second/60);
+      return duration;
+   }
 
  }

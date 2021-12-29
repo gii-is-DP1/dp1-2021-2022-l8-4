@@ -18,18 +18,18 @@
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
 
-				<petclinic:menuItem active="${name eq 'home'}" url="/" title="home page">
+				<petclinic:menuItem active="${name eq 'home'}" url="/" title="Página de inicio">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Inicio</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'rules'}" url="/rules" title="rules">
+				<petclinic:menuItem active="${name eq 'rules'}" url="/rules" title="Reglas">
 					<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
 					<span>Reglas</span>
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'users'}" url="/users?page=1"
-					title="list users">
+					title="Listado de usuarios">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span>Lista de Usuarios</span>
 				</petclinic:menuItem>
@@ -38,19 +38,19 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Iniciar Sesion</a></li>
+					<li><a href="<c:url value="/login" />" title="Inicio de sesión">Iniciar Sesion</a></li>
 					<li><a href="<c:url value="/users/new" />">Registrarse</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 
-					<petclinic:menuItem active="${name eq 'lobbiesList'}" url="/games/lobbies">
+					<petclinic:menuItem active="${name eq 'lobbiesList'}" url="/games/lobbies" title="Unirse a una partida">
 						<span>Unirse a partida</span>
 					</petclinic:menuItem>
-					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new">
+					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new" title="Crear una nueva partida">
 						<span>Nueva partida</span>
 					</petclinic:menuItem>
 					
-					<petclinic:menuItem active="${name eq 'statistics'}" url="/statistics">
+					<petclinic:menuItem active="${name eq 'statistics'}" url="/statistics" title="Estadisticas">
 						<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
 						<span>Estadisticas</span>
 					</petclinic:menuItem>
