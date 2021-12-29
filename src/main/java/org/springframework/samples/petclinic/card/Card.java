@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.model.BaseEntity;
-import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.playercard.PlayerCard;
 
 import lombok.Getter;

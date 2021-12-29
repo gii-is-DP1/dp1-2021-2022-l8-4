@@ -8,9 +8,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.card.CardEnum;
-import org.springframework.samples.petclinic.card.CardType;
-import org.springframework.samples.petclinic.card.UseCardsInterface;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
@@ -40,6 +37,8 @@ public class PlayerService {
     private GameService gameService;
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private MapGameRepository mapGameRepository;
 
     @Autowired
     public PlayerService(PlayerRepository playerRepository) {
@@ -196,13 +195,13 @@ public class PlayerService {
 
     public void useCardsInRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
-            card.getCardEnum().effectInRoll(player, playerService);
+            card.getCardEnum().effectInRoll(player, playerService,mapGameRepository);
         }
     }
 
     public void useCardsAfterRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
-            card.getCardEnum().effectAfterRoll(player, playerService);
+            card.getCardEnum().effectAfterRoll(player, playerService,mapGameRepository);
         }
     }
 
@@ -288,11 +287,11 @@ public class PlayerService {
             player.setLifePoints(damagedLife);
         } else {
             player.setLifePoints(0);
-            List<Integer> turnList = MapGameRepository.getInstance().getTurnList(player.getGame().getId());
+            List<Integer> turnList = mapGameRepository.getTurnList(player.getGame().getId());
             Integer index = turnList.indexOf(player.getId());
             if (index >= 0) {
                 turnList.remove(player.getId());
-                MapGameRepository.getInstance().putTurnList(player.getGame().getId(), turnList);
+                mapGameRepository.putTurnList(player.getGame().getId(), turnList);
             }
             player.setLocation(LocationType.fueraTokyo);
         }
@@ -301,7 +300,7 @@ public class PlayerService {
     // Use all card from a player that are activated
     public Integer useCardsInDamage(Player player, Integer damage) {
         for (Card card : player.getAvailableCards()) {
-            damage = card.getCardEnum().effectDamage(player, playerService, damage);
+            damage = card.getCardEnum().effectDamage(player, playerService, damage,mapGameRepository);
         }
         return damage;
     }

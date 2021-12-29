@@ -45,6 +45,9 @@ public class GameController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MapGameRepository mapGameRepository;
+
     @GetMapping()
     public String gameListNotFinished(ModelMap modelMap) {
         String view = "games/gamesList";
@@ -103,14 +106,14 @@ public class GameController {
 
 
         Iterable<Player> players = gameService.findPlayerList(gameId);
-
-        if (MapGameRepository.getInstance().getTurnList(gameId) == null) {
+        
+        if (mapGameRepository.getTurnList(gameId) == null) {
             List<Integer> turnList = gameService.initialTurnList(gameId);
-            MapGameRepository.getInstance().putTurnList(gameId, turnList);
+            mapGameRepository.putTurnList(gameId, turnList);
         }
 
-        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
-        Roll roll = MapGameRepository.getInstance().getRoll(gameId);
+        List<Integer> turnList = mapGameRepository.getTurnList(gameId);
+        Roll roll = mapGameRepository.getRoll(gameId);
 
         List<Player> orderedPlayers = gameService.playersOrder(turnList);
         modelMap.addAttribute("orderedPlayers", orderedPlayers);

@@ -77,7 +77,7 @@ public class UserServiceTest {
     @Test
 	public void testCountUsers() throws Exception {
         Integer contador1 = userService.userCount();
-        Integer numero = 9;
+        Integer numero = 15;
     
         assertEquals(contador1, numero);
         User user = new User();
@@ -87,7 +87,7 @@ public class UserServiceTest {
         userService.saveUser(user);
 
         Integer contador2NewUser = userService.userCount();
-        numero = 10;
+        numero = 16;
         assertEquals(contador2NewUser, numero);
 
 	}
@@ -96,7 +96,7 @@ public class UserServiceTest {
 	public void testFindAllUsers() throws Exception {
         List<User> listcont= new ArrayList<>();
         userService.findAll().forEach(listcont::add);
-        Integer numero = 9;
+        Integer numero = 15;
         Integer contadorFind = listcont.size();
         assertEquals(contadorFind, numero);
 
@@ -109,7 +109,7 @@ public class UserServiceTest {
         List<User> listcont2= new ArrayList<>();
         userService.findAll().forEach(listcont2::add);
         Integer contadorFind2 = listcont2.size();
-        numero = 10;
+        numero = 16;
         assertEquals(contadorFind2, numero);
 	}
 

@@ -48,18 +48,15 @@ public class Player extends BaseEntity {
     private Monster monster;
 
     @NotNull
-    @Column(name = "life_points")
     private Integer lifePoints;
 
     
     @NotNull
     @Min(0)
-    @Column(name = "victory_points")
     private Integer victoryPoints;
 
     @NotNull
     @Min(0)
-    @Column(name = "energy_points")
     private Integer energyPoints;
 
     @Enumerated(value = EnumType.ORDINAL)
@@ -79,8 +76,7 @@ public class Player extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player", fetch = FetchType.EAGER)
     private Set<PlayerStatus> playerStatus;
 
-    @NotNull
-    @Column(name = "recently_hurt" ,columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default false")
     private Boolean recentlyHurt;
     
 
@@ -105,7 +101,10 @@ public class Player extends BaseEntity {
     protected void setPlayerStatusInternal(Set<PlayerStatus> playerStatus) {
         this.playerStatus = playerStatus;
     }
-
+    /**
+     * @return "ALIVE" if the player's health points is >0 or "DEAD" if the player's health points is <=0
+     *
+     */
     public String monsterStatus() {
         String status = "ALIVE";
         if (this.lifePoints <= 0) {
@@ -128,7 +127,10 @@ public class Player extends BaseEntity {
     public Boolean isDead() {
         return this.lifePoints <= 0;
     }
-
+    /**
+     * @return the maximum health points of a player
+     *
+     */
     public Integer getMaxHealth() {
         Integer maxHealth=10;
         if(this.playerCard.stream()
@@ -137,17 +139,24 @@ public class Player extends BaseEntity {
                         .anyMatch(x -> x.equals(CardEnum.evenBigger))){
                             maxHealth=12;
                         }
-        return maxHealth; //Cuando se haga lo de la carta de vida maxima esto se cambia 
+        return maxHealth;
     }
 
     public Boolean getRecentlyHurt(){
         return this.recentlyHurt;
     }
 
+    /**
+     * @return whether the player is outside of Tokyo or not.
+     *
+     */
     public Boolean isOutOfTokyo(){
         return this.location == LocationType.fueraTokyo;
     }
-
+    /**
+     * @return whether the player is in Tokyo or TokyoBay or not.
+     *
+     */
     public Boolean isInTokyo(){
         return this.location == LocationType.ciudadTokyo || this.location== LocationType.bahiaTokyo;
     }

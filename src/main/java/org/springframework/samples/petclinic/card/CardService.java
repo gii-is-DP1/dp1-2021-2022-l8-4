@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.MapGameRepository;
-import org.springframework.samples.petclinic.player.Player;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +22,8 @@ public class CardService {
     private CardRepository cardRepository;
 
     @Autowired
-    public CardService(CardRepository cardRepository) {
-        this.cardRepository = cardRepository;
-    }
+    private MapGameRepository mapGameRepository;
+
 
     @Transactional // (readOnly = true)
     public Iterable<Card> findAll() {
@@ -64,7 +63,7 @@ public class CardService {
     @Transactional
     public void newDeck(Game game) {
         Deck deck = new Deck(findAll());
-        MapGameRepository.getInstance().putDeck(game, deck);
+        mapGameRepository.putDeck(game, deck);
     }
 
     /**
@@ -75,9 +74,9 @@ public class CardService {
      */
     @Transactional
     public Card nextCard(Game game) {
-        Deck deck = MapGameRepository.getInstance().getDeck(game);
+        Deck deck = mapGameRepository.getDeck(game);
         Card card = deck.nextCard();
-        MapGameRepository.getInstance().putDeck(game, deck);
+        mapGameRepository.putDeck(game, deck);
         return card;
     }
 

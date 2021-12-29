@@ -50,6 +50,9 @@ public class GameService {
     @Autowired
     private AchievementService achievementService;
 
+    @Autowired
+    private MapGameRepository mapGameRepository;
+
     @Transactional
     public Iterable<Game> findAll() {
         Iterable<Game> res = gameRepository.findAll();
@@ -150,13 +153,13 @@ public class GameService {
             roll.rollDiceNext(valoresConservados);
             roll.setRollAmount(roll.getMaxThrows());
         }
-        MapGameRepository.getInstance().putRoll(gameId, roll);
+        mapGameRepository.putRoll(gameId, roll);
     }
 
     @Transactional
     public void nuevoTurno(int gameId) {
         Game game = findGameById(gameId);
-        MapGameRepository.getInstance().putRoll(gameId, new Roll());
+        mapGameRepository.putRoll(gameId, new Roll());
 
         game.setTurn(game.getTurn() + 1);
 
@@ -171,14 +174,14 @@ public class GameService {
     public void useCardsStartTurn(Player player) {
         for (Card card : player.getAvailableCards()) {
             if (card.getType() != CardType.DESCARTAR) {
-                card.getCardEnum().effectStartTurn(player, playerService);
+                card.getCardEnum().effectStartTurn(player, playerService,mapGameRepository);
             }
         }
     }
 
     @Transactional
     public void nextPositionTurn(Integer gameId) {
-        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+        List<Integer> turnList = mapGameRepository.getTurnList(gameId);
 
         Boolean finished = Boolean.FALSE;
 
@@ -186,7 +189,7 @@ public class GameService {
             Player player = playerService.findPlayerById(turnList.get(1));
             if (!player.isDead()) {
                 turnList.add(turnList.remove(0));
-                MapGameRepository.getInstance().putTurnList(gameId, turnList);
+                mapGameRepository.putTurnList(gameId, turnList);
                 break;
             } else {
                 turnList.remove(1);
@@ -258,7 +261,7 @@ public class GameService {
     @Transactional
     public Player actualTurn(Integer gameId) {
 
-        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+        List<Integer> turnList = mapGameRepository.getTurnList(gameId);
         Player actualPlayer = playerService.findPlayerById(turnList.get(0));
 
         return actualPlayer;
@@ -290,7 +293,7 @@ public class GameService {
     @Transactional
     public void useCardsEndTurn(Player player) {
         for (Card card : player.getAvailableCards()) {
-            card.getCardEnum().effectEndTurn(player, playerService);
+            card.getCardEnum().effectEndTurn(player, playerService,mapGameRepository);
         }
     }
 
@@ -304,7 +307,7 @@ public class GameService {
                 playerService.checkplayers(gameId);
             } else {
 
-                Roll rollData = MapGameRepository.getInstance().getRoll(gameId); // Esto es temporal, pretendo poner
+                Roll rollData = mapGameRepository.getRoll(gameId); // Esto es temporal, pretendo poner
                                                                                  // mejor rol por que esta mal hecho
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
