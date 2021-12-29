@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
+import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -47,20 +49,8 @@ public class UserServiceTest {
         assertThat(user.getId()).isNotNull();
         Integer id = userService.findUserByUsername("rosmolarr").getId();
         assertEquals(user.getId(), id);
-        
     }
 
-    @Test
-    public void testUpdateCardName() throws Exception {
-        Optional<User> user = userService.findUserById(1);
-
-        String newName = "Admin";
-        user.get().setUsername(newName);
-        this.userService.saveUser(user.get());
-
-        user = this.userService.findUserById(1);
-        assertThat(user.get().getUsername()).isEqualTo(newName);
-    }
     
     @Test
     public void testFindUserById() {
