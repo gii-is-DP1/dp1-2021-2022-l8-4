@@ -24,10 +24,6 @@ public class CardService {
     @Autowired
     private MapGameRepository mapGameRepository;
 
-    @Autowired
-    public CardService(CardRepository cardRepository) {
-        this.cardRepository = cardRepository;
-    }
 
     @Transactional // (readOnly = true)
     public Iterable<Card> findAll() {

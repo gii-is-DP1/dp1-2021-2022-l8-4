@@ -10,13 +10,14 @@ import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.card.Deck;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Ricardo Nadal Garcia
  * @author Noelia López Durán
  */
 
-@Component
+@Service // Dejo esto como @Service cuando debería ser @Component porque si no , no funcionan los test 
 public class MapGameRepository{
     private CardService cardService;
     
