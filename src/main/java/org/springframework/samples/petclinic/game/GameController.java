@@ -16,8 +16,10 @@ import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +49,11 @@ public class GameController {
 
     @Autowired
     private MapGameRepository mapGameRepository;
+
+    @InitBinder("newGame")
+	public void initPetBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new NewGameValidator());
+	}
 
     @GetMapping()
     public String gameListNotFinished(ModelMap modelMap) {
@@ -173,13 +180,14 @@ public class GameController {
     @PostMapping("/new")
     public String createNewGame(@ModelAttribute("newGame") @Valid Game newGame, BindingResult result,
             ModelMap modelMap) {
-        User user = userService.authenticatedUser();
-
-        if (result.hasErrors() || !user.equals(newGame.getCreator())) {
+    
+        if (result.hasErrors()) {
             modelMap.put("newGame", newGame);
             return "games/newGame";
         } else {
-            gameService.createNewGame(newGame);
+            User user = userService.authenticatedUser();
+            newGame.setCreator(user);
+            gameService.saveGame(newGame);
             return "redirect:/games/" + newGame.getId() + "/lobby";
         }
     }
@@ -215,12 +223,18 @@ public class GameController {
         return "redirect:/games/" + gameId + "/lobby";
     }
 
-    @DeleteMapping("/{gameId}/lobby")
+    @GetMapping("/{gameId}/lobby/delete")
     public String deleteGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         User user = userService.authenticatedUser();
         Game game = gameService.findGameById(gameId);
-        gameService.deleteGameByCreator(user, game);
-        return "redirect:/games";
+
+        if(user.isCreator(game)){
+            gameService.deleteGame(game);
+            return "redirect:/games/lobbies";
+        }else{
+            return "redirect:/games/" + gameId + "/lobby"; 
+        }
+        
     }
 
     @GetMapping("/{gameId}/start")

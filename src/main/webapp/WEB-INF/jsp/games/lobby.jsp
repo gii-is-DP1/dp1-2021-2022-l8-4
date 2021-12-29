@@ -81,9 +81,8 @@
                             </c:if>
 
                             <c:if test="${game.creator.id == currentUser.id}">
-                                <form action="/games/${game.id}/lobby" method="delete">
-                                    <button type="submit" >Borrar partida</button>
-                                </form>
+                                
+                                <a href="/games/${game.id}/lobby/delete"><button type="submit" >Borrar partida</button></a>
                                 <a href="/games/${game.id}/start"><button type="button" >Iniciar partida</button></a>
                             </c:if>
 

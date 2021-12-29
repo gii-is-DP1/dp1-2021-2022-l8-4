@@ -22,7 +22,6 @@
                                     </div>
 
                                     <input type="hidden" value="0" name="turn"></input>
-                                    <input type="hidden" value="${currentUser.id}" name="creator"></input>
                                     
                                     <div class="row" style="display: initial;">
                                         <input type="submit" value="Crear nueva partida"/>

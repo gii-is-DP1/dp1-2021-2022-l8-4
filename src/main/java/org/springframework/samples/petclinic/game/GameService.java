@@ -93,24 +93,11 @@ public class GameService {
     }
 
     /**
-     * Save game making sure initial values are correct
-     * @param newGame
-     */
-    @Transactional
-    public void createNewGame(Game newGame){
-        newGame.setEndTime(null);
-        newGame.setWinner(null);
-        newGame.setTurn(0);
-        saveGame(newGame);
-    }
-
-
-    /**
      * Delete a game given its creator
      */
     @Transactional
-    public void deleteGameByCreator(User creator, Game game) {
-        if (creator.isCreator(game)) {
+    public void deleteGame(Game game) {
+        if (!game.isStarted()) {
             gameRepository.delete(game);
         }
     }
