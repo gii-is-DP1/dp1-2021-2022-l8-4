@@ -42,6 +42,7 @@ import lombok.Setter;
 @Table(name = "players")
 public class Player extends BaseEntity {
 
+    @NotNull
     @Enumerated(value = EnumType.ORDINAL)
     @Column(name = "monster_name")
     private Monster monster;
@@ -78,6 +79,7 @@ public class Player extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player", fetch = FetchType.EAGER)
     private Set<PlayerStatus> playerStatus;
 
+    @NotNull
     @Column(name = "recently_hurt" ,columnDefinition = "boolean default false")
     private Boolean recentlyHurt;
     

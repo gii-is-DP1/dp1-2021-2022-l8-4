@@ -39,10 +39,10 @@
                                                 <c:out value="${game.winner}" />
                                             </td>
                                             <td>
-                                                <c:out value="${game.startTime}" />
+                                                <c:out value="${game.parseStartTime()}" />
                                             </td>
                                             <td>
-                                                <c:out value="${game.endTime}" />
+                                                <c:out value="${game.parseEndTime()}" />
                                             </td>
                                             <td>
                                                 <c:out value="${game.playersAmount()}" /> 

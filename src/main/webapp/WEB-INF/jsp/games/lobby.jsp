@@ -60,18 +60,27 @@
                                 </tbody>
                             </table>
 
-                            <form:form modelAttribute="newPlayer">
-                                <tr>
-                                    <td>Selecciona tu monstruo</td>
-                                    <td><form:radiobuttons path="monster" items="${availableMonsters}" itemLabel="name"/></td>
-                                </tr>
+                            <c:if test="${!currentUser.hasActivePlayer()}">
+                                <form:form modelAttribute="newPlayer">
+                                    <tr>
+                                        <td>Selecciona tu monstruo</td>
+                                        <td><form:radiobuttons path="monster" items="${availableMonsters}" itemLabel="name"/></td>
+                                    </tr>
 
-                                <tr>
-                                    <input type="submit" value="Unirse a partida"/>
-                                </tr>
-                            </form:form>
-                            
-                            <c:if test="${isCreator}">
+                                    <input type="hidden" value="${currentUser.id}" name="user"></input>
+                                    <input type="hidden" value="0" name="energyPoints"></input>
+                                    <input type="hidden" value="0" name="lifePoints"></input>
+                                    <input type="hidden" value="0" name="victoryPoints"></input>
+                                    <input type="hidden" value="fueraTokyo" name="location"></input>
+                                    <input type="hidden" value="FALSE" name="recentlyHurt"></input>
+
+                                    <tr>
+                                        <input type="submit" value="Unirse a partida"/>
+                                    </tr>
+                                </form:form>
+                            </c:if>
+
+                            <c:if test="${game.creator.id == currentUser.id}">
                                 <form action="/games/${game.id}/lobby" method="delete">
                                     <button type="submit" >Borrar partida</button>
                                 </form>
