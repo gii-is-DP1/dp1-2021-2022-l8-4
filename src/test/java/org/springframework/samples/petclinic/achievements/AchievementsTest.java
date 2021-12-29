@@ -1,7 +1,7 @@
 package org.springframework.samples.petclinic.achievements;
 
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,8 +41,6 @@ public class AchievementsTest {
     @Autowired
     private AchievementService achievementsService;
     @Autowired
-    private MetricService metricService;
-    @Autowired
     private UserService userService;
     @Autowired
     private GameService gameService;
@@ -59,7 +57,10 @@ public class AchievementsTest {
         achievement.setMetric(tipoMetrica);
         achievement.setRewardPoints(10);
         achievementsService.saveAchievement(achievement);
+        assertThat(achievement.getId()).isNotNull();
     }
+
+
 
     @Test
     public void testAchivementGet(){

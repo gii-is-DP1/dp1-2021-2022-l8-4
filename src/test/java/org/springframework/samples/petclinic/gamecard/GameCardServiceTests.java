@@ -21,6 +21,7 @@ import org.springframework.samples.petclinic.card.Deck;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GameService;
 import org.springframework.samples.petclinic.game.GameServiceTests;
+import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.stereotype.Service;
 

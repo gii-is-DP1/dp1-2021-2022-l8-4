@@ -42,7 +42,7 @@ public class MetricControler {
 
     
     @GetMapping()
-    public String rules(Map<String, Object> model) {	    
+    public String getStatistics(Map<String, Object> model) {	    
       return "modules/statistics/metrics/statistics";
     }
 }
