@@ -42,6 +42,7 @@ import lombok.Setter;
 @Table(name = "players")
 public class Player extends BaseEntity {
 
+    @NotNull
     @Enumerated(value = EnumType.ORDINAL)
     @Column(name = "monster_name")
     private Monster monster;
@@ -68,7 +69,7 @@ public class Player extends BaseEntity {
     @OneToMany(mappedBy = "player")
     private List<PlayerCard> playerCard;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -77,15 +78,7 @@ public class Player extends BaseEntity {
 
     @Column(columnDefinition = "boolean default false")
     private Boolean recentlyHurt;
-    /**
-     * Reduce player's life points to 0 and remove the player from the on going game
-     */
-    public void surrender() {
-        if (location.equals(LocationType.bahiaTokyo) || location.equals(LocationType.ciudadTokyo)) {
-            setLocation(LocationType.fueraTokyo);
-        }
-        this.lifePoints = 0;
-    }
+    
 
     /**
      * Get a list of cards the has not been used yet by the player

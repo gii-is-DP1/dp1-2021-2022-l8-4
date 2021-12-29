@@ -3,13 +3,13 @@ package org.springframework.samples.petclinic.modules.statistics.metrics;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.modules.statistics.achievement.Achievement;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.Map;
 
 
@@ -17,41 +17,32 @@ import java.util.Map;
 /* @author Jose Maria Delgado Sanchez
 */
 @Controller
-@RequestMapping("/metrics")
+@RequestMapping("/statistics")
 public class MetricControler {
     
     @Autowired
     private MetricService metricService;
 
-    @GetMapping()
-    public String getStatistics(ModelMap modelMap){
-        String view = "modules/statistics/metrics/metrics";
-        MetricType metric = MetricType.gamesPlayed;
-        List<MetricData> rows = metricService.statisticsByMetricType(metric);
-
-        modelMap.addAttribute("metrics", MetricType.values());
-        modelMap.addAttribute("metric", metric);
-        modelMap.addAttribute("metricToDisplay", new Achievement());
-        modelMap.addAttribute("rows", rows);
-        return view;
-    }
-
-    @PostMapping
-    public String requestStatistics(@ModelAttribute("metricToDisplay") Achievement metricToDisplay,ModelMap modelMap){
-        String view = "modules/statistics/metrics/metrics";
-        MetricType metric = metricToDisplay.getMetric();
-        List<MetricData> rows = metricService.statisticsByMetricType(metric);
+    @GetMapping(path = "/ranking")
+    public String getRanking(@RequestParam(value = "metric", defaultValue = "gamesPlayed") MetricType metric,@RequestParam(value = "page", defaultValue = "1") int page, ModelMap modelMap){
+        String view = "modules/statistics/metrics/ranking";
+        Page<MetricData> pages = metricService.rankingByMetricType(metric,page-1,2);
 
         modelMap.addAttribute("metrics", MetricType.values());
         modelMap.addAttribute("actualMetric", metric);
-        modelMap.addAttribute("metricToDisplay", new Achievement());
-        modelMap.addAttribute("rows", rows);
-        return view;
 
+        modelMap.addAttribute("totalPages", pages.getTotalPages());
+        modelMap.addAttribute("totalElements", pages.getTotalElements());
+        modelMap.addAttribute("number", pages.getNumber());
+        modelMap.addAttribute("rows", pages.getContent());
+        modelMap.addAttribute("size", pages.getContent().size());
+        
+        return view;
     }
+
     
-    @GetMapping("/statistics")
+    @GetMapping()
     public String rules(Map<String, Object> model) {	    
-      return "modules/metrics/statistics";
+      return "modules/statistics/metrics/statistics";
     }
 }

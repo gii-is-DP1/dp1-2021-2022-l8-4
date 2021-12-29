@@ -26,7 +26,7 @@
                 </div>
                 <div class="row" >
                     <div class="col col-sm-6">
-                        <hr style="margin-right: 17%;margin-left: 13%;">
+                        <hr style="margin-right: 17%;margin-left: 18%;">
                     </div>
                     <div class="col col-sm-6">
                         <hr style="margin-left: 17%;margin-right: 13%;">
@@ -157,6 +157,8 @@
                     
 
                 </div>
+
+                <a href="/statistics/ranking"><button type="button" >Ranking de jugadores</button></a>
                 
             </div>
            

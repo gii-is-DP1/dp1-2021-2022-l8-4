@@ -18,6 +18,10 @@
                                     <td>Numero maximo de jugadores</td>
                                     <td><form:radiobuttons path="maxNumberOfPlayers" items="${[2,3,4,5,6]}"/></td>
                                 </tr>
+
+                                <input type="hidden" value="0" name="turn"></input>
+                                <input type="hidden" value="${currentUser.id}" name="creator"></input>
+                                
                                 
                                 <tr>
                                     <input type="submit" value="Crear nueva partida"/>

@@ -90,8 +90,9 @@ public class PlayerCardService {
             // Check if the player has enough energy
             Integer energyPoints = player.getEnergyPoints();
             Integer cost = card.getCost();
+            energyPoints=useCardsWhenBuy(player, energyPoints, cost);
             if (energyPoints >= cost) {
-
+                
                 // Calculate new energyPoints value
                 player.setEnergyPoints(energyPoints - cost);
 
@@ -110,6 +111,14 @@ public class PlayerCardService {
                 gameCardService.showCards(game);
             }
         }
+    }
+
+    //Use all card from a player that are activated when you buy a card
+    public Integer useCardsWhenBuy(Player player,Integer energy,Integer cost) {
+        for(Card card:player.getAvailableCards()) {
+            energy=card.getCardEnum().effectBuy(player, playerService, energy,cost);
+        }
+        return energy;
     }
 
     @Transactional

@@ -41,6 +41,12 @@ public class AuthoritiesService {
 	}
 
 	@Transactional
+	public Iterable<Authorities> findAll() {
+		Iterable<Authorities> res = authoritiesRepository.findAll();
+		return res;
+	}
+
+	@Transactional
 	public void saveAuthorities(Authorities authorities) throws DataAccessException {
 		authoritiesRepository.save(authorities);
 	}

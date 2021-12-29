@@ -1,6 +1,8 @@
 package org.springframework.samples.petclinic.game;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -38,6 +41,7 @@ import lombok.Setter;
  @Table(name = "games")
  public class Game extends NamedEntity{
 
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User creator;
@@ -71,6 +75,11 @@ import lombok.Setter;
     @Getter
     @OneToMany(mappedBy = "game")
     private List<GameCard> gameCards;
+
+    @PreRemove
+    private void setGameInGameCardsNull() {
+        gameCards.forEach(gc -> gc.setGame(null));
+    }
 
     
     /**
@@ -135,6 +144,17 @@ import lombok.Setter;
 
        return availableMonsters;
     }
+
+    /**
+     * @return String parsed date
+     */
+    public String parseStartTime(){
+       return this.startTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+    }
+
+    public String parseEndTime(){
+      return this.endTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+   }
  
 
   public List<Player> playersAlive(){

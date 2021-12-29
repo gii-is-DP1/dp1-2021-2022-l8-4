@@ -2,15 +2,11 @@ package org.springframework.samples.petclinic.player;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -21,7 +17,6 @@ import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GameService;
-import org.springframework.samples.petclinic.player.exceptions.DuplicatedMonsterNameException;
 import org.springframework.samples.petclinic.playercard.PlayerCard;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
@@ -83,6 +78,7 @@ public class PlayerServiceTests {
         player1.setLifePoints(10);
         player1.setVictoryPoints(0);
         player1.setLocation(LocationType.fueraTokyo);
+        player1.setRecentlyHurt(Boolean.FALSE);
         playerService.savePlayer(player1);
         
         player2=new Player();
@@ -94,6 +90,7 @@ public class PlayerServiceTests {
         player2.setLifePoints(10);
         player2.setVictoryPoints(0);
         player2.setLocation(LocationType.ciudadTokyo);
+        player2.setRecentlyHurt(Boolean.FALSE);
         playerService.savePlayer(player2);
 
         //Esto lo hago ya que la lista de players no se guarda al hacer saveplayer como deberia (solo ocurre en el test)
@@ -147,10 +144,12 @@ public class PlayerServiceTests {
 
         Player playerTest=new Player();
         playerTest.setUser(user1);
+        playerTest.setMonster(Monster.cyberBunny);
         playerTest.setEnergyPoints(0);
         playerTest.setLifePoints(10);
         playerTest.setVictoryPoints(0);
         playerTest.setLocation(LocationType.fueraTokyo);
+        playerTest.setRecentlyHurt(Boolean.FALSE);
         playerTest.setGame(game2);
         
         playerService.savePlayer(playerTest);
@@ -160,7 +159,6 @@ public class PlayerServiceTests {
 
     
     @Test
-    @Disabled
     public void testJoinGame(){
         User testUser=new User();
         testUser.setUsername("UsuarioDePruebaJoin");
@@ -178,10 +176,11 @@ public class PlayerServiceTests {
         gameService.saveGame(gameTest);
 
         Player newPlayer=new Player();
+        newPlayer.setUser(testUser);
         newPlayer.setMonster(Monster.king); 
 
-        playerService.joinGame(testUser, newPlayer, gameTest);
-        assertEquals(1, gameTest.getPlayers().size()); //No se mete no se por que
+        playerService.joinGame(newPlayer, gameTest);
+        assertEquals(1, gameTest.getPlayers().size());
     }
 
     @Test
@@ -363,6 +362,7 @@ public class PlayerServiceTests {
         player.setVictoryPoints(2);
         player.setEnergyPoints(6);
         player.setLocation(LocationType.fueraTokyo);
+        player.setRecentlyHurt(Boolean.FALSE);
         player.setGame(game1);
         player.setUser(user1);
             

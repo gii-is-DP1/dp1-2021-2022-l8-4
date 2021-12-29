@@ -11,7 +11,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.card.CardService;
+import org.springframework.samples.petclinic.card.CardType;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
@@ -91,25 +93,17 @@ public class GameService {
     }
 
     /**
-     * Create a new game in the data base setting its creator.
-     * 
-     * @param creator of the game
-     * @param newGame maxNumberOfPlayers must not be null and between 2 - 6, name
-     *                must not be emtpy
-     * @return Game object if the game was succesfully created, otherwise null
+     * Save game making sure initial values are correct
+     * @param newGame
      */
-    
     @Transactional
-    public Game createNewGame(User creator, Game newGame) {
-        if (!newGame.getName().isEmpty() && newGame.getMaxNumberOfPlayers() != null) {
-            newGame.setCreator(creator);
-            newGame.setTurn(0);
-            saveGame(newGame);
-            return newGame;
-        } else {
-            return null;
-        }
+    public void createNewGame(Game newGame){
+        newGame.setEndTime(null);
+        newGame.setWinner(null);
+        newGame.setTurn(0);
+        saveGame(newGame);
     }
+
 
     /**
      * Delete a game given its creator
@@ -131,13 +125,11 @@ public class GameService {
     }
 
     /**
-     * @return True if the game could be started, false if the game cannot be
-     *         started yet
+     * Start the game if has enough players and the game was not previously started
      */
     @Transactional
-    public Boolean startGameByCreator(User creator, Game game) {
-        Boolean started = false;
-        if (creator.isCreator(game) && game.hasEnoughPlayers() && !game.isStarted()) {
+    public void startGame(Game game) {
+        if (game.hasEnoughPlayers() && !game.isStarted()) {
             game.setTurn(1);
             game.setStartTime(LocalDateTime.now());
 
@@ -145,16 +137,14 @@ public class GameService {
             gameCardService.showCards(game);
 
             saveGame(game);
-            started = true;
         }
-        return started;
     }
 
     @Transactional
     public void turnRoll(Roll roll, Integer gameId) {
         if (roll.getRollAmount() == null || roll.getRollAmount() == 0) {
             roll.rollDiceInitial();
-            
+
         } else if (roll.getRollAmount() < roll.getMaxThrows() && roll.getKeep().length < roll.getValues().size()) {
             List<DiceValues> valoresConservados = Arrays.asList(roll.getKeep());
             roll.rollDiceNext(valoresConservados);
@@ -171,14 +161,22 @@ public class GameService {
         Game game = findGameById(gameId);
         mapGameRepository.putRoll(gameId, new Roll());
 
-        
         game.setTurn(game.getTurn() + 1);
 
         nextPositionTurn(gameId);
-        
-        playerService.useCards(actualTurn(gameId));
+
+        useCardsStartTurn(actualTurn(gameId));
         saveGame(game);
         playerService.startTurn(actualTurnPlayerId(gameId));
+    }
+
+    @Transactional
+    public void useCardsStartTurn(Player player) {
+        for (Card card : player.getAvailableCards()) {
+            if (card.getType() != CardType.DESCARTAR) {
+                card.getCardEnum().effectStartTurn(player, playerService,mapGameRepository);
+            }
+        }
     }
 
     @Transactional
@@ -263,18 +261,8 @@ public class GameService {
     @Transactional
     public Player actualTurn(Integer gameId) {
 
-        Player actualPlayer = new Player();
-        Boolean finished = Boolean.FALSE;
-        while (!finished) {
-            List<Integer> turnList = mapGameRepository.getTurnList(gameId);
-            actualPlayer = playerService.findPlayerById(turnList.get(0));
-            if (!actualPlayer.isDead()) {
-                break;
-            } else {
-                turnList.remove(0);
-                mapGameRepository.putTurnList(gameId, turnList);
-            }
-        }
+        List<Integer> turnList = mapGameRepository.getTurnList(gameId);
+        Player actualPlayer = playerService.findPlayerById(turnList.get(0));
 
         return actualPlayer;
     }
@@ -303,15 +291,24 @@ public class GameService {
     }
 
     @Transactional
+    public void useCardsEndTurn(Player player) {
+        for (Card card : player.getAvailableCards()) {
+            card.getCardEnum().effectEndTurn(player, playerService,mapGameRepository);
+        }
+    }
+
+    @Transactional
     public void handleTurnAction(Integer gameId, Boolean newTurn, Roll keepInfo) {
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
+                useCardsEndTurn(playerService.actualPlayer(gameId));
                 isRecentlyHurtToFalse(gameId);
                 nuevoTurno(gameId);
                 playerService.checkplayers(gameId);
             } else {
 
-                Roll rollData=mapGameRepository.getRoll(gameId); //Esto es temporal, pretendo poner mejor rol por que esta mal hecho
+                Roll rollData = mapGameRepository.getRoll(gameId); // Esto es temporal, pretendo poner
+                                                                                 // mejor rol por que esta mal hecho
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
                 if (rollData.getRollAmount() == rollData.getMaxThrows()) {
@@ -323,7 +320,6 @@ public class GameService {
         }
 
     }
-
 
     public void changePosition(Integer gameId) {
         Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));
