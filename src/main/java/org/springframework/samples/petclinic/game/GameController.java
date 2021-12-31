@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.game.exceptions.NewGameCreationException;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -186,9 +186,15 @@ public class GameController {
             return "games/newGame";
         } else {
             User user = userService.authenticatedUser();
-            newGame.setCreator(user);
-            gameService.saveGame(newGame);
-            return "redirect:/games/" + newGame.getId() + "/lobby";
+
+            try{
+                newGame.setCreator(user);
+                gameService.createNewGame(newGame);
+                return "redirect:/games/" + newGame.getId() + "/lobby";
+            } catch (NewGameCreationException e) {
+                return "redirect:/games/new";
+            }
+
         }
     }
 
@@ -214,10 +220,11 @@ public class GameController {
     @PostMapping("/{gameId}/lobby")
     public String joinGame(@ModelAttribute("newPlayer") @Valid Player newPlayer, BindingResult result, ModelMap modelMap,
             @PathVariable("gameId") int gameId) {
-        User user = userService.authenticatedUser();
 
-        if(!result.hasErrors() && user.equals(newPlayer.getUser())){
+        if(!result.hasErrors()){
             Game game = gameService.findGameById(gameId);
+            User user = userService.authenticatedUser();
+            newPlayer.setUser(user);
             playerService.joinGame(newPlayer, game);
         }
         return "redirect:/games/" + gameId + "/lobby";

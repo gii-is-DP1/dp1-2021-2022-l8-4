@@ -77,7 +77,8 @@ public class PlayerService {
         if (game.hasRoom() &&
                 !game.isStarted() &&
                 game.monsterAvailable(monster) &&
-                !user.hasActivePlayer()) {
+                !user.hasActivePlayer() &&
+                (!user.hasActiveGameAsCreator() || user.isCreator(game) )) {
 
             newPlayer.setGame(game);
             newPlayer.setUser(user);
@@ -193,12 +194,14 @@ public class PlayerService {
 
     }
 
+    @Transactional
     public void useCardsInRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
             card.getCardEnum().effectInRoll(player, playerService,mapGameRepository);
         }
     }
 
+    @Transactional
     public void useCardsAfterRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
             card.getCardEnum().effectAfterRoll(player, playerService,mapGameRepository);
@@ -354,6 +357,7 @@ public class PlayerService {
      * @return True if the player has been hurt (the property recentlyhurt of the
      *         player equals true)
      */
+    @Transactional
     public Boolean isRecentlyHurt(Integer gameId) {
         User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
@@ -367,6 +371,7 @@ public class PlayerService {
     /**
      * @return True if the player is in TokyoCity or TokyoBay.
      */
+    @Transactional
     public Boolean isInTokyo(Integer gameId) {
         User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
@@ -377,6 +382,7 @@ public class PlayerService {
         return result;
     }
 
+    @Transactional
     public void checkplayers(Integer gameId) {
         Game game = gameService.findGameById(gameId);
         Integer numplayers = game.getMaxNumberOfPlayers();
