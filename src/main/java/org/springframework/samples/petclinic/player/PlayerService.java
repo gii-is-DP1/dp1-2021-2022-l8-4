@@ -98,7 +98,7 @@ public class PlayerService {
 
 
     @Transactional
-    public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {
+    public void useRoll(Integer playerIdActualTurn, Roll roll) {
         Player playerActualTurn = findPlayerById(playerIdActualTurn);
         List<Player> playersInGameList = playerActualTurn.getGame().getPlayers();
 
@@ -140,7 +140,7 @@ public class PlayerService {
 
     }
 
-
+    @Transactional
     public void handleDamageRolls(Player actualPlayer, List<Player> playersInGame,Integer damage) {
         for (Player player : playersInGame) {
             if (actualPlayer.getId() != player.getId()) {
@@ -165,6 +165,7 @@ public class PlayerService {
         }
     }
 
+    @Transactional
     public Player enterTokyoInRollIfEmpty(Player actualPlayer,List<Player> listPlayersInGame,Integer damage) {
         Boolean bayInPlay = listPlayersInGame.stream().filter(p -> !p.isDead()).count() > 4;
         Boolean tokyoCityEmpty = !listPlayersInGame.stream()
@@ -185,13 +186,13 @@ public class PlayerService {
         return actualPlayer;
     }
     
-
+    @Transactional
     public void useCardsInRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
             card.getCardEnum().effectInRoll(player, playerService,mapGameRepository);
         }
     }
-
+    @Transactional
     public void useCardsAfterRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
             card.getCardEnum().effectAfterRoll(player, playerService,mapGameRepository);
@@ -274,14 +275,14 @@ public class PlayerService {
     public void damagePlayer(Player player, Integer damage) {
         damage = useCardsInDamage(player, damage);
         Integer damagedLife = player.getLifePoints() - damage;
-
-        if (0 < damagedLife) {
+        Integer minHealth=0;
+        if (minHealth < damagedLife) {
             player.setLifePoints(damagedLife);
         } else {
-            player.setLifePoints(0);
+            player.setLifePoints(minHealth);
             List<Integer> turnList = mapGameRepository.getTurnList(player.getGame().getId());
-            Integer index = turnList.indexOf(player.getId());
-            if (index >= 0) {
+            Integer positionInTurnList = turnList.indexOf(player.getId()); 
+            if (positionInTurnList >= 0) { //If the player is in the turnlist
                 turnList.remove(player.getId());
                 mapGameRepository.putTurnList(player.getGame().getId(), turnList);
             }
@@ -290,6 +291,7 @@ public class PlayerService {
     }
 
     // Use all card from a player that are activated
+    @Transactional
     public Integer useCardsInDamage(Player player, Integer damage) {
         for (Card card : player.getAvailableCards()) {
             damage = card.getCardEnum().effectDamage(player, playerService, damage,mapGameRepository);
@@ -300,20 +302,22 @@ public class PlayerService {
     @Transactional
     public void substractVictoryPointsPlayer(Player player, Integer victoryPoints) {
         Integer victoryPointsNew = player.getLifePoints() - victoryPoints;
-        if (0 < victoryPointsNew) {
+        Integer minVictoryPoints=0;
+        if (minVictoryPoints < victoryPointsNew) {
             player.setVictoryPoints(victoryPointsNew);
         } else {
-            player.setVictoryPoints(0);
+            player.setVictoryPoints(minVictoryPoints);
         }
     }
 
     @Transactional
     public void startTurn(Integer playerId) {
         Player player = findPlayerById(playerId);
+        Integer pointsObtainedInTokyo=2;
         if (player.getLocation().equals(LocationType.ciudadTokyo)
                 || player.getLocation().equals(LocationType.bahiaTokyo)) {
 
-            player.setVictoryPoints(player.getVictoryPoints() + 2);
+            player.setVictoryPoints(player.getVictoryPoints() + pointsObtainedInTokyo);
 
             savePlayer(player);
         }
@@ -346,6 +350,7 @@ public class PlayerService {
      * @return True if the player has been hurt (the property recentlyhurt of the
      *         player equals true)
      */
+    @Transactional
     public Boolean isRecentlyHurt(Integer gameId) {
         User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
@@ -359,6 +364,7 @@ public class PlayerService {
     /**
      * @return True if the player is in TokyoCity or TokyoBay.
      */
+    @Transactional
     public Boolean isInTokyo(Integer gameId) {
         User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
@@ -368,11 +374,12 @@ public class PlayerService {
         }
         return result;
     }
-
+    @Transactional
     public void checkplayers(Integer gameId) {
         Game game = gameService.findGameById(gameId);
         Integer numplayers = game.getMaxNumberOfPlayers();
-        if (numplayers < 5) {
+        Integer minAmmountPlayersTokyoBay=5;
+        if (numplayers < minAmmountPlayersTokyoBay) {
             List<Player> lsplayersAlive = game.playersAlive();
             for (Player player : lsplayersAlive) {
                 if (player.getLocation() == LocationType.bahiaTokyo) {

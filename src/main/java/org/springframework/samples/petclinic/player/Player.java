@@ -36,6 +36,8 @@ import lombok.Setter;
  * @author José María Delgado Sánchez
  */
 
+
+
 @Entity
 @Getter
 @Setter
@@ -94,6 +96,7 @@ public class Player extends BaseEntity {
      */
     public String monsterStatus() {
         String status = "ALIVE";
+        
         if (this.lifePoints <= 0) {
             status = "DEAD";
         }
@@ -102,7 +105,8 @@ public class Player extends BaseEntity {
 
 
     public Boolean isDead() {
-        return this.lifePoints <= 0;
+        Integer minHealth=0;
+        return this.lifePoints <= minHealth;
     }
     /**
      * @return the maximum health points of a player
