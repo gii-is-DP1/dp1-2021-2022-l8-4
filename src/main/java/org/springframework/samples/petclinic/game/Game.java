@@ -1,8 +1,6 @@
 package org.springframework.samples.petclinic.game;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -134,17 +132,6 @@ import lombok.Setter;
        return availableMonsters;
     }
 
-    /**
-     * @return String parsed date
-     */
-    public String parseStartTime(){
-       return this.startTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
-    }
-
-    public String parseEndTime(){
-      return this.endTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
-   }
- 
 
   public List<Player> playersAlive(){
      List<Player> vivos=new ArrayList<Player>();

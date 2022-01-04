@@ -43,7 +43,6 @@ public class User extends BaseEntity {
     private String email;
 
     @NotEmpty
-    @Column(name = "password")
     private String password;
 
     private boolean enabled;

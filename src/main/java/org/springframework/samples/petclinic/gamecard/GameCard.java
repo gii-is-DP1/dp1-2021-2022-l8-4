@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.gamecard;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,7 +31,6 @@ public class GameCard extends BaseEntity {
    @JoinColumn(name = "card_id")
    private Card card;
 
-   @Column(name = "sold")
    private Boolean sold;
 
 }
