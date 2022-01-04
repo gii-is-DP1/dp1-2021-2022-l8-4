@@ -30,21 +30,17 @@ import lombok.Setter;
 public class Achievement extends NamedEntity {
 
    @NotEmpty
-   @Column(name="description")
    private String description;
 
    @NotNull
-   @Column(name="rewardPoints")
    private Integer rewardPoints;
 
    @NotNull
    @Enumerated(value = EnumType.ORDINAL)
-   @Column(name="metric")
    private MetricType metric;
 
    @NotNull
    @Min(0)
-   @Column(name="goal")
    private Long goal;
 
    @ManyToMany(mappedBy = "achievements")

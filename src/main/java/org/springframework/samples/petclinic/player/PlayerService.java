@@ -78,7 +78,8 @@ public class PlayerService {
         if (game.hasRoom() &&
                 !game.isStarted() &&
                 game.monsterAvailable(monster) &&
-                !user.hasActivePlayer()) {
+                !user.hasActivePlayer() &&
+                (!user.hasActiveGameAsCreator() || user.isCreator(game) )) {
 
             newPlayer.setGame(game);
             newPlayer.setUser(user);
@@ -194,6 +195,7 @@ public class PlayerService {
             card.getCardEnum().effectInRoll(player, playerService,mapGameRepository);
         }
     }
+
     @Transactional
     public void useCardsAfterRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
@@ -376,6 +378,7 @@ public class PlayerService {
         }
         return result;
     }
+
     @Transactional
     public void checkplayers(Integer gameId) {
         Game game = gameService.findGameById(gameId);

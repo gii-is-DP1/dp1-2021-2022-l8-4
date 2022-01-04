@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.card.CardType;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.game.exceptions.NewGameCreationException;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.petclinic.player.LocationType;
@@ -123,6 +124,21 @@ public class GameService {
             cardService.newDeck(game);
             gameCardService.showCards(game);
 
+            saveGame(game);
+        }
+    }
+
+    /**
+     * Create a new game
+     * @param game
+     * @throws TooManyGamesCreatedException
+     */
+    @Transactional
+    public void createNewGame(Game game) throws NewGameCreationException{
+        User creator = game.getCreator();
+        if(creator.hasActiveGameAsCreator() || creator.hasActivePlayer()){
+            throw new NewGameCreationException("El usuario ya tiene otro juego activo");
+        }else{
             saveGame(game);
         }
     }
