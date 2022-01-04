@@ -8,6 +8,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.gamecard.GameCard;
@@ -29,6 +30,7 @@ import lombok.Setter;
 public class Card extends BaseEntity {
 
     @NotNull
+    @Min(0)
     @Column(name = "cost")
     private Integer cost;
 
