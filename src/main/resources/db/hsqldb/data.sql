@@ -83,10 +83,6 @@ INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,loc
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (12,4,10,0,0,0,3,14);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (13,5,10,0,0,0,3,15);
 
-INSERT INTO playerStatus(id,player_id,status,amount) VALUES (1, 1, 1,1 );
-INSERT INTO playerStatus(id,player_id,status,amount) VALUES (2, 1, 0,1 );
-INSERT INTO playerStatus(id,player_id,status,amount) VALUES (3, 4, 0,2 );
-
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (1, 1, 1,FALSE);
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (2, 1, 2,FALSE);
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (3, 1, 3,FALSE);
