@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
    
-<petclinic:layout pageName="Users">
+<petclinic:layout pageName="Achievements">
     <jsp:body>
         <h2>Editar logro</h2>
         <form:form modelAttribute="achievement" class="form-horizontal" >
@@ -14,8 +14,8 @@
                 <petclinic:inputField label="Nombre" name="name"/>
                 <petclinic:inputField label="Descripcion" name="description"/>
                 <petclinic:inputField label="Puntos de recompensa" name="rewardPoints"/>
-                <form:select itemLabel="name" path="metric" items="${metrics}" />
                 <petclinic:inputField label="Meta" name="goal"/>
+                <form:select itemLabel="name" path="metric" items="${metrics}" style="margin-left: 17.2%; margin-bottom: 5%;"/>
             </div>
 
             <div class="form-group">
