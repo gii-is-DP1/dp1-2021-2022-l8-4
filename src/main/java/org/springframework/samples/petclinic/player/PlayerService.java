@@ -1,12 +1,14 @@
 package org.springframework.samples.petclinic.player;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+
 import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
@@ -98,10 +100,7 @@ public class PlayerService {
     @Transactional
     public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {
         Player playerActualTurn = findPlayerById(playerIdActualTurn);
-        List<Player> listaJugadoresEnPartida = playerActualTurn.getGame().getPlayers();
-
-        Boolean tokyoCityEmpty = Boolean.FALSE;
-        Boolean tokyoBayEmpty = Boolean.FALSE;
+        List<Player> playersInGameList = playerActualTurn.getGame().getPlayers();
 
         // Use all the cards that are used when the player does the last roll
         useCardsInRoll(playerActualTurn);
@@ -116,52 +115,47 @@ public class PlayerService {
         Integer twos = rollCount.get("twos") + cardValuesCount.get("twos");
         Integer threes = rollCount.get("threes") + cardValuesCount.get("threes");
 
-        // Si tokyo tiene espacio
-        Boolean bayInPlay = listaJugadoresEnPartida.stream().filter(p -> !p.isDead()).count() > 4;
-        tokyoCityEmpty = !listaJugadoresEnPartida.stream()
-                .anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
-        tokyoBayEmpty = !listaJugadoresEnPartida.stream()
-                .anyMatch(p -> p.getLocation().equals(LocationType.bahiaTokyo));
-
-        // CURACION
+        
+        //Handle heal
         if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
             healDamage(playerActualTurn, heal);
         }
 
-        if (tokyoCityEmpty && damage > 0) {
-            playerActualTurn.setLocation(LocationType.ciudadTokyo);
-            playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + 1);
-            damage--;
-        } else if (bayInPlay && tokyoBayEmpty && damage > 0) {
-            playerActualTurn.setLocation(LocationType.bahiaTokyo);
-            playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + 1);
-            damage--;
-        }
-        // Los efectos de los dados
-        for (Player player : listaJugadoresEnPartida) {
-            if (playerIdActualTurn == player.getId()) {
+        //Entering in Tokyo
+        playerActualTurn=enterTokyoInRollIfEmpty(playerActualTurn, playersInGameList,damage);
+        
+        //Handle energy
+        Integer sumaEnergias = playerActualTurn.getEnergyPoints() + energys;
+        playerActualTurn.setEnergyPoints(sumaEnergias);
 
-                // ENERGIAS
-                Integer sumaEnergias = player.getEnergyPoints() + energys;
-                player.setEnergyPoints(sumaEnergias);
+        //Handle score
+        Integer totalPoints = calculatePoints(ones, twos, threes);
+        playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + totalPoints);
 
-                // PUNTUACION
-                Integer totalPoints = calculatePoints(ones, twos, threes);
-                player.setVictoryPoints(player.getVictoryPoints() + totalPoints);
+        //Handle damage
+        handleDamageRolls(playerActualTurn, playersInGameList, damage);
 
-            } else {
-                // Daño a los otros jugadores estando fuera de tokyo
-                if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
+        //Use all the cards that are used after all the roll effects are done
+        useCardsAfterRoll(playerActualTurn);
+
+    }
+
+
+    public void handleDamageRolls(Player actualPlayer, List<Player> playersInGame,Integer damage) {
+        for (Player player : playersInGame) {
+            if (actualPlayer.getId() != player.getId()) {
+                //Damage players in Tokyo
+                if (actualPlayer.getLocation() == LocationType.fueraTokyo) {
                     if (player.getLocation() == LocationType.ciudadTokyo
                             || player.getLocation() == LocationType.bahiaTokyo) {
                         damagePlayer(player, damage);
-                        if (damage >= 1) { // Si se hace daño a otros jugadores
+                        if (damage >= 1) { //If damage is done to other players
                             player.setRecentlyHurt(Boolean.TRUE);
                         }
                     }
-                    // Daño a otros jugadores estando en Tokyo (ciudad o bahía)
-                } else if (playerActualTurn.getLocation() == LocationType.bahiaTokyo
-                        || playerActualTurn.getLocation() == LocationType.ciudadTokyo) {
+                //Damage players out of tokyo
+                } else if (actualPlayer.getLocation() == LocationType.bahiaTokyo
+                        || actualPlayer.getLocation() == LocationType.ciudadTokyo) {
                     if (player.getLocation() == LocationType.fueraTokyo) {
                         damagePlayer(player, damage);
                     }
@@ -169,9 +163,28 @@ public class PlayerService {
             }
             savePlayer(player);
         }
-        useCardsAfterRoll(playerActualTurn);
-
     }
+
+    public Player enterTokyoInRollIfEmpty(Player actualPlayer,List<Player> listPlayersInGame,Integer damage) {
+        Boolean bayInPlay = listPlayersInGame.stream().filter(p -> !p.isDead()).count() > 4;
+        Boolean tokyoCityEmpty = !listPlayersInGame.stream()
+                .anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
+        Boolean tokyoBayEmpty = !listPlayersInGame.stream()
+                .anyMatch(p -> p.getLocation().equals(LocationType.bahiaTokyo));
+
+        if (tokyoCityEmpty && damage > 0) {
+            actualPlayer.setLocation(LocationType.ciudadTokyo);
+            actualPlayer.setVictoryPoints(actualPlayer.getVictoryPoints() + 1);
+            damage--;
+        } else if (bayInPlay && tokyoBayEmpty && damage > 0) {
+            actualPlayer.setLocation(LocationType.bahiaTokyo);
+            actualPlayer.setVictoryPoints(actualPlayer.getVictoryPoints() + 1);
+            damage--;
+        }
+        
+        return actualPlayer;
+    }
+    
 
     public void useCardsInRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
@@ -185,19 +198,16 @@ public class PlayerService {
         }
     }
 
+    //This function is used to count the different roll values of a List of diceValues 
     @Transactional
     public Map<String, Integer> countRollValues(List<DiceValues> values) {
-        Integer heal = 0;
-        Integer damage = 0;
-        Integer energys = 0;
-        Integer ones = 0;
-        Integer twos = 0;
-        Integer threes = 0;
+        Integer heal,damage,energys,ones,twos,threes;
+        heal = damage = energys = ones = twos = threes = 0;
+
         Map<String, Integer> rollValues = new HashMap<String, Integer>();
 
         for (DiceValues valorDado : values) {
-            switch (valorDado) { // Lo estoy dejando de esta manera tan extensa por si luego hay que tener en
-                                 // cuenta las cartas para cada tipo de dado
+            switch (valorDado) { 
                 case HEAL:
                     heal++;
                     break;
@@ -228,6 +238,7 @@ public class PlayerService {
         return rollValues;
     }
 
+    //This function heals a player, without overpassing their max health points
     @Transactional
     public void healDamage(Player player, Integer healPoints) {
         healPoints = player.getLifePoints() + healPoints;
@@ -239,6 +250,7 @@ public class PlayerService {
         }
     }
 
+    //This function calculates the points a player gets with the roll dices
     @Transactional
     public Integer calculatePoints(Integer ones, Integer twos, Integer threes) {
         Integer result = 0;
