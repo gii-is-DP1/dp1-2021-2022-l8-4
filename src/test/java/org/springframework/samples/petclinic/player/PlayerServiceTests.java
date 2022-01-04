@@ -376,29 +376,6 @@ public class PlayerServiceTests {
 		// checks that id has been generated
 		assertThat(player.getId()).isNotNull();
 	}
-    
-
-
-
-    @Test
-    @Disabled
-	@Transactional
-	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){ //Actualmente no comprueba esto en la base de datos, solo lo hace al hacer JoinGame
-        User user1 = this.userService.findUserById(1).get();
-		Player player = new Player();
-		player.setMonster(Monster.alien);
-        player.setLifePoints(10);
-        player.setVictoryPoints(2);
-        player.setEnergyPoints(6);
-        player.setLocation(LocationType.fueraTokyo);
-        player.setGame(game1);
-        player.setUser(user1);
-           
-        this.playerService.savePlayer(player);
-      //  assertThrows(expectedType, executable)    
-
-		}
-
 	
   
     @Test
