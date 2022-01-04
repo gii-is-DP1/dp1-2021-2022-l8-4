@@ -30,8 +30,6 @@ public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
-    private PlayerStatusRepository playerStatusRepository;
-    @Autowired
     private UserService userService;
     @Autowired
     private GameService gameService;
@@ -96,24 +94,6 @@ public class PlayerService {
         return playerRepository.findById(id).get();
     }
 
-    @Transactional
-    public void savePlayerStatus(PlayerStatus pStatus) throws DataAccessException {
-        playerStatusRepository.save(pStatus);
-    }
-
-    @Transactional
-    public List<PlayerStatus> findPlayerStatus(int playerId) {
-        return playerStatusRepository.findByPlayerId(playerId);
-
-    }
-
-    @Transactional(readOnly = true)
-    public List<StatusType> findStatusTypes() throws DataAccessException {
-        List<StatusType> ct = new ArrayList<StatusType>();
-        ct.add(StatusType.Veneno);
-        ct.add(StatusType.Reductor);
-        return ct;
-    }
 
     @Transactional
     public void useRoll(int gameId, Integer playerIdActualTurn, Roll roll) {

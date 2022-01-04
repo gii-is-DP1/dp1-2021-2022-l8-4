@@ -293,9 +293,7 @@ public class GameService {
                 nuevoTurno(gameId);
                 playerService.checkplayers(gameId);
             } else {
-
-                Roll rollData = mapGameRepository.getRoll(gameId); // Esto es temporal, pretendo poner
-                                                                                 // mejor rol por que esta mal hecho
+                Roll rollData = mapGameRepository.getRoll(gameId); 
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
                 if (rollData.getRollAmount() == rollData.getMaxThrows()) {

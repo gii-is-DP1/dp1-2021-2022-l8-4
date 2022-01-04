@@ -73,9 +73,6 @@ public class Player extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player", fetch = FetchType.EAGER)
-    private Set<PlayerStatus> playerStatus;
-
     @Column(columnDefinition = "boolean default false")
     private Boolean recentlyHurt;
     
@@ -91,16 +88,6 @@ public class Player extends BaseEntity {
                     .collect(Collectors.toList());
     }
 
-    protected Set<PlayerStatus> getPlayerStatusInternal() {
-        if (this.playerStatus == null) {
-            this.playerStatus = new HashSet<>();
-        }
-        return this.playerStatus;
-    }
-
-    protected void setPlayerStatusInternal(Set<PlayerStatus> playerStatus) {
-        this.playerStatus = playerStatus;
-    }
     /**
      * @return "ALIVE" if the player's health points is >0 or "DEAD" if the player's health points is <=0
      *
@@ -113,16 +100,6 @@ public class Player extends BaseEntity {
         return status;
     }
 
-    public List<PlayerStatus> getPlayerStatusList() {
-        List<PlayerStatus> listPlayerStatus = new ArrayList<>(getPlayerStatusInternal());
-        return Collections.unmodifiableList(listPlayerStatus);
-    }
-
-    public void addPlayerStatus(PlayerStatus playerStatus) {
-        getPlayerStatusInternal().add(playerStatus);
-        playerStatus.setPlayer(this);
-
-    }
 
     public Boolean isDead() {
         return this.lifePoints <= 0;
