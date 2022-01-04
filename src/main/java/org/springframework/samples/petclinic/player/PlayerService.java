@@ -21,6 +21,7 @@ import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 /**
  * @author Ricardo Nadal Garcia
  * @author Noelia López Durán
@@ -122,7 +123,7 @@ public class PlayerService {
         }
 
         //Entering in Tokyo
-        playerActualTurn=enterTokyoInRollIfEmpty(playerActualTurn, playersInGameList,damage);
+        damage=enterTokyoInRollIfEmpty(playerActualTurn, playersInGameList,damage);
         
         //Handle energy
         Integer sumaEnergias = playerActualTurn.getEnergyPoints() + energys;
@@ -165,8 +166,9 @@ public class PlayerService {
         }
     }
 
+    
     @Transactional
-    public Player enterTokyoInRollIfEmpty(Player actualPlayer,List<Player> listPlayersInGame,Integer damage) {
+    public Integer enterTokyoInRollIfEmpty(Player actualPlayer,List<Player> listPlayersInGame,Integer damage) {
         Boolean bayInPlay = listPlayersInGame.stream().filter(p -> !p.isDead()).count() > 4;
         Boolean tokyoCityEmpty = !listPlayersInGame.stream()
                 .anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
@@ -183,7 +185,7 @@ public class PlayerService {
             damage--;
         }
         
-        return actualPlayer;
+        return damage;
     }
     
     @Transactional
