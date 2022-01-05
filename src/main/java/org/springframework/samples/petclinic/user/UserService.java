@@ -1,6 +1,6 @@
 package org.springframework.samples.petclinic.user;
 
-import java.io.Console;
+
 import java.util.Optional;
 
 import javax.transaction.Transactional;

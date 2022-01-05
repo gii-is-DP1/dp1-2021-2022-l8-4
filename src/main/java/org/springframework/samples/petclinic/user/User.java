@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.modules.statistics.achievement.Achievement;
@@ -44,7 +43,6 @@ public class User extends BaseEntity {
     private String email;
 
     @NotEmpty
-    @Column(name = "password")
     private String password;
 
     private boolean enabled;
@@ -65,16 +63,14 @@ public class User extends BaseEntity {
     }
 
     @ManyToMany
-    @JoinTable(name = "users_achievements",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "achievement_id"))
+    @JoinTable(name = "users_achievements", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "achievement_id"))
     private Set<Achievement> achievements;
 
     /**
      * @return true if the user has an active player in a game/lobby
      */
     public Boolean hasActivePlayer() {
-        if (  this.players == null || this.players.isEmpty()) {
+        if (this.players == null || this.players.isEmpty()) {
             return false;
         } else {
             return this.players.stream()
@@ -94,5 +90,20 @@ public class User extends BaseEntity {
                 .filter(g -> g.equals(game))
                 .findFirst()
                 .isPresent();
+    }
+
+    /**
+     * @return true if the user has an active game previously created by the user
+     */
+    public Boolean hasActiveGameAsCreator() {
+        if (this.games == null || this.games.isEmpty()) {
+            return false;
+        } else {
+            return this.games.stream()
+                    .filter(g -> !g.isStarted() && g.getCreator().getId().equals(this.id))
+                    .findFirst()
+                    .isPresent();
+
+        }
     }
 }

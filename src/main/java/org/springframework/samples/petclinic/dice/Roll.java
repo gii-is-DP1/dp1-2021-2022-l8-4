@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.dice;
 import java.util.ArrayList;
 import java.util.List;
 
-import javassist.expr.NewArray;
 import lombok.Getter;
 import lombok.Setter;
 

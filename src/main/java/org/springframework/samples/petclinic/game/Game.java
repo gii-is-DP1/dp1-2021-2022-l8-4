@@ -1,8 +1,6 @@
 package org.springframework.samples.petclinic.game;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,9 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.model.NamedEntity;
@@ -46,8 +41,6 @@ import lombok.Setter;
     @JoinColumn(name = "user_id")
     private User creator;
 
-    @NotNull
-    @Min(0)
     @Column(name="turn")
     private Integer turn;
 
@@ -60,9 +53,6 @@ import lombok.Setter;
     @Column(name="end_time")
     private LocalDateTime endTime;
 
-    @NotNull
-    @Min(2)
-    @Max(6)
     @Column(name = "max_number_of_players")
     private Integer maxNumberOfPlayers;
 
@@ -70,9 +60,6 @@ import lombok.Setter;
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
 
-
-    @Setter
-    @Getter
     @OneToMany(mappedBy = "game")
     private List<GameCard> gameCards;
 
@@ -145,17 +132,6 @@ import lombok.Setter;
        return availableMonsters;
     }
 
-    /**
-     * @return String parsed date
-     */
-    public String parseStartTime(){
-       return this.startTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
-    }
-
-    public String parseEndTime(){
-      return this.endTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
-   }
- 
 
   public List<Player> playersAlive(){
      List<Player> vivos=new ArrayList<Player>();

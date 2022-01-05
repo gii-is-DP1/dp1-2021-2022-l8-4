@@ -67,7 +67,6 @@
                                         <td><form:radiobuttons path="monster" items="${availableMonsters}" itemLabel="name"/></td>
                                     </tr>
 
-                                    <input type="hidden" value="${currentUser.id}" name="user"></input>
                                     <input type="hidden" value="0" name="energyPoints"></input>
                                     <input type="hidden" value="0" name="lifePoints"></input>
                                     <input type="hidden" value="0" name="victoryPoints"></input>
@@ -81,9 +80,8 @@
                             </c:if>
 
                             <c:if test="${game.creator.id == currentUser.id}">
-                                <form action="/games/${game.id}/lobby" method="delete">
-                                    <button type="submit" >Borrar partida</button>
-                                </form>
+                                
+                                <a href="/games/${game.id}/lobby/delete"><button type="submit" >Borrar partida</button></a>
                                 <a href="/games/${game.id}/start"><button type="button" >Iniciar partida</button></a>
                             </c:if>
 

@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.card.CardService;
 import org.springframework.samples.petclinic.card.CardType;
 import org.springframework.samples.petclinic.dice.DiceValues;
 import org.springframework.samples.petclinic.dice.Roll;
+import org.springframework.samples.petclinic.game.exceptions.NewGameCreationException;
 import org.springframework.samples.petclinic.gamecard.GameCardService;
 import org.springframework.samples.petclinic.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.petclinic.player.LocationType;
@@ -49,6 +50,9 @@ public class GameService {
 
     @Autowired
     private AchievementService achievementService;
+
+    @Autowired
+    private MapGameRepository mapGameRepository;
 
     @Transactional
     public Iterable<Game> findAll() {
@@ -90,24 +94,11 @@ public class GameService {
     }
 
     /**
-     * Save game making sure initial values are correct
-     * @param newGame
-     */
-    @Transactional
-    public void createNewGame(Game newGame){
-        newGame.setEndTime(null);
-        newGame.setWinner(null);
-        newGame.setTurn(0);
-        saveGame(newGame);
-    }
-
-
-    /**
      * Delete a game given its creator
      */
     @Transactional
-    public void deleteGameByCreator(User creator, Game game) {
-        if (creator.isCreator(game)) {
+    public void deleteGame(Game game) {
+        if (!game.isStarted()) {
             gameRepository.delete(game);
         }
     }
@@ -137,6 +128,21 @@ public class GameService {
         }
     }
 
+    /**
+     * Create a new game
+     * @param game
+     * @throws TooManyGamesCreatedException
+     */
+    @Transactional
+    public void createNewGame(Game game) throws NewGameCreationException{
+        User creator = game.getCreator();
+        if(creator.hasActiveGameAsCreator() || creator.hasActivePlayer()){
+            throw new NewGameCreationException("El usuario ya tiene otro juego activo");
+        }else{
+            saveGame(game);
+        }
+    }
+
     @Transactional
     public void turnRoll(Roll roll, Integer gameId) {
         if (roll.getRollAmount() == null || roll.getRollAmount() == 0) {
@@ -150,13 +156,13 @@ public class GameService {
             roll.rollDiceNext(valoresConservados);
             roll.setRollAmount(roll.getMaxThrows());
         }
-        MapGameRepository.getInstance().putRoll(gameId, roll);
+        mapGameRepository.putRoll(gameId, roll);
     }
 
     @Transactional
     public void nuevoTurno(int gameId) {
         Game game = findGameById(gameId);
-        MapGameRepository.getInstance().putRoll(gameId, new Roll());
+        mapGameRepository.putRoll(gameId, new Roll());
 
         game.setTurn(game.getTurn() + 1);
 
@@ -171,14 +177,14 @@ public class GameService {
     public void useCardsStartTurn(Player player) {
         for (Card card : player.getAvailableCards()) {
             if (card.getType() != CardType.DESCARTAR) {
-                card.getCardEnum().effectStartTurn(player, playerService);
+                card.getCardEnum().effectStartTurn(player, playerService,mapGameRepository);
             }
         }
     }
 
     @Transactional
     public void nextPositionTurn(Integer gameId) {
-        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+        List<Integer> turnList = mapGameRepository.getTurnList(gameId);
 
         Boolean finished = Boolean.FALSE;
 
@@ -186,7 +192,7 @@ public class GameService {
             Player player = playerService.findPlayerById(turnList.get(1));
             if (!player.isDead()) {
                 turnList.add(turnList.remove(0));
-                MapGameRepository.getInstance().putTurnList(gameId, turnList);
+                mapGameRepository.putTurnList(gameId, turnList);
                 break;
             } else {
                 turnList.remove(1);
@@ -258,7 +264,7 @@ public class GameService {
     @Transactional
     public Player actualTurn(Integer gameId) {
 
-        List<Integer> turnList = MapGameRepository.getInstance().getTurnList(gameId);
+        List<Integer> turnList = mapGameRepository.getTurnList(gameId);
         Player actualPlayer = playerService.findPlayerById(turnList.get(0));
 
         return actualPlayer;
@@ -290,7 +296,7 @@ public class GameService {
     @Transactional
     public void useCardsEndTurn(Player player) {
         for (Card card : player.getAvailableCards()) {
-            card.getCardEnum().effectEndTurn(player, playerService);
+            card.getCardEnum().effectEndTurn(player, playerService,mapGameRepository);
         }
     }
 
@@ -303,14 +309,12 @@ public class GameService {
                 nuevoTurno(gameId);
                 playerService.checkplayers(gameId);
             } else {
-
-                Roll rollData = MapGameRepository.getInstance().getRoll(gameId); // Esto es temporal, pretendo poner
-                                                                                 // mejor rol por que esta mal hecho
+                Roll rollData = mapGameRepository.getRoll(gameId); 
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
                 if (rollData.getRollAmount() == rollData.getMaxThrows()) {
                     Integer playerIdActualTurn = actualTurnPlayerId(gameId);
-                    playerService.useRoll(gameId, playerIdActualTurn, rollData);
+                    playerService.useRoll(playerIdActualTurn, rollData);
 
                 }
             }
@@ -318,6 +322,7 @@ public class GameService {
 
     }
 
+    @Transactional
     public void changePosition(Integer gameId) {
         Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));
         User user = userService.authenticatedUser();
@@ -329,6 +334,7 @@ public class GameService {
         playerService.savePlayer(playerActualTurn);
     }
 
+    @Transactional
     public void isRecentlyHurtToFalse(Integer gameId) {
         List<Player> lsplayer = findPlayerList(gameId);
         for (Player player : lsplayer) {

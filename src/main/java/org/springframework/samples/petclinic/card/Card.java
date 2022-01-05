@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.gamecard.GameCard;
 import org.springframework.samples.petclinic.model.BaseEntity;
-import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.playercard.PlayerCard;
 
 import lombok.Getter;
@@ -30,15 +29,12 @@ import lombok.Setter;
 public class Card extends BaseEntity {
 
     @NotNull
-    @Column(name = "cost")
     private Integer cost;
 
     @Enumerated(value = EnumType.ORDINAL)
-    @Column(name = "type")
     private CardType type;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(name="card_enum")
     private CardEnum cardEnum;
 
     @OneToMany(mappedBy = "card")

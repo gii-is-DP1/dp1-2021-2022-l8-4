@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
+import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -47,20 +49,8 @@ public class UserServiceTest {
         assertThat(user.getId()).isNotNull();
         Integer id = userService.findUserByUsername("rosmolarr").getId();
         assertEquals(user.getId(), id);
-        
     }
 
-    @Test
-    public void testUpdateCardName() throws Exception {
-        Optional<User> user = userService.findUserById(1);
-
-        String newName = "Admin";
-        user.get().setUsername(newName);
-        this.userService.saveUser(user.get());
-
-        user = this.userService.findUserById(1);
-        assertThat(user.get().getUsername()).isEqualTo(newName);
-    }
     
     @Test
     public void testFindUserById() {
@@ -87,7 +77,7 @@ public class UserServiceTest {
     @Test
 	public void testCountUsers() throws Exception {
         Integer contador1 = userService.userCount();
-        Integer numero = 9;
+        Integer numero = 15;
     
         assertEquals(contador1, numero);
         User user = new User();
@@ -97,7 +87,7 @@ public class UserServiceTest {
         userService.saveUser(user);
 
         Integer contador2NewUser = userService.userCount();
-        numero = 10;
+        numero = 16;
         assertEquals(contador2NewUser, numero);
 
 	}
@@ -106,7 +96,7 @@ public class UserServiceTest {
 	public void testFindAllUsers() throws Exception {
         List<User> listcont= new ArrayList<>();
         userService.findAll().forEach(listcont::add);
-        Integer numero = 9;
+        Integer numero = 15;
         Integer contadorFind = listcont.size();
         assertEquals(contadorFind, numero);
 
@@ -119,7 +109,7 @@ public class UserServiceTest {
         List<User> listcont2= new ArrayList<>();
         userService.findAll().forEach(listcont2::add);
         Integer contadorFind2 = listcont2.size();
-        numero = 10;
+        numero = 16;
         assertEquals(contadorFind2, numero);
 	}
 
