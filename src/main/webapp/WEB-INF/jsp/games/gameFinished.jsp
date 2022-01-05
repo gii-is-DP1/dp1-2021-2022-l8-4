@@ -4,6 +4,7 @@
             <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
                     <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+                    <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
                         <petclinic:layout pageName="games">
                             <h2>Partida terminada :</h2>
@@ -39,10 +40,10 @@
                                                 <c:out value="${game.winner}" />
                                             </td>
                                             <td>
-                                                <c:out value="${game.parseStartTime()}" />
+                                                <petclinic:localDateTime  dateTimeValue= "${game.startTime}" />
                                             </td>
                                             <td>
-                                                <c:out value="${game.parseEndTime()}" />
+                                                <petclinic:localDateTime  dateTimeValue= "${game.endTime}" />
                                             </td>
                                             <td>
                                                 <c:out value="${game.playersAmount()}" /> 

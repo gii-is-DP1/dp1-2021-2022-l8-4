@@ -190,7 +190,6 @@ public class PlayerServiceTests {
 
     @Test
     public void testHealRoll(){
-        Game game=gameService.findGameById(game1.getId()); //El problema es que no se guardan los players en la lista de players al crearlos, cuando debería
         Roll roll=new Roll();
         List<DiceValues> valoresCuracion=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -200,7 +199,7 @@ public class PlayerServiceTests {
         roll.setValues(valoresCuracion);
         playerService.savePlayer(player1);
         
-        playerService.useRoll(game.getId(), player1.getId(), roll);
+        playerService.useRoll(player1.getId(), roll);
         
         assertEquals(player1.getLifePoints(),7);
     }
@@ -217,7 +216,7 @@ public class PlayerServiceTests {
         roll.setValues(valoresCuracion);
         playerService.savePlayer(player1);
         
-        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        playerService.useRoll(player1.getId(), roll);
         
         assertEquals(player1.getLifePoints(),1);
     }
@@ -231,7 +230,7 @@ public class PlayerServiceTests {
         }
         roll.setValues(damageValues);
         
-        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        playerService.useRoll(player1.getId(), roll);
         
         assertEquals(player2.getLifePoints(),4);
     }
@@ -245,7 +244,7 @@ public class PlayerServiceTests {
         }
         roll.setValues(damageValues);
         
-        playerService.useRoll(game1.getId(), player2.getId(), roll);
+        playerService.useRoll(player2.getId(), roll);
         
         assertEquals(player1.getLifePoints(),4);
     }
@@ -273,7 +272,7 @@ public class PlayerServiceTests {
         
         roll.setValues(onesValues);
         
-        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        playerService.useRoll(player1.getId(), roll);
         
         assertEquals(player1.getVictoryPoints(),4);
     }
@@ -288,7 +287,7 @@ public class PlayerServiceTests {
         
         roll.setValues(twosValues);
         
-        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        playerService.useRoll(player1.getId(), roll);
 
         assertEquals(player1.getVictoryPoints(),5);
     }
@@ -303,7 +302,7 @@ public class PlayerServiceTests {
         
         roll.setValues(threesValues);
         
-        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        playerService.useRoll(player1.getId(), roll);
 
         assertEquals(player1.getVictoryPoints(),6);
     }
@@ -318,7 +317,7 @@ public class PlayerServiceTests {
         
         roll.setValues(energyValues);
         
-        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        playerService.useRoll(player1.getId(), roll);
 
         assertEquals(player1.getEnergyPoints(),6);
     }
@@ -347,14 +346,10 @@ public class PlayerServiceTests {
         }
         roll.setValues(damageValues);
         
-        playerService.useRoll(game1.getId(), player1.getId(), roll);
+        playerService.useRoll(player1.getId(), roll);
         
         assertEquals(player1.getLocation(),LocationType.ciudadTokyo);
-    }
-
-
-    
-
+    } 
 
     @Test   
 	@Transactional
@@ -376,29 +371,6 @@ public class PlayerServiceTests {
 		// checks that id has been generated
 		assertThat(player.getId()).isNotNull();
 	}
-    
-
-
-
-    @Test
-    @Disabled
-	@Transactional
-	public void shouldThrowExceptionInsertingPlayersWithTheSameMonsterName(){ //Actualmente no comprueba esto en la base de datos, solo lo hace al hacer JoinGame
-        User user1 = this.userService.findUserById(1).get();
-		Player player = new Player();
-		player.setMonster(Monster.alien);
-        player.setLifePoints(10);
-        player.setVictoryPoints(2);
-        player.setEnergyPoints(6);
-        player.setLocation(LocationType.fueraTokyo);
-        player.setGame(game1);
-        player.setUser(user1);
-           
-        this.playerService.savePlayer(player);
-      //  assertThrows(expectedType, executable)    
-
-		}
-
 	
   
     @Test

@@ -67,7 +67,6 @@
                                         <td><form:radiobuttons path="monster" items="${availableMonsters}" itemLabel="name"/></td>
                                     </tr>
 
-                                    <input type="hidden" value="${currentUser.id}" name="user"></input>
                                     <input type="hidden" value="0" name="energyPoints"></input>
                                     <input type="hidden" value="0" name="lifePoints"></input>
                                     <input type="hidden" value="0" name="victoryPoints"></input>

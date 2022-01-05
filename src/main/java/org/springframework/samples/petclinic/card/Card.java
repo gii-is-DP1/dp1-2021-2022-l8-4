@@ -30,16 +30,13 @@ import lombok.Setter;
 public class Card extends BaseEntity {
 
     @NotNull
-    @Min(0)
-    @Column(name = "cost")
+    //@Min(0) //MIRAR CON RICK
     private Integer cost;
 
     @Enumerated(value = EnumType.ORDINAL)
-    @Column(name = "type")
     private CardType type;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(name="card_enum")
     private CardEnum cardEnum;
 
     @OneToMany(mappedBy = "card")
