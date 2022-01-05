@@ -110,7 +110,7 @@ public class GameServiceTests {
         gameService.changePosition(1);
         LocationType secondPlayerLocation = playerActualTurn.getLocation();
         assertThat(secondPlayerLocation.toString()).isNotEqualTo(firstPlayerLocation.toString());
-
+        
     }
 
 
