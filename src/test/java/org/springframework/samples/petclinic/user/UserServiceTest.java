@@ -33,6 +33,8 @@ public class UserServiceTest {
     @Autowired
     private AuthoritiesService authoritiesService;
 
+    private Integer numeroUsuarios = 20;
+
     @Test
     public void testGetCurrentUserId() {
         Integer currentUserId = userService.getCurrentUserId("user2");
@@ -77,7 +79,7 @@ public class UserServiceTest {
     @Test
 	public void testCountUsers() throws Exception {
         Integer contador1 = userService.userCount();
-        Integer numero = 15;
+        Integer numero = numeroUsuarios;
     
         assertEquals(contador1, numero);
         User user = new User();
@@ -87,7 +89,7 @@ public class UserServiceTest {
         userService.saveUser(user);
 
         Integer contador2NewUser = userService.userCount();
-        numero = 16;
+        numero += 1;
         assertEquals(contador2NewUser, numero);
 
 	}
@@ -96,7 +98,7 @@ public class UserServiceTest {
 	public void testFindAllUsers() throws Exception {
         List<User> listcont= new ArrayList<>();
         userService.findAll().forEach(listcont::add);
-        Integer numero = 15;
+        Integer numero = numeroUsuarios;
         Integer contadorFind = listcont.size();
         assertEquals(contadorFind, numero);
 
@@ -109,7 +111,7 @@ public class UserServiceTest {
         List<User> listcont2= new ArrayList<>();
         userService.findAll().forEach(listcont2::add);
         Integer contadorFind2 = listcont2.size();
-        numero = 16;
+        numero +=1 ;
         assertEquals(contadorFind2, numero);
 	}
 
