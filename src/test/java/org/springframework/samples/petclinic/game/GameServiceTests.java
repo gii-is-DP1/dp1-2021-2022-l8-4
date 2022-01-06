@@ -40,9 +40,6 @@ public class GameServiceTests {
     @Autowired
     private PlayerService playerService;
 
-    @Autowired
-    private UserService userService;
-
 
     @Test
     public void testSaveCardIntoDatabaseAndGenerateId(){
@@ -67,27 +64,6 @@ public class GameServiceTests {
         assertThat(notOnGoingGames).isFalse();
     }
 
-    @Disabled
-    @Test
-    public void testCreateNewGamePositive(){
-        /* User user = userService.findUserById(1).get();
-        Game g = new Game();
-        Game game = gameService.createNewGame(g);
-        assertThat(game.getCreator()).isEqualTo(user);
-        assertThat(game.getTurn()).isZero();*/
-    }
-    // caso negativo ?
-
-    @Test 
-    public void testDeleteGameByCreator(){
-        User user = userService.findUserById(1).get();
-        Game game = new Game();
-        game.setCreator(user);
-        gameService.deleteGameByCreator(user, game);
-        assertThat(gameService.findOnGoingGames().contains(game)).isFalse();
-    } 
-    // borrar juegos ya terminados?
-
 
     @Test
     public void testIsRecentlyHurtToFalse(){
@@ -106,7 +82,7 @@ public class GameServiceTests {
     @Test
     public void testChangePosition(){
 
-        // hacer cuando esté la bd de tests
+        //actualizar
         Player playerActualTurn = playerService.findPlayerById(gameService.actualTurnPlayerId(1));
         LocationType firstPlayerLocation = playerActualTurn.getLocation();
         gameService.changePosition(1);
