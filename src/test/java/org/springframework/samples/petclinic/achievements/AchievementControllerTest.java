@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Test;
 import org.junit.internal.ExactComparisonCriteria;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ public class AchievementControllerTest {
 	private AchievementService achievementService;
 
     @WithMockUser(value = "spring", authorities = {"admin"})
+    @Disabled
     @Test
     public void testAchievementCreationControllerOk() throws Exception {
         mockMvc.perform(get("/achievements"))
