@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EnumType;
@@ -21,6 +23,8 @@ import org.mockito.internal.stubbing.answers.Returns;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.petclinic.dice.DiceValues;
+import org.springframework.samples.petclinic.dice.Roll;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GameService;
 import org.springframework.stereotype.Service;
@@ -30,6 +34,7 @@ import org.springframework.stereotype.Service;
 /**
  *@author Jose Maria Delgado Sanchez
  *@author Sara Cruz Duárez
+ *@author Noelia López Durán
  */
 
 public class GameServiceTests {
@@ -39,6 +44,13 @@ public class GameServiceTests {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired 
+    private UserService userService;
+
+    private Integer numberOfGames = 4;
+    private Integer gameFinished = 1;
+
 
 
     @Test
@@ -91,6 +103,50 @@ public class GameServiceTests {
         
     }
 
+    @Test
+    public void testShouldSaveGame(){
+        List<Game> listaInicial = new ArrayList<>();
+        gameService.findAll().forEach(listaInicial::add);
+        Integer numinicial = listaInicial.size();//conteo manual
+        assertEquals(numinicial, numberOfGames);
+        Integer conteoInicial = gameService.gameCount();//para comprobar gameCount()
+        assertEquals(conteoInicial, numberOfGames);
 
+        User creator = (User) userService.findUserById(5).get();//Un usuario cualquiera para crear una partida
+        Game game = new Game();
+        game.setCreator(creator);
+        game.setName("Partida insertada");
+        game.setTurn(1);
+        game.setStartTime(LocalDateTime.now());
+        game.setMaxNumberOfPlayers(3);
+        gameService.saveGame(game);
+
+        List<Game> listaFinal = new ArrayList<>();
+        gameService.findAll().forEach(listaFinal::add);
+        Integer numfinal = listaFinal.size();
+        Integer numberOfGamesfinal = numberOfGames+1;
+        Integer conteoFinal = gameService.gameCount();
+        assertEquals(conteoFinal, numberOfGamesfinal);
+        assertEquals(numfinal, numberOfGamesfinal);
+    }
+    
+    @Test
+    public void testOnePlayerShouldDie(){
+        Integer numberPlayers = 5; 
+        Game game = gameService.findGameById(4);
+        Integer playerIdActualTurn = gameService.actualTurnPlayerId(4);
+        Integer numPlayersTest = gameService.findPlayerList(4).size();
+        assertEquals(numPlayersTest, numberPlayers);
+        //Vamos a crear una tirada a mano para matar al player 1 
+        Roll roll = new Roll();
+        DiceValues[] guardados = new DiceValues[]{DiceValues.ATTACK,
+            DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK};
+        roll.setKeep(guardados);
+        roll.setRollAmount(2);
+        playerService.useRoll(playerIdActualTurn, roll);
+        numberPlayers = numberPlayers-1;
+        Integer numPlayersTest2 = game.playersAlive().size();
+        assertEquals(numPlayersTest2, numberPlayers);
+    }
 
 }
