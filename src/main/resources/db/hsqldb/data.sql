@@ -71,12 +71,17 @@ INSERT INTO users(id,username,email,password,enabled) VALUES (19,'BigBilly','big
 INSERT INTO authorities(id,userid,authority) VALUES (19,19,'user');
 INSERT INTO users(id,username,email,password,enabled) VALUES (20,'luciia12','luciia12@email.com','contra', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (20,20,'user');
-
+--Usuarios partida 2 jugadores
+INSERT INTO users(id,username,email,password,enabled) VALUES (21,'Kleon','kleon@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (21,21,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (22,'Kaiipo','kaiipo@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (22,22,'user');
 
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (1,'Partida tremenda',1,'3',null,'2020-11-01T10:00:00','2020-11-01T11:00:00',6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (2,'Partida tremenda ya jugada',2,'15','user2','2020-11-01T10:00:00','2020-11-01T11:00:00',6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (3,'Partida Test Empezada',10,'1',null,'2020-11-10T10:30:00',null,6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (4,'Partida Test 5 jugadores',16,'8',null,'2020-11-10T10:12:54',null,6);
+INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (5,'Partida Test 2 jugadores',21,'10',null,'2021-10-10T11:09:54',null,2);
 
 
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (1,1,0,2,10,0,1,1);
@@ -99,6 +104,10 @@ INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,loc
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (16,2,10,0,30,2,4,18);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (17,3,10,0,30,0,4,19);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (18,4,10,0,30,0,4,20);
+-- Players para test con 2 usuarios
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (19,0,10,0,30,0,5,21);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (20,4,2,3,30,1,5,22);
+
 
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (1, 1, 1,FALSE);
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (2, 1, 2,FALSE);
