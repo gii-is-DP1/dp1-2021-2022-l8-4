@@ -7,6 +7,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.kingoftokyo.gamecard.GameCard;
@@ -28,6 +29,7 @@ import lombok.Setter;
 public class Card extends BaseEntity {
 
     @NotNull
+    //@Min(0) //MIRAR CON RICK
     private Integer cost;
 
     @Enumerated(value = EnumType.ORDINAL)

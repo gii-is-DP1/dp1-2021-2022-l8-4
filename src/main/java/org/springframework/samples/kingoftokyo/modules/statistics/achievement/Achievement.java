@@ -32,6 +32,7 @@ public class Achievement extends NamedEntity {
    private String description;
 
    @NotNull
+   @Min(0)
    private Integer rewardPoints;
 
    @NotNull
