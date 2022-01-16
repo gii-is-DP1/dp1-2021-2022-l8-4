@@ -66,15 +66,6 @@ public class GameController {
         return view;
     }
 
-    @GetMapping("/{gameId}/players")
-    public String gamePlayers(ModelMap modelMap, @PathVariable("gameId") int gameId) {
-        String view = "games/playersList";
-        Iterable<Player> players = gameService.findPlayerList(gameId);
-        Game game = gameService.findGameById(gameId);
-        modelMap.addAttribute("players", players);
-        modelMap.addAttribute("game", game);
-        return view;
-    }
 
     @GetMapping("/{gameId}/finished")
     public String gameFinished(ModelMap modelMap, @PathVariable("gameId") int gameId) {
@@ -95,7 +86,7 @@ public class GameController {
         Game game = gameService.findGameById(gameId);
 
         if (game.isFinished()) {
-            return "redirect:/games/{gameId}/finished";
+            return "redirect:/games/" + gameId + "/finished";
         }
 
         Iterable<Player> players = gameService.findPlayerList(gameId);
@@ -147,13 +138,13 @@ public class GameController {
 
         gameService.handleTurnAction(gameId, newTurn, roll);
 
-        return "redirect:/games/{gameId}/playing";
+        return "redirect:/games/" + gameId + "/playing";
     }
 
     @GetMapping("/{gameId}/exitTokyo")
     public String exitTokyo(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         gameService.handleExitTokyo(gameId);
-        return "redirect:/games/{gameId}/playing";
+        return "redirect:/games/" + gameId + "/playing";
     }
 
 
