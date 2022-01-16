@@ -1,10 +1,18 @@
 package org.springframework.samples.kingoftokyo.modules.statistics.metrics;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.samples.kingoftokyo.game.Game;
+import org.springframework.samples.kingoftokyo.game.GameRepository;
+import org.springframework.samples.kingoftokyo.player.Monster;
+import org.springframework.samples.kingoftokyo.player.PlayerRepository;
 import org.springframework.stereotype.Service;
 
 
@@ -13,6 +21,12 @@ public class MetricService {
 
     @Autowired
     private MetricRepository metricRepository;
+
+    @Autowired
+    private GameRepository gameRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     /**
      * 
@@ -46,6 +60,46 @@ public class MetricService {
                 break;
         }
         return null;
+    }
+
+    @Transactional
+    public Integer findTotalGamesApp() {
+        return metricRepository.totalGamesOfApp();
+    }
+    
+    @Transactional
+    public Integer findTimeGames() {
+        Integer duration = 0;
+        Integer gamesCounter = 0;
+        Iterable<Game> games = this.gameRepository.findAll();
+        for(Game game: games){
+            if(game.isFinished()){
+                gamesCounter+=1;
+                duration += game.getDuration();
+            }
+        }
+        return duration/gamesCounter;
+    }
+
+    @Transactional
+    public Monster findMonsterModa(){
+        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();				
+        List<Integer> monsters = this.playerRepository.listMonster();
+        for (Integer elemento: monsters){			
+        if (m.containsKey(elemento))					
+            m.put(elemento,m.get(elemento)+1);
+        else
+            m.put(elemento,1);			
+        }
+        int moda = 0, mayor = 0;
+        for (HashMap.Entry<Integer, Integer> entry : m.entrySet()) {
+            if (entry.getValue() > mayor) {
+                mayor = entry.getValue();
+                moda = entry.getKey();
+            }
+        }
+        Monster monstermoda = Monster.values()[moda];
+        return monstermoda;
     }
 
 }

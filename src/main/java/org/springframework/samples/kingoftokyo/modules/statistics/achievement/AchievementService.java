@@ -54,6 +54,8 @@ public class AchievementService {
         achievementRepository.delete(achievement);
     }
 
+
+
     /**
      * Given an user, returns the score linked to each metric
      * 

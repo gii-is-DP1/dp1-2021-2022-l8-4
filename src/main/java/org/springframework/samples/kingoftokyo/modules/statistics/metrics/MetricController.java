@@ -16,7 +16,7 @@ import java.util.Map;
 */
 @Controller
 @RequestMapping("/statistics")
-public class MetricControler {
+public class MetricController {
     
     @Autowired
     private MetricService metricService;
@@ -40,7 +40,11 @@ public class MetricControler {
 
     
     @GetMapping()
-    public String getStatistics(Map<String, Object> model) {	    
+    public String getStatistics(Map<String, Object> model, ModelMap modelMap) {	    
+      modelMap.addAttribute("totalGames", metricService.findTotalGamesApp());
+      modelMap.addAttribute("mediumGameTime", metricService.findTimeGames());
+      modelMap.addAttribute("modaMonstername", metricService.findMonsterModa().getName());
+      modelMap.addAttribute("modaMonstericon", metricService.findMonsterModa().getIcon());
       return "modules/statistics/metrics/statistics";
     }
 }

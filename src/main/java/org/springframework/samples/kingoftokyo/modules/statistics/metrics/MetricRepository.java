@@ -24,4 +24,12 @@ public interface MetricRepository extends CrudRepository<Game, Integer> {
 	 */
     @Query("SELECT new org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData(player.user, COUNT(player)) FROM Player player WHERE player.game.winner IS player.user.username GROUP BY player.user.id ORDER BY count(player) DESC")
     Page<MetricData> winsRanking(Pageable pageable) throws DataAccessException;
+
+    /**
+	 * Retrieve number of games.
+	 * @return a <code>Integer</code>
+	 */
+   @Query("SELECT COUNT(g) FROM Game g")
+   Integer totalGamesOfApp() throws DataAccessException;
+
 }
