@@ -1,6 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
@@ -18,21 +18,21 @@
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
 
-				<petclinic:menuItem active="${name eq 'home'}" url="/" title="Página de inicio">
+				<kingoftokyo:menuItem active="${name eq 'home'}" url="/" title="Página de inicio">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Inicio</span>
-				</petclinic:menuItem>
+				</kingoftokyo:menuItem>
 
-				<petclinic:menuItem active="${name eq 'rules'}" url="/rules" title="Reglas">
+				<kingoftokyo:menuItem active="${name eq 'rules'}" url="/rules" title="Reglas">
 					<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
 					<span>Reglas</span>
-				</petclinic:menuItem>
+				</kingoftokyo:menuItem>
 				<sec:authorize access="hasRole('admin')">
-					<petclinic:menuItem active="${name eq 'users'}" url="/users?page=1"
+					<kingoftokyo:menuItem active="${name eq 'users'}" url="/users?page=1"
 						title="Listado de usuarios">
 						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 						<span>Lista de Usuarios</span>
-					</petclinic:menuItem>
+					</kingoftokyo:menuItem>
 				</sec:authorize>
 			</ul>
 
@@ -44,17 +44,17 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 
-					<petclinic:menuItem active="${name eq 'lobbiesList'}" url="/games/lobbies" title="Unirse a una partida">
+					<kingoftokyo:menuItem active="${name eq 'lobbiesList'}" url="/games/lobbies" title="Unirse a una partida">
 						<span>Unirse a partida</span>
-					</petclinic:menuItem>
-					<petclinic:menuItem active="${name eq 'newGame'}" url="/games/new" title="Crear una nueva partida">
+					</kingoftokyo:menuItem>
+					<kingoftokyo:menuItem active="${name eq 'newGame'}" url="/games/new" title="Crear una nueva partida">
 						<span>Nueva partida</span>
-					</petclinic:menuItem>
+					</kingoftokyo:menuItem>
 					
-					<petclinic:menuItem active="${name eq 'statistics'}" url="/statistics" title="Estadisticas">
+					<kingoftokyo:menuItem active="${name eq 'statistics'}" url="/statistics" title="Estadisticas">
 						<span class="glyphicon glyphicon-fire" aria-hidden="true"></span>
 						<span>Estadisticas</span>
-					</petclinic:menuItem>
+					</kingoftokyo:menuItem>
 
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
