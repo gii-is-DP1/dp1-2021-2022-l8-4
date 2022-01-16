@@ -3,7 +3,11 @@
 
 <div>
     <%
-        String parsedDate = dateTimeValue.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)); 
-        out.print(parsedDate);
+        if(dateTimeValue != null){
+            String parsedDate = dateTimeValue.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)); 
+            out.print(parsedDate);
+        }else{
+            out.print("No hay datos");
+        }
     %>
 </div>
