@@ -2,9 +2,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="profile">
+<kingoftokyo:layout pageName="profile">
     <table style="width: 66%; border: 10px white solid; margin-left: 17%;">
             <tr style="background-color: white; ">
                 <td style="border: transparent; padding-bottom: 10px;">
@@ -90,4 +90,4 @@
         </tbody>
     </table>
 
-</petclinic:layout>
+</kingoftokyo:layout>

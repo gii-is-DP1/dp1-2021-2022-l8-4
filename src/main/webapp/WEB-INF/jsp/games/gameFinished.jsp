@@ -3,10 +3,10 @@
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-                    <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
-                    <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+                    <%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
+                    <%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
 
-                        <petclinic:layout pageName="games">
+                        <kingoftokyo:layout pageName="games">
                             <h2>Partida terminada :</h2>
 
                             <table id="gamesTable" class="table table-striped">
@@ -40,10 +40,10 @@
                                                 <c:out value="${game.winner}" />
                                             </td>
                                             <td>
-                                                <petclinic:localDateTime  dateTimeValue= "${game.startTime}" />
+                                                <kingoftokyo:localDateTime  dateTimeValue= "${game.startTime}" />
                                             </td>
                                             <td>
-                                                <petclinic:localDateTime  dateTimeValue= "${game.endTime}" />
+                                                <kingoftokyo:localDateTime  dateTimeValue= "${game.endTime}" />
                                             </td>
                                             <td>
                                                 <c:out value="${game.playersAmount()}" /> 
@@ -52,4 +52,4 @@
                                     
                                 </tbody>
                             </table>
-                        </petclinic:layout>
+                        </kingoftokyo:layout>

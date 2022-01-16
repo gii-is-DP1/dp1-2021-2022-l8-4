@@ -4,17 +4,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
    
-<petclinic:layout pageName="Achievements">
+<kingoftokyo:layout pageName="Achievements">
     <jsp:body>
         <h2>Editar logro</h2>
         <form:form modelAttribute="achievement" class="form-horizontal" >
             <div class="form-group has-feedback">
-                <petclinic:inputField label="Nombre" name="name"/>
-                <petclinic:inputField label="Descripcion" name="description"/>
-                <petclinic:inputField label="Puntos de recompensa" name="rewardPoints"/>
-                <petclinic:inputField label="Meta" name="goal"/>
+                <kingoftokyo:inputField label="Nombre" name="name"/>
+                <kingoftokyo:inputField label="Descripcion" name="description"/>
+                <kingoftokyo:inputField label="Puntos de recompensa" name="rewardPoints"/>
+                <kingoftokyo:inputField label="Meta" name="goal"/>
                 <form:select itemLabel="name" path="metric" items="${metrics}" style="margin-left: 17.2%; margin-bottom: 5%;"/>
             </div>
 
@@ -25,4 +25,4 @@
             </div>
         </form:form>
     </jsp:body>
-</petclinic:layout>
+</kingoftokyo:layout>

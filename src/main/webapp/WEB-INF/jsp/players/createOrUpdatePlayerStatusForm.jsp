@@ -2,10 +2,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
 
 
-<petclinic:layout pageName="players">
+<kingoftokyo:layout pageName="players">
     <jsp:body>
         <h2><c:if test="${playerStatus['new']}">New </c:if>PlayerStatus</h2>
 
@@ -33,9 +33,9 @@
         <form:form modelAttribute="playerStatus" class="form-horizontal">
             <div class="form-group has-feedback">
                 <div class="control-group">
-                    <petclinic:selectField name="status" label="Status" names="${statusTypes}" size="2"/>
+                    <kingoftokyo:selectField name="status" label="Status" names="${statusTypes}" size="2"/>
                 </div>
-                <petclinic:inputField label="Amount" name="amount"/>
+                <kingoftokyo:inputField label="Amount" name="amount"/>
             </div>
 
             <div class="form-group">
@@ -48,4 +48,4 @@
 
     </jsp:body>
 
-</petclinic:layout>
+</kingoftokyo:layout>
