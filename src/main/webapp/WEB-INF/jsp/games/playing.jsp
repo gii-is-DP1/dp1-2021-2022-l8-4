@@ -4,9 +4,9 @@
             <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
                     <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-                        <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+                        <%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
 
-                            <petclinic:layout pageName="dices">
+                            <kingoftokyo:layout pageName="dices">
                                 <c:if test="${isPlayerInGame}">
                                     <a href="/players/${actualPlayer.getId()}/surrender">
                                         <button type="button">
@@ -226,4 +226,4 @@
                                 </table>
 
 
-                            </petclinic:layout>
+                            </kingoftokyo:layout>
