@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 * @author Sara Cruz
 * @author Rosa Molina
 * @author Carlos Varela Soult
+* @author Ricardo Nadal Garcia
 */
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Integer>{
@@ -18,14 +19,14 @@ public interface UserRepository extends PagingAndSortingRepository<User, Integer
      * @param pageable
      * @return Obtains a page of users
      */
-    @Query(value="SELECT * FROM USERS", nativeQuery=true)
+    @Query(value="SELECT u FROM User u")
     Page<User> findAllUsersByPage(Pageable pageable);
 
     /**
      * @param username
      * @return Obtains currentUser from username
      */
-    @Query(value="SELECT * FROM USERS WHERE username=?", nativeQuery=true)
+    @Query(value="SELECT u FROM User u WHERE u.username=?1")
     User findCurrentUser(String username);
     
 }
