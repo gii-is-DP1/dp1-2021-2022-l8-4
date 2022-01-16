@@ -16,7 +16,8 @@ import org.springframework.samples.kingoftokyo.card.CardService;
 import org.springframework.samples.kingoftokyo.card.CardType;
 import org.springframework.samples.kingoftokyo.dice.DiceValues;
 import org.springframework.samples.kingoftokyo.dice.Roll;
-import org.springframework.samples.kingoftokyo.game.exceptions.NewGameCreationException;
+import org.springframework.samples.kingoftokyo.game.exceptions.DeleteGameException;
+import org.springframework.samples.kingoftokyo.game.exceptions.NewGameException;
 import org.springframework.samples.kingoftokyo.gamecard.GameCardService;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.player.LocationType;
@@ -53,6 +54,7 @@ public class GameService {
 
     @Autowired
     private MapGameRepository mapGameRepository;
+    
 
     @Transactional
     public Iterable<Game> findAll() {
@@ -97,9 +99,11 @@ public class GameService {
      * Delete a game given its creator
      */
     @Transactional
-    public void deleteGame(Game game) {
+    public void deleteGame(Game game) throws DeleteGameException {
         if (!game.isStarted()) {
             gameRepository.delete(game);
+        }else{
+            throw new DeleteGameException();
         }
     }
 
@@ -116,7 +120,7 @@ public class GameService {
      * Start the game if has enough players and the game was not previously started
      */
     @Transactional
-    public void startGame(Game game) {
+    public void startGame(Game game) throws NewGameException {
         if (game.hasEnoughPlayers() && !game.isStarted()) {
             game.setTurn(1);
             game.setStartTime(LocalDateTime.now());
@@ -125,19 +129,26 @@ public class GameService {
             gameCardService.showCards(game);
 
             saveGame(game);
+        }else{
+            if(!game.hasEnoughPlayers()){
+                throw new NewGameException("La partida no puede ser iniciada porque no hay suficientes jugadores");
+            }else{
+                throw new NewGameException("La partida ya ha sido iniciada");
+            }
+            
         }
     }
 
     /**
      * Create a new game
      * @param game
-     * @throws TooManyGamesCreatedException
+     * @throws NewGameException
      */
     @Transactional
-    public void createNewGame(Game game) throws NewGameCreationException{
+    public void createNewGame(Game game) throws NewGameException{
         User creator = game.getCreator();
         if(creator.hasActiveGameAsCreator() || creator.hasActivePlayer()){
-            throw new NewGameCreationException("El usuario ya tiene otro juego activo");
+            throw new NewGameException("El usuario ya tiene otro juego activo");
         }else{
             saveGame(game);
         }

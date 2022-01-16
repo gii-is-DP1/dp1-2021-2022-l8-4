@@ -14,6 +14,7 @@ import org.springframework.samples.kingoftokyo.dice.Roll;
 import org.springframework.samples.kingoftokyo.game.Game;
 import org.springframework.samples.kingoftokyo.game.GameService;
 import org.springframework.samples.kingoftokyo.game.MapGameRepository;
+import org.springframework.samples.kingoftokyo.game.exceptions.NewGameException;
 import org.springframework.samples.kingoftokyo.playercard.PlayerCard;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
@@ -70,7 +71,7 @@ public class PlayerService {
      * @param game
      */
     @Transactional
-    public void joinGame(Player newPlayer, Game game) {
+    public void joinGame(Player newPlayer, Game game) throws NewGameException {
         Monster monster = newPlayer.getMonster();
         User user = newPlayer.getUser();
 
@@ -89,6 +90,8 @@ public class PlayerService {
             newPlayer.setRecentlyHurt(Boolean.FALSE);
 
             game.getPlayers().add(newPlayer);
+        }else{
+            throw new NewGameException("No es posible unirse a la partida");
         }
     }
 
