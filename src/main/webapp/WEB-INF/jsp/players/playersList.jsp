@@ -22,7 +22,7 @@
                                     <c:forEach items="${players}" var="player">
                                         <tr>
                                             <td>
-                                                <c:out value="${player.monsterName}" />
+                                                <c:out value="${player.monster.name}" />
                                                 </a>
                                             </td>
                                             <td>
