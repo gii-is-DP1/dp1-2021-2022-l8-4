@@ -213,7 +213,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    extraHead("Segunda cabeza", "placeholder") {
+    extraHead("Segunda cabeza", "Tienes un dado adicional") {
 
         @Override
         public void effectStartTurn(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -227,7 +227,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    giantBrain("Cerebro galaxia", "placeholder") {
+    giantBrain("Cerebro galaxia", "Tienes una tirada adicional") {
 
         @Override
         public void effectStartTurn(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
