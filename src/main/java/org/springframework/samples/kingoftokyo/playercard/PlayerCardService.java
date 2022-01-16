@@ -18,6 +18,7 @@ import org.springframework.samples.kingoftokyo.gamecard.GameCard;
 import org.springframework.samples.kingoftokyo.gamecard.GameCardService;
 import org.springframework.samples.kingoftokyo.player.Player;
 import org.springframework.samples.kingoftokyo.player.PlayerService;
+import org.springframework.samples.kingoftokyo.player.exceptions.InvalidPlayerActionException;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 
@@ -51,18 +52,11 @@ public class PlayerCardService {
         playerCardRepository.save(playerCard);
     }
 
-    /**
-     * Find cards that can be use by a player
-     * 
-     * @param player player
-     * @return Set of cards that the player has not used yet
-     */
     @Transactional
-    // THIS CAN BE IMPLEMENTED IN A REPOSITORY METHOD
-    public Set<Card> findAvailableCardsByPlayer(Player player) {
-        return playerService.findPlayerById(player.getId()).getPlayerCard().stream()
-                .filter(x -> x.getDiscarded() == Boolean.FALSE).map(x -> x.getCard()).collect(Collectors.toSet());
+    public PlayerCard findByPlayerCard(Player player, Card card) throws DataAccessException{
+        return playerCardRepository.findByPlayerCard(player.getId(), card.getId());
     }
+
 
     /**
      * Check if the player can buy the card then buys it. A player can buy a card if
@@ -74,9 +68,8 @@ public class PlayerCardService {
      * @param player buying the card
      * @param card   card that the player wants to buy
      */
-    // SHOULD ASO CHECK IF IT IS THE PLAYER'S TURN
     @Transactional
-    public void buyCard(Player player, Card card) {
+    public void buyCard(Player player, Card card) throws InvalidPlayerActionException {
         // Retrieve the game linked to the player to check if the card is available to
         // buy
         Roll roll=mapGameRepository.getRoll(player.getGame().getId());
@@ -109,7 +102,11 @@ public class PlayerCardService {
                
                 // Show new cards
                 gameCardService.showCards(game);
+            }else{
+                throw new InvalidPlayerActionException("El jugador no tiene suficiente energia para comprar la carta");
             }
+        }else{
+            throw new InvalidPlayerActionException("No se puede llevar a cabo la compra de la carta");
         }
     }
 
@@ -129,7 +126,7 @@ public class PlayerCardService {
     }
 
     @Transactional
-    public void discardShopCards(Player player) {
+    public void discardShopCards(Player player) throws InvalidPlayerActionException {
         Game game = player.getGame();
         Roll roll=mapGameRepository.getRoll(player.getGame().getId());
         List<Card> availableCards = gameCardService.findAvailableCardsByGame(game);
@@ -154,7 +151,11 @@ public class PlayerCardService {
                
                 // Show new cards
                 gameCardService.showCards(game);
+            }else{
+                throw new InvalidPlayerActionException("El jugador no tiene suficiente energia para descartar la tienda");
             }
+        }else{
+            throw new InvalidPlayerActionException("No se puede llevar a cabo el descarte de la tienda");
         }
     }
 
