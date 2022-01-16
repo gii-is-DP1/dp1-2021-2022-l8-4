@@ -3,11 +3,11 @@
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-                    <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+                    <%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
                         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
                        
-                        <petclinic:layout pageName="newGameForm">
+                        <kingoftokyo:layout pageName="newGameForm">
                             
                             <form:form modelAttribute="newGame" style="margin-bottom:20%">
                                 <div class="col-lg-8" style="margin-left: 37%;">
@@ -29,4 +29,4 @@
                                 </div>  
                             </form:form>
 
-                    </petclinic:layout>
+                    </kingoftokyo:layout>

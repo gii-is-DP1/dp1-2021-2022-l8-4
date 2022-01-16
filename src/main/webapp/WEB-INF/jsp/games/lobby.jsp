@@ -3,10 +3,10 @@
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-                    <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+                    <%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
                         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-                        <petclinic:layout pageName="gameLobby">
+                        <kingoftokyo:layout pageName="gameLobby">
                             
                        <table class="table table-striped">
                             <thead>
@@ -86,4 +86,4 @@
                             </c:if>
 
 
-                        </petclinic:layout>
+                        </kingoftokyo:layout>
