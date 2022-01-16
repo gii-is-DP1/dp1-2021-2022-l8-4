@@ -23,11 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AchievementService {
 
-    @Autowired
     private AchievementRepository achievementRepository;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    public AchievementService(AchievementRepository achievementRepository, UserService userService){
+        this.userService = userService;
+        this.achievementRepository = achievementRepository;
+    }
+
 
     @Transactional
     public Iterable<Achievement> findAll() {

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  @RequestMapping("/achievements")
  public class AchievementController {
 
-    @Autowired
     private AchievementService achievementService;
+
+    @Autowired
+    public AchievementController(AchievementService achievementService){
+        this.achievementService = achievementService;
+    }
 
     private static final String VIEWS_ACHIEVEMENT_CREATE_OR_UPDATE_FORM = "modules/statistics/achievements/newAchievement";
 
