@@ -29,7 +29,7 @@ import lombok.Setter;
 public class Card extends BaseEntity {
 
     @NotNull
-    //@Min(0) //MIRAR CON RICK
+    @Min(0)
     private Integer cost;
 
     @Enumerated(value = EnumType.ORDINAL)
