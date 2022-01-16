@@ -124,9 +124,16 @@
                         <div class="row">
                             <h4>    
                                 Criatura elegida con menos frecuencia
-                                <spring:url value="/resources/images/errorK.png" htmlEscape="true" var="principal" />
-                                <img class="img-responsive" src="${principal}" style="width: 25%;"/>
                             </h4>
+                            <div class="row" style="align-items: center;justify-content: center;display: grid;
+                            border: 1px #7800bd solid; border-radius: 5px">
+                                <h2>
+                                    <c:out value="${nomodaMonstername}" />
+                                </h2>
+                                <h4>
+                                    <img src="${nomodaMonstericon}" width="80" height="80">
+                                </h4>
+                            </div>
                         </div>
                     </div>
                     <div class="col col-sm-1" style="margin-left: 5px;"></div>

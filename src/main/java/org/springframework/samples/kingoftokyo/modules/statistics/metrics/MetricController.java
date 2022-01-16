@@ -13,6 +13,8 @@ import java.util.Map;
 
 /**
 /* @author Jose Maria Delgado Sanchez
+*  @author Rosa Molina
+*  @author Sara Cruz
 */
 @Controller
 @RequestMapping("/statistics")
@@ -24,7 +26,7 @@ public class MetricController {
     @GetMapping(path = "/ranking")
     public String getRanking(@RequestParam(value = "metric", defaultValue = "gamesPlayed") MetricType metric,@RequestParam(value = "page", defaultValue = "1") int page, ModelMap modelMap){
         String view = "modules/statistics/metrics/ranking";
-        Page<MetricData> pages = metricService.rankingByMetricType(metric,page-1,2);
+        Page<MetricData> pages = metricService.rankingByMetricType(metric,page-1,10);
 
         modelMap.addAttribute("metrics", MetricType.values());
         modelMap.addAttribute("actualMetric", metric);
@@ -45,6 +47,8 @@ public class MetricController {
       modelMap.addAttribute("mediumGameTime", metricService.findTimeGames());
       modelMap.addAttribute("modaMonstername", metricService.findMonsterModa().getName());
       modelMap.addAttribute("modaMonstericon", metricService.findMonsterModa().getIcon());
+      modelMap.addAttribute("nomodaMonstername", metricService.findMonsterNoModa().getName());
+      modelMap.addAttribute("nomodaMonstericon", metricService.findMonsterNoModa().getIcon());
       return "modules/statistics/metrics/statistics";
     }
 }

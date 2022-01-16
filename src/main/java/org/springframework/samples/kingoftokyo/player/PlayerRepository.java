@@ -9,7 +9,8 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author Rosa Molina
- */
+ * @author Sara Cruz
+*/
 
 @Repository
 public interface PlayerRepository extends CrudRepository<Player, Integer> {

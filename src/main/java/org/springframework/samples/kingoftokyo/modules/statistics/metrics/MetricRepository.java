@@ -1,12 +1,20 @@
 package org.springframework.samples.kingoftokyo.modules.statistics.metrics;
 
 
+import java.util.List;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.samples.kingoftokyo.game.Game;
+
+/**
+*  @author Rosa Molina
+*  @author Sara Cruz
+*/
+
 
 public interface MetricRepository extends CrudRepository<Game, Integer> {
     
@@ -24,6 +32,21 @@ public interface MetricRepository extends CrudRepository<Game, Integer> {
 	 */
     @Query("SELECT new org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData(player.user, COUNT(player)) FROM Player player WHERE player.game.winner IS player.user.username GROUP BY player.user.id ORDER BY count(player) DESC")
     Page<MetricData> winsRanking(Pageable pageable) throws DataAccessException;
+
+    /**
+	 * Retrieve won games count grouped by user.
+	 * @return a <code>Integer</code>
+	 */
+    @Query("SELECT new org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData(player.user, COUNT(player)) FROM Player player WHERE player.game.winner IS player.user.username GROUP BY player.user.id ORDER BY count(player) DESC")
+    Page<MetricData> scoresRanking(Pageable pageable) throws DataAccessException;
+
+    /**
+	 * Retrieve won games count grouped by user.
+	 * @return a <code>Integer</code>
+	 */
+    //SELECT USER_ID, SUM(REWARD_POINTS ) FROM USERS_ACHIEVEMENTS INNER JOIN ACHIEVEMENTS ON USERS_ACHIEVEMENTS.ACHIEVEMENT_ID  = ACHIEVEMENTS.ID GROUP BY USER_ID ;
+    //@Query("SELECT ua.user_id, SUM(a.rewardPoints) FROM users_achievements ua INNER JOIN achievements a on ua.achievement_id = a.id GROUP BY ua.user_id")
+    //List<Object> scoresRanking() throws DataAccessException;
 
     /**
 	 * Retrieve number of games.

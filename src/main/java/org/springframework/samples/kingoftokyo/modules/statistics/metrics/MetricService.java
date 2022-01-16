@@ -15,6 +15,10 @@ import org.springframework.samples.kingoftokyo.player.Monster;
 import org.springframework.samples.kingoftokyo.player.PlayerRepository;
 import org.springframework.stereotype.Service;
 
+/**
+*  @author Rosa Molina
+*  @author Sara Cruz
+*/
 
 @Service
 public class MetricService {
@@ -100,6 +104,27 @@ public class MetricService {
         }
         Monster monstermoda = Monster.values()[moda];
         return monstermoda;
+    }
+
+    @Transactional
+    public Monster findMonsterNoModa(){
+        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();				
+        List<Integer> monsters = this.playerRepository.listMonster();
+        for (Integer elemento: monsters){			
+        if (m.containsKey(elemento))					
+            m.put(elemento,m.get(elemento)+1);
+        else
+            m.put(elemento,1);			
+        }
+        int nomoda = 0, menor = 0;
+        for (HashMap.Entry<Integer, Integer> entry : m.entrySet()) {
+            if (entry.getValue() < menor) {
+                menor = entry.getValue();
+                nomoda = entry.getKey();
+            }
+        }
+        Monster monstermenor = Monster.values()[nomoda];
+        return monstermenor;
     }
 
 }
