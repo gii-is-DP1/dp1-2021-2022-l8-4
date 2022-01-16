@@ -3,6 +3,7 @@ package org.springframework.samples.kingoftokyo.player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.kingoftokyo.card.Card;
 import org.springframework.samples.kingoftokyo.card.CardService;
+import org.springframework.samples.kingoftokyo.player.exceptions.InvalidPlayerActionException;
 import org.springframework.samples.kingoftokyo.playercard.PlayerCardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,14 +42,26 @@ public class PlayerController {
             @PathVariable("cardId") int cardId) {
         Player player = playerService.findPlayerById(playerId);
         Card card = cardService.findCardById(cardId);
-        playerCardService.buyCard(player, card);
+
+        try{
+            playerCardService.buyCard(player, card);
+        }catch(InvalidPlayerActionException e){
+            System.out.println(e.toString());
+        }
+        
         return "redirect:/games/" + player.getGame().getId() + "/playing";
     }
 
     @GetMapping("/{playerId}/cards/discard")
     public String discardAllCards(ModelMap modelMap, @PathVariable("playerId") int playerId) {
         Player player = playerService.findPlayerById(playerId);
-        playerCardService.discardShopCards(player);
+        
+        try{
+            playerCardService.discardShopCards(player);
+        }catch(InvalidPlayerActionException e){
+            System.out.println(e.toString());
+        }
+        
         return "redirect:/games/" + player.getGame().getId() + "/playing";
     }
 
