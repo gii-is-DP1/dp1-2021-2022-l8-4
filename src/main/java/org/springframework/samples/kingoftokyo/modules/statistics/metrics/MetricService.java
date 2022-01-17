@@ -51,7 +51,18 @@ public class MetricService {
     public Page<MetricData> winsRanking(int pageNumber, int numberOfElements){    
         PageRequest pageable = PageRequest.of(pageNumber, numberOfElements);    
         return metricRepository.winsRanking(pageable);
-    }
+    }    
+    
+    /**
+    * 
+    * @return List of Users with their associated score of wins ordered
+    */
+   @Transactional
+   public List<MetricData> findTurnsTokyo(){    
+       PageRequest pageable = PageRequest.of(0, 5);    
+       Page<MetricData> pages = metricRepository.maxTurnUsers(pageable);
+       return pages.toList();
+   }
 
 
     @Transactional
@@ -108,7 +119,11 @@ public class MetricService {
                 duration += game.getDuration();
             }
         }
-        return duration/gamesCounter;
+        if(gamesCounter.equals(0)){
+            return null;
+        }else{
+            return duration/gamesCounter;
+        }
     }
 
     @Transactional

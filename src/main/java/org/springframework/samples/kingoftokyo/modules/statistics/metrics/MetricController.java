@@ -2,6 +2,7 @@ package org.springframework.samples.kingoftokyo.modules.statistics.metrics;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.geo.Metrics;
 import org.springframework.samples.kingoftokyo.configuration.CurrentUserController;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -57,6 +58,8 @@ public class MetricController {
       modelMap.addAttribute("winsCurrent", metricService.findTotalWinsGamesCurrentUser(userService.authenticatedUser().getUsername()));
       modelMap.addAttribute("gamesCurrent", metricService.findTotalGamesCurrentUser(userService.authenticatedUser()));
       modelMap.addAttribute("gamesTimeCurrent", metricService.findTimeGamesforUser(userService.authenticatedUser()));
+      modelMap.addAttribute("listUsersTurns", metricService.findTurnsTokyo());
+
       return "modules/statistics/metrics/statistics";
     }
 }

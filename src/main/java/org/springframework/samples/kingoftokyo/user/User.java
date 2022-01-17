@@ -47,6 +47,9 @@ public class User extends BaseEntity {
 
     private boolean enabled;
 
+    @Column(columnDefinition = "long default 0l")
+    private Long maxTurnsTokyo;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
 
