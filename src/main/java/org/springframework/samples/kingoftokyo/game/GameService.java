@@ -272,6 +272,10 @@ public class GameService {
         return listaTurnos;
     }
 
+    /**
+     * Given a gameId returns the player who is playing their turn
+     * @param game
+     */
     @Transactional
     public Player actualTurn(Integer gameId) {
 

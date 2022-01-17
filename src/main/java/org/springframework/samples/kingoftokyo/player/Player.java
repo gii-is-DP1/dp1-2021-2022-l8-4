@@ -111,7 +111,7 @@ public class Player extends BaseEntity {
         if(this.playerCard.stream()
                         .filter(x -> x.getPlayer().getId() == this.id) 
                         .map(x -> x.getCard().getCardEnum())
-                        .anyMatch(x -> x.equals(CardEnum.evenBigger))){
+                        .anyMatch(x -> x.equals(CardEnum.EVENBIGGER))){
                             maxHealth=12;
                         }
         return maxHealth;
