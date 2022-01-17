@@ -17,7 +17,6 @@ import org.springframework.samples.kingoftokyo.game.GameRepository;
 import org.springframework.samples.kingoftokyo.player.Monster;
 import org.springframework.samples.kingoftokyo.player.PlayerRepository;
 import org.springframework.samples.kingoftokyo.user.User;
-import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.java.Log;
@@ -107,12 +106,37 @@ public class MetricService {
     public Integer findTotalGamesApp() {
         return metricRepository.totalGamesOfApp();
     }
-    
+
+    @Transactional
+    public Integer findTotalWinsGamesCurrentUser(String username) {
+        return metricRepository.totalGamesWinnerCurrentUser(username);
+    }
+
+    @Transactional
+    public Integer findTotalGamesCurrentUser(User user) {
+        return metricRepository.totalGamesCurrentUser(user);
+    }
+
+
     @Transactional
     public Integer findTimeGames() {
         Integer duration = 0;
         Integer gamesCounter = 0;
         Iterable<Game> games = this.gameRepository.findAll();
+        for(Game game: games){
+            if(game.isFinished()){
+                gamesCounter+=1;
+                duration += game.getDuration();
+            }
+        }
+        return duration/gamesCounter;
+    }
+
+    @Transactional
+    public Integer findTimeGamesforUser(User user) {
+        Integer duration = 0;
+        Integer gamesCounter = 0;
+        Iterable<Game> games = this.metricRepository.findGamesCurrentUser(user);
         for(Game game: games){
             if(game.isFinished()){
                 gamesCounter+=1;
@@ -163,5 +187,4 @@ public class MetricService {
         Monster monstermenor = Monster.values()[nomoda];
         return monstermenor;
     }
-
 }

@@ -272,6 +272,10 @@ public class GameService {
         return listaTurnos;
     }
 
+    /**
+     * Given a gameId returns the player who is playing their turn
+     * @param game
+     */
     @Transactional
     public Player actualTurn(Integer gameId) {
 
@@ -286,7 +290,7 @@ public class GameService {
         User user = userService.authenticatedUser();
         Boolean result = Boolean.FALSE;
         if (user != null) {
-            result = actualTurn(gameId).getUser().getId() == user.getId();
+            result = actualTurn(gameId).getUser().getId().equals(user.getId());
         }
         return result;
     }
@@ -298,7 +302,7 @@ public class GameService {
         Boolean result = Boolean.FALSE;
         if (user != null) {
             for (Player player : game.getPlayers()) {
-                result = result || player.getUser().getId() == user.getId();
+                result = result || player.getUser().getId().equals(user.getId());
             }
         }
         return result;
@@ -318,13 +322,12 @@ public class GameService {
                 useCardsEndTurn(playerService.actualPlayer(gameId));
                 isRecentlyHurtToFalse(gameId);
                 nuevoTurno(gameId);
-                checkPlayersAlive(gameId);
                 playerService.checkplayers(gameId);
             } else {
                 Roll rollData = mapGameRepository.getRoll(gameId); 
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
-                if (rollData.getRollAmount() == rollData.getMaxThrows()) {
+                if (rollData.getRollAmount().equals(rollData.getMaxThrows())) {
                     Integer playerIdActualTurn = actualTurnPlayerId(gameId);
                     playerService.useRoll(playerIdActualTurn, rollData);
 
@@ -334,22 +337,10 @@ public class GameService {
 
     }
     /**
-     * Checks is the number of player is less than 5 and disables Tokyo Bay. 
-     * @param gameId
+     * Swaps the locations between the player who wants to leave tokyo and the player
+     * who hurt the player in tokyo.
+     * @param game
      */
-    @Transactional
-    public void checkPlayersAlive(Integer gameId){
-        Game game  = findGameById(gameId);
-        List<Player> players = game.playersAlive();
-        if(players.size()<5){
-            for(Player player : players){
-                if(player.getLocation()==LocationType.bahiaTokyo){
-                    player.setLocation(LocationType.fueraTokyo);
-                }
-            }
-        }
-    }
-
     @Transactional
     public void changePosition(Integer gameId) {
         Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));
@@ -361,7 +352,10 @@ public class GameService {
         playerService.savePlayer(player);
         playerService.savePlayer(playerActualTurn);
     }
-
+    /**
+     * Changes the attribute "recentlyHurt" of all the players in the game to FALSE 
+     * @param game
+     */
     @Transactional
     public void isRecentlyHurtToFalse(Integer gameId) {
         List<Player> lsplayer = findPlayerList(gameId);
@@ -371,6 +365,11 @@ public class GameService {
         }
     }
 
+    /**
+     * Handles the changes of the attribute "Location" of a player from Tokyo(or TokyoBay) to fueraDeTokyo 
+     * if the players has been hurt and is on Tokyo(or Tokyobay) 
+     * @param game
+     */
     @Transactional
     public void handleExitTokyo(Integer gameId) {
         if (playerService.isRecentlyHurt(gameId) && playerService.isInTokyo(gameId)) {

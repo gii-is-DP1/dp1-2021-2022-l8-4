@@ -144,7 +144,7 @@ public class PlayerService {
     @Transactional
     public void handleDamageRolls(Player actualPlayer, List<Player> playersInGame, Integer damage) {
         for (Player player : playersInGame) {
-            if (actualPlayer.getId() != player.getId()) {
+            if (!actualPlayer.getId().equals(player.getId())) {
                 // Damage players in Tokyo
                 if (actualPlayer.getLocation() == LocationType.fueraTokyo) {
                     if (player.getLocation() == LocationType.ciudadTokyo
@@ -304,7 +304,7 @@ public class PlayerService {
 
     @Transactional
     public void substractVictoryPointsPlayer(Player player, Integer victoryPoints) {
-        Integer victoryPointsNew = player.getLifePoints() - victoryPoints;
+        Integer victoryPointsNew = player.getVictoryPoints() - victoryPoints;
         Integer minVictoryPoints = 0;
         if (minVictoryPoints < victoryPointsNew) {
             player.setVictoryPoints(victoryPointsNew);
@@ -338,7 +338,7 @@ public class PlayerService {
     public void surrender(Integer playerId) {
         Player player = findPlayerById(playerId);
         User user = userService.authenticatedUser();
-        if (player.getUser().getId() == user.getId()) {
+        if (player.getUser().getId().equals(user.getId())) {
 
             List<PlayerCard> playerCards = player.getPlayerCard();
             playerCards.forEach(card -> card.setDiscarded(Boolean.TRUE));
@@ -378,15 +378,18 @@ public class PlayerService {
         return result;
     }
 
+    /**
+     * Checks is the number of player is less than 5 and disables Tokyo Bay. 
+     * @param gameId
+     */
     @Transactional
     public void checkplayers(Integer gameId) {
         Game game = gameService.findGameById(gameId);
-        Integer numplayers = game.getMaxNumberOfPlayers();
+        List<Player> players = game.playersAlive();
         Integer minAmmountPlayersTokyoBay = 5;
-        if (numplayers < minAmmountPlayersTokyoBay) {
-            List<Player> lsplayersAlive = game.playersAlive();
-            for (Player player : lsplayersAlive) {
-                if (player.getLocation() == LocationType.bahiaTokyo) {
+        if(players.size()<minAmmountPlayersTokyoBay){
+            for(Player player : players){
+                if(player.getLocation()==LocationType.bahiaTokyo){
                     player.setLocation(LocationType.fueraTokyo);
                 }
             }

@@ -1,35 +1,46 @@
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (1,'Mi primera partida','Juega tu primera partida',10,0,1);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (2,'Mi quinta partida','Juega tu quinta partida',15,0,5);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (3,'Mi veinteava partida','Juega tu veinteava partida',15,0,20);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (4,'Mi cincuentava partida','Juega tu cincuentava partida',20,0,50);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (5,'Mi primera victoria','Gana tu primera partida',10,1,1);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (6,'Mi quinta victoria','Gana tu quinta partida',15,1,5);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (7,'Mi veinteava victoria','Gana tu veinteava partida',15,1,20);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (8,'Mi cincuentava victoria','Gana tu cincuentava partida',20,1,50);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (9,'Mi primera carta usada','Gana tu primera partida',5,2,1);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (10,'Mi quinta carta usada','Gana tu quinta partida',10,2,5);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (11,'Mi decima carta usada','Gana tu veinteava partida',10,2,10);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (12,'Mi veinteava carta usada','Gana tu cincuentava partida',20,2,20);
 
-INSERT INTO cards(id,cost,card_enum,type) VALUES(1,5,'apartmentBuilding',0);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(2,3,'cornerStore',0); 
-INSERT INTO cards(id,cost,card_enum,type) VALUES(3,4,'commuterTrain',0); 
-INSERT INTO cards(id,cost,card_enum,type) VALUES(4,8,'energize',0); 
-INSERT INTO cards(id,cost,card_enum,type) VALUES(5,3,'fireBlast',0); 
-INSERT INTO cards(id,cost,card_enum,type) VALUES(6,7,'evacuationOrders',0);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(7,7,'evacuationOrders',0); 
-INSERT INTO cards(id,cost,card_enum,type) VALUES(8,3,'heal',0); 
-INSERT INTO cards(id,cost,card_enum,type) VALUES(9,6,'gasRefinery',0);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(10,4,'highAltitudeBombing',0);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(11,5,'jetFighters',0);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(12,3,'nationalGuard',0);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(13,6,'acidAttack',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(14,5,'alphaMonster',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(15,4,'fireBreathing',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(16,3,'friendOfChildren',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(17,7,'extraHead',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(18,7,'extraHead',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(19,5,'giantBrain',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(20,3,'completeDestruction',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(21,4,'evenBigger',0);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(22,4,'gourmet',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(23,3,'camouflage',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(24,4,'armorPlating',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(25,7,'itHasAChild',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(26,3,'alienMetabolism',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(27,3,'dedicatedNewsTeam',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(28,5,'herbivore',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(29,3,'energyHoarder',1);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(30,7,'novaBreath',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(1,5,'APARTMENTBUILDING',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(2,3,'CORNERSTORE',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(3,4,'COMMUTERTRAIN',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(4,8,'ENERGIZE',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(5,3,'FIREBLAST',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(6,7,'EVACUATIONORDERS',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(7,7,'EVACUATIONORDERS',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(8,3,'HEAL',0); 
+INSERT INTO cards(id,cost,card_enum,type) VALUES(9,6,'GASREFINERY',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(10,4,'HIGHALTITUDEBOMBING',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(11,5,'JETFIGHTERS',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(12,3,'NATIONALGUARD',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(13,6,'ACIDATTACK',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(14,5,'ALPHAMONSTER',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(15,4,'FIREBREATHING',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(16,3,'FRIENDOFCHILDREN',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(17,7,'EXTRAHEAD',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(18,7,'EXTRAHEAD',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(19,5,'GIANTBRAIN',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(20,3,'COMPLETEDESTRUCTION',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(21,4,'EVENBIGGER',0);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(22,4,'GOURMET',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(23,3,'CAMOUFLAGE',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(24,4,'ARMORPLATING',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(25,7,'ITHASACHILD',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(26,3,'ALIENMETABOLISM',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(27,3,'DEDICATEDNEWSTEAM',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(28,5,'HERBIVORE',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(29,3,'ENERGYHOARDER',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(30,7,'NOVABREATH',1);
 
 INSERT INTO users(id,username,email,password,enabled) VALUES (1,'user1','user1@email.com','u53r1', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
@@ -71,12 +82,17 @@ INSERT INTO users(id,username,email,password,enabled) VALUES (19,'BigBilly','big
 INSERT INTO authorities(id,userid,authority) VALUES (19,19,'user');
 INSERT INTO users(id,username,email,password,enabled) VALUES (20,'luciia12','luciia12@email.com','contra', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (20,20,'user');
-
+--Usuarios partida 2 jugadores
+INSERT INTO users(id,username,email,password,enabled) VALUES (21,'Kleon','kleon@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (21,21,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (22,'Kaiipo','kaiipo@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (22,22,'user');
 
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (1,'Partida tremenda',1,'3',null,'2020-11-01T10:00:00','2020-11-01T11:00:00',6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (2,'Partida tremenda ya jugada',2,'15','user2','2020-11-01T10:00:00','2020-11-01T11:00:00',6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (3,'Partida Test Empezada',10,'1',null,'2020-11-10T10:30:00',null,6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (4,'Partida Test 5 jugadores',16,'8',null,'2020-11-10T10:12:54',null,6);
+INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (5,'Partida Test 2 jugadores',21,'10',null,'2021-10-10T11:09:54',null,2);
 
 -- Player de game id=1, turnos ids=3,2 , estado del player 3: finalizando turno (roll amount 3) con 10 de energia
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (1,1,0,2,10,0,1,1);
@@ -100,6 +116,10 @@ INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,loc
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (16,2,10,0,30,2,4,18);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (17,3,10,0,30,0,4,19);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (18,4,10,0,30,0,4,20);
+-- Players para test con 2 usuarios
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (19,0,10,0,30,0,5,21);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (20,4,2,3,30,1,5,22);
+
 
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (1, 1, 1,FALSE);
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (2, 1, 2,FALSE);

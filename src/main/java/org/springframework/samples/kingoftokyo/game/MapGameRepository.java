@@ -69,6 +69,10 @@ public class MapGameRepository {
         lsturno.add(17);
         lsturno.add(18);
         turnListMap.put(4, lsturno);
+
+        List<Integer> lsturno5 = new ArrayList<>();
+        lsturno5.add(19);lsturno5.add(20);
+        turnListMap.put(5, lsturno5);
     }
 
     public void putRoll(Integer gameId, Roll roll) {

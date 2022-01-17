@@ -89,12 +89,23 @@
                     <div class="col col-sm-2" style="align-items: center;justify-content: center;display: grid; margin-left: 5%;">
                         <div class="row" style="align-items: center;justify-content: center;display: grid;">
                             <h4 style="margin-left: 3px;">    
-                                Numero de partidas totales que se han jugado
+                                Numero de partidas totales que se han jugado en nuestra web
                             </h4>
                             <div class="row" style="align-items: center;justify-content: center;display: grid; 
                             border: 1px #7800bd solid; border-radius: 5px">
                                 <h4>
                                      <c:out value="${totalGames}" /> partidas
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row" style="align-items: center;justify-content: center;display: grid;">
+                            <h4 style="margin-left: 3px;">    
+                                Tiempo medio por partida en total
+                            </h4>
+                            <div class="row" style="align-items: center;justify-content: center;display: grid;
+                            border: 1px #7800bd solid; border-radius: 5px">
+                                <h4>
+                                     <c:out value="${mediumGameTime}" /> minutos
                                 </h4>
                             </div>
                         </div>
@@ -112,6 +123,31 @@
                                 </h4>
                             </div>
                         </div>
+                    </div>
+                    <div class="col col-sm-1" style="margin-left: 5px;"></div>
+                    <div class="col col-sm-2" style="align-items: center;justify-content: center;display: grid;">
+                        <div class="row" style="align-items: center;justify-content: center;display: grid;">
+                            <h4 style="margin-left: 3px;">    
+                                Numero de partidas que has ganado / Numero de partidas que has jugado
+                            </h4>
+                            <div class="row" style="align-items: center;justify-content: center;display: grid; 
+                            border: 1px #7800bd solid; border-radius: 5px">
+                                <h4>
+                                     <c:out value="${winsCurrent}" />/<c:out value="${gamesCurrent}" /> partidas
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row" style="align-items: center;justify-content: center;display: grid;">
+                            <h4 style="margin-left: 3px;">    
+                                Tiempo medio por partidas jugadas por ti
+                            </h4>
+                            <div class="row" style="align-items: center;justify-content: center;display: grid; 
+                            border: 1px #7800bd solid; border-radius: 5px">
+                                <h4>
+                                     <c:out value="${gamesTimeCurrent}" /> minutos
+                                </h4>
+                            </div>
+                        </div>
                         <div class="row">
                             <h4>    
                                 Criatura elegida con menos frecuencia
@@ -123,20 +159,6 @@
                                 </h2>
                                 <h4>
                                     <img src="${nomodaMonstericon}" width="80" height="80">
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col col-sm-1" style="margin-left: 5px;"></div>
-                    <div class="col col-sm-2" style="align-items: center;justify-content: center;display: grid;">
-                        <div class="row" style="align-items: center;justify-content: center;display: grid;">
-                            <h4 style="margin-left: 3px;">    
-                                Tiempo medio por partida
-                            </h4>
-                            <div class="row" style="align-items: center;justify-content: center;display: grid;
-                            border: 1px #7800bd solid; border-radius: 5px">
-                                <h4>
-                                     <c:out value="${mediumGameTime}" /> minutos
                                 </h4>
                             </div>
                         </div>

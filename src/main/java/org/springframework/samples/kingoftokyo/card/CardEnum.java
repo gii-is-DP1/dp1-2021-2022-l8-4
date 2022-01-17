@@ -16,7 +16,7 @@ import org.springframework.samples.kingoftokyo.playercard.PlayerCard;
  */
 
 public enum CardEnum implements UseCardsInterface { // Primero estan todas las de descarte al usarlo
-    apartmentBuilding("Bloque de apartamentos", "Otorga 3 puntos de victoria") {
+    APARTMENTBUILDING("Bloque de apartamentos", "Otorga 3 puntos de victoria") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -25,7 +25,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
         }
 
     },
-    commuterTrain("Tren de cercanias", "Otorga 2 puntos de victoria") {
+    COMMUTERTRAIN("Tren de cercanias", "Otorga 2 puntos de victoria") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -34,7 +34,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
         }
 
     },
-    energize("Energizado", "Otorga 9 puntos de energía") {
+    ENERGIZE("Energizado", "Otorga 9 puntos de energía") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -42,7 +42,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             playerService.savePlayer(player);
         }
     },
-    fireBlast("Bola de fuego", "Todos los monstruos enemigos reciben 2 puntos de daño") {
+    FIREBLAST("Bola de fuego", "Todos los monstruos enemigos reciben 2 puntos de daño") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -54,7 +54,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             }
         }
     },
-    evacuationOrders("Ordenes de evacuacion", "Todos los monstruos enemigos pierden 5 puntos de victoria") {
+    EVACUATIONORDERS("Ordenes de evacuacion", "Todos los monstruos enemigos pierden 5 puntos de victoria") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -66,14 +66,14 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             }
         }
     },
-    heal("Curacion", "Tu monstruo se cura 2 puntos de vida") {
+    HEAL("Curacion", "Tu monstruo se cura 2 puntos de vida") {
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
             playerService.healDamage(player, 2);
             playerService.savePlayer(player);
         }
     },
-    gasRefinery("Refineria de gas",
+    GASREFINERY("Refineria de gas",
             "Obtienes 2 puntos de victoria y todos los monstruos enemigos reciben 3 puntos de daño") {
 
         @Override
@@ -90,7 +90,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
         }
     },
 
-    highAltitudeBombing("Bombardeo de Gran Altura", "Todos los monstruos(incluyéndote a ti) reciben 3 puntos de daño") {
+    HIGHALTITUDEBOMBING("Bombardeo de Gran Altura", "Todos los monstruos(incluyéndote a ti) reciben 3 puntos de daño") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -101,7 +101,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
         }
     },
 
-    jetFighters("Caza de combate", "Obtienes 5 puntos de victoria pero pierdes 4 puntos de vida") {
+    JETFIGHTERS("Caza de combate", "Obtienes 5 puntos de victoria pero pierdes 4 puntos de vida") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -112,7 +112,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
         }
     },
 
-    nationalGuard("Guarda Nacional", "Obtienes 2 puntos de victoria pero pierdes 2 puntos de vida") {
+    NATIONALGUARD("Guarda Nacional", "Obtienes 2 puntos de victoria pero pierdes 2 puntos de vida") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -123,7 +123,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
         }
     },
 
-    cornerStore("Bazar de la esquina", "Otorga 1 punto de victoria") {
+    CORNERSTORE("Bazar de la esquina", "Otorga 1 punto de victoria") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -133,7 +133,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
         }
     },
 
-    evenBigger("Coloso", "La vida maxima de tu monstruo pasa a ser 12 y se cura 2 puntos de vida") {
+    EVENBIGGER("Coloso", "La vida maxima de tu monstruo pasa a ser 12 y se cura 2 puntos de vida") {
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -142,7 +142,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    acidAttack("Ataque ácido", "Obtienes en cada turno un dado de daño extra") {
+    ACIDATTACK("Ataque ácido", "Obtienes en cada turno un dado de daño extra") {
 
         @Override
         public void effectInRoll(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -155,7 +155,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    alphaMonster("Monstruo alfa", "Obtienes un punto de victoria cuando consigues al menos 1 dado de daño") {
+    ALPHAMONSTER("Monstruo alfa", "Obtienes un punto de victoria cuando consigues al menos 1 dado de daño") {
 
         @Override
         public void effectInRoll(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -169,7 +169,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             }
         }
     },
-    fireBreathing("Aliento de fuego", "Dañas a tus monstruos vecinos cuando consigues almenos 1 dado de daño") {
+    FIREBREATHING("Aliento de fuego", "Dañas a tus monstruos vecinos cuando consigues almenos 1 dado de daño") {
 
         @Override
         public void effectInRoll(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -177,16 +177,16 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
             Map<String, Integer> rollValues = playerService.countRollValues(roll.getValues());
             if (rollValues.get("damage") > 0) {
-                if (player.isInTokyo()) {
+                if (Boolean.TRUE.equals(player.isInTokyo())) {
                     for (Player playTokyo : player.getGame().playersInTokyo()) {
-                        if (player.getId() != playTokyo.getId()) {
+                        if (!player.getId().equals(playTokyo.getId())) {
                             playerService.damagePlayer(playTokyo, 1);
                             playerService.savePlayer(player);
                         }
                     }
                 } else {
                     for (Player playOutTokyo : player.getGame().playersOutOfTokyo()) {
-                        if (player.getId() != playOutTokyo.getId()) {
+                        if (!player.getId().equals(playOutTokyo.getId())) {
                             playerService.damagePlayer(playOutTokyo, 1);
                             playerService.savePlayer(player);
                         }
@@ -196,7 +196,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    friendOfChildren("Amigo de los niños",
+    FRIENDOFCHILDREN("Amigo de los niños",
             "Si en tu turno obtienes al menos 1 punto de energía, ganas 1 punto de energía extra") {
 
         @Override
@@ -213,7 +213,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    extraHead("Segunda cabeza", "Tienes un dado adicional") {
+    EXTRAHEAD("Segunda cabeza", "Tienes un dado adicional") {
 
         @Override
         public void effectStartTurn(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -227,7 +227,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    giantBrain("Cerebro galaxia", "Tienes una tirada adicional") {
+    GIANTBRAIN("Cerebro galaxia", "Tienes una tirada adicional") {
 
         @Override
         public void effectStartTurn(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -239,7 +239,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    completeDestruction("Destrucion total",
+    COMPLETEDESTRUCTION("Destrucion total",
             "Si obtienes un dado de cada tipo obtienes 9 puntos de victoria adicionales") {
 
         @Override
@@ -255,7 +255,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    armorPlating("Armadura blindada", "Si tu monstruo fuera a recibir solo uno de daño, no recibes daño en su lugar") {
+    ARMORPLATING("Armadura blindada", "Si tu monstruo fuera a recibir solo uno de daño, no recibes daño en su lugar") {
 
         @Override
         public Integer effectDamage(Player player, PlayerService playerService, Integer damage, MapGameRepository mapGameRepository) {
@@ -265,7 +265,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             return damage;
         }
     },
-    camouflage("Camuflaje", "Por cada daño recibido, hay una posibilidad de 1 entre 6 de que que no haga daño") {
+    CAMOUFLAGE("Camuflaje", "Por cada daño recibido, hay una posibilidad de 1 entre 6 de que que no haga daño") {
 
         @Override
         public Integer effectDamage(Player player, PlayerService playerService, Integer damage, MapGameRepository mapGameRepository) {
@@ -283,7 +283,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             return newDamage;
         }
     },
-    itHasAChild("¡Tiene un hijo!",
+    ITHASACHILD("¡Tiene un hijo!",
             "Si eres eliminado, descartas tus cartas, pierdes todos tus puntos de victoria y tu vida vuelve a 10") {
 
         @Override
@@ -300,7 +300,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             return damage;
         }
     },
-    alienMetabolism("Metabolismo monstruoso",
+    ALIENMETABOLISM("Metabolismo monstruoso",
             "Cuando compras una carta te cuesta uno de energia menos") {
 
         @Override
@@ -309,7 +309,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             return energy;
         }
     },
-    dedicatedNewsTeam("El preferido de la prensa",
+    DEDICATEDNEWSTEAM("El preferido de la prensa",
             "Obtienes 1 punto de victoria al comprar una carta") {
 
         @Override
@@ -320,7 +320,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             return energy;
         }
     },
-    herbivore("Herbivoro", "Obtienes 1 punto de victoria si no atacas a nadie en un turno") {
+    HERBIVORE("Herbivoro", "Obtienes 1 punto de victoria si no atacas a nadie en un turno") {
 
         @Override
         public void effectEndTurn(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -334,7 +334,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    energyHoarder("Acaparador de energia", "Obtienes 1 punto de victoria por cada 6 puntos de energia al final de tu turno") {
+    ENERGYHOARDER("Acaparador de energia", "Obtienes 1 punto de victoria por cada 6 puntos de energia al final de tu turno") {
 
         @Override
         public void effectEndTurn(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -347,7 +347,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    novaBreath("Aliento nova", "Al atacar dañas a todos los demas jugadores") {
+    NOVABREATH("Aliento nova", "Al atacar dañas a todos los demas jugadores") {
 
         @Override
         public void effectAfterRoll(Player playerRolling, PlayerService playerService, MapGameRepository mapGameRepository) {
@@ -364,7 +364,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         }
     },
-    gourmet("Gourmet", "Cuando consigas 3 o más dados 'ONE', recibirás 2 puntos de victoria extra") {
+    GOURMET("Gourmet", "Cuando consigas 3 o más dados 'ONE', recibirás 2 puntos de victoria extra") {
         @Override
         public void effectInRoll(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
             Roll roll = mapGameRepository.getRoll(player.getGame().getId());
