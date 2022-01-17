@@ -1,10 +1,8 @@
 package org.springframework.samples.kingoftokyo.player;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -20,7 +18,6 @@ import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 /**
  * @author Ricardo Nadal Garcia
@@ -79,7 +76,7 @@ public class PlayerService {
                 !game.isStarted() &&
                 game.monsterAvailable(monster) &&
                 !user.hasActivePlayer() &&
-                (!user.hasActiveGameAsCreator() || user.isCreator(game) )) {
+                (!user.hasActiveGameAsCreator() || user.isCreator(game))) {
 
             newPlayer.setGame(game);
             newPlayer.setUser(user);
@@ -90,8 +87,10 @@ public class PlayerService {
             newPlayer.setRecentlyHurt(Boolean.FALSE);
 
             game.getPlayers().add(newPlayer);
-        }else{
-            throw new NewGameException("No es posible unirse a la partida");
+        } else {
+            throw new NewGameException("El usuario {id: '" + user.getId() + "', Username: '" + user.getUsername()
+                    + "'} unirse a la partida {id: '" + game.getId() + "', Name: '" + game.getName()
+                    + "'} con el monstruo {Monster: " + monster.getName() + "}");
         }
     }
 
@@ -99,7 +98,6 @@ public class PlayerService {
     public Player findPlayerById(int id) throws DataAccessException {
         return playerRepository.findById(id).get();
     }
-
 
     @Transactional
     public void useRoll(Integer playerIdActualTurn, Roll roll) {
@@ -119,45 +117,44 @@ public class PlayerService {
         Integer twos = rollCount.get("twos") + cardValuesCount.get("twos");
         Integer threes = rollCount.get("threes") + cardValuesCount.get("threes");
 
-        
-        //Handle heal
+        // Handle heal
         if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
             healDamage(playerActualTurn, heal);
         }
 
-        //Entering in Tokyo
-        damage=enterTokyoInRollIfEmpty(playerActualTurn, playersInGameList,damage);
-        
-        //Handle energy
+        // Entering in Tokyo
+        damage = enterTokyoInRollIfEmpty(playerActualTurn, playersInGameList, damage);
+
+        // Handle energy
         Integer sumaEnergias = playerActualTurn.getEnergyPoints() + energys;
         playerActualTurn.setEnergyPoints(sumaEnergias);
 
-        //Handle score
+        // Handle score
         Integer totalPoints = calculatePoints(ones, twos, threes);
         playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + totalPoints);
 
-        //Handle damage
+        // Handle damage
         handleDamageRolls(playerActualTurn, playersInGameList, damage);
 
-        //Use all the cards that are used after all the roll effects are done
+        // Use all the cards that are used after all the roll effects are done
         useCardsAfterRoll(playerActualTurn);
 
     }
 
     @Transactional
-    public void handleDamageRolls(Player actualPlayer, List<Player> playersInGame,Integer damage) {
+    public void handleDamageRolls(Player actualPlayer, List<Player> playersInGame, Integer damage) {
         for (Player player : playersInGame) {
             if (actualPlayer.getId() != player.getId()) {
-                //Damage players in Tokyo
+                // Damage players in Tokyo
                 if (actualPlayer.getLocation() == LocationType.fueraTokyo) {
                     if (player.getLocation() == LocationType.ciudadTokyo
                             || player.getLocation() == LocationType.bahiaTokyo) {
                         damagePlayer(player, damage);
-                        if (damage >= 1) { //If damage is done to other players
+                        if (damage >= 1) { // If damage is done to other players
                             player.setRecentlyHurt(Boolean.TRUE);
                         }
                     }
-                //Damage players out of tokyo
+                    // Damage players out of tokyo
                 } else if (actualPlayer.getLocation() == LocationType.bahiaTokyo
                         || actualPlayer.getLocation() == LocationType.ciudadTokyo) {
                     if (player.getLocation() == LocationType.fueraTokyo) {
@@ -169,9 +166,8 @@ public class PlayerService {
         }
     }
 
-    
     @Transactional
-    public Integer enterTokyoInRollIfEmpty(Player actualPlayer,List<Player> listPlayersInGame,Integer damage) {
+    public Integer enterTokyoInRollIfEmpty(Player actualPlayer, List<Player> listPlayersInGame, Integer damage) {
         Boolean bayInPlay = listPlayersInGame.stream().filter(p -> !p.isDead()).count() > 4;
         Boolean tokyoCityEmpty = !listPlayersInGame.stream()
                 .anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
@@ -187,34 +183,35 @@ public class PlayerService {
             actualPlayer.setVictoryPoints(actualPlayer.getVictoryPoints() + 1);
             damage--;
         }
-        
+
         return damage;
     }
-    
+
     @Transactional
     public void useCardsInRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
-            card.getCardEnum().effectInRoll(player, playerService,mapGameRepository);
+            card.getCardEnum().effectInRoll(player, playerService, mapGameRepository);
         }
     }
 
     @Transactional
     public void useCardsAfterRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
-            card.getCardEnum().effectAfterRoll(player, playerService,mapGameRepository);
+            card.getCardEnum().effectAfterRoll(player, playerService, mapGameRepository);
         }
     }
 
-    //This function is used to count the different roll values of a List of diceValues 
+    // This function is used to count the different roll values of a List of
+    // diceValues
     @Transactional
     public Map<String, Integer> countRollValues(List<DiceValues> values) {
-        Integer heal,damage,energys,ones,twos,threes;
+        Integer heal, damage, energys, ones, twos, threes;
         heal = damage = energys = ones = twos = threes = 0;
 
         Map<String, Integer> rollValues = new HashMap<String, Integer>();
 
         for (DiceValues valorDado : values) {
-            switch (valorDado) { 
+            switch (valorDado) {
                 case HEAL:
                     heal++;
                     break;
@@ -245,7 +242,7 @@ public class PlayerService {
         return rollValues;
     }
 
-    //This function heals a player, without overpassing their max health points
+    // This function heals a player, without overpassing their max health points
     @Transactional
     public void healDamage(Player player, Integer healPoints) {
         healPoints = player.getLifePoints() + healPoints;
@@ -257,7 +254,7 @@ public class PlayerService {
         }
     }
 
-    //This function calculates the points a player gets with the roll dices
+    // This function calculates the points a player gets with the roll dices
     @Transactional
     public Integer calculatePoints(Integer ones, Integer twos, Integer threes) {
         Integer result = 0;
@@ -281,14 +278,14 @@ public class PlayerService {
     public void damagePlayer(Player player, Integer damage) {
         damage = useCardsInDamage(player, damage);
         Integer damagedLife = player.getLifePoints() - damage;
-        Integer minHealth=0;
+        Integer minHealth = 0;
         if (minHealth < damagedLife) {
             player.setLifePoints(damagedLife);
         } else {
             player.setLifePoints(minHealth);
             List<Integer> turnList = mapGameRepository.getTurnList(player.getGame().getId());
-            Integer positionInTurnList = turnList.indexOf(player.getId()); 
-            if (positionInTurnList >= 0) { //If the player is in the turnlist
+            Integer positionInTurnList = turnList.indexOf(player.getId());
+            if (positionInTurnList >= 0) { // If the player is in the turnlist
                 turnList.remove(player.getId());
                 mapGameRepository.putTurnList(player.getGame().getId(), turnList);
             }
@@ -300,7 +297,7 @@ public class PlayerService {
     @Transactional
     public Integer useCardsInDamage(Player player, Integer damage) {
         for (Card card : player.getAvailableCards()) {
-            damage = card.getCardEnum().effectDamage(player, playerService, damage,mapGameRepository);
+            damage = card.getCardEnum().effectDamage(player, playerService, damage, mapGameRepository);
         }
         return damage;
     }
@@ -308,7 +305,7 @@ public class PlayerService {
     @Transactional
     public void substractVictoryPointsPlayer(Player player, Integer victoryPoints) {
         Integer victoryPointsNew = player.getLifePoints() - victoryPoints;
-        Integer minVictoryPoints=0;
+        Integer minVictoryPoints = 0;
         if (minVictoryPoints < victoryPointsNew) {
             player.setVictoryPoints(victoryPointsNew);
         } else {
@@ -319,7 +316,7 @@ public class PlayerService {
     @Transactional
     public void startTurn(Integer playerId) {
         Player player = findPlayerById(playerId);
-        Integer pointsObtainedInTokyo=2;
+        Integer pointsObtainedInTokyo = 2;
         if (player.getLocation().equals(LocationType.ciudadTokyo)
                 || player.getLocation().equals(LocationType.bahiaTokyo)) {
 
@@ -385,7 +382,7 @@ public class PlayerService {
     public void checkplayers(Integer gameId) {
         Game game = gameService.findGameById(gameId);
         Integer numplayers = game.getMaxNumberOfPlayers();
-        Integer minAmmountPlayersTokyoBay=5;
+        Integer minAmmountPlayersTokyoBay = 5;
         if (numplayers < minAmmountPlayersTokyoBay) {
             List<Player> lsplayersAlive = game.playersAlive();
             for (Player player : lsplayersAlive) {

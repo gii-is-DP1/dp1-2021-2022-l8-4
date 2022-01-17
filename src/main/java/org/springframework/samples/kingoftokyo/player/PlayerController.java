@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Ricardo Nadal Garcia
  * @author Jose Maria Delgado Sanchez
  */
-
+@Slf4j
 @Controller
 @RequestMapping("/players")
 public class PlayerController {
@@ -46,7 +48,7 @@ public class PlayerController {
         try{
             playerCardService.buyCard(player, card);
         }catch(InvalidPlayerActionException e){
-            System.out.println(e.toString());
+            log.warn(e.toString());
         }
         
         return "redirect:/games/" + player.getGame().getId() + "/playing";
@@ -59,7 +61,7 @@ public class PlayerController {
         try{
             playerCardService.discardShopCards(player);
         }catch(InvalidPlayerActionException e){
-            System.out.println(e.toString());
+            log.warn(e.toString());
         }
         
         return "redirect:/games/" + player.getGame().getId() + "/playing";

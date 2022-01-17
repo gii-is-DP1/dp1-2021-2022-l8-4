@@ -103,7 +103,7 @@ public class GameService {
         if (!game.isStarted()) {
             gameRepository.delete(game);
         }else{
-            throw new DeleteGameException();
+            throw new DeleteGameException("La partida {id: '"+game.getId()+"', Name: '"+game.getName()+"'} no puede ser borrada");
         }
     }
 
@@ -131,9 +131,9 @@ public class GameService {
             saveGame(game);
         }else{
             if(!game.hasEnoughPlayers()){
-                throw new NewGameException("La partida no puede ser iniciada porque no hay suficientes jugadores");
+                throw new NewGameException("La partida {id: '"+game.getId()+"', Name: '"+game.getName()+"'} no puede ser iniciada porque no hay suficientes jugadores");
             }else{
-                throw new NewGameException("La partida ya ha sido iniciada");
+                throw new NewGameException("La partida {id: '"+game.getId()+"', Name: '"+game.getName()+"'} ya ha sido iniciada");
             }
             
         }
@@ -148,7 +148,7 @@ public class GameService {
     public void createNewGame(Game game) throws NewGameException{
         User creator = game.getCreator();
         if(creator.hasActiveGameAsCreator() || creator.hasActivePlayer()){
-            throw new NewGameException("El usuario ya tiene otro juego activo");
+            throw new NewGameException("El usuario {id: '"+creator.getId()+"', Username: '"+creator.getUsername()+"'} ya tiene otro juego activo");
         }else{
             saveGame(game);
         }
