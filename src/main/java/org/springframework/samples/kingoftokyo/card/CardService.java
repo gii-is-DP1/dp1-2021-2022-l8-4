@@ -26,8 +26,7 @@ public class CardService {
 
     @Transactional // (readOnly = true)
     public Iterable<Card> findAll() {
-        Iterable<Card> res = cardRepository.findAll();
-        return res;
+        return cardRepository.findAll();
     }
 
     @Transactional(readOnly = true)
