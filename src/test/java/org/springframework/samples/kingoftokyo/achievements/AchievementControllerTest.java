@@ -8,15 +8,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.kingoftokyo.configuration.CurrentUserController;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
+import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementController;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricType;
@@ -24,6 +27,7 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.MediaType;
 
 
 /**
@@ -44,6 +48,7 @@ public class AchievementControllerTest {
     @MockBean
     private CurrentUserController currentUserController;
 
+
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
     public void testAchievementControllerOk() throws Exception {
@@ -63,14 +68,14 @@ public class AchievementControllerTest {
     @Disabled
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
-    public void testAchievementCreateControllerError() throws Exception {
-        mockMvc.perform(post("/product/create")
+    public void testAchievementCreateController() throws Exception {
+        mockMvc.perform(post("/achievement/new")
                     .with(csrf())
-                    .param("name", "")
-                    .param("description", "")
-                    .param("rewardPoints", "-20")
-                    .param("metric", "1"))
-                .andExpect(status().isNotFound())
+                    .param("name", "name")
+                    .param("description", "description")
+                    .param("rewardPoints", "20")
+                    .param("metrics", "Victorias"))
+                .andExpect(status().isOk())
                 .andExpect(view().name("achievements"));
 
     }

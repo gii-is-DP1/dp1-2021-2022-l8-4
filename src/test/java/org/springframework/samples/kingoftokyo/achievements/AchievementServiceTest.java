@@ -48,7 +48,7 @@ public class AchievementServiceTest {
     @Test
     public void shouldCreateAchivement() {
         Achievement achievement = new Achievement();
-        achievement.setId(2);
+        achievement.setId(99);
         achievement.setName("Achievement 2");
         achievement.setDescription("Nuevo achievement");
         achievement.setGoal(1l);
@@ -86,12 +86,12 @@ public class AchievementServiceTest {
     public void shouldFindAllAchievement(){
         List<Achievement> listcont= new ArrayList<>();
         achievementsService.findAll().forEach(listcont::add);
-        Integer numero = 1;
+        Integer numero = 12;
         Integer contadorFind = listcont.size();
         assertEquals(contadorFind, numero);
 
         Achievement achievement = new Achievement();
-        achievement.setId(3);
+        achievement.setId(99);
         achievement.setName("Achievement 3");
         achievement.setDescription("Nuevo achievement 3");
         achievement.setGoal(1l);
@@ -102,7 +102,7 @@ public class AchievementServiceTest {
 
         List<Achievement> listcont2= new ArrayList<>();
         achievementsService.findAll().forEach(listcont2::add);
-        numero = 2;
+        numero = 13;
         contadorFind = listcont2.size();
         assertEquals(contadorFind, numero);
     }
@@ -115,7 +115,7 @@ public class AchievementServiceTest {
     @Test
     public void shouldBeObtainAchievement(){
         Achievement achievement = new Achievement();
-        achievement.setId(4);
+        achievement.setId(99);
         achievement.setName("Achievement 4");
         achievement.setDescription("Nuevo achievement 4");
         achievement.setGoal(1l);
@@ -125,6 +125,46 @@ public class AchievementServiceTest {
         achievementsService.saveAchievement(achievement);
         assertEquals(true, achievement.isObtained(1l));
     }
+
+    /**
+     * should not be obtain
+     * isObtained
+     */
+
+    @Test
+    public void shouldNotBeObtainAchievement(){
+        Achievement achievement = new Achievement();
+        achievement.setId(99);
+        achievement.setName("Achievement 4");
+        achievement.setDescription("Nuevo achievement 4");
+        achievement.setGoal(1l);
+        MetricType tipoMetrica = MetricType.wins;
+        achievement.setMetric(tipoMetrica);
+        achievement.setRewardPoints(10);
+        achievementsService.saveAchievement(achievement);
+        assertEquals(false, achievement.isObtained(0l));
+    }
+
+    
+    /**
+     * should not be obtain because score is null
+     * isObtained
+     */
+
+    @Test
+    public void shouldNotBeObtainCauseScoreNullAchievement(){
+        Achievement achievement = new Achievement();
+        achievement.setId(99);
+        achievement.setName("Achievement 4");
+        achievement.setDescription("Nuevo achievement 4");
+        achievement.setGoal(1l);
+        MetricType tipoMetrica = MetricType.wins;
+        achievement.setMetric(tipoMetrica);
+        achievement.setRewardPoints(10);
+        achievementsService.saveAchievement(achievement);
+        assertEquals(false, achievement.isObtained(null));
+    }
+
 
     /**
      * should get users achievement
@@ -139,7 +179,7 @@ public class AchievementServiceTest {
         set.add(userService.findUserById(3).get());
 
         Achievement achievement = new Achievement();
-        achievement.setId(5);
+        achievement.setId(99);
         achievement.setName("Achievement 5");
         achievement.setDescription("Nuevo achievement 5");
         achievement.setGoal(1l);
