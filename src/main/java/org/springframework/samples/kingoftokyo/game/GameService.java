@@ -322,7 +322,6 @@ public class GameService {
                 useCardsEndTurn(playerService.actualPlayer(gameId));
                 isRecentlyHurtToFalse(gameId);
                 nuevoTurno(gameId);
-                checkPlayersAlive(gameId);
                 playerService.checkplayers(gameId);
             } else {
                 Roll rollData = mapGameRepository.getRoll(gameId); 
@@ -336,22 +335,6 @@ public class GameService {
             }
         }
 
-    }
-    /**
-     * Checks is the number of player is less than 5 and disables Tokyo Bay. 
-     * @param gameId
-     */
-    @Transactional
-    public void checkPlayersAlive(Integer gameId){
-        Game game  = findGameById(gameId);
-        List<Player> players = game.playersAlive();
-        if(players.size()<5){
-            for(Player player : players){
-                if(player.getLocation()==LocationType.bahiaTokyo){
-                    player.setLocation(LocationType.fueraTokyo);
-                }
-            }
-        }
     }
 
     @Transactional
