@@ -336,7 +336,11 @@ public class GameService {
         }
 
     }
-
+    /**
+     * Swaps the locations between the player who wants to leave tokyo and the player
+     * who hurt the player in tokyo.
+     * @param game
+     */
     @Transactional
     public void changePosition(Integer gameId) {
         Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));
@@ -348,7 +352,10 @@ public class GameService {
         playerService.savePlayer(player);
         playerService.savePlayer(playerActualTurn);
     }
-
+    /**
+     * Changes the attribute "recentlyHurt" of all the players in the game to FALSE 
+     * @param game
+     */
     @Transactional
     public void isRecentlyHurtToFalse(Integer gameId) {
         List<Player> lsplayer = findPlayerList(gameId);
@@ -358,6 +365,11 @@ public class GameService {
         }
     }
 
+    /**
+     * Handles the changes of the attribute "Location" of a player from Tokyo(or TokyoBay) to fueraDeTokyo 
+     * if the players has been hurt and is on Tokyo(or Tokyobay) 
+     * @param game
+     */
     @Transactional
     public void handleExitTokyo(Integer gameId) {
         if (playerService.isRecentlyHurt(gameId) && playerService.isInTokyo(gameId)) {
