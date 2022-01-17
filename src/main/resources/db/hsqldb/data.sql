@@ -21,7 +21,7 @@ INSERT INTO cards(id,cost,card_enum,type) VALUES(18,7,'EXTRAHEAD',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(19,5,'GIANTBRAIN',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(20,3,'COMPLETEDESTRUCTION',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(21,4,'EVENBIGGER',0);
-INSERT INTO cards(id,cost,card_enum,type) VALUES(22,4,'gourmet',1);
+INSERT INTO cards(id,cost,card_enum,type) VALUES(22,4,'GOURMET',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(23,3,'CAMOUFLAGE',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(24,4,'ARMORPLATING',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(25,7,'ITHASACHILD',1);
