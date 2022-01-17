@@ -23,10 +23,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Jose Maria Delgado Sanchez
  */
 
+@Slf4j
 @Controller
 @RequestMapping("/games")
 public class LobbyController {
@@ -79,7 +82,7 @@ public class LobbyController {
                 gameService.createNewGame(newGame);
                 return "redirect:/games/" + newGame.getId() + "/lobby";
             } catch (NewGameException e) {
-                System.out.println(e.toString());
+                log.warn(e.toString());
                 return "redirect:/games/lobbies";
             }
 
@@ -118,7 +121,7 @@ public class LobbyController {
             try {
                 playerService.joinGame(newPlayer, game);
             } catch (NewGameException e) {
-                System.out.println(e.toString());
+                log.warn(e.toString());
             }
 
         }
@@ -136,7 +139,7 @@ public class LobbyController {
             try {
                 gameService.deleteGame(game);
             } catch (DeleteGameException e) {
-                System.out.println(e.toString());
+                log.warn(e.toString());
                 view = "redirect:/games/" + gameId + "/lobby";
             }
         } else {
@@ -155,7 +158,7 @@ public class LobbyController {
             try{
                 gameService.startGame(game);
             }catch(NewGameException e){
-                System.out.println(e.toString());
+                log.warn(e.toString());
             }
         }
         return "redirect:/games/" + game.getId() + "/lobby";

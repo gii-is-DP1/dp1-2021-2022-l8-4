@@ -216,7 +216,7 @@ public class LobbyControllerTest {
 
         Mockito.when(userService.authenticatedUser()).thenReturn(user);
 
-        doThrow(new DeleteGameException()).when(gameService).deleteGame(game);
+        doThrow(new DeleteGameException("")).when(gameService).deleteGame(game);
 
         mockMvc.perform(get("/games/"+gameId+"/lobby/delete")).andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/games/" + gameId + "/lobby"));
