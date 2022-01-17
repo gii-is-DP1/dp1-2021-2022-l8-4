@@ -179,14 +179,14 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             if (rollValues.get("damage") > 0) {
                 if (Boolean.TRUE.equals(player.isInTokyo())) {
                     for (Player playTokyo : player.getGame().playersInTokyo()) {
-                        if (player.getId() != playTokyo.getId()) {
+                        if (!player.getId().equals(playTokyo.getId())) {
                             playerService.damagePlayer(playTokyo, 1);
                             playerService.savePlayer(player);
                         }
                     }
                 } else {
                     for (Player playOutTokyo : player.getGame().playersOutOfTokyo()) {
-                        if (player.getId() != playOutTokyo.getId()) {
+                        if (!player.getId().equals(playOutTokyo.getId())) {
                             playerService.damagePlayer(playOutTokyo, 1);
                             playerService.savePlayer(player);
                         }
