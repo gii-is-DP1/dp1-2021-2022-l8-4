@@ -4,11 +4,15 @@ package org.springframework.samples.kingoftokyo.game;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -17,12 +21,16 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.kingoftokyo.dice.DiceValues;
 import org.springframework.samples.kingoftokyo.dice.Roll;
+import org.springframework.samples.kingoftokyo.game.exceptions.DeleteGameException;
+import org.springframework.samples.kingoftokyo.game.exceptions.NewGameException;
 import org.springframework.samples.kingoftokyo.player.LocationType;
 import org.springframework.samples.kingoftokyo.player.Player;
 import org.springframework.samples.kingoftokyo.player.PlayerService;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
+import org.springframework.test.web.servlet.MockMvc;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 
@@ -32,6 +40,7 @@ import org.springframework.stereotype.Service;
  *@author Noelia López Durán
  */
 
+ 
 public class GameServiceTests {
     
     private GameService gameService;
@@ -39,14 +48,17 @@ public class GameServiceTests {
     private UserService userService;
 
     @Autowired
-    public GameServiceTests(GameService gameService,PlayerService playerService,UserService userService){
+    private GameServiceTests(GameService gameService,PlayerService playerService,UserService userService){
         this.gameService=gameService;
         this.playerService = playerService;
         this.userService = userService;
     }
 
-    private Integer numberOfGames = 5;
+    private Integer numberOfGames = 7;
+    private Integer gamesStarted = 4;
     private Integer gameFinished = 1;
+    private Integer gamesPlaying = numberOfGames-gameFinished;
+    private Integer gamesInLobby = gamesPlaying-gamesStarted;
 
 
 
@@ -139,37 +151,41 @@ public class GameServiceTests {
 
     @Test
     public void testEndGameWithVictoryPoints(){
-        Integer gamesPlayingOriginal = numberOfGames-gameFinished; //4
-        Game game = gameService.findGameById(4);
+        Integer gamesPlaying = numberOfGames-gameFinished;
         Player player = gameService.actualTurn(4);
-        Integer gamesPlayingCalculated = gameService.findAllNotFinished().size();
-        Integer finishedGamesCalculated = gameService.findAllFinished().size();
-        assertEquals(gamesPlayingOriginal, gamesPlayingCalculated);
+        Integer gamesPlayingCalculated = gameService.findAllNotFinished().size();// Los juegos sin empezar cuentan como juegos jugandose
+        Integer finishedGamesCalculated = gameService.findAllFinished().size(); 
+        assertEquals(gamesPlaying ,gamesPlayingCalculated);
         assertEquals(gameFinished,finishedGamesCalculated);
         player.setVictoryPoints(20);
         playerService.savePlayer(player);
-        gameService.saveGame(game);
         gameService.endGame(4);
         Integer finishedGamesCalculated2 = gameService.findAllFinished().size();
         assertEquals(gameFinished+1, finishedGamesCalculated2 );
         Integer gamesPlayingCalculated2 = gameService.findAllNotFinished().size();
-        assertThat(gamesPlayingOriginal).isGreaterThan(gamesPlayingCalculated2);
+        assertThat(gamesPlaying).isGreaterThan(gamesPlayingCalculated2);
     }
 
     @Test
     public void testEndGameKillingEveryone(){
-        Integer gamesPlayingOriginal = numberOfGames-gameFinished;
         Game game = gameService.findGameById(5);
         Player player = gameService.actualTurn(5);
         player.setLifePoints(0);
         playerService.savePlayer(player);
-        gameService.saveGame(game);
         gameService.endGame(5);
         Integer finishedGamesCalculated = gameService.findAllFinished().size();
         assertEquals(gameFinished+1, finishedGamesCalculated ); //Debería haber un game finished más que antes
         Integer gamesPlayingCalculated = gameService.findAllNotFinished().size();
         //Vamos a comprobar que el numero de partidas jugando ahora es 1 menos que antes
-        assertThat(gamesPlayingOriginal).isGreaterThan(gamesPlayingCalculated); 
+        assertThat(gamesPlaying).isGreaterThan(gamesPlayingCalculated); 
+    }
+    @Test
+    public void testShouldNotEndGame(){
+        gameService.endGame(5);
+        Integer finishedGamesCalculated = gameService.findAllFinished().size();
+        assertEquals(gameFinished, finishedGamesCalculated ); //No debería acabar el juego
+        Integer gamesPlayingCalculated = gameService.findAllNotFinished().size();
+        assertEquals(gamesPlaying,gamesPlayingCalculated); 
     }
     
     
@@ -204,6 +220,81 @@ public class GameServiceTests {
         gameService.saveGame(game);
         assertNotEquals(game.getTurn(), initialTurn);
         assertNotEquals(playerActualTurn.getMonster(), playerInitiaPlayer.getMonster());
+    }
+
+    @Test
+    public void testShouldStartGame(){
+        Game game = gameService.findGameById(6);//Un game sin empezar (pero que cumple las condiciones para empezar)
+        try {
+            gameService.startGame(game);
+            assertNotNull(game.getStartTime());
+            assertEquals(1, game.getTurn());
+            Integer gamesThatHadStarted = gameService.findOnGoingGames().size();
+            assertEquals(gamesStarted+1, gamesThatHadStarted);      
+        } catch (NewGameException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }   
+    }
+
+    @Test
+    public void testStartGameNotEnoughPlayers(){
+        Game game = gameService.findGameById(7);//Un game sin empezar con 1 solo jugador
+        assertThrows(NewGameException.class, () -> {gameService.startGame(game);});
+        Integer gamesThatHadStarted = gameService.findOnGoingGames().size();
+        assertEquals(gamesStarted, gamesThatHadStarted);       
+    }
+    
+    @Test
+    public void testStartGameAlreadyStarted(){
+        Game game = gameService.findGameById(5);//Un game sin empezar con 1 solo jugador
+        assertThrows(NewGameException.class, () -> {gameService.startGame(game);});  
+        Integer gamesThatHadStarted = gameService.findOnGoingGames().size();
+        assertEquals(gamesStarted, gamesThatHadStarted);     
+    }
+    
+    @Test
+    public void testFindLobbies(){
+        Integer calculatedGamesInLobby = gameService.findLobbies().size();
+        assertEquals(gamesInLobby, calculatedGamesInLobby);     
+    }
+
+    @Test
+    public void testDeleteGame(){
+        Game game = gameService.findGameById(6);//un game sin empezar
+        try {
+            gameService.deleteGame(game);
+            assertThrows(NoSuchElementException.class,() ->{gameService.findGameById(6);});
+            Integer calculatedGamesInLobby = gameService.findLobbies().size();
+            assertEquals(gamesInLobby-1, calculatedGamesInLobby);      
+        } catch (DeleteGameException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }   
+    }
+
+    @Test
+    public void testShouldNotDeleteGameStarted(){
+        Game game = gameService.findGameById(5);//un game empezado
+        assertThrows(DeleteGameException.class, () -> {gameService.deleteGame(game);});
+        Integer calculatedGamesPlaying = gameService.findOnGoingGames().size();
+        assertEquals(gamesStarted, calculatedGamesPlaying);    
+    }
+
+    @Test
+    public void testPlayerInGameByUser(){
+        Player player = playerService.findPlayerById(19);
+        User user = userService.findUserById(21).get();
+        Player playerObtenido = gameService.playerInGameByUser(user, 5);
+        assertEquals(player, playerObtenido);
+        
+    }
+
+    @Test 
+    public void testShouldNotFindPlayerInGame(){
+        User user = userService.findUserById(21).get();
+        assertThrows(NoSuchElementException.class,() ->{gameService.playerInGameByUser(user, 6);});//Probamos en un game en el que no está
+        
     }
 
 }
