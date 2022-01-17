@@ -83,6 +83,7 @@ public class PlayerService {
             newPlayer.setEnergyPoints(0);
             newPlayer.setLifePoints(10);
             newPlayer.setVictoryPoints(0);
+            newPlayer.setTurnsTokyo(0l);
             newPlayer.setLocation(LocationType.fueraTokyo);
             newPlayer.setRecentlyHurt(Boolean.FALSE);
 
@@ -316,13 +317,19 @@ public class PlayerService {
     @Transactional
     public void startTurn(Integer playerId) {
         Player player = findPlayerById(playerId);
+        User user = player.getUser();
         Integer pointsObtainedInTokyo = 2;
         if (player.getLocation().equals(LocationType.ciudadTokyo)
                 || player.getLocation().equals(LocationType.bahiaTokyo)) {
 
             player.setVictoryPoints(player.getVictoryPoints() + pointsObtainedInTokyo);
-
+            player.setTurnsTokyo(player.getTurnsTokyo() + 1l);
             savePlayer(player);
+
+            if(player.getTurnsTokyo()>user.getMaxTurnsTokyo()){
+                user.setMaxTurnsTokyo(player.getTurnsTokyo());
+                userService.saveUser(user);
+            }
         }
 
     }

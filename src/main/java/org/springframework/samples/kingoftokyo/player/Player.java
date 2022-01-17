@@ -46,6 +46,8 @@ public class Player extends BaseEntity {
     @NotNull
     private Integer lifePoints;
 
+    @Column(columnDefinition = "long default 0l")
+    private Long turnsTokyo;
     
     @NotNull
     @Min(0)
