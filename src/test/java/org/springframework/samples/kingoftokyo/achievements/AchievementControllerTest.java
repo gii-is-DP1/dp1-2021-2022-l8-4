@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -62,14 +63,14 @@ public class AchievementControllerTest {
     @Disabled
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
-    public void testAchievementCreateController() throws Exception {
+    public void testAchievementCreateControllerError() throws Exception {
         mockMvc.perform(post("/product/create")
                     .with(csrf())
-                    .param("name", "achievementtest")
-                    .param("description", "test for the achievement controller")
-                    .param("rewardPoints", "20")
+                    .param("name", "")
+                    .param("description", "")
+                    .param("rewardPoints", "-20")
                     .param("metric", "1"))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andExpect(view().name("achievements"));
 
     }
