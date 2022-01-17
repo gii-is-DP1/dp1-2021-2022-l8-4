@@ -35,7 +35,7 @@ public class UserServiceTest {
     @Autowired
     private AuthoritiesService authoritiesService;
 
-    private Integer numeroUsuarios = 22;
+    private Integer numeroUsuarios = 25;
 
     @Test
     public void testGetCurrentUserId() {

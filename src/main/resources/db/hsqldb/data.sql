@@ -76,12 +76,21 @@ INSERT INTO users(id,username,email,password,enabled) VALUES (21,'Kleon','kleon@
 INSERT INTO authorities(id,userid,authority) VALUES (21,21,'user');
 INSERT INTO users(id,username,email,password,enabled) VALUES (22,'Kaiipo','kaiipo@email.com','contra', TRUE);
 INSERT INTO authorities(id,userid,authority) VALUES (22,22,'user');
+--Usuarios para partida sin empezar
+INSERT INTO users(id,username,email,password,enabled) VALUES (23,'Joselu2','joselu2@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (23,23,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (24,'betico7','betico7@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (24,24,'user');
+INSERT INTO users(id,username,email,password,enabled) VALUES (25,'solitario','solitario@email.com','contra', TRUE);
+INSERT INTO authorities(id,userid,authority) VALUES (25,25,'user');
 
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (1,'Partida tremenda',1,'3',null,'2020-11-01T10:00:00','2020-11-01T11:00:00',6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (2,'Partida tremenda ya jugada',2,'15','user2','2020-11-01T10:00:00','2020-11-01T11:00:00',6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (3,'Partida Test Empezada',10,'1',null,'2020-11-10T10:30:00',null,6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (4,'Partida Test 5 jugadores',16,'8',null,'2020-11-10T10:12:54',null,6);
 INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (5,'Partida Test 2 jugadores',21,'10',null,'2021-10-10T11:09:54',null,2);
+INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (6,'Partida sin empezar',23,'0',null,null,null,4);
+INSERT INTO games(id,name,user_id,turn,winner,start_time,end_time,max_number_of_players) VALUES (7,'Partida sin empezar 1 jugador',25,'0',null,null,null,6);
 
 -- Player de game id=1, turnos ids=3,2 , estado del player 3: finalizando turno (roll amount 3) con 10 de energia
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (1,1,0,2,10,0,1,1);
@@ -108,6 +117,11 @@ INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,loc
 -- Players para test con 2 usuarios
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (19,0,10,0,30,0,5,21);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (20,4,2,3,30,1,5,22);
+-- Players para test partida sin empezar
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (21,1,10,0,20,0,6,23);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (22,2,10,5,20,0,6,24);
+-- Player test jugador solitario
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (23,2,10,0,20,0,7,25);
 
 
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (1, 1, 1,FALSE);
