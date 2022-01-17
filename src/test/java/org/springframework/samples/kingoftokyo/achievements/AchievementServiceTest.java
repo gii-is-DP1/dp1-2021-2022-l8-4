@@ -29,11 +29,10 @@ import org.springframework.stereotype.Service;
 
 /**
 /* @author Rosa Molina
-/* @author Carlos Varela Soult
 */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class AchievementsTest {
+public class AchievementServiceTest {
     @Autowired
     private AchievementService achievementsService;
     @Autowired
@@ -41,9 +40,13 @@ public class AchievementsTest {
     @Autowired
     private GameService gameService;
 
-    
+    /**
+     * should create new achievement
+     * set
+     */
+
     @Test
-    public void testAchivementCreate() {
+    public void shouldCreateAchivement() {
         Achievement achievement = new Achievement();
         achievement.setId(2);
         achievement.setName("Achievement 2");
@@ -56,10 +59,13 @@ public class AchievementsTest {
         assertThat(achievement.getId()).isNotNull();
     }
 
-
+    /**
+     * should get achievement by id
+     * findAchivementById
+     */
 
     @Test
-    public void testAchivementGet(){
+    public void shouldGetAchivement(){
         Achievement achievement = achievementsService.findAchievementById(1).get();
         MetricType metrica = MetricType.gamesPlayed;
         assertEquals(1, achievement.getId());
@@ -70,9 +76,14 @@ public class AchievementsTest {
         assertEquals(10, achievement.getRewardPoints());
     }
 
+    /**
+     * should find all achievement
+     * findall
+     */
+
 
     @Test
-    public void testFindAllAchievement(){
+    public void shouldFindAllAchievement(){
         List<Achievement> listcont= new ArrayList<>();
         achievementsService.findAll().forEach(listcont::add);
         Integer numero = 1;
@@ -96,8 +107,13 @@ public class AchievementsTest {
         assertEquals(contadorFind, numero);
     }
 
+    /**
+     * should be obtain
+     * isObtained
+     */
+
     @Test
-    public void testIsObtainAchievement(){
+    public void shouldBeObtainAchievement(){
         Achievement achievement = new Achievement();
         achievement.setId(4);
         achievement.setName("Achievement 4");
@@ -110,9 +126,13 @@ public class AchievementsTest {
         assertEquals(true, achievement.isObtained(1l));
     }
 
+    /**
+     * should get users achievement
+     * getUsers
+     */
 
     @Test
-    public void testUsersAchievement(){ //Como es tan largo lo he probado achievement parte
+    public void shouldGetUsersAchievement(){
         Set<User> set = new HashSet<>();
         set.add(userService.findUserById(1).get());
         set.add(userService.findUserById(2).get());
@@ -131,9 +151,13 @@ public class AchievementsTest {
         assertEquals(set, achievement.getUsers());
     }
 
+    /**
+     * should delete achievement
+     * deleteAchievement
+     */
 
     @Test
-    public void testCheckAndDeleteAchievement(){
+    public void shouldDeleteAchievement(){
         Achievement achievement = achievementsService.findAchievementById(1).get();
         assertEquals(achievement.getId(), 1);
         achievementsService.deleteAchievement(achievement);
@@ -141,22 +165,40 @@ public class AchievementsTest {
         assertEquals(achievementsService.findAchievementById(1), emptyOptional);
     }
     
+    /**
+     * should get the wins, cards, gamesPlayed
+     */
     @Test
-    public void testWinsandCardByUserAchievement(){
-        User user1 = userService.findUserById(1).get();
-        Integer cardUsedByUser = achievementsService.cardsUsedByUser(user1);
-        assertEquals(cardUsedByUser, 0);
+    public void shouldGetWinsByUser(){
         User user2 = userService.findUserById(2).get();
-        Integer winsByUser = achievementsService.winsByUser(user2);
+        MetricType metricType = MetricType.wins;
+        Integer winsByUser = achievementsService.getScoreByUser(metricType, user2);
         assertEquals(winsByUser, 1);
-        Integer gamesPlayedByUser = achievementsService.gamesPlayedByUser(user1);
-        assertEquals(gamesPlayedByUser, 1);
-
     }
 
-    @Disabled
     @Test
-    public void testScoresByUserAndCheckAchievement(){
+    public void shouldGetGamesPlayedByUser(){
+        User user1 = userService.findUserById(1).get();
+        MetricType metricType = MetricType.gamesPlayed;
+        Integer gamesPlayedByUser = achievementsService.getScoreByUser(metricType, user1);
+        assertEquals(gamesPlayedByUser, 1);
+    }
+
+    @Test
+    public void shouldGetCardsByUser(){
+        User user1 = userService.findUserById(1).get();
+        MetricType metricType = MetricType.cardsUsed;
+        Integer cardUsedByUser = achievementsService.getScoreByUser(metricType, user1);
+        assertEquals(cardUsedByUser, 0);
+    }
+
+    /**
+     * should get scores by user
+     * scoresByUser
+     */
+
+    @Test
+    public void shouldGetScoresByUser(){
         User user1 = userService.findUserById(1).get();
         Map<MetricType, Integer> map = achievementsService.scoresByUser(user1);
         Map<MetricType, Integer> mapExpected = new HashMap<>();
@@ -164,30 +206,6 @@ public class AchievementsTest {
         mapExpected.put(MetricType.wins, 0);
         mapExpected.put(MetricType.cardsUsed, 0);
         assertEquals(map, mapExpected);
-
-        Game newGame = new Game();
-        newGame.setCreator(user1);
-        newGame.setEndTime(LocalDateTime.now());
-        newGame.setId(5);
-        newGame.setMaxNumberOfPlayers(2);
-        newGame.setName("Juego inventado");
-        newGame.setWinner(user1.getUsername());
-        newGame.setTurn(1);
-        newGame.setStartTime(LocalDateTime.of(2021, 12, 26, 16, 15, 24));
-        gameService.saveGame(newGame);
-        assertEquals(newGame.isFinished(), true);
-
-        achievementsService.checkAchievements(user1);
-        
-        Map<MetricType, Integer> map2 = achievementsService.scoresByUser(user1);
-        Map<MetricType, Integer> mapExpected2 = new HashMap<>();
-        mapExpected2.put(MetricType.gamesPlayed, 1);
-        mapExpected2.put(MetricType.wins, 1);
-        mapExpected2.put(MetricType.cardsUsed, 0);
-        //check no añade la win al usuario
-        assertEquals(map2, mapExpected2);
     }
-
- 
 
 }

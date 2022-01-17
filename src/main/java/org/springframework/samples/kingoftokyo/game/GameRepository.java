@@ -28,8 +28,5 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
 	@Query("SELECT game FROM Game game WHERE game.turn IS 0")
 	List<Game> findLobbies() throws DataAccessException;
 
-	/**
-	 * Retrieve finished games where  <code>Game</code>s from the data store
-	 */
     
 }

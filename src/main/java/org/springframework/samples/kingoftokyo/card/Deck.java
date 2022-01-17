@@ -37,6 +37,19 @@ public class Deck {
     }
 
     /**
+     * Discard a list of cards (This is used for data initialization purposes)
+     */
+    public void discard(Integer[] cardIds){
+        for(Integer id: cardIds){
+            Card card = cards.stream()
+                                .filter(c -> c.getId() == id)
+                                .findFirst().get();
+            cards.remove(card);
+        }
+    }
+
+
+    /**
      * Check if the deck is empty
      * 
      * @return true if there are no cards left, false if not

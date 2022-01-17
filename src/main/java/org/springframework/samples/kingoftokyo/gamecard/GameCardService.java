@@ -62,7 +62,7 @@ public class GameCardService {
      */
     @Transactional
     public GameCard findByGameCard(Game game, Card card) throws DataAccessException {
-        return gameCardRepository.findByGameCards(game.getId(), card.getId());
+        return gameCardRepository.findByGameCard(game.getId(), card.getId());
     }
 
     /**

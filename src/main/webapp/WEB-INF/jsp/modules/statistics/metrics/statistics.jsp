@@ -1,11 +1,11 @@
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
-        <petclinic:layout pageName="statistics">
+        <kingoftokyo:layout pageName="statistics">
             <div class="container">
                  <div class="row">
                     <h1 style="display: flex;flex-direction: column;justify-content: center;text-align: center; margin-bottom: 0px;
@@ -16,6 +16,7 @@
                     <div class="col col-sm-6" style="align-items: center;justify-content: center;display: flex;">
                         <h4>
                             Ranking usuarios
+                            
                         </h4>
                     </div>
                     <div class="col col-sm-6" style="align-items: center;justify-content: center;display: flex;">
@@ -23,6 +24,7 @@
                             Estadisticas del juego
                         </h4>
                     </div>
+
                 </div>
                 <div class="row" >
                     <div class="col col-sm-6">
@@ -62,7 +64,7 @@
                                 </tr>
                             </tbody>
                         </table>
-
+                        <a href="/statistics/ranking"><button type="button" >Ranking de jugadores</button></a>
                     </div>
                     <div class="col col-sm-3" style="align-items: center;justify-content: center;display: grid;">
                         <h4>
@@ -93,36 +95,59 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col col-sm-3" style="align-items: center;justify-content: center;display: grid;">
-                        <div class="row">
-                            <h4>    
+                    <div class="col col-sm-2" style="align-items: center;justify-content: center;display: grid; margin-left: 5%;">
+                        <div class="row" style="align-items: center;justify-content: center;display: grid;">
+                            <h4 style="margin-left: 3px;">    
                                 Numero de partidas totales que se han jugado
-                                <spring:url value="/resources/images/errorK.png" htmlEscape="true" var="principal" />
-                                <img class="img-responsive" src="${principal}" style="width: 25%;"/>
                             </h4>
+                            <div class="row" style="align-items: center;justify-content: center;display: grid; 
+                            border: 1px #7800bd solid; border-radius: 5px">
+                                <h4>
+                                     <c:out value="${totalGames}" /> partidas
+                                </h4>
+                            </div>
                         </div>
                         <div class="row">
                             <h4>    
                                 Criatura elegida con mas frecuencia
-                                <spring:url value="/resources/images/errorK.png" htmlEscape="true" var="principal" />
-                                <img class="img-responsive" src="${principal}" style="width: 25%;"/>
                             </h4>
+                            <div class="row" style="align-items: center;justify-content: center;display: grid;
+                            border: 1px #7800bd solid; border-radius: 5px">
+                                <h2>
+                                    <c:out value="${modaMonstername}" />
+                                </h2>
+                                <h4>
+                                    <img src="${modaMonstericon}" width="80" height="80">
+                                </h4>
+                            </div>
                         </div>
                         <div class="row">
                             <h4>    
                                 Criatura elegida con menos frecuencia
-                                <spring:url value="/resources/images/errorK.png" htmlEscape="true" var="principal" />
-                                <img class="img-responsive" src="${principal}" style="width: 25%;"/>
                             </h4>
+                            <div class="row" style="align-items: center;justify-content: center;display: grid;
+                            border: 1px #7800bd solid; border-radius: 5px">
+                                <h2>
+                                    <c:out value="${nomodaMonstername}" />
+                                </h2>
+                                <h4>
+                                    <img src="${nomodaMonstericon}" width="80" height="80">
+                                </h4>
+                            </div>
                         </div>
                     </div>
-                    <div class="col col-sm-3" style="align-items: center;justify-content: center;display: grid;">
-                        <div class="row">
-                            <h4>    
+                    <div class="col col-sm-1" style="margin-left: 5px;"></div>
+                    <div class="col col-sm-2" style="align-items: center;justify-content: center;display: grid;">
+                        <div class="row" style="align-items: center;justify-content: center;display: grid;">
+                            <h4 style="margin-left: 3px;">    
                                 Tiempo medio por partida
-                                <spring:url value="/resources/images/errorK.png" htmlEscape="true" var="principal" />
-                                <img class="img-responsive" src="${principal}" style="width: 25%;"/>
                             </h4>
+                            <div class="row" style="align-items: center;justify-content: center;display: grid;
+                            border: 1px #7800bd solid; border-radius: 5px">
+                                <h4>
+                                     <c:out value="${mediumGameTime}" /> minutos
+                                </h4>
+                            </div>
                         </div>
                         <div class="row">
                             <h4>    
@@ -157,9 +182,7 @@
                     
 
                 </div>
-
-                <a href="/statistics/ranking"><button type="button" >Ranking de jugadores</button></a>
                 
             </div>
            
-        </petclinic:layout>
+        </kingoftokyo:layout>

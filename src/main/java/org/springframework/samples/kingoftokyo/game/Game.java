@@ -28,6 +28,7 @@ import lombok.Setter;
 /**
  * @author José Maria Delgado Sanchez
  * @author Ricardo Nadal Garcia
+ * @author Rosa Molina
  */
 
  @Entity
@@ -188,8 +189,7 @@ import lombok.Setter;
       Integer hour = this.endTime.getHour() - this.startTime.getHour();
       Integer minute = this.endTime.getMinute() - this.startTime.getMinute();
       Integer second = this.endTime.getSecond() - this.startTime.getSecond();
-      Integer duration = (hour*60) + (minute) + (second/60);
-      return duration;
+      return (hour*60) + (minute) + (second/60);
    }
 
  }

@@ -14,5 +14,5 @@ public interface GameCardRepository extends CrudRepository<GameCard, Integer> {
 	 * @return a <code>GameCard</code> of <code>Game</code>s
 	 */
 	@Query("SELECT gc FROM GameCard gc WHERE gc.game.id = ?1 AND gc.card.id = ?2")
-	GameCard findByGameCards(int gameId, int cardId) throws DataAccessException;
+	GameCard findByGameCard(int gameId, int cardId) throws DataAccessException;
 }
