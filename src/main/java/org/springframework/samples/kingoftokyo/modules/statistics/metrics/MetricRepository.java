@@ -50,7 +50,7 @@ public interface MetricRepository extends CrudRepository<Game, Integer> {
 
     /**
 	 * Retrieve number of games for login user.
-	 * @return a <code>Integer</code>
+	 * @return a <code>List<Game></code>
 	 */
     @Query("SELECT p.game FROM Player p WHERE p.user =?1 AND p.game.winner IS NOT NULL")
     List<Game> findGamesCurrentUser(User user) throws DataAccessException;
@@ -69,7 +69,13 @@ public interface MetricRepository extends CrudRepository<Game, Integer> {
     @Query("SELECT COUNT(p.game) FROM Player p WHERE p.user =?1 AND p.game.winner IS NOT NULL")
     Integer totalGamesCurrentUser(User user) throws DataAccessException;
    
-   
+    /**
+	 * Retrieve list of users with max turns in tokyo
+	 * @return a <code>Integer</code>
+	 */
+
+    @Query("SELECT new org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData(user, user.maxTurnsTokyo) FROM User user ORDER BY user.maxTurnsTokyo desc")
+    Page<MetricData> maxTurnUsers(Pageable pageable) throws DataAccessException;
 
 
 

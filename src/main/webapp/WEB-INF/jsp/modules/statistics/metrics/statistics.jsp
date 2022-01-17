@@ -88,108 +88,106 @@
                     </div>
                     <div class="col col-sm-2" style="align-items: center;justify-content: center;display: grid; margin-left: 5%;">
                         <div class="row" style="align-items: center;justify-content: center;display: grid;">
-                            <h4 style="margin-left: 3px;">    
-                                Numero de partidas totales que se han jugado en nuestra web
-                            </h4>
+                            <h5 style="margin-left: 3px;">    
+                                Numero de partidas totales que se han jugado
+                            </h5>
                             <div class="row" style="align-items: center;justify-content: center;display: grid; 
                             border: 1px #7800bd solid; border-radius: 5px">
-                                <h4>
+                                <h5>
                                      <c:out value="${totalGames}" /> partidas
-                                </h4>
+                                </h5>
                             </div>
                         </div>
                         <div class="row" style="align-items: center;justify-content: center;display: grid;">
-                            <h4 style="margin-left: 3px;">    
+                            <h5 style="margin-left: 3px;">    
                                 Tiempo medio por partida en total
-                            </h4>
+                            </h5>
                             <div class="row" style="align-items: center;justify-content: center;display: grid;
                             border: 1px #7800bd solid; border-radius: 5px">
-                                <h4>
+                                <h5>
                                      <c:out value="${mediumGameTime}" /> minutos
-                                </h4>
+                                </h5>
                             </div>
                         </div>
                         <div class="row">
-                            <h4>    
+                            <h5>    
                                 Criatura elegida con mas frecuencia
-                            </h4>
+                            </h5>
                             <div class="row" style="align-items: center;justify-content: center;display: grid;
                             border: 1px #7800bd solid; border-radius: 5px">
-                                <h2>
+                                <h5>
                                     <c:out value="${modaMonstername}" />
-                                </h2>
-                                <h4>
+                                </h5>
+                                <h5>
                                     <img src="${modaMonstericon}" width="80" height="80">
-                                </h4>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h5>    
+                                Criatura elegida con menos frecuencia
+                            </h5>
+                            <div class="row" style="align-items: center;justify-content: center;display: grid;
+                            border: 1px #7800bd solid; border-radius: 5px">
+                                <h5>
+                                    <c:out value="${nomodaMonstername}" />
+                                </h5>
+                                <h5>
+                                    <img src="${nomodaMonstericon}" width="80" height="80">
+                                </h5>
                             </div>
                         </div>
                     </div>
-                    <div class="col col-sm-1" style="margin-left: 5px;"></div>
+                    <div class="col col-sm-1" style="margin-left: 5px;">
+                    
+                    </div>
                     <div class="col col-sm-2" style="align-items: center;justify-content: center;display: grid;">
                         <div class="row" style="align-items: center;justify-content: center;display: grid;">
-                            <h4 style="margin-left: 3px;">    
+                            <h5 style="margin-left: 3px;">    
                                 Numero de partidas que has ganado / Numero de partidas que has jugado
-                            </h4>
+                            </h5>
                             <div class="row" style="align-items: center;justify-content: center;display: grid; 
                             border: 1px #7800bd solid; border-radius: 5px">
-                                <h4>
+                                <h5>
                                      <c:out value="${winsCurrent}" />/<c:out value="${gamesCurrent}" /> partidas
-                                </h4>
+                                </h5>
                             </div>
                         </div>
                         <div class="row" style="align-items: center;justify-content: center;display: grid;">
-                            <h4 style="margin-left: 3px;">    
+                            <h5 style="margin-left: 3px;">    
                                 Tiempo medio por partidas jugadas por ti
-                            </h4>
+                            </h5>
                             <div class="row" style="align-items: center;justify-content: center;display: grid; 
                             border: 1px #7800bd solid; border-radius: 5px">
-                                <h4>
+                                <h5>
                                      <c:out value="${gamesTimeCurrent}" /> minutos
-                                </h4>
+                                </h5>
                             </div>
                         </div>
+                    
                         <div class="row">
-                            <h4>    
-                                Criatura elegida con menos frecuencia
-                            </h4>
-                            <div class="row" style="align-items: center;justify-content: center;display: grid;
-                            border: 1px #7800bd solid; border-radius: 5px">
-                                <h2>
-                                    <c:out value="${nomodaMonstername}" />
-                                </h2>
-                                <h4>
-                                    <img src="${nomodaMonstericon}" width="80" height="80">
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <h4>    
-                                Jugadores que mas tiempo han estado dentro de tokyo
+                            <h5>    
+                                Jugadores que mas turnos han estado dentro de tokyo
                                 <table class="table">
                                     <tbody>
-                                        <tr>
-                                            <th>1</th>
-                                            <th>User1</th>
-                                            <th>10</th>
-                                        </tr>
-                                        <tr>
-                                            <th>1</th>
-                                            <th>User1</th>
-                                            <th>10</th>
-                                        </tr>
-                                        <tr>
-                                            <th>1</th>
-                                            <th>User1</th>
-                                            <th>10</th>
-                                        </tr>
-                                        <tr>
-                                            <th>1</th>
-                                            <th>User1</th>
-                                            <th>10</th>
-                                        </tr>
+                                        <c:forEach items="${listUsersTurns}" var="list" varStatus="status">
+                                            <tr>
+                                                <th>
+                                                    <c:out value="${status.index+1}" />
+                                                    </a>
+                                                </th>
+                                                <th>
+                                                    <c:out value="${list.user.username}" />
+                                                    </a>
+                                                </th>
+                                                <th>
+                                                    <c:out value="${list.score}" />
+                                                </th>
+                                            </tr>
+                                        </c:forEach>
                                     </tbody>
                                 </table>
-                            </h4>
+                            </h5>
                         </div>
                     </div>
                     
