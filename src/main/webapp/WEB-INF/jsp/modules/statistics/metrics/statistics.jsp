@@ -42,27 +42,23 @@
 
                         <table class="table">
                             <tbody>
-                                <tr>
-                                    <th>1</th>
-                                    <th>User1</th>
-                                    <th>10</th>
-                                </tr>
-                                <tr>
-                                    <th>1</th>
-                                    <th>User1</th>
-                                    <th>10</th>
-                                </tr>
-                                <tr>
-                                    <th>1</th>
-                                    <th>User1</th>
-                                    <th>10</th>
-                                </tr>
-                                <tr>
-                                    <th>1</th>
-                                    <th>User1</th>
-                                    <th>10</th>
-                                </tr>
+                                <c:forEach items="${listWinsRanking}" var="list" varStatus="status">
+                                    <tr>
+                                        <th>
+                                            <c:out value="${status.index+1}" />
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <c:out value="${list.user.username}" />
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <c:out value="${list.score}" />
+                                        </th>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
+                            
                         </table>
                         <a href="/statistics/ranking"><button type="button" >Ranking de jugadores</button></a>
                     </div>
@@ -72,26 +68,21 @@
                         </h4>
                         <table class="table">
                             <tbody>
-                                <tr>
-                                    <th>1</th>
-                                    <th>User1</th>
-                                    <th>10</th>
-                                </tr>
-                                <tr>
-                                    <th>1</th>
-                                    <th>User1</th>
-                                    <th>10</th>
-                                </tr>
-                                <tr>
-                                    <th>1</th>
-                                    <th>User1</th>
-                                    <th>10</th>
-                                </tr>
-                                <tr>
-                                    <th>1</th>
-                                    <th>User1</th>
-                                    <th>10</th>
-                                </tr>
+                                <c:forEach items="${listScoresRanking}" var="list" varStatus="status">
+                                    <tr>
+                                        <th>
+                                            <c:out value="${status.index+1}" />
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <c:out value="${list.user.username}" />
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <c:out value="${list.score}" />
+                                        </th>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>
