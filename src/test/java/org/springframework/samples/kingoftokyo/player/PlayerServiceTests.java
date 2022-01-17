@@ -53,12 +53,14 @@ public class PlayerServiceTests {
         user1.setUsername("UsuarioDePrueba");
         user1.setEmail("usuarioDePrueba@gmail.com");
         user1.setPassword("contraseñaDePrueba");
+        user1.setMaxTurnsTokyo(0l);
         userService.saveUser(user1);
 
         user2=new User();
         user2.setUsername("UsuarioDePrueba2");
         user2.setEmail("usuarioDePrueba2@gmail.com");
         user2.setPassword("contraseñaDePrueba2");
+        user2.setMaxTurnsTokyo(0l);
         userService.saveUser(user2);
     
         game1=new Game();
@@ -320,7 +322,6 @@ public class PlayerServiceTests {
         assertEquals(player1.getEnergyPoints(),6);
     }
 
-    @Disabled
     @Test
     public void startTurnInTokyoTest() {
         assertEquals(player2.getVictoryPoints(), 0);
