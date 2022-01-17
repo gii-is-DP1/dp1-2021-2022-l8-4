@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.samples.kingoftokyo.game.Game;
+import org.springframework.samples.kingoftokyo.user.User;
 
 /**
 *  @author Rosa Molina
@@ -54,5 +55,30 @@ public interface MetricRepository extends CrudRepository<Game, Integer> {
 	 */
    @Query("SELECT COUNT(g) FROM Game g")
    Integer totalGamesOfApp() throws DataAccessException;
+
+    /**
+	 * Retrieve number of games for login user.
+	 * @return a <code>Integer</code>
+	 */
+    @Query("SELECT p.game FROM Player p WHERE p.user =?1 AND p.game.winner IS NOT NULL")
+    List<Game> findGamesCurrentUser(User user) throws DataAccessException;
+    
+    /**
+	 * Retrieve number of games winning for login user.
+	 * @return a <code>Integer</code>
+	 */
+    @Query("SELECT COUNT(g) FROM Game g WHERE g.winner =?1")
+    Integer totalGamesWinnerCurrentUser(String username) throws DataAccessException;
+
+    /**
+	 * Retrieve number of games for login user.
+	 * @return a <code>Integer</code>
+	 */
+    @Query("SELECT COUNT(p.game) FROM Player p WHERE p.user =?1 AND p.game.winner IS NOT NULL")
+    Integer totalGamesCurrentUser(User user) throws DataAccessException;
+   
+   
+
+
 
 }

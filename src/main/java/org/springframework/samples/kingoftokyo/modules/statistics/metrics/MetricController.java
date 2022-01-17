@@ -2,6 +2,8 @@ package org.springframework.samples.kingoftokyo.modules.statistics.metrics;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.samples.kingoftokyo.configuration.CurrentUserController;
+import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,9 @@ public class MetricController {
     
     @Autowired
     private MetricService metricService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping(path = "/ranking")
     public String getRanking(@RequestParam(value = "metric", defaultValue = "gamesPlayed") MetricType metric,@RequestParam(value = "page", defaultValue = "1") int page, ModelMap modelMap){
@@ -49,6 +54,9 @@ public class MetricController {
       modelMap.addAttribute("modaMonstericon", metricService.findMonsterModa().getIcon());
       modelMap.addAttribute("nomodaMonstername", metricService.findMonsterNoModa().getName());
       modelMap.addAttribute("nomodaMonstericon", metricService.findMonsterNoModa().getIcon());
+      modelMap.addAttribute("winsCurrent", metricService.findTotalWinsGamesCurrentUser(userService.authenticatedUser().getUsername()));
+      modelMap.addAttribute("gamesCurrent", metricService.findTotalGamesCurrentUser(userService.authenticatedUser()));
+      modelMap.addAttribute("gamesTimeCurrent", metricService.findTimeGamesforUser(userService.authenticatedUser()));
       return "modules/statistics/metrics/statistics";
     }
 }
