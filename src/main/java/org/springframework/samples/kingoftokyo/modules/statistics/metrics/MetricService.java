@@ -1,11 +1,14 @@
 package org.springframework.samples.kingoftokyo.modules.statistics.metrics;
 
+import java.io.Console;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +16,11 @@ import org.springframework.samples.kingoftokyo.game.Game;
 import org.springframework.samples.kingoftokyo.game.GameRepository;
 import org.springframework.samples.kingoftokyo.player.Monster;
 import org.springframework.samples.kingoftokyo.player.PlayerRepository;
+import org.springframework.samples.kingoftokyo.user.User;
+import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
+
+import lombok.extern.java.Log;
 
 /**
 *  @author Rosa Molina
@@ -31,6 +38,7 @@ public class MetricService {
 
     @Autowired
     private PlayerRepository playerRepository;
+
 
     /**
      * 
@@ -52,6 +60,15 @@ public class MetricService {
         return metricRepository.winsRanking(pageable);
     }
 
+    /**
+     * 
+     * @return List of Users with their associated score of achievements ordered
+     */
+    @Transactional
+    public Page<MetricData> scoresRanking(int pageNumber, int numberOfElements){    
+        PageRequest pageable = PageRequest.of(pageNumber, numberOfElements);    
+        return metricRepository.scoresRanking(pageable);
+    }
 
     @Transactional
     public Page<MetricData> rankingByMetricType(MetricType metric, int pageNumber, int numberOfElements){
@@ -64,6 +81,26 @@ public class MetricService {
                 break;
         }
         return null;
+    }
+
+    /**
+     * 
+     * @return List of 10 Users with their associated score of wins ordered
+     */
+    @Transactional
+    public List<MetricData> winsRankingStatistic(){
+        Page<MetricData> pages = winsRanking(0, 10);
+        return pages.toList();
+    }
+
+    /**
+     * 
+     * @return List of 10 Users with their associated score of achievements ordered
+     */
+    @Transactional
+    public List<MetricData> scoresRankingStatistic(){
+        Page<MetricData> pages = scoresRanking(0, 10);
+        return pages.toList();
     }
 
     @Transactional

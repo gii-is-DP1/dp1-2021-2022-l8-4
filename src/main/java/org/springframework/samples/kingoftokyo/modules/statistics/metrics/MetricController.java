@@ -42,13 +42,15 @@ public class MetricController {
 
     
     @GetMapping()
-    public String getStatistics(Map<String, Object> model, ModelMap modelMap) {	    
+    public String getStatistics(Map<String, Object> model, ModelMap modelMap) {
       modelMap.addAttribute("totalGames", metricService.findTotalGamesApp());
       modelMap.addAttribute("mediumGameTime", metricService.findTimeGames());
       modelMap.addAttribute("modaMonstername", metricService.findMonsterModa().getName());
       modelMap.addAttribute("modaMonstericon", metricService.findMonsterModa().getIcon());
       modelMap.addAttribute("nomodaMonstername", metricService.findMonsterNoModa().getName());
       modelMap.addAttribute("nomodaMonstericon", metricService.findMonsterNoModa().getIcon());
+      modelMap.addAttribute("listWinsRanking", metricService.winsRankingStatistic());
+      modelMap.addAttribute("listScoresRanking", metricService.scoresRankingStatistic());
       return "modules/statistics/metrics/statistics";
     }
 }

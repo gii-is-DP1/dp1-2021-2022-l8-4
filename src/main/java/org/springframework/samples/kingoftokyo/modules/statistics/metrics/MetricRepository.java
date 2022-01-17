@@ -34,19 +34,11 @@ public interface MetricRepository extends CrudRepository<Game, Integer> {
     Page<MetricData> winsRanking(Pageable pageable) throws DataAccessException;
 
     /**
-	 * Retrieve won games count grouped by user.
-	 * @return a <code>Integer</code>
+	 * Retrieve max scores grouped by user.
+	 * @return a <code>Pageable</code>
 	 */
-    @Query("SELECT new org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData(player.user, COUNT(player)) FROM Player player WHERE player.game.winner IS player.user.username GROUP BY player.user.id ORDER BY count(player) DESC")
+    @Query("SELECT new org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData(user, SUM(achiev.rewardPoints)) FROM User user INNER JOIN user.achievements achiev INNER JOIN achiev.users userAchiev WHERE user.id IS userAchiev.id GROUP BY user.id ORDER BY sum(achiev.rewardPoints) DESC")
     Page<MetricData> scoresRanking(Pageable pageable) throws DataAccessException;
-
-    /**
-	 * Retrieve won games count grouped by user.
-	 * @return a <code>Integer</code>
-	 */
-    //SELECT USER_ID, SUM(REWARD_POINTS ) FROM USERS_ACHIEVEMENTS INNER JOIN ACHIEVEMENTS ON USERS_ACHIEVEMENTS.ACHIEVEMENT_ID  = ACHIEVEMENTS.ID GROUP BY USER_ID ;
-    //@Query("SELECT ua.user_id, SUM(a.rewardPoints) FROM users_achievements ua INNER JOIN achievements a on ua.achievement_id = a.id GROUP BY ua.user_id")
-    //List<Object> scoresRanking() throws DataAccessException;
 
     /**
 	 * Retrieve number of games.
