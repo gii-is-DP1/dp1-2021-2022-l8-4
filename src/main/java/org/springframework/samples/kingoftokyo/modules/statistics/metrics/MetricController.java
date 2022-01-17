@@ -3,6 +3,7 @@ package org.springframework.samples.kingoftokyo.modules.statistics.metrics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.samples.kingoftokyo.configuration.CurrentUserController;
+import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,6 +29,9 @@ public class MetricController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AchievementService achievementService;
+
     @GetMapping(path = "/ranking")
     public String getRanking(@RequestParam(value = "metric", defaultValue = "gamesPlayed") MetricType metric,@RequestParam(value = "page", defaultValue = "1") int page, ModelMap modelMap){
         String view = "modules/statistics/metrics/ranking";
@@ -48,6 +52,7 @@ public class MetricController {
     
     @GetMapping()
     public String getStatistics(Map<String, Object> model, ModelMap modelMap) {
+      achievementService.checkAchievements(userService.authenticatedUser());
       modelMap.addAttribute("totalGames", metricService.findTotalGamesApp());
       modelMap.addAttribute("mediumGameTime", metricService.findTimeGames());
       modelMap.addAttribute("modaMonstername", metricService.findMonsterModa().getName());
