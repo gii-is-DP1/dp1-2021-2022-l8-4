@@ -169,9 +169,9 @@ public class GameServiceTests {
         assertEquals(gameFinished+1, finishedGamesCalculated ); //Debería haber un game finished más que antes
         Integer gamesPlayingCalculated = gameService.findAllNotFinished().size();
         //Vamos a comprobar que el numero de partidas jugando ahora es 1 menos que antes
-        assertThat(gamesPlayingOriginal).isGreaterThan(gamesPlayingCalculated);
-        
+        assertThat(gamesPlayingOriginal).isGreaterThan(gamesPlayingCalculated); 
     }
+    
     
     @Test
     public void testOnePlayerShouldDie(){
