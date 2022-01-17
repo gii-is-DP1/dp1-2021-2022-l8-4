@@ -290,7 +290,7 @@ public class GameService {
         User user = userService.authenticatedUser();
         Boolean result = Boolean.FALSE;
         if (user != null) {
-            result = actualTurn(gameId).getUser().getId() == user.getId();
+            result = actualTurn(gameId).getUser().getId().equals(user.getId());
         }
         return result;
     }
@@ -302,7 +302,7 @@ public class GameService {
         Boolean result = Boolean.FALSE;
         if (user != null) {
             for (Player player : game.getPlayers()) {
-                result = result || player.getUser().getId() == user.getId();
+                result = result || player.getUser().getId().equals(user.getId());
             }
         }
         return result;
@@ -327,7 +327,7 @@ public class GameService {
                 Roll rollData = mapGameRepository.getRoll(gameId); 
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
-                if (rollData.getRollAmount() == rollData.getMaxThrows()) {
+                if (rollData.getRollAmount().equals(rollData.getMaxThrows())) {
                     Integer playerIdActualTurn = actualTurnPlayerId(gameId);
                     playerService.useRoll(playerIdActualTurn, rollData);
 

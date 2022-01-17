@@ -144,7 +144,7 @@ public class PlayerService {
     @Transactional
     public void handleDamageRolls(Player actualPlayer, List<Player> playersInGame, Integer damage) {
         for (Player player : playersInGame) {
-            if (actualPlayer.getId() != player.getId()) {
+            if (!actualPlayer.getId().equals(player.getId())) {
                 // Damage players in Tokyo
                 if (actualPlayer.getLocation() == LocationType.fueraTokyo) {
                     if (player.getLocation() == LocationType.ciudadTokyo
@@ -338,7 +338,7 @@ public class PlayerService {
     public void surrender(Integer playerId) {
         Player player = findPlayerById(playerId);
         User user = userService.authenticatedUser();
-        if (player.getUser().getId() == user.getId()) {
+        if (player.getUser().getId().equals(user.getId())) {
 
             List<PlayerCard> playerCards = player.getPlayerCard();
             playerCards.forEach(card -> card.setDiscarded(Boolean.TRUE));
