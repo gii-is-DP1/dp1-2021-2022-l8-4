@@ -41,7 +41,7 @@ import org.springframework.test.web.servlet.MockMvc;
  */
 
  
-public class GameServiceTests {
+class GameServiceTests {
     
     private GameService gameService;
     private PlayerService playerService;
@@ -63,7 +63,7 @@ public class GameServiceTests {
 
 
     @Test
-    public void testSaveCardIntoDatabaseAndGenerateId(){
+    void testSaveCardIntoDatabaseAndGenerateId(){
         Game game = new Game();
         game.setTurn(0);
         game.setMaxNumberOfPlayers(6);
@@ -76,7 +76,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testOnGoingGamesList(){
+    void testOnGoingGamesList(){
         List<Game> games = gameService.findOnGoingGames();
         Boolean notOnGoingGames = games.stream()
                                     .filter(g -> !g.isOnGoing())
@@ -87,7 +87,7 @@ public class GameServiceTests {
 
 
     @Test
-    public void testIsRecentlyHurtToFalse(){
+    void testIsRecentlyHurtToFalse(){
         List<Player> lsplayer = gameService.findPlayerList(1);
         gameService.isRecentlyHurtToFalse(1);
         Boolean res = false;
@@ -101,7 +101,7 @@ public class GameServiceTests {
 
     @Disabled
     @Test
-    public void testChangePosition(){
+    void testChangePosition(){
 
         //actualizar
         Player playerActualTurn = playerService.findPlayerById(gameService.actualTurnPlayerId(1));
@@ -112,7 +112,7 @@ public class GameServiceTests {
         
     }
     @Test
-    public void testShouldSaveGame(){
+    void testShouldSaveGame(){
         Game game = gameService.findGameById(2);//Un game acabado
         String winner = game.getWinner();
         String newWinner = "user3";
@@ -123,7 +123,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testShouldCreateGame(){
+    void testShouldCreateGame(){
         List<Game> listaInicial = new ArrayList<>();
         gameService.findAll().forEach(listaInicial::add);
         Integer numinicial = listaInicial.size();//conteo manual usando findAll()
@@ -150,7 +150,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testEndGameWithVictoryPoints(){
+    void testEndGameWithVictoryPoints(){
         Integer gamesPlaying = numberOfGames-gameFinished;
         Player player = gameService.actualTurn(4);
         Integer gamesPlayingCalculated = gameService.findAllNotFinished().size();// Los juegos sin empezar cuentan como juegos jugandose
@@ -167,7 +167,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testEndGameKillingEveryone(){
+    void testEndGameKillingEveryone(){
         Game game = gameService.findGameById(5);
         Player player = gameService.actualTurn(5);
         player.setLifePoints(0);
@@ -180,7 +180,7 @@ public class GameServiceTests {
         assertThat(gamesPlaying).isGreaterThan(gamesPlayingCalculated); 
     }
     @Test
-    public void testShouldNotEndGame(){
+    void testShouldNotEndGame(){
         gameService.endGame(5);
         Integer finishedGamesCalculated = gameService.findAllFinished().size();
         assertEquals(gameFinished, finishedGamesCalculated ); //No debería acabar el juego
@@ -190,7 +190,7 @@ public class GameServiceTests {
     
     
     @Test
-    public void testOnePlayerShouldDie(){
+    void testOnePlayerShouldDie(){
         Integer numberPlayers = 5; 
         Game game = gameService.findGameById(4);
         Integer playerIdActualTurn = gameService.actualTurnPlayerId(4);
@@ -209,7 +209,7 @@ public class GameServiceTests {
     }
     @Disabled
     @Test
-    public void testOnePlayerTurn(){
+    void testOnePlayerTurn(){
         Player playerInitiaPlayer = gameService.actualTurn(4);
         Roll rollkeep = new Roll(); //una tirada cualquiera sin tener ningun dado guardado 
 
@@ -223,7 +223,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testShouldStartGame(){
+    void testShouldStartGame(){
         Game game = gameService.findGameById(6);//Un game sin empezar (pero que cumple las condiciones para empezar)
         try {
             gameService.startGame(game);
@@ -238,7 +238,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testStartGameNotEnoughPlayers(){
+    void testStartGameNotEnoughPlayers(){
         Game game = gameService.findGameById(7);//Un game sin empezar con 1 solo jugador
         assertThrows(NewGameException.class, () -> {gameService.startGame(game);});
         Integer gamesThatHadStarted = gameService.findOnGoingGames().size();
@@ -246,7 +246,7 @@ public class GameServiceTests {
     }
     
     @Test
-    public void testStartGameAlreadyStarted(){
+    void testStartGameAlreadyStarted(){
         Game game = gameService.findGameById(5);//Un game sin empezar con 1 solo jugador
         assertThrows(NewGameException.class, () -> {gameService.startGame(game);});  
         Integer gamesThatHadStarted = gameService.findOnGoingGames().size();
@@ -254,13 +254,13 @@ public class GameServiceTests {
     }
     
     @Test
-    public void testFindLobbies(){
+    void testFindLobbies(){
         Integer calculatedGamesInLobby = gameService.findLobbies().size();
         assertEquals(gamesInLobby, calculatedGamesInLobby);     
     }
 
     @Test
-    public void testDeleteGame(){
+    void testDeleteGame(){
         Game game = gameService.findGameById(6);//un game sin empezar
         try {
             gameService.deleteGame(game);
@@ -274,7 +274,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testShouldNotDeleteGameStarted(){
+    void testShouldNotDeleteGameStarted(){
         Game game = gameService.findGameById(5);//un game empezado
         assertThrows(DeleteGameException.class, () -> {gameService.deleteGame(game);});
         Integer calculatedGamesPlaying = gameService.findOnGoingGames().size();
@@ -282,7 +282,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testPlayerInGameByUser(){
+    void testPlayerInGameByUser(){
         Player player = playerService.findPlayerById(19);
         User user = userService.findUserById(21).get();
         Player playerObtenido = gameService.playerInGameByUser(user, 5);
@@ -291,7 +291,7 @@ public class GameServiceTests {
     }
 
     @Test 
-    public void testShouldNotFindPlayerInGame(){
+    void testShouldNotFindPlayerInGame(){
         User user = userService.findUserById(21).get();
         assertThrows(NoSuchElementException.class,() ->{gameService.playerInGameByUser(user, 6);});//Probamos en un game en el que no está
         
