@@ -2,6 +2,7 @@ package org.springframework.samples.kingoftokyo.card;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -9,6 +10,8 @@ import org.springframework.samples.kingoftokyo.game.Game;
 import org.springframework.samples.kingoftokyo.game.MapGameRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javassist.NotFoundException;
 
 /**
  * @author Jose Maria Delgado Sanchez
@@ -49,8 +52,13 @@ public class CardService {
     }
 
     @Transactional
-    public Card findCardById(int id) throws DataAccessException {
-        return cardRepository.findById(id).get();
+    public Card findCardById(int id) throws DataAccessException, NotFoundException {
+        Optional<Card> card = cardRepository.findById(id);
+        if(!card.isEmpty()){
+            return card.get();
+        }else{
+            throw new NotFoundException("Card {id:"+id+"} no encontrada");
+        }  
     }
 
     /**

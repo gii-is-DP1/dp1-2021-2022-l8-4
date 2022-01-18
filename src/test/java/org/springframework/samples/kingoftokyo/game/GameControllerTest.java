@@ -73,7 +73,10 @@ public class GameControllerTest {
     @WithMockUser(value = "spring", authorities = { "user" })
     @Test
     public void testGameFinishedOk() throws Exception {
-        mockMvc.perform(get("/games/{gameId}/finished", "1"))
+
+        Mockito.when(gameService.findGameById(anyInt())).thenReturn(new Game());
+
+        mockMvc.perform(get("/games/{gameId}/finished", "2"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("games/gameFinished"));
     }

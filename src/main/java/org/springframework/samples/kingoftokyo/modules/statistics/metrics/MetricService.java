@@ -139,7 +139,11 @@ public class MetricService {
                 duration += game.getDuration();
             }
         }
-        return duration/gamesCounter;
+        if(gamesCounter.equals(0)){
+            return null;
+        }else{
+            return duration/gamesCounter;
+        }
     }
 
     @Transactional

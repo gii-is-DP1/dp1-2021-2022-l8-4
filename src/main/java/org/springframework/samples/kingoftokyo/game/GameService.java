@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -26,6 +27,8 @@ import org.springframework.samples.kingoftokyo.player.PlayerService;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
+
+import javassist.NotFoundException;
 
 /**
  * @author Jose Maria Delgado Sanchez
@@ -75,14 +78,15 @@ public class GameService {
     }
 
     @Transactional
-    public Game findGameById(int id) throws DataAccessException {
-        return gameRepository.findById(id).get();
+    public Game findGameById(int id) throws DataAccessException, NotFoundException {
+        Optional<Game> game = gameRepository.findById(id);
+        if(!game.isEmpty()){
+            return game.get();
+        }else{
+            throw new NotFoundException("Game {id:"+id+"} no encontrada");
+        }
     }
 
-    @Transactional
-    public List<Player> findPlayerList(int gameId) throws DataAccessException {
-        return gameRepository.findById(gameId).get().getPlayers();
-    }
 
     @Transactional
     public List<Game> findOnGoingGames() throws DataAccessException {
@@ -172,8 +176,8 @@ public class GameService {
     }
 
     @Transactional
-    public void nuevoTurno(int gameId) {
-        Game game = findGameById(gameId);
+    public void nuevoTurno(Game game) throws NotFoundException {
+        Integer gameId = game.getId();
         mapGameRepository.putRoll(gameId, new Roll());
 
         game.setTurn(game.getTurn() + 1);
@@ -182,7 +186,7 @@ public class GameService {
 
         useCardsStartTurn(actualTurn(gameId));
         saveGame(game);
-        playerService.startTurn(actualTurnPlayerId(gameId));
+        playerService.startTurn(actualTurnPlayer(gameId));
     }
 
     @Transactional
@@ -195,7 +199,7 @@ public class GameService {
     }
 
     @Transactional
-    public void nextPositionTurn(Integer gameId) {
+    public void nextPositionTurn(Integer gameId) throws DataAccessException, NotFoundException {
         List<Integer> turnList = mapGameRepository.getTurnList(gameId);
 
         Boolean finished = Boolean.FALSE;
@@ -214,9 +218,14 @@ public class GameService {
     }
 
     @Transactional
-    public Integer actualTurnPlayerId(Integer gameId) {
+    public Integer actualTurnPlayerId(Integer gameId) throws NotFoundException {
+        return actualTurnPlayer(gameId).getId();
+    }
+
+    @Transactional
+    public Player actualTurnPlayer(Integer gameId) throws NotFoundException {
         Player player = actualTurn(gameId);
-        return player.getId();
+        return player;
     }
 
     @Transactional
@@ -244,8 +253,7 @@ public class GameService {
     }
 
     @Transactional
-    public void endGame(Integer gameId) {
-        Game game = findGameById(gameId);
+    public void endGame(Game game) {
         if (game.playersWithMaxVictoryPoints().size() != 0) {
             game.setWinner(game.playersWithMaxVictoryPoints().get(0).getUser().getUsername());
             game.setEndTime(LocalDateTime.now());
@@ -263,9 +271,9 @@ public class GameService {
     }
 
     @Transactional
-    public List<Integer> initialTurnList(Integer gameId) {
+    public List<Integer> initialTurnList(Game game) {
         List<Integer> listaTurnos = new ArrayList<Integer>();
-        List<Player> jugadores = findPlayerList(gameId);
+        List<Player> jugadores = game.getPlayers();
         for (Player player : jugadores) {
             listaTurnos.add(player.getId());
         }
@@ -276,9 +284,11 @@ public class GameService {
     /**
      * Given a gameId returns the player who is playing their turn
      * @param game
+     * @throws NotFoundException
+     * @throws DataAccessException
      */
     @Transactional
-    public Player actualTurn(Integer gameId) {
+    public Player actualTurn(Integer gameId) throws NotFoundException {
 
         List<Integer> turnList = mapGameRepository.getTurnList(gameId);
         Player actualPlayer = playerService.findPlayerById(turnList.get(0));
@@ -287,7 +297,7 @@ public class GameService {
     }
 
     @Transactional
-    public Boolean isPlayerTurn(Integer gameId) {
+    public Boolean isPlayerTurn(Integer gameId) throws NotFoundException {
         User user = userService.authenticatedUser();
         Boolean result = Boolean.FALSE;
         if (user != null) {
@@ -297,8 +307,7 @@ public class GameService {
     }
 
     @Transactional
-    public Boolean isPlayerInGame(Integer gameId) {
-        Game game = findGameById(gameId);
+    public Boolean isPlayerInGame(Game game) {
         User user = userService.authenticatedUser();
         Boolean result = Boolean.FALSE;
         if (user != null) {
@@ -317,20 +326,21 @@ public class GameService {
     }
 
     @Transactional
-    public void handleTurnAction(Integer gameId, Boolean newTurn, Roll keepInfo) {
+    public void handleTurnAction(Game game, Boolean newTurn, Roll keepInfo) throws NotFoundException {
+        Integer gameId = game.getId();
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
-                useCardsEndTurn(playerService.actualPlayer(gameId));
-                isRecentlyHurtToFalse(gameId);
-                nuevoTurno(gameId);
-                playerService.checkplayers(gameId);
+                useCardsEndTurn(playerService.actualPlayer(game));
+                isRecentlyHurtToFalse(game);
+                nuevoTurno(game);
+                playerService.checkplayers(game);
             } else {
                 Roll rollData = mapGameRepository.getRoll(gameId); 
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
                 if (rollData.getRollAmount().equals(rollData.getMaxThrows())) {
-                    Integer playerIdActualTurn = actualTurnPlayerId(gameId);
-                    playerService.useRoll(playerIdActualTurn, rollData);
+                    Player playerActualTurn = actualTurnPlayer(gameId);
+                    playerService.useRoll(playerActualTurn, rollData);
 
                 }
             }
@@ -341,10 +351,11 @@ public class GameService {
      * Swaps the locations between the player who wants to leave tokyo and the player
      * who hurt the player in tokyo.
      * @param game
+     * @throws NotFoundException
      */
     @Transactional
-    public void changePosition(Integer gameId) {
-        Player playerActualTurn = playerService.findPlayerById(actualTurnPlayerId(gameId));
+    public void changePosition(Integer gameId) throws NotFoundException {
+        Player playerActualTurn = actualTurnPlayer(gameId);
         User user = userService.authenticatedUser();
         Player player = playerInGameByUser(user, gameId);
         LocationType LeavingTokyoLocation = player.getLocation();
@@ -358,8 +369,8 @@ public class GameService {
      * @param game
      */
     @Transactional
-    public void isRecentlyHurtToFalse(Integer gameId) {
-        List<Player> lsplayer = findPlayerList(gameId);
+    public void isRecentlyHurtToFalse(Game game) {
+        List<Player> lsplayer = game.getPlayers();
         for (Player player : lsplayer) {
             player.setRecentlyHurt(Boolean.FALSE);
             playerService.savePlayer(player);
@@ -370,12 +381,13 @@ public class GameService {
      * Handles the changes of the attribute "Location" of a player from Tokyo(or TokyoBay) to fueraDeTokyo 
      * if the players has been hurt and is on Tokyo(or Tokyobay) 
      * @param game
+     * @throws NotFoundException
      */
     @Transactional
-    public void handleExitTokyo(Integer gameId) {
-        if (playerService.isRecentlyHurt(gameId) && playerService.isInTokyo(gameId)) {
-            changePosition(gameId);
-            isRecentlyHurtToFalse(gameId);
+    public void handleExitTokyo(Game game) throws NotFoundException {
+        if (playerService.isRecentlyHurt(game.getId()) && playerService.isInTokyo(game.getId())) {
+            changePosition(game.getId());
+            isRecentlyHurtToFalse(game);
         }
     }
 
@@ -386,6 +398,13 @@ public class GameService {
      */
     @Transactional
     public List<Player> playersOrder(List<Integer> turnList) {
-        return turnList.stream().map(id -> playerService.findPlayerById(id)).collect(Collectors.toList());
+        return turnList.stream().map(id -> {
+            try {
+                return playerService.findPlayerById(id);
+            } catch (DataAccessException | NotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).collect(Collectors.toList());
     }
 }

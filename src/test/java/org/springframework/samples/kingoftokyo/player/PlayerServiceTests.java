@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.kingoftokyo.dice.DiceValues;
 import org.springframework.samples.kingoftokyo.dice.Roll;
 import org.springframework.samples.kingoftokyo.game.Game;
@@ -23,6 +24,8 @@ import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javassist.NotFoundException;
 
 /** 
  *@author Noelia López Durán
@@ -48,7 +51,7 @@ public class PlayerServiceTests {
     private Player player2;
 
     @BeforeEach
-    public void createInitialPlayer() {
+    public void createInitialPlayer() throws DataAccessException, NotFoundException {
         user1=new User();
         user1.setUsername("UsuarioDePrueba");
         user1.setEmail("usuarioDePrueba@gmail.com");
@@ -109,7 +112,7 @@ public class PlayerServiceTests {
     }
 
     @Test
-    public void testPlayerFindById(){
+    public void testPlayerFindById() throws DataAccessException, NotFoundException{
         Integer playerId=player1.getId();
         Player playerTest=playerService.findPlayerById(playerId);
         assertEquals(playerId, playerTest.getId());
@@ -120,7 +123,7 @@ public class PlayerServiceTests {
   
 
     @Test
-    public void testFindPlayerWithCorrectId(){
+    public void testFindPlayerWithCorrectId() throws DataAccessException, NotFoundException{
         Player player4 = playerService.findPlayerById(4);
         assertThat(player4.getMonster().getName()).startsWith("CyberBunny");
 		assertThat(player4.getLifePoints()).isEqualTo(0);
@@ -199,7 +202,7 @@ public class PlayerServiceTests {
         roll.setValues(valoresCuracion);
         playerService.savePlayer(player1);
         
-        playerService.useRoll(player1.getId(), roll);
+        playerService.useRoll(player1, roll);
         
         assertEquals(player1.getLifePoints(),7);
     }
@@ -216,7 +219,7 @@ public class PlayerServiceTests {
         roll.setValues(valoresCuracion);
         playerService.savePlayer(player1);
         
-        playerService.useRoll(player1.getId(), roll);
+        playerService.useRoll(player1, roll);
         
         assertEquals(player1.getLifePoints(),1);
     }
@@ -230,7 +233,7 @@ public class PlayerServiceTests {
         }
         roll.setValues(damageValues);
         
-        playerService.useRoll(player1.getId(), roll);
+        playerService.useRoll(player1, roll);
         
         assertEquals(player2.getLifePoints(),4);
     }
@@ -244,14 +247,14 @@ public class PlayerServiceTests {
         }
         roll.setValues(damageValues);
         
-        playerService.useRoll(player2.getId(), roll);
+        playerService.useRoll(player2, roll);
         
         assertEquals(player1.getLifePoints(),4);
     }
 
     @Test
 	@Transactional
-	public void shouldUpdateMonsterName() {
+	public void shouldUpdateMonsterName() throws DataAccessException, NotFoundException {
 		Player player2 = this.playerService.findPlayerById(2);
 
 		Monster newName = Monster.alien;
@@ -272,7 +275,7 @@ public class PlayerServiceTests {
         
         roll.setValues(onesValues);
         
-        playerService.useRoll(player1.getId(), roll);
+        playerService.useRoll(player1, roll);
         
         assertEquals(player1.getVictoryPoints(),4);
     }
@@ -287,7 +290,7 @@ public class PlayerServiceTests {
         
         roll.setValues(twosValues);
         
-        playerService.useRoll(player1.getId(), roll);
+        playerService.useRoll(player1, roll);
 
         assertEquals(player1.getVictoryPoints(),5);
     }
@@ -302,7 +305,7 @@ public class PlayerServiceTests {
         
         roll.setValues(threesValues);
         
-        playerService.useRoll(player1.getId(), roll);
+        playerService.useRoll(player1, roll);
 
         assertEquals(player1.getVictoryPoints(),6);
     }
@@ -317,7 +320,7 @@ public class PlayerServiceTests {
         
         roll.setValues(energyValues);
         
-        playerService.useRoll(player1.getId(), roll);
+        playerService.useRoll(player1, roll);
 
         assertEquals(player1.getEnergyPoints(),6);
     }
@@ -325,14 +328,14 @@ public class PlayerServiceTests {
     @Test
     public void startTurnInTokyoTest() {
         assertEquals(player2.getVictoryPoints(), 0);
-        playerService.startTurn(player2.getId());
+        playerService.startTurn(player2);
         assertEquals(player2.getVictoryPoints(), 2);
     }
 
     @Test
     public void startTurnOutOfTokyoTest() {
         assertEquals(player1.getVictoryPoints(), 0);
-        playerService.startTurn(player1.getId());
+        playerService.startTurn(player1);
         assertEquals(player1.getVictoryPoints(), 0);
     }
 
@@ -346,7 +349,7 @@ public class PlayerServiceTests {
         }
         roll.setValues(damageValues);
         
-        playerService.useRoll(player1.getId(), roll);
+        playerService.useRoll(player1, roll);
         
         assertEquals(player1.getLocation(),LocationType.ciudadTokyo);
     } 
