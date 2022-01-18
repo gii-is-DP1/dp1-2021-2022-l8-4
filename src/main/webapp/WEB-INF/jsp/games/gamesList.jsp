@@ -34,7 +34,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <c:out value="${game.startTime}" />
+                                                <kingoftokyo:localDateTime  dateTimeValue= "${game.startTime}" />
                                             </td>
                                             <td>
                                                 <c:out value="${game.playersAlive().size()}" /> /
