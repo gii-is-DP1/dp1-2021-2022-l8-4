@@ -143,7 +143,7 @@ public class UserService {
 	public Boolean isAuthUserPlayingAsPlayer(Player player) {
 		User user = authenticatedUser();
 		if (user instanceof User) {
-			return user.getPlayers().stream().map(p -> p.getId()).filter(id -> id == player.getId()).findAny()
+			return user.getPlayers().stream().map(p -> p.getId()).filter(id -> player.getId().equals(id) ).findAny()
 					.isPresent();
 		} else {
 			return false;
@@ -153,8 +153,12 @@ public class UserService {
 	@Transactional
 	public Boolean isAdmin(int userId){
 		Optional<Authorities> auth = authoritiesRepository.findById(userId);
-		int res = auth.get().authority.compareTo("admin");
-		return res==0 ? true : false;
+		if(auth.isPresent()){
+			int res = auth.get().authority.compareTo("admin");
+			return res==0 ? true : false;
+		}else{
+			return false;
+		}
 	}
 
 }
