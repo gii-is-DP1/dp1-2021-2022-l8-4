@@ -31,4 +31,5 @@ import org.springframework.stereotype.Repository;
 	 */
     @Query("SELECT COUNT(pc) FROM PlayerCard pc WHERE player.user.id=?1 AND pc.discarded IS TRUE")
     Integer cardsUsedByUser(int userId) throws DataAccessException;
+
  }

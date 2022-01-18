@@ -46,6 +46,8 @@ public class Player extends BaseEntity {
     @NotNull
     private Integer lifePoints;
 
+    @Column(columnDefinition = "long default 0l")
+    private Long turnsTokyo;
     
     @NotNull
     @Min(0)
@@ -109,9 +111,9 @@ public class Player extends BaseEntity {
     public Integer getMaxHealth() {
         Integer maxHealth=10;
         if(this.playerCard.stream()
-                        .filter(x -> x.getPlayer().getId() == this.id) 
+                        .filter(x -> x.getPlayer().getId().equals(this.id)) 
                         .map(x -> x.getCard().getCardEnum())
-                        .anyMatch(x -> x.equals(CardEnum.evenBigger))){
+                        .anyMatch(x -> x.equals(CardEnum.EVENBIGGER))){
                             maxHealth=12;
                         }
         return maxHealth;
