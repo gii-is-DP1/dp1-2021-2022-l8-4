@@ -209,7 +209,7 @@ public class GameService {
             if (!player.isDead()) {
                 turnList.add(turnList.remove(0));
                 mapGameRepository.putTurnList(gameId, turnList);
-                break;
+                finished=Boolean.TRUE;
             } else {
                 turnList.remove(1);
             }
@@ -231,7 +231,7 @@ public class GameService {
     @Transactional
     public List<Game> findAllFinished() {
         Iterable<Game> resultSinFiltrar = findAll();
-        List<Game> resultadoFiltrado = new ArrayList<Game>();
+        List<Game> resultadoFiltrado = new ArrayList<>();
         for (Game game : resultSinFiltrar) {
             if (game.isFinished()) {
                 resultadoFiltrado.add(game);
@@ -254,7 +254,7 @@ public class GameService {
 
     @Transactional
     public void endGame(Game game) {
-        if (game.playersWithMaxVictoryPoints().size() != 0) {
+        if (!game.playersWithMaxVictoryPoints().isEmpty()) {
             game.setWinner(game.playersWithMaxVictoryPoints().get(0).getUser().getUsername());
             game.setEndTime(LocalDateTime.now());
         } else if (game.playersAlive().size() == 1) {
@@ -272,7 +272,7 @@ public class GameService {
 
     @Transactional
     public List<Integer> initialTurnList(Game game) {
-        List<Integer> listaTurnos = new ArrayList<Integer>();
+        List<Integer> listaTurnos = new ArrayList<>();
         List<Player> jugadores = game.getPlayers();
         for (Player player : jugadores) {
             listaTurnos.add(player.getId());
@@ -291,9 +291,7 @@ public class GameService {
     public Player actualTurn(Integer gameId) throws NotFoundException {
 
         List<Integer> turnList = mapGameRepository.getTurnList(gameId);
-        Player actualPlayer = playerService.findPlayerById(turnList.get(0));
-
-        return actualPlayer;
+        return playerService.findPlayerById(turnList.get(0));
     }
 
     @Transactional
@@ -360,7 +358,7 @@ public class GameService {
         Player player = playerInGameByUser(user, gameId);
         LocationType LeavingTokyoLocation = player.getLocation();
         playerActualTurn.setLocation(LeavingTokyoLocation);
-        player.setLocation(LocationType.fueraTokyo);
+        player.setLocation(LocationType.FUERATOKYO);
         playerService.savePlayer(player);
         playerService.savePlayer(playerActualTurn);
     }

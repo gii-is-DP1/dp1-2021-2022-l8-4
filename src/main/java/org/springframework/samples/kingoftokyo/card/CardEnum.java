@@ -162,7 +162,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             Roll roll = mapGameRepository.getRoll(player.getGame().getId());
 
             Map<String, Integer> rollValues = playerService.countRollValues(roll.getValues());
-            if (rollValues.get("damage") > 0) {
+            if (rollValues.get(damageString) > 0) {
                 player.setVictoryPoints(player.getVictoryPoints() + 1);
                 playerService.savePlayer(player);
 
@@ -176,7 +176,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             Roll roll = mapGameRepository.getRoll(player.getGame().getId());
 
             Map<String, Integer> rollValues = playerService.countRollValues(roll.getValues());
-            if (rollValues.get("damage") > 0) {
+            if (rollValues.get(damageString) > 0) {
                 if (Boolean.TRUE.equals(player.isInTokyo())) {
                     for (Player playTokyo : player.getGame().playersInTokyo()) {
                         if (!player.getId().equals(playTokyo.getId())) {
@@ -247,7 +247,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             Roll roll = mapGameRepository.getRoll(player.getGame().getId());
 
             Map<String, Integer> rollValues = playerService.countRollValues(roll.getValues());
-            if (rollValues.get("heal") > 0 && rollValues.get("damage") > 0 && rollValues.get("energy") > 0
+            if (rollValues.get("heal") > 0 && rollValues.get(damageString) > 0 && rollValues.get("energy") > 0
                     && rollValues.get("ones") > 0 && rollValues.get("twos") > 0 && rollValues.get("threes") > 0) {
                 player.setVictoryPoints(player.getVictoryPoints() + 9);
                 playerService.savePlayer(player);
@@ -328,7 +328,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             Map<String, Integer> tiradas = playerService.countRollValues(roll.getValues());
             Map<String, Integer> efectosCartas = playerService.countRollValues(roll.getCardExtraValues());
 
-            if (tiradas.get("damage") + efectosCartas.get("damage") == 0) {
+            if (tiradas.get(damageString) + efectosCartas.get(damageString) == 0) {
                 player.setVictoryPoints(player.getVictoryPoints() + 1);
             }
 
@@ -357,7 +357,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
             for (Player player : playerRolling.getGame().getPlayers()) {
                 if (player.getLocation() == playerRolling.getLocation()) {
-                    Integer damageTotal=tiradas.get("damage") + efectosCartas.get("damage");
+                    Integer damageTotal=tiradas.get(damageString) + efectosCartas.get(damageString);
                     playerService.damagePlayer(player,damageTotal);
                 }
             }

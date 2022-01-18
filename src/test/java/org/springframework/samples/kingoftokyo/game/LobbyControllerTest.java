@@ -163,7 +163,7 @@ class LobbyControllerTest {
     void testPostLobby() throws Exception {
         Player player=new Player();
         player.setEnergyPoints(0);
-        player.setLocation(LocationType.fueraTokyo);
+        player.setLocation(LocationType.FUERATOKYO);
         player.setLifePoints(10);
         player.setMonster(Monster.alien);
         player.setVictoryPoints(0);
