@@ -60,6 +60,7 @@ public class UserController {
     public String initCreationForm(ModelMap modelMap) {
         String view = VIEWS_USERS_CREATE_UPDATE_FORM;
         modelMap.addAttribute("user", new User());
+        modelMap.put("maxTurns", 0l);
         return view;
     }
 
@@ -67,6 +68,7 @@ public class UserController {
     public String processCreationForm(@Valid User user, BindingResult result, ModelMap modelMap) {
         if (result.hasErrors()) {
             modelMap.addAttribute("user", user);
+            modelMap.put("maxTurns", 0l);
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
         } else {
@@ -84,6 +86,7 @@ public class UserController {
         if (currentUserId.equals(userId) || userService.isAdmin(currentUserId)) {
             User user = this.userService.findUserById(userId);
             modelMap.put("user", user);
+            modelMap.put("maxTurns", user.getMaxTurnsTokyo());
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
         } else {
@@ -106,6 +109,7 @@ public class UserController {
             ModelMap modelMap) {
         if (result.hasErrors()) {
             modelMap.put("user", user);
+            modelMap.put("maxTurns", user.getMaxTurnsTokyo());
             return VIEWS_USERS_CREATE_UPDATE_FORM;
         } else {
             User userToUpdate = this.userService.findUserById(userId);
