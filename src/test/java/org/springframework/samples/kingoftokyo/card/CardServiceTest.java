@@ -3,13 +3,13 @@ package org.springframework.samples.kingoftokyo.card;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -23,12 +23,17 @@ import org.springframework.stereotype.Service;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
  
 public class CardServiceTest {
+
+    private static final Integer NUM_CARTAS = 30;
+    private CardService cardService;
     
     @Autowired
-    private CardService cardService;
+    private CardServiceTest(CardService cardService) {
+        this.cardService = cardService;
+    }
 
     @Test
-    public void testFindCardTypes() {
+    void testFindCardTypes() {
         Collection<CardType> cardTypes = cardService.findCardTypes();
         List<CardType> cardTypesList = cardTypes.stream().collect(Collectors.toList());
         CardType cardType1 = cardTypesList.get(0);
@@ -38,55 +43,65 @@ public class CardServiceTest {
     }
 
     @Test
-    @Disabled
-    public void testFindAll() {
-        Iterable<Card> all = cardService.findAll();
-        // Iterating over all cards
-        for (Card card:all) {
-            String monsterName = card.getCardEnum().getName();
-            monsterName.equals("Monstruo Alfa");
-        }
-
-    }
-
-    @Test
-    @Disabled //Esto se deja asi hasta que se añadan todas las cartas y se cambie el numero de cartas por el que haya en dicho momento
-    public void testCountWithInitialData(){
-        int count = cardService.cardCount();
-        assertEquals(count, 10);
-    }
-
-    @Test
-    @Disabled
-    public void testSaveCardIntoDatabaseAndGenerateId() {
-        Card card = new Card();
-       // card.setName("Fábrica de lava");
-        card.setCost(5);
-        card.setType(CardType.DESCARTAR);
-        cardService.saveCard(card);
-        assertThat(card.getId()).isNotNull();
-    }
-
-    @Test
-    @Disabled
     @Transactional
-	public void testUpdateCardName() throws Exception {
-		Card card = cardService.findCardById(1);
+    void shouldFindAll() {
+        List<Card> listcont = new ArrayList<>();
+        cardService.findAll().forEach(listcont::add);
+        assertEquals(listcont.size(), NUM_CARTAS);
 
+        Card newCard = new Card();
+        newCard.setId(50);
+        newCard.setCardEnum(CardEnum.NATIONALGUARD);
+        newCard.setCost(10);
+        newCard.setType(CardType.PERMANENTE);
+        cardService.saveCard(newCard);
+
+        List<Card> listcont2 = new ArrayList<>();
+        cardService.findAll().forEach(listcont2::add);
+        assertEquals(listcont2.size(), NUM_CARTAS+1);
+    }
+
+    @Test
+    void shouldFindCardById() {
+        Card card = cardService.findCardById(10);
+        Card anotherCard = cardService.findCardById(25);
+        assertEquals(card.getCost(), 4);
+        assertEquals(anotherCard.getCost(), 7);
+        assertThat(card.getCardEnum().getName()).startsWith("Bombardeo");
+        assertThat(anotherCard.getCardEnum().getName()).startsWith("¡Tiene");
+    }
+
+    @Test
+    @Transactional
+    void shouldSaveCardIntoDatabaseAndGenerateId() {
+        Card newCard = new Card();
+        newCard.setId(88);
+        newCard.setCardEnum(CardEnum.CAMOUFLAGE);
+        newCard.setCost(36);
+        newCard.setType(CardType.PERMANENTE);
+        cardService.saveCard(newCard);
+        assertThat(newCard.getId()).isNotNull();
+    }
+
+    @Test
+    @Transactional
+	void shouldUpdateCardName() {
+		Card card = cardService.findCardById(1);
 		String newName = "Fábrica de agua";
-	//	card.getCardEnum().setName(newName);
+        String newDescription = "Llueve y moja al jugador siguiente, así que pierde su turno";
+        card.getCardEnum().setName(newName);
+        card.getCardEnum().setDescription(newDescription);
 		this.cardService.saveCard(card);
 
 		card = this.cardService.findCardById(1);
-	//	assertThat(card.getName()).isEqualTo(newName);
+		assertThat(card.getCardEnum().getName()).isEqualTo(newName);
+        assertThat(card.getCardEnum().getDescription()).isEqualTo(newDescription);
 	}
 
     @Test
-    @Disabled
-    public void testFindCardById() {
-        Card card = cardService.findCardById(1);
-        assertEquals(card.getCost(), 5);
-        assertThat(card.getCardEnum().getName()).startsWith("Monstruo Alfa");
+    void shouldCardCount() {
+        int count = cardService.cardCount();
+        assertEquals(count,NUM_CARTAS);
     }
 
 }
