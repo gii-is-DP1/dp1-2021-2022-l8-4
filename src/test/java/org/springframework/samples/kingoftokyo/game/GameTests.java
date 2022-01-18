@@ -30,13 +30,13 @@ public class GameTests {
         game.setTurn(0);
         game.setMaxNumberOfPlayers(6);
         
-        assertEquals(game.getCreator(), user);
-        assertEquals(game.getEndTime(), ldt);
-        assertEquals(game.getStartTime(), ldt);
-        assertEquals(game.getName(), "juego");
-        assertEquals(game.getWinner(), "user1");
-        assertEquals(game.getTurn(), 0);
-        assertEquals(game.getMaxNumberOfPlayers(), 6);
+        assertEquals(user, game.getCreator());
+        assertEquals(ldt, game.getEndTime());
+        assertEquals(ldt, game.getStartTime());
+        assertEquals("juego", game.getName());
+        assertEquals("user1", game.getWinner());
+        assertEquals(0, game.getTurn());
+        assertEquals(6, game.getMaxNumberOfPlayers());
     }
 
     

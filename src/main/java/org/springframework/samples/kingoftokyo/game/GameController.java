@@ -10,6 +10,7 @@ import org.springframework.samples.kingoftokyo.dice.Roll;
 import org.springframework.samples.kingoftokyo.gamecard.GameCardService;
 import org.springframework.samples.kingoftokyo.player.Player;
 import org.springframework.samples.kingoftokyo.player.PlayerService;
+import org.springframework.samples.kingoftokyo.player.exceptions.InvalidPlayerActionException;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -154,6 +155,8 @@ public class GameController {
         }catch(NotFoundException e){
             log.warn(e.toString());
             return VIEWS_EXCEPTION;
+        } catch (InvalidPlayerActionException e) {
+            log.warn(e.toString());
         }
         return viewGames + gameId + "/playing";
     }
