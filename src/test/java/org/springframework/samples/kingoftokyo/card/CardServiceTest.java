@@ -26,7 +26,7 @@ import javassist.NotFoundException;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @Import(SecurityConfiguration.class)
 
-public class CardServiceTest {
+class CardServiceTest {
 
     private static final Integer NUM_CARTAS = 30;
     private CardService cardService;

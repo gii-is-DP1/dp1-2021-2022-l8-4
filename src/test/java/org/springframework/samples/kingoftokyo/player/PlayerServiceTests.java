@@ -36,7 +36,7 @@ import javassist.NotFoundException;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @Import(SecurityConfiguration.class)
 
-public class PlayerServiceTests {
+class PlayerServiceTests {
     
     @Autowired
     protected PlayerService playerService;
@@ -52,7 +52,7 @@ public class PlayerServiceTests {
     private Player player2;
 
     @BeforeEach
-    public void createInitialPlayer() throws DataAccessException, NotFoundException {
+    void createInitialPlayer() throws DataAccessException, NotFoundException {
         user1=new User();
         user1.setUsername("UsuarioDePrueba");
         user1.setEmail("usuarioDePrueba@gmail.com");
@@ -113,7 +113,7 @@ public class PlayerServiceTests {
     }
 
     @Test
-    public void testPlayerFindById() throws DataAccessException, NotFoundException{
+    void testPlayerFindById() throws DataAccessException, NotFoundException{
         Integer playerId=player1.getId();
         Player playerTest=playerService.findPlayerById(playerId);
         assertEquals(playerId, playerTest.getId());
@@ -124,7 +124,7 @@ public class PlayerServiceTests {
   
 
     @Test
-    public void testFindPlayerWithCorrectId() throws DataAccessException, NotFoundException{
+    void testFindPlayerWithCorrectId() throws DataAccessException, NotFoundException{
         Player player4 = playerService.findPlayerById(4);
         assertThat(player4.getMonster().getName()).startsWith("CyberBunny");
 		assertThat(player4.getLifePoints()).isEqualTo(0);
@@ -135,14 +135,14 @@ public class PlayerServiceTests {
     }
 
     @Test
-    public void testCountPlayers() {
+    void testCountPlayers() {
         Integer size=(int) StreamSupport.stream(playerService.findAll().spliterator(),false).count();
         assertEquals(size,playerService.playerCount());
     }
 
 
     @Test 
-    public void testAddPlayer(){
+    void testAddPlayer(){
         int countInitial=playerService.playerCount();
         Game game2=new Game();
         game2.setName("Partida prueb2");
@@ -168,7 +168,7 @@ public class PlayerServiceTests {
 
     
     @Test
-    public void testJoinGame() throws NewGameException{
+    void testJoinGame() throws NewGameException{
         User testUser=new User();
         testUser.setUsername("UsuarioDePruebaJoin");
         testUser.setEmail("usuarioDePruebaJoin@gmail.com");
@@ -193,7 +193,7 @@ public class PlayerServiceTests {
     }
 
     @Test
-    public void testHealRoll(){
+    void testHealRoll(){
         Roll roll=new Roll();
         List<DiceValues> valoresCuracion=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -209,7 +209,7 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    public void testHealRollInTokyo() {
+    void testHealRollInTokyo() {
         Roll roll=new Roll();
         List<DiceValues> valoresCuracion=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -226,7 +226,7 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    public void testDamageToTokyoRoll(){
+    void testDamageToTokyoRoll(){
         Roll roll=new Roll();
         List<DiceValues> damageValues=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -240,7 +240,7 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    public void testDamageFromTokyoRoll(){
+    void testDamageFromTokyoRoll(){
         Roll roll=new Roll();
         List<DiceValues> damageValues=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -255,7 +255,7 @@ public class PlayerServiceTests {
 
     @Test
 	@Transactional
-	public void shouldUpdateMonsterName() throws DataAccessException, NotFoundException {
+	void shouldUpdateMonsterName() throws DataAccessException, NotFoundException {
 		Player player2 = this.playerService.findPlayerById(2);
 
 		Monster newName = Monster.alien;
@@ -267,7 +267,7 @@ public class PlayerServiceTests {
 	}
 
     @Test 
-    public void testOnesRoll(){
+    void testOnesRoll(){
         Roll roll=new Roll();
         List<DiceValues> onesValues=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -282,7 +282,7 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    public void testTwosRoll(){
+    void testTwosRoll(){
         Roll roll=new Roll();
         List<DiceValues> twosValues=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -297,7 +297,7 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    public void testThreesRoll(){
+    void testThreesRoll(){
         Roll roll=new Roll();
         List<DiceValues> threesValues=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -312,7 +312,7 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    public void testEnergyRoll(){
+    void testEnergyRoll(){
         Roll roll=new Roll();
         List<DiceValues> energyValues=new ArrayList<DiceValues>();
         for(int i=0;i<6;i++){
@@ -327,7 +327,7 @@ public class PlayerServiceTests {
     }
 
     @Test
-    public void startTurnInTokyoTest() {
+    void startTurnInTokyoTest() {
         assertEquals(player2.getVictoryPoints(), 0);
 
         
@@ -336,7 +336,7 @@ public class PlayerServiceTests {
     }
 
     @Test
-    public void startTurnOutOfTokyoTest() {
+    void startTurnOutOfTokyoTest() {
         assertEquals(player1.getVictoryPoints(), 0);
  
         playerService.startTurn(player1);
@@ -344,7 +344,7 @@ public class PlayerServiceTests {
     }
 
     @Test 
-    public void testEnterTokyoRoll(){
+    void testEnterTokyoRoll(){
         Roll roll=new Roll();
         player2.setLocation(LocationType.FUERATOKYO);
         List<DiceValues> damageValues=new ArrayList<DiceValues>();
@@ -360,7 +360,7 @@ public class PlayerServiceTests {
 
     @Test   
 	@Transactional
-	public void shouldInsertPlayerIntoDatabaseAndGenerateId() {
+	void shouldInsertPlayerIntoDatabaseAndGenerateId() {
         
         User user1 = this.userService.findUserById(1);
 		Player player = new Player();

@@ -383,8 +383,8 @@ public class GameService {
         Player playerActualTurn = actualTurnPlayer(gameId);
         User user = userService.authenticatedUser();
         Player player = playerInGameByUser(user, gameId);
-        LocationType LeavingTokyoLocation = player.getLocation();
-        playerActualTurn.setLocation(LeavingTokyoLocation);
+        LocationType leavingTokyoLocation = player.getLocation();
+        playerActualTurn.setLocation(leavingTokyoLocation);
         player.setLocation(LocationType.FUERATOKYO);
         playerService.savePlayer(player);
         playerService.savePlayer(playerActualTurn);
