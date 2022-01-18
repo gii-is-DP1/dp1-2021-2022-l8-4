@@ -106,8 +106,11 @@ public class UserController {
 
     @PostMapping(value = "/{userId}/edit")
     public String processUpdateForm(@Valid User user, BindingResult result, @PathVariable("userId") int userId,
-            ModelMap modelMap) {
-        if (result.hasErrors()) {
+            ModelMap modelMap, @RequestParam(value = "version", required=false) Integer version) {
+        if(user.getVersion()!=version) { 
+            modelMap.put("message","Concurrent modification of user! Try again!");
+            return initUpdateForm(user.getId(),modelMap);
+        }else if (result.hasErrors()) {
             modelMap.put("user", user);
             modelMap.put("maxTurns", user.getMaxTurnsTokyo());
             return VIEWS_USERS_CREATE_UPDATE_FORM;
