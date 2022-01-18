@@ -35,6 +35,15 @@ public interface MetricRepository extends CrudRepository<Game, Integer> {
     Page<MetricData> winsRanking(Pageable pageable) throws DataAccessException;
 
     /**
+	 * Retrieve cards used count grouped by user.
+	 * @return a <code>Integer</code>
+     * CONSULTA NO FUNCIONA COMO DEBERIA- MIRAR MAÑANA CON SARA
+     */
+    @Query("SELECT new org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData(player.user, COUNT(pc.id)) FROM Player player JOIN PlayerCard pc WHERE player.id is pc.player.id GROUP BY player.user.id ORDER BY count(pc.id) DESC")
+    Page<MetricData> cardsRanking(Pageable pageable) throws DataAccessException;
+
+
+    /**
 	 * Retrieve max scores grouped by user.
 	 * @return a <code>Pageable</code>
 	 */

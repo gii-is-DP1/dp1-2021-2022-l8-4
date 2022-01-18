@@ -50,6 +50,16 @@ public class MetricService {
 
     /**
      * 
+     * @return List of Users with their associated score of cards used ordered
+     */
+    @Transactional
+    public Page<MetricData> cardsRanking(int pageNumber, int numberOfElements){    
+        PageRequest pageable = PageRequest.of(pageNumber, numberOfElements);    
+        return metricRepository.cardsRanking(pageable);
+    }    
+
+        /**
+     * 
      * @return List of Users with their associated score of wins ordered
      */
     @Transactional
@@ -57,6 +67,7 @@ public class MetricService {
         PageRequest pageable = PageRequest.of(pageNumber, numberOfElements);    
         return metricRepository.winsRanking(pageable);
     }    
+    
     
     /**
     * 
@@ -86,6 +97,8 @@ public class MetricService {
                 return gamesPlayedRanking(pageNumber, numberOfElements);
             case wins:
                 return winsRanking(pageNumber, numberOfElements);
+            case cardsUsed:
+                return cardsRanking(pageNumber, numberOfElements);
             default:
                 break;
         }

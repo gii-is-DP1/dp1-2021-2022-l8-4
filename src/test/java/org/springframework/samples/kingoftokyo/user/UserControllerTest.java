@@ -122,6 +122,7 @@ public class UserControllerTest {
                 .andExpect(view().name("redirect:/users/profile/{userId}"));
     }
 
+
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test
     void testPostCurrentUserWithUpdatedDataHasErrors() throws Exception {
