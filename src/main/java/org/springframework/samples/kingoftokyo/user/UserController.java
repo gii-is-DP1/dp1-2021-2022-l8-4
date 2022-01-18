@@ -1,9 +1,7 @@
 package org.springframework.samples.kingoftokyo.user;
 
-import java.util.Optional;
 
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,17 +25,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AchievementService achievementService;
-
     private static final String VIEWS_USERS_CREATE_UPDATE_FORM = "users/createOrUpdateUsersForm";
-
+    private static final String VIEW_USER_LIST = "users/usersList";
     private static final String VIEWS_EXCEPTION = "exception";
-
     private String message = "message";
+
+    private UserService userService;
+    private AchievementService achievementService;
+    @Autowired
+    public UserController(UserService userService, AchievementService achievementService) {
+        this.userService = userService;
+        this.achievementService = achievementService;
+    }
 
     /**
      * @param modelMap
@@ -46,7 +45,7 @@ public class UserController {
      */
     @GetMapping()
     public String usersList(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") int page) {
-        String view = "users/usersList";
+        String view = VIEW_USER_LIST;
         Page<User> pages = userService.getPageOfUsers(page - 1);
         modelMap.addAttribute("totalPages", pages.getTotalPages());
         modelMap.addAttribute("totalElements", pages.getTotalElements());
@@ -60,6 +59,7 @@ public class UserController {
     public String initCreationForm(ModelMap modelMap) {
         String view = VIEWS_USERS_CREATE_UPDATE_FORM;
         modelMap.addAttribute("user", new User());
+        modelMap.put("maxTurns", 0l);
         return view;
     }
 
@@ -67,6 +67,7 @@ public class UserController {
     public String processCreationForm(@Valid User user, BindingResult result, ModelMap modelMap) {
         if (result.hasErrors()) {
             modelMap.addAttribute("user", user);
+            modelMap.put("maxTurns", 0l);
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
         } else {
@@ -84,6 +85,7 @@ public class UserController {
         if (currentUserId.equals(userId) || userService.isAdmin(currentUserId)) {
             User user = this.userService.findUserById(userId);
             modelMap.put("user", user);
+            modelMap.put("maxTurns", user.getMaxTurnsTokyo());
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
         } else {
@@ -103,9 +105,13 @@ public class UserController {
 
     @PostMapping(value = "/{userId}/edit")
     public String processUpdateForm(@Valid User user, BindingResult result, @PathVariable("userId") int userId,
-            ModelMap modelMap) {
-        if (result.hasErrors()) {
+            ModelMap modelMap, @RequestParam(value = "version", required=false) Integer version) {
+        if(user.getVersion()!=version) { 
+            modelMap.put("message","Concurrent modification of user! Try again!");
+            return initUpdateForm(user.getId(),modelMap);
+        }else if (result.hasErrors()) {
             modelMap.put("user", user);
+            modelMap.put("maxTurns", user.getMaxTurnsTokyo());
             return VIEWS_USERS_CREATE_UPDATE_FORM;
         } else {
             User userToUpdate = this.userService.findUserById(userId);

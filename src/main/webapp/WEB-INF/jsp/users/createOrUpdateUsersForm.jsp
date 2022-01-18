@@ -30,6 +30,8 @@
                     </c:choose>
                     <kingoftokyo:inputField label="Email" name="email"/>
                     <kingoftokyo:inputField label="Password" name="password"/>
+                    <input type="hidden" name="version" value="${user.version}"/>
+                    <input type="hidden" value="${maxTurns}" name="maxTurnsTokyo"></input>
                 </div>
 
                 <div class="form-group">

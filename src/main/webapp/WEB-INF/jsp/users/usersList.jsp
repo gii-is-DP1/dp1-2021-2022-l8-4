@@ -10,10 +10,11 @@
         <table id="usersTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th style="width: 150px;">Username</th>
+                    <th style="width: 150px;">Usuario</th>
                     <th style="width: 200px;">Email</th>
-                    <th style="width: 120px">Password</th>
-
+                    <th style="width: 120px">Contrasenya</th>
+                    <th style="width: 120px">Ultimo editor</th>
+                    <th style="width: 120px">Ultima edicion </th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,12 @@
                                 </td>
                                 <td>
                                     <c:out value="${user.password}"/>
+                                </td>
+                                <td>
+                                    <c:out value="${user.modifier}"/>
+                                </td>
+                                <td>
+                                    <kingoftokyo:localDateTime dateTimeValue="${user.lastModifiedDate}"></kingoftokyo:localDateTime>
                                 </td>
                                 <td>
                                     <spring:url value="/users/{userId}/edit" var="userid">
