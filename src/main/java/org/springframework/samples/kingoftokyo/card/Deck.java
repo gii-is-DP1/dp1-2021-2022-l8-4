@@ -42,7 +42,7 @@ public class Deck {
     public void discard(Integer[] cardIds){
         for(Integer id: cardIds){
             Card card = cards.stream()
-                                .filter(c -> c.getId() == id)
+                                .filter(c -> c.getId().equals(id))
                                 .findFirst().get();
             cards.remove(card);
         }

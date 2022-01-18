@@ -14,10 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
-import org.springframework.samples.kingoftokyo.user.Authorities;
-import org.springframework.samples.kingoftokyo.user.AuthoritiesService;
-import org.springframework.samples.kingoftokyo.user.User;
-import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -38,13 +34,13 @@ public class UserServiceTest {
     private Integer numeroUsuarios = 25;
 
     @Test
-    public void testGetCurrentUserId() {
+    void testGetCurrentUserId() {
         Integer currentUserId = userService.getCurrentUserId("user2");
         assertThat(currentUserId).isEqualTo(2);
     }
 
     @Test
-    public void testSaveUserIntoDatabaseAndGenerateId() {
+    void testSaveUserIntoDatabaseAndGenerateId() {
         User user = new User();
         user.setUsername("rosmolarr");
         user.setEmail("rosmolarr@alum.us.es");
@@ -57,17 +53,17 @@ public class UserServiceTest {
 
     
     @Test
-    public void testFindUserById() {
+    void testFindUserById() {
         Optional<User> user = userService.findUserById(1);
-        assertEquals(user.get().getEmail(), "user1@email.com");
-        assertEquals(user.get().getPassword(), "u53r1");
-        assertEquals(user.get().getUsername(), "user1");
-        assertEquals(user.get().isEnabled(), true);
+        assertEquals("user1@email.com", user.get().getEmail());
+        assertEquals("u53r1", user.get().getPassword());
+        assertEquals("user1", user.get().getUsername());
+        assertEquals(true, user.get().isEnabled());
         
     }
 
     @Test
-	public void testUpdateUserName() throws Exception {
+	void testUpdateUserName() throws Exception {
 		Optional<User> user = userService.findUserById(1);
 
 		String newName = "Admin";
@@ -79,7 +75,7 @@ public class UserServiceTest {
 	}
 
     @Test
-	public void testCountUsers() throws Exception {
+	void testCountUsers() throws Exception {
         Integer contador1 = userService.userCount();
         Integer numero = numeroUsuarios;
     
@@ -97,7 +93,7 @@ public class UserServiceTest {
 	}
 
     @Test
-	public void testFindAllUsers() throws Exception {
+	void testFindAllUsers() throws Exception {
         List<User> listcont= new ArrayList<>();
         userService.findAll().forEach(listcont::add);
         Integer numero = numeroUsuarios;
@@ -118,7 +114,7 @@ public class UserServiceTest {
 	}
 
     @Test
-    public void testGetPageOfUsers() {
+    void testGetPageOfUsers() {
         int countUsers=0;
         int pageId=0;
         Page<User> page = userService.getPageOfUsers(pageId);
@@ -131,7 +127,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testDeleteUser() {
+    void testDeleteUser() {
         List<User> currentListUsers = new ArrayList<>();
         List<User> newListUsers = new ArrayList<>();
         userService.findAll().forEach(currentListUsers::add);
@@ -144,7 +140,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testIsAdmin() {
+    void testIsAdmin() {
         List<User> listAdmins = new ArrayList<>();
         List<User> allUsers = new ArrayList<>();
         List<Authorities> listAuthorities = new ArrayList<>();

@@ -2,12 +2,11 @@ package org.springframework.samples.kingoftokyo.metrics;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData;
-import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricService;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
@@ -18,15 +17,14 @@ import org.springframework.stereotype.Service;
 */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class MetricsTest {
-    @Autowired
-    private MetricService metricService;
+class MetricsTest {
+
     @Autowired
     private UserService userService;
 
     
     @Test
-    public void testMetricCreate() {
+    void testMetricCreate() {
         User user1 = userService.findUserById(1).get();        
         MetricData metric = new MetricData(user1, 10l);
         assertEquals(user1, metric.getUser());
@@ -34,7 +32,7 @@ public class MetricsTest {
     }
 
     @Test
-    public void testMetricUpdate() {
+    void testMetricUpdate() {
         User user1 = userService.findUserById(1).get();
         User user2 = userService.findUserById(2).get();
         MetricData metric = new MetricData(user1, 10l);
