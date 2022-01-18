@@ -39,10 +39,10 @@
                                                 <c:out value="${game.winner}" />
                                             </td>
                                             <td>
-                                                <c:out value="${game.startTime}" />
+                                                <kingoftokyo:localDateTime  dateTimeValue= "${game.startTime}" />
                                             </td>
                                             <td>
-                                                <c:out value="${game.endTime}" />
+                                                <kingoftokyo:localDateTime  dateTimeValue= "${game.endTime}" />
                                             </td>
                                             <td>
                                                 <c:out value="${game.playersAmount()}" /> 
