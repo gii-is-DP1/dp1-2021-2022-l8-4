@@ -44,7 +44,7 @@ import javassist.NotFoundException;
  * @author Rosa Molina
  * @author Jose Maria Delgado Sanchez
  */
-public class PlayerCardServiceTests {
+class PlayerCardServiceTests {
 
     @MockBean
     private UserService userService;
@@ -72,7 +72,7 @@ public class PlayerCardServiceTests {
     private Card card1;
 
     @BeforeEach
-    public void configure() throws NotFoundException  {
+    void configure() throws NotFoundException  {
         //Turno de player id=3 en el game id=1 con user id=3 y rollAmount=3
         this.player3 = playerService.findPlayerById(3);
         this.game1 = gameService.findGameById(1);
@@ -86,7 +86,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void shouldFindPlayerCard() throws NotFoundException  {
+    void shouldFindPlayerCard() throws NotFoundException  {
         Player player = playerService.findPlayerById(1);
         Card card = cardService.findCardById(1);
         PlayerCard playercard = new PlayerCard();
@@ -101,7 +101,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void shouldBuyCard() throws InvalidPlayerActionException, NotFoundException {
+    void shouldBuyCard() throws InvalidPlayerActionException, NotFoundException {
 
         Integer energy = player3.getEnergyPoints();
 
@@ -120,7 +120,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void buyCardNotEnoughEnergy() throws InvalidPlayerActionException {
+    void buyCardNotEnoughEnergy() throws InvalidPlayerActionException {
 
         player3.setEnergyPoints(0);
 
@@ -130,7 +130,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void buyCardAvailableCardsFail() throws InvalidPlayerActionException {
+    void buyCardAvailableCardsFail() throws InvalidPlayerActionException {
 
         GameCard gameCard = gameCardService.findByGameCard(game1, card1);
         gameCard.setSold(Boolean.TRUE);
@@ -141,7 +141,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void buyCardIsOnGoingFail() throws InvalidPlayerActionException {
+    void buyCardIsOnGoingFail() throws InvalidPlayerActionException {
 
         game1.setTurn(0);
 
@@ -151,7 +151,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void buyCardIsDeadFail() throws InvalidPlayerActionException {
+    void buyCardIsDeadFail() throws InvalidPlayerActionException {
 
         player3.setLifePoints(0);
 
@@ -161,7 +161,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void buyCardRollFinishedFail() throws InvalidPlayerActionException {
+    void buyCardRollFinishedFail() throws InvalidPlayerActionException {
         // Inicializa el roll para que rollAmount valga 0
         mapGameRepository.putRoll(game1.getId(), new Roll());
 
@@ -171,7 +171,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void shouldDiscardShopCards() throws InvalidPlayerActionException, NotFoundException{
+    void shouldDiscardShopCards() throws InvalidPlayerActionException, NotFoundException{
         List<Card> cardList = gameCardService.findAvailableCardsByGame(game1);
         Set<Integer> ids = cardList.stream()
                                 .map(c->c.getId())
@@ -195,7 +195,7 @@ public class PlayerCardServiceTests {
 
 
     @Test
-    public void discardShopCardsNotEnoughEnergy() throws InvalidPlayerActionException {
+    void discardShopCardsNotEnoughEnergy() throws InvalidPlayerActionException {
 
         player3.setEnergyPoints(0);
 
@@ -205,7 +205,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void discardShopCardsIsDeadFail() throws InvalidPlayerActionException {
+    void discardShopCardsIsDeadFail() throws InvalidPlayerActionException {
 
         player3.setLifePoints(0);
 
@@ -215,7 +215,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void useCardsWhenBuyNoEffect(){
+    void useCardsWhenBuyNoEffect(){
         Integer energy = player3.getEnergyPoints();
         Integer cost = card1.getCost();
 
@@ -225,7 +225,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void useCardsWhenBuyDifferentEnergy() throws NotFoundException {
+    void useCardsWhenBuyDifferentEnergy() throws NotFoundException {
         Integer energy = player3.getEnergyPoints();
         Integer cost = card1.getCost();
         Card newCard = cardService.findCardById(26);

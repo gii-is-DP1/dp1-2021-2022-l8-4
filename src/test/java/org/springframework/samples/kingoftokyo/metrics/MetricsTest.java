@@ -17,14 +17,14 @@ import org.springframework.stereotype.Service;
 */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class MetricsTest {
+class MetricsTest {
 
     @Autowired
     private UserService userService;
 
     
     @Test
-    public void testMetricCreate() {
+    void testMetricCreate() {
         User user1 = userService.findUserById(1).get();        
         MetricData metric = new MetricData(user1, 10l);
         assertEquals(user1, metric.getUser());
@@ -32,7 +32,7 @@ public class MetricsTest {
     }
 
     @Test
-    public void testMetricUpdate() {
+    void testMetricUpdate() {
         User user1 = userService.findUserById(1).get();
         User user2 = userService.findUserById(2).get();
         MetricData metric = new MetricData(user1, 10l);
