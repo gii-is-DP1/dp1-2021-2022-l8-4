@@ -378,8 +378,8 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
         }
     };
 
-    private final String name;
-    private final String description;
+    private String name;
+    private String description;
 
     private CardEnum(String name, String description) {
         this.name = name;
@@ -392,6 +392,14 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
     public String getDescription() {
         return this.description;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public void setDescription(String newDescription) {
+        this.description = newDescription;
     }
 
 }
