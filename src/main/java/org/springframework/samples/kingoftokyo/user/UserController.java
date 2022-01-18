@@ -1,6 +1,5 @@
 package org.springframework.samples.kingoftokyo.user;
 
-import java.util.Optional;
 
 import javax.validation.Valid;
 
