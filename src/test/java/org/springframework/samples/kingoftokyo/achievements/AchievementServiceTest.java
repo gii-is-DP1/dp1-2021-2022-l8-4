@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
 import org.springframework.samples.kingoftokyo.game.Game;
 import org.springframework.samples.kingoftokyo.game.GameService;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
@@ -32,6 +34,7 @@ import org.springframework.stereotype.Service;
 */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@Import(SecurityConfiguration.class)
 class AchievementServiceTest {
     @Autowired
     private AchievementService achievementsService;

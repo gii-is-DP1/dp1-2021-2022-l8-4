@@ -24,21 +24,23 @@ import org.springframework.samples.kingoftokyo.player.Player;
  * @author Rosa Molina
  * @author Carlos Varela Soult
  * @author Jose Maria Delgado Sanchez
+ *  @author Ricardo Nadal Garcia
  */
 
 @Service
 public class UserService {
 
-	@Autowired
+	
 	private UserRepository userRepository;
-	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	private AuthoritiesRepository authoritiesRepository;
 
 	@Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Transactional

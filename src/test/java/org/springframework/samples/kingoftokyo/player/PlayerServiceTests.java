@@ -12,7 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
 import org.springframework.samples.kingoftokyo.dice.DiceValues;
 import org.springframework.samples.kingoftokyo.dice.Roll;
 import org.springframework.samples.kingoftokyo.game.Game;
@@ -32,7 +34,7 @@ import javassist.NotFoundException;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-
+@Import(SecurityConfiguration.class)
 
 public class PlayerServiceTests {
     
