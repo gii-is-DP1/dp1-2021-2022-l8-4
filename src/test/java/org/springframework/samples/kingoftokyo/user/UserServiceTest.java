@@ -2,8 +2,13 @@ package org.springframework.samples.kingoftokyo.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,8 +18,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.samples.kingoftokyo.game.Game;
+import org.springframework.samples.kingoftokyo.game.GameService;
+import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
+import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
+import org.springframework.samples.kingoftokyo.player.Player;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
+
+import javassist.NotFoundException;
 
 /**
  * @author Carlos Varela Soult
@@ -30,6 +44,10 @@ public class UserServiceTest {
     private UserService userService;
     @Autowired
     private AuthoritiesService authoritiesService;
+    @Autowired
+    private AchievementService achievementService;
+    @Autowired
+    private GameService gameService;
 
     private Integer numeroUsuarios = 25;
 
@@ -60,6 +78,48 @@ public class UserServiceTest {
         assertEquals("user1", user.getUsername());
         assertEquals(true, user.isEnabled());
         
+    }
+
+    @Test
+    void testGetAndSetAchievements(){
+        User user = userService.findUserById(1).get();
+        Set<Achievement> setAchievement = new HashSet<>();
+        Achievement achievement = achievementService.findAchievementById(1).get();
+        setAchievement.add(achievement);
+        user.setAchievements(setAchievement);
+        assertEquals(setAchievement, user.getAchievements());
+    }
+
+    @Test
+    void testGetAndSetGames() throws DataAccessException, NotFoundException{
+        User user = userService.findUserById(1).get();
+        Set<Game> setGame = new HashSet<>();
+        Game game = this.gameService.findGameById(1);
+        setGame.add(game);
+        assertEquals(setGame, user.getGames());
+    }
+
+    @Test
+    void testSetPlayers(){
+        User user = new User();
+        user.setUsername("userTestSetPlayer");
+        Player player = new Player();
+        player.setUser(user);
+        Set<Player> setPlayer = new HashSet<>();
+        setPlayer.add(player);
+        user.setPlayers(setPlayer);
+        assertEquals(setPlayer, user.getPlayers());
+    }
+
+    @Test
+    void testSetAuthorities(){
+        User user = new User();
+        user.setUsername("userTestSetPlayer2");
+        Authorities auth = new Authorities();
+        auth.setAuthority("test");
+        Set<Authorities> setAuth = new HashSet<>();
+        user.setAuthorities(setAuth);
+        assertEquals(setAuth, user.getAuthorities());
     }
 
     @Test
@@ -167,4 +227,27 @@ public class UserServiceTest {
         assertThat(listAdmins.contains(userWhoIsAdmin));
     }
 
+    @Test
+    void testHasActivePlayer() {
+        User userPlayerActive = userService.findUserById(10).get();
+        assertTrue(userPlayerActive.hasActivePlayer());
+        User userPlayerActiveButDied = userService.findUserById(1).get();
+        assertFalse(userPlayerActiveButDied.hasActivePlayer());
+    }
+
+    @Test
+    void testHasActiveGameAsCreator() throws DataAccessException, NotFoundException {
+        User userGameActive = userService.findUserById(23).get();
+        assertTrue(userGameActive.hasActiveGameAsCreator());
+    }
+
+    @Test
+    void testAuthenticatedUserIsNull() {
+        assertNull(userService.authenticatedUser());
+    }
+
+    @Test
+    void testUserIsAdmin() {
+        assertTrue(userService.isAdmin(1));
+    }
 }
