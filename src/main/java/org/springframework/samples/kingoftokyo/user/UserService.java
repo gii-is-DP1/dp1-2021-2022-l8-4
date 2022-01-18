@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,8 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
 	private AuthoritiesRepository authoritiesRepository;
 
 	@Autowired
@@ -51,6 +54,7 @@ public class UserService {
 	@Transactional
 	public void saveUser(User user) {
 		user.setEnabled(true);
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 		Authorities authority = new Authorities();
 		authority.setUser(user);
