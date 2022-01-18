@@ -37,6 +37,8 @@ public class UserController {
     
     private static final String VIEWS_EXCEPTION = "exception";
 
+    private String message = "message";
+
     /**
      * @param modelMap
      * @param page
@@ -70,7 +72,7 @@ public class UserController {
         }else {
             //creating user
             userService.saveUser(user);
-            modelMap.addAttribute("message","User succesfully created!");
+            modelMap.addAttribute(message,"User succesfully created!");
             return "redirect:/login";
         }
     } 
@@ -110,7 +112,7 @@ public class UserController {
             Optional<User> userToUpdate=this.userService.findUserById(userId);
 			BeanUtils.copyProperties(user, userToUpdate.get(), "id");                                                                                               
             this.userService.saveUser(userToUpdate.get());      
-            modelMap.addAttribute("message","User succesfully edited!"); 
+            modelMap.addAttribute(message,"User succesfully edited!"); 
 			return "redirect:/users/profile/{userId}";
 		}
 	}
@@ -131,10 +133,10 @@ public class UserController {
         Optional<User> user = userService.findUserById(userId);
         if (user.isPresent()) {
            userService.deleteUser(user.get());
-           modelMap.addAttribute("message", "user succesfully deleted");
+           modelMap.addAttribute(message, "User succesfully deleted");
         }
         else {
-           modelMap.addAttribute("message", "user not found");
+           modelMap.addAttribute(message, "User not found");
         }
        return "redirect:/users?page=1";
     }

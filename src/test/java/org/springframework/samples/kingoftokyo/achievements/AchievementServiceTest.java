@@ -46,7 +46,7 @@ public class AchievementServiceTest {
      */
 
     @Test
-    public void shouldCreateAchivement() {
+    void shouldCreateAchivement() {
         Achievement achievement = new Achievement();
         achievement.setId(99);
         achievement.setName("Achievement 2");
@@ -65,7 +65,7 @@ public class AchievementServiceTest {
      */
 
     @Test
-    public void shouldGetAchivement(){
+    void shouldGetAchivement(){
         Achievement achievement = achievementsService.findAchievementById(1).get();
         MetricType metrica = MetricType.gamesPlayed;
         assertEquals(1, achievement.getId());
@@ -83,7 +83,7 @@ public class AchievementServiceTest {
 
 
     @Test
-    public void shouldFindAllAchievement(){
+    void shouldFindAllAchievement(){
         List<Achievement> listcont= new ArrayList<>();
         achievementsService.findAll().forEach(listcont::add);
         Integer numero = 12;
@@ -113,7 +113,7 @@ public class AchievementServiceTest {
      */
 
     @Test
-    public void shouldBeObtainAchievement(){
+    void shouldBeObtainAchievement(){
         Achievement achievement = new Achievement();
         achievement.setId(99);
         achievement.setName("Achievement 4");
@@ -132,7 +132,7 @@ public class AchievementServiceTest {
      */
 
     @Test
-    public void shouldNotBeObtainAchievement(){
+    void shouldNotBeObtainAchievement(){
         Achievement achievement = new Achievement();
         achievement.setId(99);
         achievement.setName("Achievement 4");
@@ -152,7 +152,7 @@ public class AchievementServiceTest {
      */
 
     @Test
-    public void shouldNotBeObtainCauseScoreNullAchievement(){
+    void shouldNotBeObtainCauseScoreNullAchievement(){
         Achievement achievement = new Achievement();
         achievement.setId(99);
         achievement.setName("Achievement 4");
@@ -172,7 +172,7 @@ public class AchievementServiceTest {
      */
 
     @Test
-    public void shouldGetUsersAchievement(){
+    void shouldGetUsersAchievement(){
         Set<User> set = new HashSet<>();
         set.add(userService.findUserById(1).get());
         set.add(userService.findUserById(2).get());
@@ -197,9 +197,9 @@ public class AchievementServiceTest {
      */
 
     @Test
-    public void shouldDeleteAchievement(){
+    void shouldDeleteAchievement(){
         Achievement achievement = achievementsService.findAchievementById(1).get();
-        assertEquals(achievement.getId(), 1);
+        assertEquals(1, achievement.getId());
         achievementsService.deleteAchievement(achievement);
         Optional emptyOptional = Optional.empty(); 
         assertEquals(achievementsService.findAchievementById(1), emptyOptional);
@@ -209,27 +209,27 @@ public class AchievementServiceTest {
      * should get the wins, cards, gamesPlayed
      */
     @Test
-    public void shouldGetWinsByUser(){
+    void shouldGetWinsByUser(){
         User user2 = userService.findUserById(2).get();
         MetricType metricType = MetricType.wins;
         Integer winsByUser = achievementsService.getScoreByUser(metricType, user2);
-        assertEquals(winsByUser, 1);
+        assertEquals(1, winsByUser);
     }
 
     @Test
-    public void shouldGetGamesPlayedByUser(){
+    void shouldGetGamesPlayedByUser(){
         User user1 = userService.findUserById(1).get();
         MetricType metricType = MetricType.gamesPlayed;
         Integer gamesPlayedByUser = achievementsService.getScoreByUser(metricType, user1);
-        assertEquals(gamesPlayedByUser, 1);
+        assertEquals(1, gamesPlayedByUser);
     }
 
     @Test
-    public void shouldGetCardsByUser(){
+    void shouldGetCardsByUser(){
         User user1 = userService.findUserById(1).get();
         MetricType metricType = MetricType.cardsUsed;
         Integer cardUsedByUser = achievementsService.getScoreByUser(metricType, user1);
-        assertEquals(cardUsedByUser, 0);
+        assertEquals(0, cardUsedByUser);
     }
 
     /**
@@ -238,14 +238,14 @@ public class AchievementServiceTest {
      */
 
     @Test
-    public void shouldGetScoresByUser(){
+    void shouldGetScoresByUser(){
         User user1 = userService.findUserById(1).get();
         Map<MetricType, Integer> map = achievementsService.scoresByUser(user1);
         Map<MetricType, Integer> mapExpected = new HashMap<>();
         mapExpected.put(MetricType.gamesPlayed, 1);
         mapExpected.put(MetricType.wins, 0);
         mapExpected.put(MetricType.cardsUsed, 0);
-        assertEquals(map, mapExpected);
+        assertEquals(mapExpected, map);
     }
 
 }

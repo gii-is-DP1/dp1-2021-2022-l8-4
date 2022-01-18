@@ -2,8 +2,6 @@ package org.springframework.samples.kingoftokyo.modules.statistics.metrics;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.geo.Metrics;
-import org.springframework.samples.kingoftokyo.configuration.CurrentUserController;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Controller;

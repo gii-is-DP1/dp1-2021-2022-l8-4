@@ -34,7 +34,7 @@ public class GameCardServiceTests {
     private CardService cardService;
 
     @Test
-    public void shouldFindGameCardWithCorrectId() {
+    void shouldFindGameCardWithCorrectId() {
         Game game = gameService.findGameById(1);
         Card card = cardService.findCardById(1);
         GameCard gameCard = gameCardService.findByGameCard(game, card);
@@ -43,7 +43,7 @@ public class GameCardServiceTests {
     }
 
     @Test
-    public void shouldInsertGameCard() {
+    void shouldInsertGameCard() {
         GameCard gameCard = new GameCard();
 
         Card card = cardService.findCardById(5);
@@ -59,7 +59,7 @@ public class GameCardServiceTests {
     }
 
     @Test
-    public void shouldUpdateGameCard() {
+    void shouldUpdateGameCard() {
         Game oldGame = gameService.findGameById(1);
         Card oldCard = cardService.findCardById(1);
         GameCard gameCard = gameCardService.findByGameCard(oldGame, oldCard);
@@ -72,7 +72,7 @@ public class GameCardServiceTests {
     }
 
     @Test
-    public void shouldFindAvailableCardsByGame() throws Exception {
+    void shouldFindAvailableCardsByGame() throws Exception {
         Game game = gameService.findGameById(1);
         List<Card> availableCardsSet = gameCardService.findAvailableCardsByGame(game);
         List<Card> availableCardsList = availableCardsSet.stream().collect(Collectors.toList());
@@ -81,7 +81,7 @@ public class GameCardServiceTests {
     }
 
     @Test
-    public void shouldShowCardsByGame() throws Exception {
+    void shouldShowCardsByGame() throws Exception {
         Game game = gameService.findGameById(1);
         gameCardService.showCards(game);
         game.getGameCards().get(1).setSold(Boolean.TRUE);
