@@ -31,7 +31,7 @@ public class CardService {
 
     @Transactional(readOnly = true)
     public Collection<CardType> findCardTypes() throws DataAccessException {
-        Collection<CardType> ct = new ArrayList<CardType>();
+        Collection<CardType> ct = new ArrayList<>();
         ct.add(CardType.DESCARTAR);
         ct.add(CardType.PERMANENTE);
         return ct;

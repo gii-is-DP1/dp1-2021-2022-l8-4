@@ -37,6 +37,8 @@ public class LobbyController {
     private final GameService gameService;
     private final UserService userService;
     private final PlayerService playerService;
+    private String lobby = "/lobby";
+    private String rediGames = "redirect:/games/";
 
     @Autowired
     public LobbyController(GameService gameService,
@@ -80,7 +82,7 @@ public class LobbyController {
             try {
                 newGame.setCreator(user);
                 gameService.createNewGame(newGame);
-                return "redirect:/games/" + newGame.getId() + "/lobby";
+                return rediGames + newGame.getId() + lobby;
             } catch (NewGameException e) {
                 log.warn(e.toString());
                 return "redirect:/games/lobbies";
@@ -94,7 +96,7 @@ public class LobbyController {
         Game game = gameService.findGameById(gameId);
 
         if (game.isStarted()) {
-            return "redirect:/games/" + game.getId() + "/playing";
+            return rediGames + game.getId() + "/playing";
         } else {
             String view = "games/lobby";
 
@@ -125,7 +127,7 @@ public class LobbyController {
             }
 
         }
-        return "redirect:/games/" + gameId + "/lobby";
+        return rediGames + gameId + lobby;
     }
 
     @GetMapping("/{gameId}/lobby/delete")
@@ -140,10 +142,10 @@ public class LobbyController {
                 gameService.deleteGame(game);
             } catch (DeleteGameException e) {
                 log.warn(e.toString());
-                view = "redirect:/games/" + gameId + "/lobby";
+                view = rediGames + gameId + lobby;
             }
         } else {
-            view = "redirect:/games/" + gameId + "/lobby";
+            view = rediGames + gameId + lobby;
         }
         return view;
     }
@@ -161,7 +163,7 @@ public class LobbyController {
                 log.warn(e.toString());
             }
         }
-        return "redirect:/games/" + game.getId() + "/lobby";
+        return rediGames + game.getId() + lobby;
     }
 
 }

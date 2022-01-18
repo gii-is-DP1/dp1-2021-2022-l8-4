@@ -135,7 +135,7 @@ import lombok.Setter;
 
 
   public List<Player> playersAlive(){
-     List<Player> vivos=new ArrayList<Player>();
+     List<Player> vivos=new ArrayList<>();
      for(Player player:this.players) {
          if(!player.isDead()){
             vivos.add(player);
@@ -155,7 +155,7 @@ import lombok.Setter;
   }
   
   public List<Player> playersWithMaxVictoryPoints() {
-     List<Player> playerList=new ArrayList<Player>();
+     List<Player> playerList=new ArrayList<>();
      Integer maxPoints=20;
      for(Player player:this.players) {
         if(player.getVictoryPoints()>=maxPoints) {
@@ -166,7 +166,7 @@ import lombok.Setter;
   }
 
   public List<Player> playersOutOfTokyo(){
-     List<Player> playerList=new ArrayList<Player>();
+     List<Player> playerList=new ArrayList<>();
      for(Player player:this.players){
         if(player.isOutOfTokyo() && !player.isDead()) {
            playerList.add(player);
@@ -176,7 +176,7 @@ import lombok.Setter;
   }
 
    public List<Player> playersInTokyo(){
-      List<Player> playerList=new ArrayList<Player>();
+      List<Player> playerList=new ArrayList<>();
       for(Player player:this.players){
          if(player.isInTokyo() && !player.isDead()) {
             playerList.add(player);

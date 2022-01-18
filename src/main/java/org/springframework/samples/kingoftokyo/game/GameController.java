@@ -34,6 +34,7 @@ public class GameController {
     private GameCardService gameCardService;
     private UserService userService;
     private MapGameRepository mapGameRepository;
+    private String viewGames = "redirect:/games/";
 
     @Autowired
     public GameController(GameService gameService,
@@ -86,7 +87,7 @@ public class GameController {
         Game game = gameService.findGameById(gameId);
 
         if (game.isFinished()) {
-            return "redirect:/games/" + gameId + "/finished";
+            return viewGames + gameId + "/finished";
         }
 
         Iterable<Player> players = gameService.findPlayerList(gameId);
@@ -118,8 +119,8 @@ public class GameController {
         Player actualPlayer = playerService.actualPlayer(gameId);
         modelMap.addAttribute("actualPlayer", actualPlayer);
 
-        Player AuthenticatedPlayer = gameService.playerInGameByUser(userService.authenticatedUser(), gameId);
-        modelMap.addAttribute("AuthenticatedPlayer", AuthenticatedPlayer);
+        Player authenticatedPlayer = gameService.playerInGameByUser(userService.authenticatedUser(), gameId);
+        modelMap.addAttribute("AuthenticatedPlayer", authenticatedPlayer);
 
         modelMap.addAttribute("players", players);
         modelMap.addAttribute("game", game);
@@ -138,13 +139,13 @@ public class GameController {
 
         gameService.handleTurnAction(gameId, newTurn, roll);
 
-        return "redirect:/games/" + gameId + "/playing";
+        return viewGames + gameId + "/playing";
     }
 
     @GetMapping("/{gameId}/exitTokyo")
     public String exitTokyo(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         gameService.handleExitTokyo(gameId);
-        return "redirect:/games/" + gameId + "/playing";
+        return viewGames + gameId + "/playing";
     }
 
 
