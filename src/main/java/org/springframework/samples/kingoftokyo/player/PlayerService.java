@@ -34,7 +34,7 @@ public class PlayerService {
     @Autowired
     private GameService gameService;
     @Autowired
-    private PlayerService playerService;
+    private PlayerService pService;
     @Autowired
     private MapGameRepository mapGameRepository;
 
@@ -84,7 +84,7 @@ public class PlayerService {
             newPlayer.setLifePoints(10);
             newPlayer.setVictoryPoints(0);
             newPlayer.setTurnsTokyo(0l);
-            newPlayer.setLocation(LocationType.fueraTokyo);
+            newPlayer.setLocation(LocationType.FUERATOKYO);
             newPlayer.setRecentlyHurt(Boolean.FALSE);
 
             game.getPlayers().add(newPlayer);
@@ -119,7 +119,7 @@ public class PlayerService {
         Integer threes = rollCount.get("threes") + cardValuesCount.get("threes");
 
         // Handle heal
-        if (playerActualTurn.getLocation() == LocationType.fueraTokyo) {
+        if (playerActualTurn.getLocation() == LocationType.FUERATOKYO) {
             healDamage(playerActualTurn, heal);
         }
 
@@ -144,23 +144,19 @@ public class PlayerService {
 
     @Transactional
     public void handleDamageRolls(Player actualPlayer, List<Player> playersInGame, Integer damage) {
+        Boolean actualPlayerOutOfTokyo=actualPlayer.getLocation() == LocationType.FUERATOKYO;
         for (Player player : playersInGame) {
-            if (!actualPlayer.getId().equals(player.getId())) {
-                // Damage players in Tokyo
-                if (actualPlayer.getLocation() == LocationType.fueraTokyo) {
-                    if (player.getLocation() == LocationType.ciudadTokyo
-                            || player.getLocation() == LocationType.bahiaTokyo) {
-                        damagePlayer(player, damage);
-                        if (damage >= 1) { // If damage is done to other players
-                            player.setRecentlyHurt(Boolean.TRUE);
-                        }
-                    }
-                    // Damage players out of tokyo
-                } else if (actualPlayer.getLocation() == LocationType.bahiaTokyo
-                        || actualPlayer.getLocation() == LocationType.ciudadTokyo) {
-                    if (player.getLocation() == LocationType.fueraTokyo) {
-                        damagePlayer(player, damage);
-                    }
+            Boolean damagedPlayerIsActualPlayer=actualPlayer.getId().equals(player.getId());
+            Boolean playerDamagedInTokyo=player.getLocation() == LocationType.CIUDADTOKYO
+            || player.getLocation() == LocationType.BAHIATOKYO;
+
+            Boolean playersInDifferentLocations=(actualPlayerOutOfTokyo && playerDamagedInTokyo) || 
+                            (!actualPlayerOutOfTokyo && !playerDamagedInTokyo);
+                   
+            if (!damagedPlayerIsActualPlayer && playersInDifferentLocations){
+                    damagePlayer(player, damage);
+                if (damage >= 1 && playerDamagedInTokyo) { // If damage is done to other players
+                    player.setRecentlyHurt(Boolean.TRUE);
                 }
             }
             savePlayer(player);
@@ -171,16 +167,16 @@ public class PlayerService {
     public Integer enterTokyoInRollIfEmpty(Player actualPlayer, List<Player> listPlayersInGame, Integer damage) {
         Boolean bayInPlay = listPlayersInGame.stream().filter(p -> !p.isDead()).count() > 4;
         Boolean tokyoCityEmpty = !listPlayersInGame.stream()
-                .anyMatch(p -> p.getLocation().equals(LocationType.ciudadTokyo));
+                .anyMatch(p -> p.getLocation().equals(LocationType.CIUDADTOKYO));
         Boolean tokyoBayEmpty = !listPlayersInGame.stream()
-                .anyMatch(p -> p.getLocation().equals(LocationType.bahiaTokyo));
+                .anyMatch(p -> p.getLocation().equals(LocationType.BAHIATOKYO));
 
         if (tokyoCityEmpty && damage > 0) {
-            actualPlayer.setLocation(LocationType.ciudadTokyo);
+            actualPlayer.setLocation(LocationType.CIUDADTOKYO);
             actualPlayer.setVictoryPoints(actualPlayer.getVictoryPoints() + 1);
             damage--;
         } else if (bayInPlay && tokyoBayEmpty && damage > 0) {
-            actualPlayer.setLocation(LocationType.bahiaTokyo);
+            actualPlayer.setLocation(LocationType.BAHIATOKYO);
             actualPlayer.setVictoryPoints(actualPlayer.getVictoryPoints() + 1);
             damage--;
         }
@@ -191,14 +187,14 @@ public class PlayerService {
     @Transactional
     public void useCardsInRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
-            card.getCardEnum().effectInRoll(player, playerService, mapGameRepository);
+            card.getCardEnum().effectInRoll(player, pService, mapGameRepository);
         }
     }
 
     @Transactional
     public void useCardsAfterRoll(Player player) {
         for (Card card : player.getAvailableCards()) {
-            card.getCardEnum().effectAfterRoll(player, playerService, mapGameRepository);
+            card.getCardEnum().effectAfterRoll(player, pService, mapGameRepository);
         }
     }
 
@@ -290,7 +286,7 @@ public class PlayerService {
                 turnList.remove(player.getId());
                 mapGameRepository.putTurnList(player.getGame().getId(), turnList);
             }
-            player.setLocation(LocationType.fueraTokyo);
+            player.setLocation(LocationType.FUERATOKYO);
         }
     }
 
@@ -298,7 +294,7 @@ public class PlayerService {
     @Transactional
     public Integer useCardsInDamage(Player player, Integer damage) {
         for (Card card : player.getAvailableCards()) {
-            damage = card.getCardEnum().effectDamage(player, playerService, damage, mapGameRepository);
+            damage = card.getCardEnum().effectDamage(player, pService, damage, mapGameRepository);
         }
         return damage;
     }
@@ -319,8 +315,8 @@ public class PlayerService {
         Player player = findPlayerById(playerId);
         User user = player.getUser();
         Integer pointsObtainedInTokyo = 2;
-        if (player.getLocation().equals(LocationType.ciudadTokyo)
-                || player.getLocation().equals(LocationType.bahiaTokyo)) {
+        if (player.getLocation().equals(LocationType.CIUDADTOKYO)
+                || player.getLocation().equals(LocationType.BAHIATOKYO)) {
 
             player.setVictoryPoints(player.getVictoryPoints() + pointsObtainedInTokyo);
             player.setTurnsTokyo(player.getTurnsTokyo() + 1l);
@@ -379,7 +375,7 @@ public class PlayerService {
         User user = userService.authenticatedUser();
         Player player = gameService.playerInGameByUser(user, gameId);
         Boolean result = Boolean.FALSE;
-        if (player.getLocation() == LocationType.bahiaTokyo || player.getLocation() == LocationType.ciudadTokyo) {
+        if (player.getLocation() == LocationType.BAHIATOKYO || player.getLocation() == LocationType.CIUDADTOKYO) {
             result = Boolean.TRUE;
         }
         return result;
@@ -396,8 +392,8 @@ public class PlayerService {
         Integer minAmmountPlayersTokyoBay = 5;
         if(players.size()<minAmmountPlayersTokyoBay){
             for(Player player : players){
-                if(player.getLocation()==LocationType.bahiaTokyo){
-                    player.setLocation(LocationType.fueraTokyo);
+                if(player.getLocation()==LocationType.BAHIATOKYO){
+                    player.setLocation(LocationType.FUERATOKYO);
                 }
             }
         }
