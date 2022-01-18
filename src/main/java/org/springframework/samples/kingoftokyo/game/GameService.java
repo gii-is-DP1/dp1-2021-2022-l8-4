@@ -24,6 +24,7 @@ import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Ac
 import org.springframework.samples.kingoftokyo.player.LocationType;
 import org.springframework.samples.kingoftokyo.player.Player;
 import org.springframework.samples.kingoftokyo.player.PlayerService;
+import org.springframework.samples.kingoftokyo.player.exceptions.InvalidPlayerActionException;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
@@ -322,10 +323,28 @@ public class GameService {
             card.getCardEnum().effectEndTurn(player, playerService,mapGameRepository);
         }
     }
+    @Transactional
+    public void validateRoll(Roll newRoll, Roll oldRoll) throws InvalidPlayerActionException {
+        Boolean correctKeep=oldRoll.getValues().containsAll(Arrays.asList(newRoll.getKeep()));
+        if(!correctKeep) {
+            throw new InvalidPlayerActionException("Los dados conservados no son validos");
+        }
+    }
 
     @Transactional
-    public void handleTurnAction(Game game, Boolean newTurn, Roll keepInfo) throws NotFoundException {
+    public void validateNewTurn(Roll roll,Boolean newTurn) throws InvalidPlayerActionException {
+        if(newTurn && !roll.isFinished()) {
+            throw new InvalidPlayerActionException("No se puede terminar el turno todavia");
+        }   
+    }
+
+    
+
+    @Transactional
+    public void handleTurnAction(Game game, Boolean newTurn, Roll keepInfo) throws NotFoundException, InvalidPlayerActionException {
         Integer gameId = game.getId();
+        Roll rollData = mapGameRepository.getRoll(gameId); 
+
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
                 useCardsEndTurn(playerService.actualPlayer(game));
@@ -333,7 +352,8 @@ public class GameService {
                 nuevoTurno(game);
                 playerService.checkplayers(game);
             } else {
-                Roll rollData = mapGameRepository.getRoll(gameId); 
+               
+                validateRoll(keepInfo, rollData);
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
                 if (rollData.getRollAmount().equals(rollData.getMaxThrows())) {
