@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 /**
  * @author Sara Cruz
  * @author Rosa Molina
@@ -27,14 +27,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/users")
 public class UserController {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private AchievementService achievementService;
-    
+
     private static final String VIEWS_USERS_CREATE_UPDATE_FORM = "users/createOrUpdateUsersForm";
-    
+
     private static final String VIEWS_EXCEPTION = "exception";
 
     private String message = "message";
@@ -44,10 +44,10 @@ public class UserController {
      * @param page
      * @return View of paginated list of users
      */
-	@GetMapping()
-    public String usersList(ModelMap modelMap, @RequestParam(value="page") int page){
+    @GetMapping()
+    public String usersList(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") int page) {
         String view = "users/usersList";
-        Page<User> pages = userService.getPageOfUsers(page-1);
+        Page<User> pages = userService.getPageOfUsers(page - 1);
         modelMap.addAttribute("totalPages", pages.getTotalPages());
         modelMap.addAttribute("totalElements", pages.getTotalElements());
         modelMap.addAttribute("number", pages.getNumber());
@@ -55,7 +55,7 @@ public class UserController {
         modelMap.addAttribute("size", pages.getContent().size());
         return view;
     }
-  
+
     @GetMapping(path = "/new")
     public String initCreationForm(ModelMap modelMap) {
         String view = VIEWS_USERS_CREATE_UPDATE_FORM;
@@ -65,33 +65,32 @@ public class UserController {
 
     @PostMapping(path = "/new")
     public String processCreationForm(@Valid User user, BindingResult result, ModelMap modelMap) {
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             modelMap.addAttribute("user", user);
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
-        }else {
-            //creating user
+        } else {
+            // creating user
             userService.saveUser(user);
-            modelMap.addAttribute(message,"User succesfully created!");
+            modelMap.addAttribute(message, "User succesfully created!");
             return "redirect:/login";
         }
-    } 
+    }
 
-    
     @GetMapping(value = "/{userId}/edit")
-	public String initUpdateForm(@PathVariable("userId") int userId, ModelMap modelMap) {
+    public String initUpdateForm(@PathVariable("userId") int userId, ModelMap modelMap) {
 
         Integer currentUserId = userService.authenticatedUser().getId();
-        if(currentUserId.equals(userId) || userService.isAdmin(currentUserId)){
-            Optional<User> user = this.userService.findUserById(userId);
-            modelMap.put("user", user.get());
+        if (currentUserId.equals(userId) || userService.isAdmin(currentUserId)) {
+            User user = this.userService.findUserById(userId);
+            modelMap.put("user", user);
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
-        } else{
+        } else {
             return VIEWS_EXCEPTION;
         }
-		
-	}
+
+    }
 
     /**
      *
@@ -103,26 +102,24 @@ public class UserController {
      */
 
     @PostMapping(value = "/{userId}/edit")
-	public String processUpdateForm(@Valid User user, BindingResult result, @PathVariable("userId") int userId, ModelMap modelMap) {
-		if (result.hasErrors()) {
-			modelMap.put("user", user);
-			return VIEWS_USERS_CREATE_UPDATE_FORM;
-		}
-		else {
-            Optional<User> userToUpdate=this.userService.findUserById(userId);
-            if(userToUpdate.isPresent()){
-                BeanUtils.copyProperties(user, userToUpdate.get(), "id");                                                                                               
-                this.userService.saveUser(userToUpdate.get());      
-                modelMap.addAttribute(message,"User succesfully edited!");
-            } 
-			return "redirect:/users/profile/{userId}"; 
-		}
-	}
+    public String processUpdateForm(@Valid User user, BindingResult result, @PathVariable("userId") int userId,
+            ModelMap modelMap) {
+        if (result.hasErrors()) {
+            modelMap.put("user", user);
+            return VIEWS_USERS_CREATE_UPDATE_FORM;
+        } else {
+            User userToUpdate = this.userService.findUserById(userId);
+            BeanUtils.copyProperties(user, userToUpdate, "id");
+            this.userService.saveUser(userToUpdate);
+            modelMap.addAttribute(message, "User succesfully edited!");
+            return "redirect:/users/profile/{userId}";
+        }
+    }
 
     @GetMapping(value = "/profile/{userId}")
-    public String usersProfile(@PathVariable("userId") int userId, ModelMap modelMap){
-        String view ="users/profile";
-        User user= this.userService.findUserById(userId).get();
+    public String usersProfile(@PathVariable("userId") int userId, ModelMap modelMap) {
+        String view = "users/profile";
+        User user = this.userService.findUserById(userId);
 
         achievementService.checkAchievements(user);
 
@@ -130,16 +127,13 @@ public class UserController {
         return view;
     }
 
-    @GetMapping(path="/delete/{userId}")
+    @GetMapping(path = "/delete/{userId}")
     public String deleteUser(@PathVariable("userId") int userId, ModelMap modelMap) {
-        Optional<User> user = userService.findUserById(userId);
-        if (user.isPresent()) {
-           userService.deleteUser(user.get());
-           modelMap.addAttribute(message, "User succesfully deleted");
-        }
-        else {
-           modelMap.addAttribute(message, "User not found");
-        }
-       return "redirect:/users?page=1";
+        
+        User user = userService.findUserById(userId);
+        userService.deleteUser(user);
+        modelMap.addAttribute(message, "User succesfully deleted");
+
+        return "redirect:/users?page=1";
     }
 }

@@ -25,7 +25,7 @@ class MetricsTest {
     
     @Test
     void testMetricCreate() {
-        User user1 = userService.findUserById(1).get();        
+        User user1 = userService.findUserById(1);        
         MetricData metric = new MetricData(user1, 10l);
         assertEquals(user1, metric.getUser());
         assertEquals(10l, metric.getScore());
@@ -33,8 +33,8 @@ class MetricsTest {
 
     @Test
     void testMetricUpdate() {
-        User user1 = userService.findUserById(1).get();
-        User user2 = userService.findUserById(2).get();
+        User user1 = userService.findUserById(1);
+        User user2 = userService.findUserById(2);
         MetricData metric = new MetricData(user1, 10l);
         metric.setScore(20l);
         metric.setUser(user2);

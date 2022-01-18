@@ -174,9 +174,9 @@ class AchievementServiceTest {
     @Test
     void shouldGetUsersAchievement(){
         Set<User> set = new HashSet<>();
-        set.add(userService.findUserById(1).get());
-        set.add(userService.findUserById(2).get());
-        set.add(userService.findUserById(3).get());
+        set.add(userService.findUserById(1));
+        set.add(userService.findUserById(2));
+        set.add(userService.findUserById(3));
 
         Achievement achievement = new Achievement();
         achievement.setId(99);
@@ -210,7 +210,7 @@ class AchievementServiceTest {
      */
     @Test
     void shouldGetWinsByUser(){
-        User user2 = userService.findUserById(2).get();
+        User user2 = userService.findUserById(2);
         MetricType metricType = MetricType.wins;
         Integer winsByUser = achievementsService.getScoreByUser(metricType, user2);
         assertEquals(1, winsByUser);
@@ -218,7 +218,7 @@ class AchievementServiceTest {
 
     @Test
     void shouldGetGamesPlayedByUser(){
-        User user1 = userService.findUserById(1).get();
+        User user1 = userService.findUserById(1);
         MetricType metricType = MetricType.gamesPlayed;
         Integer gamesPlayedByUser = achievementsService.getScoreByUser(metricType, user1);
         assertEquals(1, gamesPlayedByUser);
@@ -226,7 +226,7 @@ class AchievementServiceTest {
 
     @Test
     void shouldGetCardsByUser(){
-        User user1 = userService.findUserById(1).get();
+        User user1 = userService.findUserById(1);
         MetricType metricType = MetricType.cardsUsed;
         Integer cardUsedByUser = achievementsService.getScoreByUser(metricType, user1);
         assertEquals(0, cardUsedByUser);
@@ -239,7 +239,7 @@ class AchievementServiceTest {
 
     @Test
     void shouldGetScoresByUser(){
-        User user1 = userService.findUserById(1).get();
+        User user1 = userService.findUserById(1);
         Map<MetricType, Integer> map = achievementsService.scoresByUser(user1);
         Map<MetricType, Integer> mapExpected = new HashMap<>();
         mapExpected.put(MetricType.gamesPlayed, 1);

@@ -39,6 +39,7 @@ public class GameController {
     private UserService userService;
     private MapGameRepository mapGameRepository;
     private String viewGames = "redirect:/games/";
+    private static final String VIEWS_EXCEPTION = "exception";
 
     @Autowired
     public GameController(GameService gameService,
@@ -79,7 +80,7 @@ public class GameController {
             modelMap.addAttribute("game", game);
         } catch (NotFoundException e) {
             log.warn(e.toString());
-            return "redirect:/error";
+            return VIEWS_EXCEPTION;
         }
         return view;
     }
@@ -138,7 +139,7 @@ public class GameController {
 
         } catch (NotFoundException e) {
             log.warn(e.toString());
-            return "redirect:/error";
+            return VIEWS_EXCEPTION;
         }
 
         return view;
@@ -153,9 +154,9 @@ public class GameController {
             gameService.handleTurnAction(game, newTurn, roll);
         }catch(NotFoundException e){
             log.warn(e.toString());
-            return "redirect:/error";
-        }catch(InvalidPlayerActionException p) {
-            log.warn(p.toString());
+            return VIEWS_EXCEPTION;
+        } catch (InvalidPlayerActionException e) {
+            log.warn(e.toString());
         }
         return viewGames + gameId + "/playing";
     }
@@ -167,7 +168,7 @@ public class GameController {
             gameService.handleExitTokyo(game);
         }catch(NotFoundException e){
             log.warn(e.toString());
-            return "redirect:/error";
+            return VIEWS_EXCEPTION;
         }
         return viewGames + gameId + "/playing";
     }

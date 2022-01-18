@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -361,7 +360,7 @@ public class PlayerServiceTests {
 	@Transactional
 	public void shouldInsertPlayerIntoDatabaseAndGenerateId() {
         
-        User user1 = this.userService.findUserById(1).get();
+        User user1 = this.userService.findUserById(1);
 		Player player = new Player();
 		player.setMonster(Monster.gigaZaur);
         player.setLifePoints(10);

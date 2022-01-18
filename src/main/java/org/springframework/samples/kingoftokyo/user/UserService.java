@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -65,8 +66,13 @@ public class UserService {
 	 */
 
 	@Transactional
-	public Optional<User> findUserById(int id) throws DataAccessException {
-		return userRepository.findById(id);
+	public User findUserById(int id) throws DataAccessException {
+		Optional<User> user = userRepository.findById(id);
+		if(user.isPresent()){
+			return user.get();
+		}else{
+			throw new NotFoundException("User {id:"+id+"} no encontrado");
+		}
 	}
 
 	/**
@@ -92,7 +98,7 @@ public class UserService {
 	@Transactional
 	public User findUserByUsername(String username) {
 		int userId = getCurrentUserId(username);
-		return findUserById(userId).get();
+		return findUserById(userId);
 	}
 
 	@Transactional
@@ -137,7 +143,7 @@ public class UserService {
 	public Boolean isAuthUserPlayingAsPlayer(Player player) {
 		User user = authenticatedUser();
 		if (user instanceof User) {
-			return user.getPlayers().stream().map(p -> p.getId()).filter(id -> id == player.getId()).findAny()
+			return user.getPlayers().stream().map(p -> p.getId()).filter(id -> player.getId().equals(id) ).findAny()
 					.isPresent();
 		} else {
 			return false;
@@ -147,8 +153,12 @@ public class UserService {
 	@Transactional
 	public Boolean isAdmin(int userId){
 		Optional<Authorities> auth = authoritiesRepository.findById(userId);
-		int res = auth.get().authority.compareTo("admin");
-		return res==0 ? true : false;
+		if(auth.isPresent()){
+			int res = auth.get().authority.compareTo("admin");
+			return res==0 ? true : false;
+		}else{
+			return false;
+		}
 	}
 
 }

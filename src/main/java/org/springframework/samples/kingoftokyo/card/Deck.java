@@ -2,6 +2,7 @@ package org.springframework.samples.kingoftokyo.card;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -41,10 +42,13 @@ public class Deck {
      */
     public void discard(Integer[] cardIds){
         for(Integer id: cardIds){
-            Card card = cards.stream()
+            Optional<Card> card = cards.stream()
                                 .filter(c -> c.getId().equals(id))
-                                .findFirst().get();
-            cards.remove(card);
+                                .findAny();
+
+            if(card.isPresent()){
+                cards.remove(card.get());
+            }  
         }
     }
 

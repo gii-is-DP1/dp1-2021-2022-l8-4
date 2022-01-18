@@ -4,13 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,7 +23,6 @@ import org.springframework.samples.kingoftokyo.game.GameService;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.player.Player;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
@@ -72,17 +69,17 @@ public class UserServiceTest {
     
     @Test
     void testFindUserById() {
-        Optional<User> user = userService.findUserById(1);
-        assertEquals("user1@email.com", user.get().getEmail());
-        assertEquals("u53r1", user.get().getPassword());
-        assertEquals("user1", user.get().getUsername());
-        assertEquals(true, user.get().isEnabled());
+        User user = userService.findUserById(1);
+        assertEquals("user1@email.com", user.getEmail());
+        assertEquals("u53r1", user.getPassword());
+        assertEquals("user1", user.getUsername());
+        assertEquals(true, user.isEnabled());
         
     }
 
     @Test
     void testGetAndSetAchievements(){
-        User user = userService.findUserById(1).get();
+        User user = userService.findUserById(1);
         Set<Achievement> setAchievement = new HashSet<>();
         Achievement achievement = achievementService.findAchievementById(1).get();
         setAchievement.add(achievement);
@@ -92,7 +89,7 @@ public class UserServiceTest {
 
     @Test
     void testGetAndSetGames() throws DataAccessException, NotFoundException{
-        User user = userService.findUserById(1).get();
+        User user = userService.findUserById(1);
         Set<Game> setGame = new HashSet<>();
         Game game = this.gameService.findGameById(1);
         setGame.add(game);
@@ -124,14 +121,14 @@ public class UserServiceTest {
 
     @Test
 	void testUpdateUserName() throws Exception {
-		Optional<User> user = userService.findUserById(1);
+		User user = userService.findUserById(1);
 
 		String newName = "Admin";
-		user.get().setUsername(newName);
-        this.userService.saveUser(user.get());
+		user.setUsername(newName);
+        this.userService.saveUser(user);
 
 		user = this.userService.findUserById(1);
-		assertThat(user.get().getUsername()).isEqualTo(newName);
+		assertThat(user.getUsername()).isEqualTo(newName);
 	}
 
     @Test
@@ -193,7 +190,7 @@ public class UserServiceTest {
         userService.findAll().forEach(currentListUsers::add);
         Integer currentCount = currentListUsers.size();
 
-        userService.deleteUser(userService.findUserById(1).get());
+        userService.deleteUser(userService.findUserById(1));
         userService.findAll().forEach(newListUsers::add);
         Integer newCount = newListUsers.size();
         assertThat(newCount).isEqualTo(currentCount-1);
@@ -223,21 +220,21 @@ public class UserServiceTest {
         }
        
         // Checks if some user who is admin is in all admins list
-        User userWhoIsAdmin = userService.findUserById(5).get();
+        User userWhoIsAdmin = userService.findUserById(5);
         assertThat(listAdmins.contains(userWhoIsAdmin));
     }
 
     @Test
     void testHasActivePlayer() {
-        User userPlayerActive = userService.findUserById(10).get();
+        User userPlayerActive = userService.findUserById(10);
         assertTrue(userPlayerActive.hasActivePlayer());
-        User userPlayerActiveButDied = userService.findUserById(1).get();
+        User userPlayerActiveButDied = userService.findUserById(1);
         assertFalse(userPlayerActiveButDied.hasActivePlayer());
     }
 
     @Test
     void testHasActiveGameAsCreator() throws DataAccessException, NotFoundException {
-        User userGameActive = userService.findUserById(23).get();
+        User userGameActive = userService.findUserById(23);
         assertTrue(userGameActive.hasActiveGameAsCreator());
     }
 
