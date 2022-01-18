@@ -29,11 +29,13 @@ import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Jose Maria Delgado Sanchez
  * @author Ricardo Nadal Garcia
  */
+@Slf4j
 @Service
 public class GameService {
 
@@ -118,7 +120,12 @@ public class GameService {
      */
     @Transactional
     public Player playerInGameByUser(User user, int gameId) {
-        return user.getPlayers().stream().filter(p -> p.getGame().getId() == gameId).findFirst().get();
+        Optional<Player> player = user.getPlayers().stream().filter(p -> p.getGame().getId() == gameId).findFirst();
+        if(player.isPresent()){
+            return player.get();
+        }else{
+            return null;
+        }
     }
 
     /**
@@ -400,7 +407,7 @@ public class GameService {
             try {
                 return playerService.findPlayerById(id);
             } catch (DataAccessException | NotFoundException e) {
-                e.printStackTrace();
+                 log.warn(e.toString());
             }
             return null;
         }).collect(Collectors.toList());

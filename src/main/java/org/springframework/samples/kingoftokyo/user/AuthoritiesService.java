@@ -54,14 +54,12 @@ public class AuthoritiesService {
 	@Transactional
 	public void saveAuthorities(Integer userid, String role) throws DataAccessException {
 		Authorities authority = new Authorities();
-		Optional<User> user = userService.findUserById(userid);
-		if(user.isPresent()) {
-			authority.setUser(user.get());
-			authority.setAuthority(role);
-			user.get().getAuthorities().add(authority);
-			authoritiesRepository.save(authority);
-		}else
-			throw new DataAccessException("User '"+userid+"' not found!") {};
+		User user = userService.findUserById(userid);
+		authority.setUser(user);
+		authority.setAuthority(role);
+		user.getAuthorities().add(authority);
+		authoritiesRepository.save(authority);
+
 	}
 
 }

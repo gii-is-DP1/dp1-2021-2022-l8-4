@@ -104,7 +104,7 @@ public class PlayerService {
         if(!player.isEmpty()){
             return player.get();
         }else{
-            throw new NotFoundException("Player {id:"+id+"} no encontrada");
+            throw new NotFoundException("Player {id:"+id+"} no encontrado");
         }
     }
 
@@ -339,7 +339,12 @@ public class PlayerService {
     @Transactional
     public Player actualPlayer(Game game) {
         User user = userService.authenticatedUser();
-        return game.getPlayers().stream().filter(p -> p.getUser().getId().equals(user.getId())).findAny().get();
+        Optional<Player> player = game.getPlayers().stream().filter(p -> p.getUser().getId().equals(user.getId())).findAny();
+        if(player.isPresent()){
+            return player.get();
+        }else{
+            return null;
+        }
     }
 
     @Transactional

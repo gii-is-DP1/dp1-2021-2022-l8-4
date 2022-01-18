@@ -32,6 +32,8 @@ public class PlayerController {
     @Autowired
     private CardService cardService;
 
+    private static final String VIEWS_EXCEPTION = "exception";
+
     @GetMapping()
     public String cardsList(ModelMap modelMap) {
         String view = "players/playersList";
@@ -43,43 +45,41 @@ public class PlayerController {
     @GetMapping("/{playerId}/cards/{cardId}/buy")
     public String buyCard(ModelMap modelMap, @PathVariable("playerId") int playerId,
             @PathVariable("cardId") int cardId) {
-        String view = "redirect:/error";
+
         try {
             Player player = playerService.findPlayerById(playerId);
             Card card = cardService.findCardById(cardId);
             playerCardService.buyCard(player, card);
-            view = "redirect:/games/" + player.getGame().getId() + "/playing";
+            return "redirect:/games/" + player.getGame().getId() + "/playing";
         } catch (NotFoundException | InvalidPlayerActionException e) {
             log.warn(e.toString());
+            return VIEWS_EXCEPTION;
         }
-        return view;
     }
 
     @GetMapping("/{playerId}/cards/discard")
     public String discardAllCards(ModelMap modelMap, @PathVariable("playerId") int playerId) {
-        String view = "redirect:/error";
 
         try {
             Player player = playerService.findPlayerById(playerId);
             playerCardService.discardShopCards(player);
-            view = "redirect:/games/" + player.getGame().getId() + "/playing";
+            return "redirect:/games/" + player.getGame().getId() + "/playing";
         } catch (NotFoundException | InvalidPlayerActionException e) {
             log.warn(e.toString());
+            return VIEWS_EXCEPTION;
         }
-        return view;
     }
 
     @GetMapping("/{playerId}/surrender")
     public String surrender(ModelMap modelMap, @PathVariable("playerId") int playerId) {
-        String view = "redirect:/error";
         try {
             Player player = playerService.findPlayerById(playerId);
             playerService.surrender(player);
-            view = "redirect:/games/" + player.getGame().getId() + "/playing";
+            return "redirect:/games/" + player.getGame().getId() + "/playing";
         } catch (NotFoundException e) {
             log.warn(e.toString());
+            return VIEWS_EXCEPTION;
         }
-        return view;
     }
 
 }

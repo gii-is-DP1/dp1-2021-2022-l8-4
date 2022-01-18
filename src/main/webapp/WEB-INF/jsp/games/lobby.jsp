@@ -70,7 +70,7 @@
                                     <input type="hidden" value="0" name="energyPoints"></input>
                                     <input type="hidden" value="0" name="lifePoints"></input>
                                     <input type="hidden" value="0" name="victoryPoints"></input>
-                                    <input type="hidden" value="fueraTokyo" name="location"></input>
+                                    <input type="hidden" value="FUERATOYKO" name="locationType"></input>
                                     <input type="hidden" value="FALSE" name="recentlyHurt"></input>
 
                                     <tr>

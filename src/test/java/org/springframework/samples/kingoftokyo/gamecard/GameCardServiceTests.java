@@ -2,6 +2,7 @@ package org.springframework.samples.kingoftokyo.gamecard;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,10 +77,11 @@ class GameCardServiceTests {
     @Test
     void shouldFindAvailableCardsByGame() throws Exception {
         Game game = gameService.findGameById(1);
+        Integer cardId = 1;
         List<Card> availableCardsSet = gameCardService.findAvailableCardsByGame(game);
         List<Card> availableCardsList = availableCardsSet.stream().collect(Collectors.toList());
         assertThat(availableCardsList.get(0).getId()).isNotNull();
-        assertThat(availableCardsList.get(0).getCardEnum().getName()).startsWith("Bloque");
+        assertEquals(cardId,availableCardsList.get(0).getId());
     }
 
     @Test
