@@ -27,12 +27,40 @@
 					<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
 					<span>Reglas</span>
 				</kingoftokyo:menuItem>
-				<sec:authorize access="hasRole('admin')">
-					<kingoftokyo:menuItem active="${name eq 'users'}" url="/users?page=1"
-						title="Listado de usuarios">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Lista de Usuarios</span>
-					</kingoftokyo:menuItem>
+
+				<sec:authorize access="hasAnyAuthority('admin')">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
+							<span class="glyphicon glyphicon-eye-open"></span>
+							<strong>Administrador</strong>
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/users?page=1" title="Listado de usuarios">
+									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+									<span>Usuarios</span>
+								</kingoftokyo:menuItem>
+							</li>
+							<li>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/games" title="Partidas en">
+									<span class="glyphicon glyphicon-knight" aria-hidden="true"></span>
+									<span>Partidas en juego</span>
+								</kingoftokyo:menuItem>
+							</li>
+							<li>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/games/finished" title="Partidas terminadas">
+									<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+									<span>Partidas terminadas</span>
+								</kingoftokyo:menuItem>
+							</li>
+							<li>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/achievements" title="Logros">
+									<span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+									<span>Logros</span>
+								</kingoftokyo:menuItem>
+							</li>
+						</ul>
 				</sec:authorize>
 			</ul>
 
@@ -56,43 +84,34 @@
 						<span>Estadisticas</span>
 					</kingoftokyo:menuItem>
 
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
-							<strong><sec:authentication property="name" /></strong> <span
-							class="glyphicon glyphicon-chevron-down"></span>
-					</a>
+					<li class="dropdown">
+
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
+							<span class="glyphicon glyphicon-user"></span>
+							<strong><sec:authentication property="name" /></strong> 
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						</a>
 						<ul class="dropdown-menu">
+
 							<li>
-								<div class="navbar-login">
-									<div class="row">
-										<div class="col-lg-8">
-											<p class="text-left">
-												<a href="<c:url value="/users/profile/${currentUser.id}" />"
-													class="btn btn-primary btn-block btn-sm">Perfil</a>
-											</p>
-											<p class="text-left">
-												<a href="<c:url value="/logout" />"
-													class="btn btn-primary btn-block btn-sm">Salir</a>
-											</p>
-										</div>
-									</div>
-								</div>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/users/profile/${currentUser.id}" title="Perfil">
+									
+									<span>Perfil</span>
+								</kingoftokyo:menuItem>
 							</li>
-							<li class="divider"></li>
-<!-- 							
-                            <li> 
-								<div class="navbar-login navbar-login-session">
-									<div class="row">
-										<div class="col-lg-12">
-											<p>
-												<a href="#" class="btn btn-primary btn-block">My Profile</a>
-											</p>
-										</div>
-									</div>
-								</div>
+
+							<li>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/logout" title="Logout">
+									
+									<span>Cerrar sesion</span>
+								</kingoftokyo:menuItem>
 							</li>
--->
-						</ul></li>
+							
+							
+							
+
+						</ul>
+					</li>
 				</sec:authorize>
 			</ul>
 		</div>

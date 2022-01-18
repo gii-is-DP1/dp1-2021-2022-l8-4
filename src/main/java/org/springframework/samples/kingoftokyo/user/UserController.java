@@ -1,4 +1,6 @@
 package org.springframework.samples.kingoftokyo.user;
+
+
 import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,7 @@ public class UserController {
     public String initCreationForm(ModelMap modelMap) {
         String view = VIEWS_USERS_CREATE_UPDATE_FORM;
         modelMap.addAttribute("user", new User());
+        modelMap.put("maxTurns", 0l);
         return view;
     }
 
@@ -64,6 +67,7 @@ public class UserController {
     public String processCreationForm(@Valid User user, BindingResult result, ModelMap modelMap) {
         if (result.hasErrors()) {
             modelMap.addAttribute("user", user);
+            modelMap.put("maxTurns", 0l);
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
         } else {
@@ -81,6 +85,7 @@ public class UserController {
         if (currentUserId.equals(userId) || userService.isAdmin(currentUserId)) {
             User user = this.userService.findUserById(userId);
             modelMap.put("user", user);
+            modelMap.put("maxTurns", user.getMaxTurnsTokyo());
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
         } else {
@@ -100,9 +105,13 @@ public class UserController {
 
     @PostMapping(value = "/{userId}/edit")
     public String processUpdateForm(@Valid User user, BindingResult result, @PathVariable("userId") int userId,
-            ModelMap modelMap) {
-        if (result.hasErrors()) {
+            ModelMap modelMap, @RequestParam(value = "version", required=false) Integer version) {
+        if(user.getVersion()!=version) { 
+            modelMap.put("message","Concurrent modification of user! Try again!");
+            return initUpdateForm(user.getId(),modelMap);
+        }else if (result.hasErrors()) {
             modelMap.put("user", user);
+            modelMap.put("maxTurns", user.getMaxTurnsTokyo());
             return VIEWS_USERS_CREATE_UPDATE_FORM;
         } else {
             User userToUpdate = this.userService.findUserById(userId);
