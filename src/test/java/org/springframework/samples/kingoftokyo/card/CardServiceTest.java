@@ -22,13 +22,13 @@ import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
  
-public class CardServiceTest {
+class CardServiceTest {
     
     @Autowired
     private CardService cardService;
 
     @Test
-    public void testFindCardTypes() {
+    void testFindCardTypes() {
         Collection<CardType> cardTypes = cardService.findCardTypes();
         List<CardType> cardTypesList = cardTypes.stream().collect(Collectors.toList());
         CardType cardType1 = cardTypesList.get(0);
@@ -39,7 +39,7 @@ public class CardServiceTest {
 
     @Test
     @Disabled
-    public void testFindAll() {
+    void testFindAll() {
         Iterable<Card> all = cardService.findAll();
         // Iterating over all cards
         for (Card card:all) {
@@ -51,14 +51,14 @@ public class CardServiceTest {
 
     @Test
     @Disabled //Esto se deja asi hasta que se añadan todas las cartas y se cambie el numero de cartas por el que haya en dicho momento
-    public void testCountWithInitialData(){
+    void testCountWithInitialData(){
         int count = cardService.cardCount();
         assertEquals(count, 10);
     }
 
     @Test
     @Disabled
-    public void testSaveCardIntoDatabaseAndGenerateId() {
+    void testSaveCardIntoDatabaseAndGenerateId() {
         Card card = new Card();
        // card.setName("Fábrica de lava");
         card.setCost(5);
@@ -70,7 +70,7 @@ public class CardServiceTest {
     @Test
     @Disabled
     @Transactional
-	public void testUpdateCardName() throws Exception {
+	void testUpdateCardName() throws Exception {
 		Card card = cardService.findCardById(1);
 
 		String newName = "Fábrica de agua";
@@ -83,7 +83,7 @@ public class CardServiceTest {
 
     @Test
     @Disabled
-    public void testFindCardById() {
+    void testFindCardById() {
         Card card = cardService.findCardById(1);
         assertEquals(card.getCost(), 5);
         assertThat(card.getCardEnum().getName()).startsWith("Monstruo Alfa");

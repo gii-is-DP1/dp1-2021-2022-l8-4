@@ -45,7 +45,7 @@ import java.util.Set;
         excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE , classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration= SecurityConfiguration.class)
         
-public class LobbyControllerTest {
+class LobbyControllerTest {
     @MockBean
     private GameService gameService;
 
@@ -63,7 +63,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testLobbiesList() throws Exception {
+    void testLobbiesList() throws Exception {
         mockMvc.perform(get("/games/lobbies")).andExpect(status().isOk())
                 .andExpect(view().name("games/lobbiesList"))
                 .andExpect(model().attributeExists("lobbies"));
@@ -72,7 +72,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testNewLobby() throws Exception {
+    void testNewLobby() throws Exception {
         mockMvc.perform(get("/games/new")).andExpect(status().isOk())
                 .andExpect(view().name("games/newGame"))
                 .andExpect(model().attributeExists("newGame"));
@@ -80,7 +80,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testPostNewLobby() throws Exception {
+    void testPostNewLobby() throws Exception {
         mockMvc.perform(post("/games/new")
                             .with(csrf())
                             .param("name","TEST")
@@ -93,7 +93,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testPostNewLobbyHasErrors() throws Exception {
+    void testPostNewLobbyHasErrors() throws Exception {
         String nameTooShort="a";
         mockMvc.perform(post("/games/new")
                             .with(csrf())
@@ -107,7 +107,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testPostNewLobbyThrowException() throws Exception {
+    void testPostNewLobbyThrowException() throws Exception {
         doThrow(new NewGameException("")).when(gameService).createNewGame(any(Game.class));
         mockMvc.perform(post("/games/new")
                             .with(csrf())
@@ -121,7 +121,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testJoinNewLobby() throws Exception {
+    void testJoinNewLobby() throws Exception {
         Game game=new Game();
         Integer gameId=1;
 
@@ -145,7 +145,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testJoinStartedLobby() throws Exception {
+    void testJoinStartedLobby() throws Exception {
         Game game=new Game(); 
         Integer gameStartedTurn=1;      
         game.setTurn(gameStartedTurn);
@@ -160,7 +160,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testPostLobby() throws Exception {
+    void testPostLobby() throws Exception {
         Player player=new Player();
         player.setEnergyPoints(0);
         player.setLocation(LocationType.fueraTokyo);
@@ -183,7 +183,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testDeleteLobbyWithCorrectUser() throws Exception {
+    void testDeleteLobbyWithCorrectUser() throws Exception {
         Game game=new Game(); 
         Integer gameId=1;
         game.setId(gameId);
@@ -203,7 +203,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testDeleteLobbyThrowingException() throws Exception {
+    void testDeleteLobbyThrowingException() throws Exception {
         Game game=new Game(); 
         Integer gameId=1;
         game.setId(gameId);
@@ -224,7 +224,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testDeleteLobbyWithoutCorrectUser() throws Exception {
+    void testDeleteLobbyWithoutCorrectUser() throws Exception {
         Game game=new Game();
         Integer gameId=1; 
         game.setId(gameId);
@@ -243,7 +243,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testStartLobbyWithCorrectUser() throws Exception {
+    void testStartLobbyWithCorrectUser() throws Exception {
         Game game=new Game(); 
         Integer gameId=1;
         game.setId(gameId);
@@ -261,7 +261,7 @@ public class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
-    public void testStartLobbyWithoutCorrectUser() throws Exception {
+    void testStartLobbyWithoutCorrectUser() throws Exception {
         Game game=new Game();
         Integer gameId=1; 
         game.setId(gameId);
