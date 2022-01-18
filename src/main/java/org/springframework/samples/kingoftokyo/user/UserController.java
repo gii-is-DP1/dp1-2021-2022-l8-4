@@ -2,7 +2,6 @@ package org.springframework.samples.kingoftokyo.user;
 
 
 import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,17 +25,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AchievementService achievementService;
-
     private static final String VIEWS_USERS_CREATE_UPDATE_FORM = "users/createOrUpdateUsersForm";
-
+    private static final String VIEW_USER_LIST = "users/usersList";
     private static final String VIEWS_EXCEPTION = "exception";
-
     private String message = "message";
+
+    private UserService userService;
+    private AchievementService achievementService;
+    @Autowired
+    public UserController(UserService userService, AchievementService achievementService) {
+        this.userService = userService;
+        this.achievementService = achievementService;
+    }
 
     /**
      * @param modelMap
@@ -45,7 +45,7 @@ public class UserController {
      */
     @GetMapping()
     public String usersList(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") int page) {
-        String view = "users/usersList";
+        String view = VIEW_USER_LIST;
         Page<User> pages = userService.getPageOfUsers(page - 1);
         modelMap.addAttribute("totalPages", pages.getTotalPages());
         modelMap.addAttribute("totalElements", pages.getTotalElements());
