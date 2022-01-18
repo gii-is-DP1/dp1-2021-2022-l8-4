@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class AchievementServiceTest {
+class AchievementServiceTest {
     @Autowired
     private AchievementService achievementsService;
     @Autowired

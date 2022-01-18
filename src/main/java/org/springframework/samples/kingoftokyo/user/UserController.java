@@ -110,10 +110,12 @@ public class UserController {
 		}
 		else {
             Optional<User> userToUpdate=this.userService.findUserById(userId);
-			BeanUtils.copyProperties(user, userToUpdate.get(), "id");                                                                                               
-            this.userService.saveUser(userToUpdate.get());      
-            modelMap.addAttribute(message,"User succesfully edited!"); 
-			return "redirect:/users/profile/{userId}";
+            if(userToUpdate.isPresent()){
+                BeanUtils.copyProperties(user, userToUpdate.get(), "id");                                                                                               
+                this.userService.saveUser(userToUpdate.get());      
+                modelMap.addAttribute(message,"User succesfully edited!");
+            } 
+			return "redirect:/users/profile/{userId}"; 
 		}
 	}
 

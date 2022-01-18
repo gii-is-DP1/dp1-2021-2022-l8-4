@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * @author Rosa Molina
  */
 
-public class GameCardServiceTests {
+class GameCardServiceTests {
     
     @Autowired
     private GameCardService gameCardService;

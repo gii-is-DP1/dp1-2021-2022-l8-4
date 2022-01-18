@@ -65,7 +65,7 @@ public class AchievementControllerTest {
 
     }
 
-    @Disabled //expected estatus 200 but is 404
+    @Disabled("expected estatus 200 but is 404")
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
     void testAchievementCreateController() throws Exception {
