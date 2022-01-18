@@ -26,6 +26,7 @@ import org.springframework.samples.kingoftokyo.game.exceptions.NewGameException;
 import org.springframework.samples.kingoftokyo.player.LocationType;
 import org.springframework.samples.kingoftokyo.player.Player;
 import org.springframework.samples.kingoftokyo.player.PlayerService;
+import org.springframework.samples.kingoftokyo.player.exceptions.InvalidPlayerActionException;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
@@ -212,7 +213,7 @@ class GameServiceTests {
     }
     @Disabled
     @Test
-    void testOnePlayerTurn() throws DataAccessException, NotFoundException{
+    void testOnePlayerTurn() throws DataAccessException, NotFoundException, InvalidPlayerActionException{
         Player playerInitiaPlayer = gameService.actualTurn(4);
         Roll rollkeep = new Roll(); //una tirada cualquiera sin tener ningun dado guardado 
 
