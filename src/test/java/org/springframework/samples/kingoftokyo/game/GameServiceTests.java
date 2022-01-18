@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.kingoftokyo.dice.DiceValues;
 import org.springframework.samples.kingoftokyo.dice.Roll;
 import org.springframework.samples.kingoftokyo.player.LocationType;
@@ -23,6 +24,8 @@ import org.springframework.samples.kingoftokyo.player.PlayerService;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
+
+import javassist.NotFoundException;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 
@@ -49,7 +52,7 @@ public class GameServiceTests {
 
 
     @Test
-    public void testSaveCardIntoDatabaseAndGenerateId(){
+    public void testSaveCardIntoDatabaseAndGenerateId() throws DataAccessException, NotFoundException{
         Game game = new Game();
         game.setTurn(0);
         game.setMaxNumberOfPlayers(6);
@@ -73,9 +76,10 @@ public class GameServiceTests {
 
 
     @Test
-    public void testIsRecentlyHurtToFalse(){
-        List<Player> lsplayer = gameService.findPlayerList(1);
-        gameService.isRecentlyHurtToFalse(1);
+    public void testIsRecentlyHurtToFalse() throws DataAccessException, NotFoundException{
+        Game game = gameService.findGameById(1);
+        List<Player> lsplayer = game.getPlayers();
+        gameService.isRecentlyHurtToFalse(game);
         Boolean res = false;
         for(Player player : lsplayer){
             if(player.getRecentlyHurt().equals(true))
@@ -126,11 +130,11 @@ public class GameServiceTests {
     }
     
     @Test
-    public void testOnePlayerShouldDie(){
+    public void testOnePlayerShouldDie() throws DataAccessException, NotFoundException{
         Integer numberPlayers = 5; 
         Game game = gameService.findGameById(4);
         Integer playerIdActualTurn = gameService.actualTurnPlayerId(4);
-        Integer numPlayersTest = gameService.findPlayerList(4).size();
+        Integer numPlayersTest = game.getPlayers().size();
         assertEquals(numPlayersTest, numberPlayers);
         //Vamos a crear una tirada a mano para matar al player 1 
         Roll roll = new Roll();

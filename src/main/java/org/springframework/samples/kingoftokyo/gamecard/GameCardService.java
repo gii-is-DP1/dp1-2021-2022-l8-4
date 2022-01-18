@@ -49,7 +49,7 @@ public class GameCardService {
     @Transactional
     public List<Card> findAvailableCardsByGame(Game game) {
         return StreamSupport.stream(findAll().spliterator(), Boolean.FALSE)
-                .filter(x -> x.getSold() == Boolean.FALSE && x.getGame().getId() == game.getId()).map(x -> x.getCard())
+                .filter(x -> x.getSold() == Boolean.FALSE && x.getGame().getId().equals(game.getId()) ).map(x -> x.getCard())
                 .collect(Collectors.toList());
     }
 

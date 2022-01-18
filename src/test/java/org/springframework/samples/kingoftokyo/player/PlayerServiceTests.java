@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.kingoftokyo.dice.DiceValues;
 import org.springframework.samples.kingoftokyo.dice.Roll;
 import org.springframework.samples.kingoftokyo.game.Game;
@@ -23,6 +24,8 @@ import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javassist.NotFoundException;
 
 /** 
  *@author Noelia López Durán
@@ -48,7 +51,7 @@ public class PlayerServiceTests {
     private Player player2;
 
     @BeforeEach
-    public void createInitialPlayer() {
+    public void createInitialPlayer() throws DataAccessException, NotFoundException {
         user1=new User();
         user1.setUsername("UsuarioDePrueba");
         user1.setEmail("usuarioDePrueba@gmail.com");

@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
+import javassist.NotFoundException;
+
 /**
  * @author Carlos Varela Soult
  */
@@ -83,7 +85,7 @@ public class CardServiceTest {
 
     @Test
     @Disabled
-    public void testFindCardById() {
+    public void testFindCardById() throws NotFoundException {
         Card card = cardService.findCardById(1);
         assertEquals(card.getCost(), 5);
         assertThat(card.getCardEnum().getName()).startsWith("Monstruo Alfa");

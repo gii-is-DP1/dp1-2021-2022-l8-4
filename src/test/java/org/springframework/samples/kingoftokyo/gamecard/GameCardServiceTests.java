@@ -16,6 +16,8 @@ import org.springframework.samples.kingoftokyo.game.Game;
 import org.springframework.samples.kingoftokyo.game.GameService;
 import org.springframework.stereotype.Service;
 
+import javassist.NotFoundException;
+
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 /**
  * @author Carlos Varela Soult
@@ -34,7 +36,7 @@ public class GameCardServiceTests {
     private CardService cardService;
 
     @Test
-    public void shouldFindGameCardWithCorrectId() {
+    public void shouldFindGameCardWithCorrectId() throws NotFoundException  {
         Game game = gameService.findGameById(1);
         Card card = cardService.findCardById(1);
         GameCard gameCard = gameCardService.findByGameCard(game, card);
@@ -43,7 +45,7 @@ public class GameCardServiceTests {
     }
 
     @Test
-    public void shouldInsertGameCard() {
+    public void shouldInsertGameCard() throws NotFoundException {
         GameCard gameCard = new GameCard();
 
         Card card = cardService.findCardById(5);
@@ -59,7 +61,7 @@ public class GameCardServiceTests {
     }
 
     @Test
-    public void shouldUpdateGameCard() {
+    public void shouldUpdateGameCard() throws NotFoundException {
         Game oldGame = gameService.findGameById(1);
         Card oldCard = cardService.findCardById(1);
         GameCard gameCard = gameCardService.findByGameCard(oldGame, oldCard);

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -43,10 +44,12 @@ public class PlayerController {
     public String buyCard(ModelMap modelMap, @PathVariable("playerId") int playerId,
             @PathVariable("cardId") int cardId) {
         Player player = playerService.findPlayerById(playerId);
-        Card card = cardService.findCardById(cardId);
-
+    
         try{
+            Card card = cardService.findCardById(cardId);
             playerCardService.buyCard(player, card);
+        }catch(NotFoundException e){
+            log.warn(e.toString());
         }catch(InvalidPlayerActionException e){
             log.warn(e.toString());
         }

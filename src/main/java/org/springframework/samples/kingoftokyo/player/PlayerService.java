@@ -328,8 +328,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public Player actualPlayer(Integer gameId) {
-        Game game = gameService.findGameById(gameId);
+    public Player actualPlayer(Game game) {
         User user = userService.authenticatedUser();
         return game.getPlayers().stream().filter(p -> p.getUser().getId().equals(user.getId())).findAny().get();
     }
@@ -344,7 +343,7 @@ public class PlayerService {
             playerCards.forEach(card -> card.setDiscarded(Boolean.TRUE));
             player.setPlayerCard(playerCards);
             damagePlayer(player, 99);
-            gameService.endGame(player.getGame().getId());
+            gameService.endGame(player.getGame());
             savePlayer(player);
         }
     }
@@ -379,8 +378,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public void checkplayers(Integer gameId) {
-        Game game = gameService.findGameById(gameId);
+    public void checkplayers(Game game) {
         Integer numplayers = game.getMaxNumberOfPlayers();
         Integer minAmmountPlayersTokyoBay = 5;
         if (numplayers < minAmmountPlayersTokyoBay) {

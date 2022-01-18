@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -91,21 +92,26 @@ public class LobbyController {
 
     @GetMapping("/{gameId}/lobby")
     public String gameLobby(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse responde) {
-        Game game = gameService.findGameById(gameId);
+        String view = "welcome";
+        try {
+            Game game = gameService.findGameById(gameId);
+            if (game.isStarted()) {
+                return "redirect:/games/" + game.getId() + "/playing";
+            } else {
+                view = "games/lobby";
 
-        if (game.isStarted()) {
-            return "redirect:/games/" + game.getId() + "/playing";
-        } else {
-            String view = "games/lobby";
+                responde.addHeader("Refresh", "10");
 
-            responde.addHeader("Refresh", "10");
-
-            modelMap.addAttribute("availableMonsters", game.availableMonsters());
-            modelMap.addAttribute("game", game);
-            modelMap.addAttribute("players", game.getPlayers());
-            modelMap.addAttribute("newPlayer", new Player());
-            return view;
+                modelMap.addAttribute("availableMonsters", game.availableMonsters());
+                modelMap.addAttribute("game", game);
+                modelMap.addAttribute("players", game.getPlayers());
+                modelMap.addAttribute("newPlayer", new Player());
+                return view;
+            }
+        } catch (NotFoundException e) {
+            log.warn(e.toString());
         }
+        return view;
     }
 
     @PostMapping("/{gameId}/lobby")
@@ -114,13 +120,16 @@ public class LobbyController {
             @PathVariable("gameId") int gameId) {
 
         if (!result.hasErrors()) {
-            Game game = gameService.findGameById(gameId);
+
             User user = userService.authenticatedUser();
             newPlayer.setUser(user);
 
             try {
+                Game game = gameService.findGameById(gameId);
                 playerService.joinGame(newPlayer, game);
             } catch (NewGameException e) {
+                log.warn(e.toString());
+            } catch (NotFoundException e) {
                 log.warn(e.toString());
             }
 
@@ -131,37 +140,40 @@ public class LobbyController {
     @GetMapping("/{gameId}/lobby/delete")
     public String deleteGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         String view = "redirect:/games/lobbies";
-
         User user = userService.authenticatedUser();
-        Game game = gameService.findGameById(gameId);
 
-        if (user.isCreator(game)) {
-            try {
+        try {
+            Game game = gameService.findGameById(gameId);
+
+            if (user.isCreator(game)) {
                 gameService.deleteGame(game);
-            } catch (DeleteGameException e) {
-                log.warn(e.toString());
+            } else {
                 view = "redirect:/games/" + gameId + "/lobby";
             }
-        } else {
-            view = "redirect:/games/" + gameId + "/lobby";
+        } catch (NotFoundException e) {
+            log.warn(e.toString());
+        } catch (DeleteGameException e) {
+            log.warn(e.toString());
         }
         return view;
     }
 
     @GetMapping("/{gameId}/start")
     public String startGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
+        String view = "welcome";
         User user = userService.authenticatedUser();
-        Game game = gameService.findGameById(gameId);
-
-        if (user.isCreator(game)) {
-
-            try{
+        try {
+            Game game = gameService.findGameById(gameId);
+            if (user.isCreator(game)) {
                 gameService.startGame(game);
-            }catch(NewGameException e){
-                log.warn(e.toString());
             }
+            return "redirect:/games/" + game.getId() + "/lobby";
+        } catch (NotFoundException e) {
+            log.warn(e.toString());
+        } catch (NewGameException e) {
+            log.warn(e.toString());
         }
-        return "redirect:/games/" + game.getId() + "/lobby";
+        return view;
     }
 
 }

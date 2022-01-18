@@ -19,12 +19,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Ricardo Nadal Garcia
  * @author Jose Maria Delgado Sanchez
  * @author Noelia López Durán
  */
-
+@Slf4j
 @Controller
 @RequestMapping("/games")
 public class GameController {
@@ -41,13 +44,12 @@ public class GameController {
             GameCardService gameCardService,
             UserService userService,
             MapGameRepository mapGameRepository) {
-                this.gameService = gameService;
-                this.playerService = playerService;
-                this.gameCardService = gameCardService;
-                this.userService = userService;
-                this.mapGameRepository = mapGameRepository;
+        this.gameService = gameService;
+        this.playerService = playerService;
+        this.gameCardService = gameCardService;
+        this.userService = userService;
+        this.mapGameRepository = mapGameRepository;
     }
-
 
     @GetMapping()
     public String gameListNotFinished(ModelMap modelMap) {
@@ -57,7 +59,6 @@ public class GameController {
         return view;
     }
 
-
     @GetMapping("/finished")
     public String gameListFinished(ModelMap modelMap) {
         String view = "games/gamesListFinished";
@@ -66,14 +67,18 @@ public class GameController {
         return view;
     }
 
-
     @GetMapping("/{gameId}/finished")
     public String gameFinished(ModelMap modelMap, @PathVariable("gameId") int gameId) {
         String view = "games/gameFinished";
-        Iterable<Player> players = gameService.findPlayerList(gameId);
-        Game game = gameService.findGameById(gameId);
-        modelMap.addAttribute("players", players);
-        modelMap.addAttribute("game", game);
+        try {
+            Game game = gameService.findGameById(gameId);
+            Iterable<Player> players = game.getPlayers();
+            modelMap.addAttribute("players", players);
+            modelMap.addAttribute("game", game);
+        } catch (NotFoundException e) {
+            log.warn(e.toString());
+            return "redirect:/error";
+        }
         return view;
     }
 
@@ -81,53 +86,58 @@ public class GameController {
     public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse responde) {
         String view = "games/playing";
 
-        gameService.endGame(gameId);
+        
 
-        Game game = gameService.findGameById(gameId);
+        try {
+            Game game = gameService.findGameById(gameId);
+            if (game.isFinished()) {
+                return "redirect:/games/" + gameId + "/finished";
+            }
+            gameService.endGame(game);
 
-        if (game.isFinished()) {
-            return "redirect:/games/" + gameId + "/finished";
+            if (mapGameRepository.getTurnList(gameId) == null) {
+                List<Integer> turnList = gameService.initialTurnList(game);
+                mapGameRepository.putTurnList(gameId, turnList);
+            }
+
+            List<Integer> turnList = mapGameRepository.getTurnList(gameId);
+            Roll roll = mapGameRepository.getRoll(gameId);
+
+            List<Player> orderedPlayers = gameService.playersOrder(turnList);
+            modelMap.addAttribute("orderedPlayers", orderedPlayers);
+
+            Player actualPlayerTurn = gameService.actualTurn(gameId);
+            modelMap.addAttribute("actualPlayerTurn", actualPlayerTurn);
+
+            Boolean isPlayerTurn = gameService.isPlayerTurn(gameId);
+            modelMap.addAttribute("isPlayerTurn", isPlayerTurn);
+
+            if (!isPlayerTurn) {
+                responde.addHeader("Refresh", "1");
+            }
+
+            Boolean isPlayerInGame = gameService.isPlayerInGame(game);
+            modelMap.addAttribute("isPlayerInGame", isPlayerInGame);
+
+            Player actualPlayer = playerService.actualPlayer(game);
+            modelMap.addAttribute("actualPlayer", actualPlayer);
+
+            Player AuthenticatedPlayer = gameService.playerInGameByUser(userService.authenticatedUser(), gameId);
+            modelMap.addAttribute("AuthenticatedPlayer", AuthenticatedPlayer);
+
+            Iterable<Player> players = game.getPlayers();
+            modelMap.addAttribute("players", players);
+            modelMap.addAttribute("game", game);
+            modelMap.addAttribute("roll", roll);
+            // Retrieve data from board_card association and generate a list of cards
+            List<Card> cards = gameCardService.findAvailableCardsByGame(game);
+            modelMap.addAttribute("cards", cards);
+            modelMap.addAttribute("turnList", turnList);
+
+        } catch (NotFoundException e) {
+            log.warn(e.toString());
+            return "redirect:/error";
         }
-
-        Iterable<Player> players = gameService.findPlayerList(gameId);
-
-        if (mapGameRepository.getTurnList(gameId) == null) {
-            List<Integer> turnList = gameService.initialTurnList(gameId);
-            mapGameRepository.putTurnList(gameId, turnList);
-        }
-
-        List<Integer> turnList = mapGameRepository.getTurnList(gameId);
-        Roll roll = mapGameRepository.getRoll(gameId);
-
-        List<Player> orderedPlayers = gameService.playersOrder(turnList);
-        modelMap.addAttribute("orderedPlayers", orderedPlayers);
-
-        Player actualPlayerTurn = gameService.actualTurn(gameId);
-        modelMap.addAttribute("actualPlayerTurn", actualPlayerTurn);
-
-        Boolean isPlayerTurn = gameService.isPlayerTurn(gameId);
-        modelMap.addAttribute("isPlayerTurn", isPlayerTurn);
-
-        if (!isPlayerTurn) {
-            responde.addHeader("Refresh", "1");
-        }
-
-        Boolean isPlayerInGame = gameService.isPlayerInGame(gameId);
-        modelMap.addAttribute("isPlayerInGame", isPlayerInGame);
-
-        Player actualPlayer = playerService.actualPlayer(gameId);
-        modelMap.addAttribute("actualPlayer", actualPlayer);
-
-        Player AuthenticatedPlayer = gameService.playerInGameByUser(userService.authenticatedUser(), gameId);
-        modelMap.addAttribute("AuthenticatedPlayer", AuthenticatedPlayer);
-
-        modelMap.addAttribute("players", players);
-        modelMap.addAttribute("game", game);
-        modelMap.addAttribute("roll", roll);
-        // Retrieve data from board_card association and generate a list of cards
-        List<Card> cards = gameCardService.findAvailableCardsByGame(game);
-        modelMap.addAttribute("cards", cards);
-        modelMap.addAttribute("turnList", turnList);
 
         return view;
     }
@@ -136,14 +146,25 @@ public class GameController {
     public String rollKeep(@ModelAttribute("newTurn") Boolean newTurn, @ModelAttribute("roll") Roll roll,
             @PathVariable("gameId") int gameId) {
 
-        gameService.handleTurnAction(gameId, newTurn, roll);
-
+        try{
+            Game game = gameService.findGameById(gameId);
+            gameService.handleTurnAction(game, newTurn, roll);
+        }catch(NotFoundException e){
+            log.warn(e.toString());
+            return "redirect:/error";
+        }
         return "redirect:/games/" + gameId + "/playing";
     }
 
     @GetMapping("/{gameId}/exitTokyo")
     public String exitTokyo(ModelMap modelMap, @PathVariable("gameId") int gameId) {
-        gameService.handleExitTokyo(gameId);
+        try{
+            Game game = gameService.findGameById(gameId);
+            gameService.handleExitTokyo(game);
+        }catch(NotFoundException e){
+            log.warn(e.toString());
+            return "redirect:/error";
+        }
         return "redirect:/games/" + gameId + "/playing";
     }
 

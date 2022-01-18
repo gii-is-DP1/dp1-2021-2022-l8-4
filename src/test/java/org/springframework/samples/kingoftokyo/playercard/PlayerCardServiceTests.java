@@ -37,6 +37,8 @@ import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 
+import javassist.NotFoundException;
+
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 /**
  * @author Rosa Molina
@@ -70,7 +72,7 @@ public class PlayerCardServiceTests {
     private Card card1;
 
     @BeforeEach
-    public void configure() {
+    public void configure() throws NotFoundException  {
         //Turno de player id=3 en el game id=1 con user id=3 y rollAmount=3
         this.player3 = playerService.findPlayerById(3);
         this.game1 = gameService.findGameById(1);
@@ -84,7 +86,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void shouldFindPlayerCard() {
+    public void shouldFindPlayerCard() throws NotFoundException  {
         Player player = playerService.findPlayerById(1);
         Card card = cardService.findCardById(1);
         PlayerCard playercard = new PlayerCard();
@@ -223,7 +225,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void useCardsWhenBuyDifferentEnergy(){
+    public void useCardsWhenBuyDifferentEnergy() throws NotFoundException {
         Integer energy = player3.getEnergyPoints();
         Integer cost = card1.getCost();
         Card newCard = cardService.findCardById(26);

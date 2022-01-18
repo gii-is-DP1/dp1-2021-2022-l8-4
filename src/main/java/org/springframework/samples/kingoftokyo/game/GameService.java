@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -26,6 +27,8 @@ import org.springframework.samples.kingoftokyo.player.PlayerService;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
+
+import javassist.NotFoundException;
 
 /**
  * @author Jose Maria Delgado Sanchez
@@ -73,14 +76,20 @@ public class GameService {
     }
 
     @Transactional
-    public Game findGameById(int id) throws DataAccessException {
-        return gameRepository.findById(id).get();
+    public Game findGameById(int id) throws DataAccessException, NotFoundException {
+        Optional<Game> game = gameRepository.findById(id);
+        if(!game.isEmpty()){
+            return game.get();
+        }else{
+            throw new NotFoundException("Game {id:"+id+"} no encontrada");
+        }
     }
 
-    @Transactional
-    public List<Player> findPlayerList(int gameId) throws DataAccessException {
-        return gameRepository.findById(gameId).get().getPlayers();
-    }
+    // @Transactional
+    // public List<Player> findPlayerList(int gameId) throws DataAccessException {
+    //     Optional<List<Player>> playerList = gameRepository.findById(gameId);
+    //     return gameRepository.findById(gameId).get().getPlayers();
+    // }
 
     @Transactional
     public List<Game> findOnGoingGames() throws DataAccessException {
@@ -171,8 +180,8 @@ public class GameService {
     }
 
     @Transactional
-    public void nuevoTurno(int gameId) {
-        Game game = findGameById(gameId);
+    public void nuevoTurno(Game game) {
+        Integer gameId = game.getId();
         mapGameRepository.putRoll(gameId, new Roll());
 
         game.setTurn(game.getTurn() + 1);
@@ -243,8 +252,7 @@ public class GameService {
     }
 
     @Transactional
-    public void endGame(Integer gameId) {
-        Game game = findGameById(gameId);
+    public void endGame(Game game) {
         if (game.playersWithMaxVictoryPoints().size() != 0) {
             game.setWinner(game.playersWithMaxVictoryPoints().get(0).getUser().getUsername());
             game.setEndTime(LocalDateTime.now());
@@ -262,9 +270,9 @@ public class GameService {
     }
 
     @Transactional
-    public List<Integer> initialTurnList(Integer gameId) {
+    public List<Integer> initialTurnList(Game game) {
         List<Integer> listaTurnos = new ArrayList<Integer>();
-        List<Player> jugadores = findPlayerList(gameId);
+        List<Player> jugadores = game.getPlayers();
         for (Player player : jugadores) {
             listaTurnos.add(player.getId());
         }
@@ -292,8 +300,7 @@ public class GameService {
     }
 
     @Transactional
-    public Boolean isPlayerInGame(Integer gameId) {
-        Game game = findGameById(gameId);
+    public Boolean isPlayerInGame(Game game) {
         User user = userService.authenticatedUser();
         Boolean result = Boolean.FALSE;
         if (user != null) {
@@ -312,14 +319,15 @@ public class GameService {
     }
 
     @Transactional
-    public void handleTurnAction(Integer gameId, Boolean newTurn, Roll keepInfo) {
+    public void handleTurnAction(Game game, Boolean newTurn, Roll keepInfo) {
+        Integer gameId = game.getId();
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
-                useCardsEndTurn(playerService.actualPlayer(gameId));
-                isRecentlyHurtToFalse(gameId);
-                nuevoTurno(gameId);
-                checkPlayersAlive(gameId);
-                playerService.checkplayers(gameId);
+                useCardsEndTurn(playerService.actualPlayer(game));
+                isRecentlyHurtToFalse(game);
+                nuevoTurno(game);
+                checkPlayersAlive(game);
+                playerService.checkplayers(game);
             } else {
                 Roll rollData = mapGameRepository.getRoll(gameId); 
                 rollData.setKeep(keepInfo.getKeep());
@@ -338,8 +346,7 @@ public class GameService {
      * @param gameId
      */
     @Transactional
-    public void checkPlayersAlive(Integer gameId){
-        Game game  = findGameById(gameId);
+    public void checkPlayersAlive(Game game){
         List<Player> players = game.playersAlive();
         if(players.size()<5){
             for(Player player : players){
@@ -363,8 +370,8 @@ public class GameService {
     }
 
     @Transactional
-    public void isRecentlyHurtToFalse(Integer gameId) {
-        List<Player> lsplayer = findPlayerList(gameId);
+    public void isRecentlyHurtToFalse(Game game) {
+        List<Player> lsplayer = game.getPlayers();
         for (Player player : lsplayer) {
             player.setRecentlyHurt(Boolean.FALSE);
             playerService.savePlayer(player);
@@ -372,10 +379,10 @@ public class GameService {
     }
 
     @Transactional
-    public void handleExitTokyo(Integer gameId) {
-        if (playerService.isRecentlyHurt(gameId) && playerService.isInTokyo(gameId)) {
-            changePosition(gameId);
-            isRecentlyHurtToFalse(gameId);
+    public void handleExitTokyo(Game game) {
+        if (playerService.isRecentlyHurt(game.getId()) && playerService.isInTokyo(game.getId())) {
+            changePosition(game.getId());
+            isRecentlyHurtToFalse(game);
         }
     }
 
