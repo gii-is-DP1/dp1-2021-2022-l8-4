@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +41,8 @@ public class LobbyController {
     private final UserService userService;
     private final PlayerService playerService;
     private static final String VIEWS_EXCEPTION = "exception";
-    private String lobby = "/lobby";
-    private String rediGames = "redirect:/games/";
+    private final String lobby = "/lobby";
+    private final String rediGames = "redirect:/games/";
 
     @Autowired
     public LobbyController(GameService gameService,
@@ -94,7 +96,9 @@ public class LobbyController {
     }
 
     @GetMapping("/{gameId}/lobby")
-    public String gameLobby(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse responde) {
+    public String gameLobby(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse responde,
+            @RequestParam(value = "message", required = false) final String message, @RequestParam(value = "messageType", required = false) final String messageType) {
+
         String view = "games/lobby";
         try {
             Game game = gameService.findGameById(gameId);
@@ -107,6 +111,11 @@ public class LobbyController {
                 modelMap.addAttribute("game", game);
                 modelMap.addAttribute("players", game.getPlayers());
                 modelMap.addAttribute("newPlayer", new Player());
+
+                if(message instanceof String && messageType instanceof String){
+                    modelMap.put("messageType", messageType);
+                    modelMap.put("message", message);
+                }
             }
             return view;
         } catch (NotFoundException e) {
@@ -118,9 +127,9 @@ public class LobbyController {
 
     @PostMapping("/{gameId}/lobby")
     public String joinGame(@ModelAttribute("newPlayer") @Valid Player newPlayer, BindingResult result,
-            ModelMap modelMap,
-            @PathVariable("gameId") int gameId) {
-
+            ModelMap modelMap, @PathVariable("gameId") int gameId, final RedirectAttributes redirectAttributes) {
+        
+        String view = rediGames + gameId + lobby;
         if (!result.hasErrors()) {
 
             User user = userService.authenticatedUser();
@@ -129,15 +138,18 @@ public class LobbyController {
             try {
                 Game game = gameService.findGameById(gameId);
                 playerService.joinGame(newPlayer, game);
-            } catch (NewGameException e) {
-                log.warn(e.toString());
-            } catch(NotFoundException e){
+                return view;
+            } catch (NotFoundException e) {
                 log.warn(e.toString());
                 return VIEWS_EXCEPTION;
+            } catch (NewGameException e) {
+                log.warn(e.toString());
+                redirectAttributes.addAttribute("messageType", "danger");
+                redirectAttributes.addAttribute("message", e.getMessage());
+                return view;
             }
-
         }
-        return rediGames + gameId + lobby;
+        return view;
     }
 
     @GetMapping("/{gameId}/lobby/delete")
@@ -161,8 +173,9 @@ public class LobbyController {
     }
 
     @GetMapping("/{gameId}/start")
-    public String startGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
-        String view = rediGames + gameId + "/lobby";
+    public String startGame(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse response,
+            final RedirectAttributes redirectAttributes) {
+        String view = rediGames + gameId + lobby;
         User user = userService.authenticatedUser();
         try {
             Game game = gameService.findGameById(gameId);
@@ -170,9 +183,14 @@ public class LobbyController {
                 gameService.startGame(game);
             }
             return view;
-        } catch (NotFoundException | NewGameException e) {
+        } catch (NotFoundException e) {
             log.warn(e.toString());
             return VIEWS_EXCEPTION;
+        } catch (NewGameException e) {
+            log.warn(e.toString());
+            redirectAttributes.addAttribute("messageType", "danger");
+            redirectAttributes.addAttribute("message", e.getMessage());
+            return view;
         }
     }
 

@@ -92,9 +92,14 @@ public class PlayerService {
 
             game.getPlayers().add(newPlayer);
         } else {
-            throw new NewGameException("El usuario {id: '" + user.getId() + "', Username: '" + user.getUsername()
-                    + "'} unirse a la partida {id: '" + game.getId() + "', Name: '" + game.getName()
-                    + "'} con el monstruo {Monster: " + monster.getName() + "}");
+            String error ="El usuario {id: '" + user.getId() + "', Username: '" + user.getUsername()
+            + "'} no puede unirse a la partida {id: '" + game.getId() + "', Name: '" + game.getName()
+            + "'} con el monstruo {Monster: " + monster.getName() + "}";
+            if(user.hasActiveGameAsCreator() && !user.isCreator(game)){
+                throw new NewGameException(error + "porque tiene una partida creada sin iniciar");
+            }else{
+                throw new NewGameException(error);
+            }
         }
     }
 
