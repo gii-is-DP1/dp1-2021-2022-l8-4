@@ -128,14 +128,14 @@ public class Player extends BaseEntity {
      *
      */
     public Boolean isOutOfTokyo(){
-        return this.location == LocationType.fueraTokyo;
+        return this.location == LocationType.FUERATOKYO;
     }
     /**
      * @return whether the player is in Tokyo or TokyoBay or not.
      *
      */
     public Boolean isInTokyo(){
-        return this.location == LocationType.ciudadTokyo || this.location== LocationType.bahiaTokyo;
+        return this.location == LocationType.CIUDADTOKYO || this.location== LocationType.BAHIATOKYO;
     }
 
 }

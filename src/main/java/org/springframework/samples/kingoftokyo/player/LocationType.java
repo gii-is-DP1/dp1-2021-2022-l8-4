@@ -6,5 +6,5 @@ package org.springframework.samples.kingoftokyo.player;
  */
  
 public enum LocationType{
-    fueraTokyo,ciudadTokyo,bahiaTokyo;
+    FUERATOKYO,CIUDADTOKYO,BAHIATOKYO;
 }
