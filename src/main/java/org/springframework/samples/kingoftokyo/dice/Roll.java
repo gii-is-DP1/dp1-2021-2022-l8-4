@@ -34,9 +34,9 @@ public class Roll {
         this.maxThrows=3;
         this.rollAmount=0;
         this.keep=new DiceValues[0];
-        this.cardExtraValues=new ArrayList<DiceValues>();
+        this.cardExtraValues=new ArrayList<>();
 
-        List<DiceValues> dadosDeTodo=new ArrayList<DiceValues>();
+        List<DiceValues> dadosDeTodo=new ArrayList<>();
         dadosDeTodo.add(DiceValues.ONE);
         dadosDeTodo.add(DiceValues.TWO);
         dadosDeTodo.add(DiceValues.THREE);
@@ -49,7 +49,7 @@ public class Roll {
    
 
     public void rollDiceInitial() {
-        List<DiceValues> dadosIniciales =new ArrayList<DiceValues>();
+        List<DiceValues> dadosIniciales =new ArrayList<>();
         rollDice(dadosIniciales);
         this.rollAmount++;
     }
@@ -61,7 +61,7 @@ public class Roll {
     }
     
     public void rollDice(List<DiceValues> dadosConservados) {
-        List<DiceValues> resultado=new ArrayList<DiceValues>();
+        List<DiceValues> resultado=new ArrayList<>();
         Integer tiradas=values.size();
         int i;
         int max=5;

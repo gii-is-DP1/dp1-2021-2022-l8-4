@@ -4,7 +4,6 @@ import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -135,7 +134,7 @@ public class MetricService {
         Integer gamesCounter = 0;
         Iterable<Game> games = this.gameRepository.findAll();
         for(Game game: games){
-            if(game.isFinished()){
+            if(Boolean.TRUE.equals(game.isFinished())){
                 gamesCounter+=1;
                 duration += game.getDuration();
             }
@@ -153,7 +152,7 @@ public class MetricService {
         Integer gamesCounter = 0;
         Iterable<Game> games = this.metricRepository.findGamesCurrentUser(user);
         for(Game game: games){
-            if(game.isFinished()){
+            if(Boolean.TRUE.equals(game.isFinished())){
                 gamesCounter+=1;
                 duration += game.getDuration();
             }
@@ -167,7 +166,7 @@ public class MetricService {
 
     @Transactional
     public Monster findMonsterModa(){
-        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();				
+        HashMap<Integer, Integer> m = new HashMap<>();				
         List<Integer> monsters = this.playerRepository.listMonster();
         for (Integer elemento: monsters){			
         if (m.containsKey(elemento))					
@@ -175,20 +174,20 @@ public class MetricService {
         else
             m.put(elemento,1);			
         }
-        int moda = 0, mayor = 0;
+        Integer moda = 0;
+        Integer mayor = 0;
         for (HashMap.Entry<Integer, Integer> entry : m.entrySet()) {
             if (entry.getValue() > mayor) {
                 mayor = entry.getValue();
                 moda = entry.getKey();
             }
         }
-        Monster monstermoda = Monster.values()[moda];
-        return monstermoda;
+        return Monster.values()[moda];
     }
 
     @Transactional
     public Monster findMonsterNoModa(){
-        HashMap<Integer, Integer> m = new HashMap<Integer, Integer>();				
+        HashMap<Integer, Integer> m = new HashMap<>();				
         List<Integer> monsters = this.playerRepository.listMonster();
         for (Integer elemento: monsters){			
         if (m.containsKey(elemento))					
@@ -196,14 +195,14 @@ public class MetricService {
         else
             m.put(elemento,1);			
         }
-        int nomoda = 0, menor = 0;
+        Integer nomoda = 0;
+        Integer menor = 0;
         for (HashMap.Entry<Integer, Integer> entry : m.entrySet()) {
             if (entry.getValue() < menor) {
                 menor = entry.getValue();
                 nomoda = entry.getKey();
             }
         }
-        Monster monstermenor = Monster.values()[nomoda];
-        return monstermenor;
+        return Monster.values()[nomoda];
     }
 }

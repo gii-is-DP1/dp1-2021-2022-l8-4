@@ -59,10 +59,12 @@ public class GameService {
     private MapGameRepository mapGameRepository;
     
 
+    private String laPartida = "La partida {id: '";
+    private String name = "', Name: '";
+
     @Transactional
     public Iterable<Game> findAll() {
-        Iterable<Game> res = gameRepository.findAll();
-        return res;
+        return gameRepository.findAll();
     }
 
     @Transactional
@@ -107,7 +109,7 @@ public class GameService {
         if (!game.isStarted()) {
             gameRepository.delete(game);
         }else{
-            throw new DeleteGameException("La partida {id: '"+game.getId()+"', Name: '"+game.getName()+"'} no puede ser borrada");
+            throw new DeleteGameException(laPartida + game.getId() + name + game.getName()+"'} no puede ser borrada");
         }
     }
 
@@ -116,8 +118,7 @@ public class GameService {
      */
     @Transactional
     public Player playerInGameByUser(User user, int gameId) {
-        Player player = user.getPlayers().stream().filter(p -> p.getGame().getId() == gameId).findFirst().get();
-        return player;
+        return user.getPlayers().stream().filter(p -> p.getGame().getId() == gameId).findFirst().get();
     }
 
     /**
@@ -135,9 +136,9 @@ public class GameService {
             saveGame(game);
         }else{
             if(!game.hasEnoughPlayers()){
-                throw new NewGameException("La partida {id: '"+game.getId()+"', Name: '"+game.getName()+"'} no puede ser iniciada porque no hay suficientes jugadores");
+                throw new NewGameException(laPartida + game.getId() + name + game.getName()+"'} no puede ser iniciada porque no hay suficientes jugadores");
             }else{
-                throw new NewGameException("La partida {id: '"+game.getId()+"', Name: '"+game.getName()+"'} ya ha sido iniciada");
+                throw new NewGameException(laPartida + game.getId() + name + game.getName()+"'} ya ha sido iniciada");
             }
             
         }

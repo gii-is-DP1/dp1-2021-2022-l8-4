@@ -14,8 +14,7 @@ public class CurrentUserController {
 
     @ModelAttribute("currentUser")
     public User getCurrentUser() {
-        User currentUser = userService.authenticatedUser();
-        return currentUser;
+        return userService.authenticatedUser();
     }
 
 }

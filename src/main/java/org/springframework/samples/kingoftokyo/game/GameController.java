@@ -37,6 +37,7 @@ public class GameController {
     private GameCardService gameCardService;
     private UserService userService;
     private MapGameRepository mapGameRepository;
+    private String viewGames = "redirect:/games/";
 
     @Autowired
     public GameController(GameService gameService,
@@ -86,12 +87,10 @@ public class GameController {
     public String gameRoll(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse responde) {
         String view = "games/playing";
 
-        
-
         try {
             Game game = gameService.findGameById(gameId);
             if (game.isFinished()) {
-                return "redirect:/games/" + gameId + "/finished";
+                return viewGames + gameId + "/finished";
             }
             gameService.endGame(game);
 
@@ -133,6 +132,8 @@ public class GameController {
             List<Card> cards = gameCardService.findAvailableCardsByGame(game);
             modelMap.addAttribute("cards", cards);
             modelMap.addAttribute("turnList", turnList);
+            Player authenticatedPlayer = gameService.playerInGameByUser(userService.authenticatedUser(), gameId);
+            modelMap.addAttribute("AuthenticatedPlayer", authenticatedPlayer);
 
         } catch (NotFoundException e) {
             log.warn(e.toString());
@@ -153,7 +154,7 @@ public class GameController {
             log.warn(e.toString());
             return "redirect:/error";
         }
-        return "redirect:/games/" + gameId + "/playing";
+        return viewGames + gameId + "/playing";
     }
 
     @GetMapping("/{gameId}/exitTokyo")
@@ -165,8 +166,7 @@ public class GameController {
             log.warn(e.toString());
             return "redirect:/error";
         }
-        return "redirect:/games/" + gameId + "/playing";
+        return viewGames + gameId + "/playing";
     }
-
 
 }

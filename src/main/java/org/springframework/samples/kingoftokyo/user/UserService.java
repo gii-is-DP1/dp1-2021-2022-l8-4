@@ -39,8 +39,7 @@ public class UserService {
 
 	@Transactional
 	public Iterable<User> findAll() {
-		Iterable<User> res = userRepository.findAll();
-		return res;
+		return userRepository.findAll();
 	}
 
 	@Transactional
@@ -80,8 +79,7 @@ public class UserService {
 	@Transactional
 	public Integer getCurrentUserId(String currentUserUsername) {
 		User currentUser = userRepository.findCurrentUser(currentUserUsername);
-		Integer currentUserId = currentUser.getId();
-		return currentUserId;
+		return currentUser.getId();
 	}
 
 	/**
