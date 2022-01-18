@@ -3,6 +3,7 @@ package org.springframework.samples.kingoftokyo.player;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -18,6 +19,8 @@ import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javassist.NotFoundException;
 
 /**
  * @author Ricardo Nadal Garcia
@@ -96,13 +99,17 @@ public class PlayerService {
     }
 
     @Transactional
-    public Player findPlayerById(int id) throws DataAccessException {
-        return playerRepository.findById(id).get();
+    public Player findPlayerById(int id) throws DataAccessException, NotFoundException {
+        Optional<Player> player = playerRepository.findById(id);
+        if(!player.isEmpty()){
+            return player.get();
+        }else{
+            throw new NotFoundException("Player {id:"+id+"} no encontrada");
+        }
     }
 
     @Transactional
-    public void useRoll(Integer playerIdActualTurn, Roll roll) {
-        Player playerActualTurn = findPlayerById(playerIdActualTurn);
+    public void useRoll(Player playerActualTurn, Roll roll) {
         List<Player> playersInGameList = playerActualTurn.getGame().getPlayers();
 
         // Use all the cards that are used when the player does the last roll
@@ -315,8 +322,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public void startTurn(Integer playerId) {
-        Player player = findPlayerById(playerId);
+    public void startTurn(Player player) {
         User user = player.getUser();
         Integer pointsObtainedInTokyo = 2;
         if (player.getLocation().equals(LocationType.ciudadTokyo)
@@ -341,8 +347,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public void surrender(Integer playerId) {
-        Player player = findPlayerById(playerId);
+    public void surrender(Player player) {
         User user = userService.authenticatedUser();
         if (player.getUser().getId().equals(user.getId())) {
 

@@ -102,7 +102,7 @@ class GameServiceTests {
 
     @Disabled
     @Test
-    void testChangePosition(){
+    void testChangePosition() throws NotFoundException{
 
         //actualizar
         Player playerActualTurn = playerService.findPlayerById(gameService.actualTurnPlayerId(1));
@@ -196,7 +196,7 @@ class GameServiceTests {
     public void testOnePlayerShouldDie() throws DataAccessException, NotFoundException{
         Integer numberPlayers = 5; 
         Game game = gameService.findGameById(4);
-        Integer playerIdActualTurn = gameService.actualTurnPlayerId(4);
+        Player playerActualTurn = gameService.actualTurnPlayer(4);
         Integer numPlayersTest = game.getPlayers().size();
         assertEquals(numPlayersTest, numberPlayers);
         //Vamos a crear una tirada a mano para matar al player 1 
@@ -205,7 +205,7 @@ class GameServiceTests {
             DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK};
         roll.setKeep(guardados);
         roll.setRollAmount(2);
-        playerService.useRoll(playerIdActualTurn, roll);
+        playerService.useRoll(playerActualTurn, roll);
         numberPlayers = numberPlayers-1;
         Integer numPlayersTest2 = game.playersAlive().size();
         assertEquals(numPlayersTest2, numberPlayers);
@@ -285,7 +285,7 @@ class GameServiceTests {
     }
 
     @Test
-    void testPlayerInGameByUser(){
+    void testPlayerInGameByUser() throws DataAccessException, NotFoundException{
         Player player = playerService.findPlayerById(19);
         User user = userService.findUserById(21).get();
         Player playerObtenido = gameService.playerInGameByUser(user, 5);

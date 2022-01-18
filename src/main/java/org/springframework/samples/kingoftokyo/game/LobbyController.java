@@ -127,9 +127,7 @@ public class LobbyController {
             try {
                 Game game = gameService.findGameById(gameId);
                 playerService.joinGame(newPlayer, game);
-            } catch (NewGameException e) {
-                log.warn(e.toString());
-            } catch (NotFoundException e) {
+            } catch (NewGameException | NotFoundException e) {
                 log.warn(e.toString());
             }
 
@@ -150,9 +148,7 @@ public class LobbyController {
             } else {
                 view = "redirect:/games/" + gameId + "/lobby";
             }
-        } catch (NotFoundException e) {
-            log.warn(e.toString());
-        } catch (DeleteGameException e) {
+        } catch (NotFoundException | DeleteGameException e) {
             log.warn(e.toString());
         }
         return view;
@@ -168,9 +164,7 @@ public class LobbyController {
                 gameService.startGame(game);
             }
             return "redirect:/games/" + game.getId() + "/lobby";
-        } catch (NotFoundException e) {
-            log.warn(e.toString());
-        } catch (NewGameException e) {
+        } catch (NotFoundException | NewGameException e) {
             log.warn(e.toString());
         }
         return view;

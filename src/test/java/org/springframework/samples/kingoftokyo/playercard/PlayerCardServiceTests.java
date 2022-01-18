@@ -101,7 +101,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void shouldBuyCard() throws InvalidPlayerActionException {
+    public void shouldBuyCard() throws InvalidPlayerActionException, NotFoundException {
 
         Integer energy = player3.getEnergyPoints();
 
@@ -171,7 +171,7 @@ public class PlayerCardServiceTests {
     }
 
     @Test
-    public void shouldDiscardShopCards() throws InvalidPlayerActionException{
+    public void shouldDiscardShopCards() throws InvalidPlayerActionException, NotFoundException{
         List<Card> cardList = gameCardService.findAvailableCardsByGame(game1);
         Set<Integer> ids = cardList.stream()
                                 .map(c->c.getId())
