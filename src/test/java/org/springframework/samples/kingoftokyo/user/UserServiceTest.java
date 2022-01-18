@@ -54,24 +54,24 @@ public class UserServiceTest {
     
     @Test
     void testFindUserById() {
-        Optional<User> user = userService.findUserById(1);
-        assertEquals("user1@email.com", user.get().getEmail());
-        assertEquals("u53r1", user.get().getPassword());
-        assertEquals("user1", user.get().getUsername());
-        assertEquals(true, user.get().isEnabled());
+        User user = userService.findUserById(1);
+        assertEquals("user1@email.com", user.getEmail());
+        assertEquals("u53r1", user.getPassword());
+        assertEquals("user1", user.getUsername());
+        assertEquals(true, user.isEnabled());
         
     }
 
     @Test
 	void testUpdateUserName() throws Exception {
-		Optional<User> user = userService.findUserById(1);
+		User user = userService.findUserById(1);
 
 		String newName = "Admin";
-		user.get().setUsername(newName);
-        this.userService.saveUser(user.get());
+		user.setUsername(newName);
+        this.userService.saveUser(user);
 
 		user = this.userService.findUserById(1);
-		assertThat(user.get().getUsername()).isEqualTo(newName);
+		assertThat(user.getUsername()).isEqualTo(newName);
 	}
 
     @Test
@@ -133,7 +133,7 @@ public class UserServiceTest {
         userService.findAll().forEach(currentListUsers::add);
         Integer currentCount = currentListUsers.size();
 
-        userService.deleteUser(userService.findUserById(1).get());
+        userService.deleteUser(userService.findUserById(1));
         userService.findAll().forEach(newListUsers::add);
         Integer newCount = newListUsers.size();
         assertThat(newCount).isEqualTo(currentCount-1);
@@ -163,7 +163,7 @@ public class UserServiceTest {
         }
        
         // Checks if some user who is admin is in all admins list
-        User userWhoIsAdmin = userService.findUserById(5).get();
+        User userWhoIsAdmin = userService.findUserById(5);
         assertThat(listAdmins.contains(userWhoIsAdmin));
     }
 

@@ -358,7 +358,7 @@ public class PlayerServiceTests {
 	@Transactional
 	public void shouldInsertPlayerIntoDatabaseAndGenerateId() {
         
-        User user1 = this.userService.findUserById(1).get();
+        User user1 = this.userService.findUserById(1);
 		Player player = new Player();
 		player.setMonster(Monster.gigaZaur);
         player.setLifePoints(10);
@@ -380,7 +380,7 @@ public class PlayerServiceTests {
     @Disabled
 	@Transactional
 	public void shouldThrowExceptionUpdatingPlayerWithTheSameMonsterName() { //Actualmente no comprueba esto en la base de datos, solo lo hace al hacer JoinGame
-        User user1 = this.userService.findUserById(1).get();
+        User user1 = this.userService.findUserById(1);
 		Player player = new Player();
 		player.setMonster(Monster.gigaZaur);
         player.setLifePoints(10);

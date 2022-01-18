@@ -38,6 +38,7 @@ public class LobbyController {
     private final GameService gameService;
     private final UserService userService;
     private final PlayerService playerService;
+    private static final String VIEWS_EXCEPTION = "exception";
     private String lobby = "/lobby";
     private String rediGames = "redirect:/games/";
 
@@ -94,26 +95,25 @@ public class LobbyController {
 
     @GetMapping("/{gameId}/lobby")
     public String gameLobby(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse responde) {
-        String view = "welcome";
+        String view = "games/lobby";
         try {
             Game game = gameService.findGameById(gameId);
             if (game.isStarted()) {
-                return rediGames + game.getId() + "/playing";
+                view = rediGames + game.getId() + "/playing";
             } else {
-                view = "games/lobby";
-
                 responde.addHeader("Refresh", "10");
 
                 modelMap.addAttribute("availableMonsters", game.availableMonsters());
                 modelMap.addAttribute("game", game);
                 modelMap.addAttribute("players", game.getPlayers());
                 modelMap.addAttribute("newPlayer", new Player());
-                return view;
             }
+            return view;
         } catch (NotFoundException e) {
             log.warn(e.toString());
+            return VIEWS_EXCEPTION;
         }
-        return view;
+
     }
 
     @PostMapping("/{gameId}/lobby")
@@ -129,8 +129,11 @@ public class LobbyController {
             try {
                 Game game = gameService.findGameById(gameId);
                 playerService.joinGame(newPlayer, game);
-            } catch (NewGameException | NotFoundException e) {
+            } catch (NewGameException e) {
                 log.warn(e.toString());
+            } catch(NotFoundException e){
+                log.warn(e.toString());
+                return VIEWS_EXCEPTION;
             }
 
         }
@@ -152,24 +155,25 @@ public class LobbyController {
             }
         } catch (NotFoundException | DeleteGameException e) {
             log.warn(e.toString());
+            return VIEWS_EXCEPTION;
         }
         return view;
     }
 
     @GetMapping("/{gameId}/start")
     public String startGame(ModelMap modelMap, @PathVariable("gameId") int gameId) {
-        String view = "welcome";
+        String view = rediGames + gameId + "/lobby";
         User user = userService.authenticatedUser();
         try {
             Game game = gameService.findGameById(gameId);
             if (user.isCreator(game)) {
                 gameService.startGame(game);
             }
-            return "redirect:/games/" + game.getId() + "/lobby";
+            return view;
         } catch (NotFoundException | NewGameException e) {
             log.warn(e.toString());
+            return VIEWS_EXCEPTION;
         }
-        return view;
     }
 
 }

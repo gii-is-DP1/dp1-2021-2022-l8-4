@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -132,7 +133,7 @@ class GameServiceTests {
         Integer conteoInicial = gameService.gameCount();//para comprobar gameCount()
         assertEquals(conteoInicial, numberOfGames);
 
-        User creator = (User) userService.findUserById(5).get();//Un usuario cualquiera para crear una partida
+        User creator = (User) userService.findUserById(5);//Un usuario cualquiera para crear una partida
         Game game = new Game();
         game.setCreator(creator);
         game.setName("Partida insertada");
@@ -287,7 +288,7 @@ class GameServiceTests {
     @Test
     void testPlayerInGameByUser() throws DataAccessException, NotFoundException{
         Player player = playerService.findPlayerById(19);
-        User user = userService.findUserById(21).get();
+        User user = userService.findUserById(21);
         Player playerObtenido = gameService.playerInGameByUser(user, 5);
         assertEquals(player, playerObtenido);
         
@@ -295,8 +296,8 @@ class GameServiceTests {
 
     @Test 
     void testShouldNotFindPlayerInGame(){
-        User user = userService.findUserById(21).get();
-        assertThrows(NoSuchElementException.class,() ->{gameService.playerInGameByUser(user, 6);});//Probamos en un game en el que no está
+        User user = userService.findUserById(21);
+        assertNull(gameService.playerInGameByUser(user, 6));//Probamos en un game en el que no está
         
     }
 

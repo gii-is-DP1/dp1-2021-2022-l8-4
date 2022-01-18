@@ -218,8 +218,8 @@ class LobbyControllerTest {
 
         doThrow(new DeleteGameException("")).when(gameService).deleteGame(game);
 
-        mockMvc.perform(get("/games/"+gameId+"/lobby/delete")).andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/games/lobbies"));
+        mockMvc.perform(get("/games/"+gameId+"/lobby/delete")).andExpect(status().isOk())
+                .andExpect(view().name("exception"));
     }
 
     @WithMockUser(value = "spring", authorities = {"admin"})
