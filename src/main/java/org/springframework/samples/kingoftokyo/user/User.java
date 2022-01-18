@@ -15,7 +15,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.samples.kingoftokyo.game.Game;
-import org.springframework.samples.kingoftokyo.model.BaseEntity;
+import org.springframework.samples.kingoftokyo.model.AuditableEntity;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
 import org.springframework.samples.kingoftokyo.player.Player;
 
@@ -28,10 +28,10 @@ import lombok.Setter;
  */
 
 @Getter
-@Setter
+@Setter 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User extends AuditableEntity {
 
     @NotEmpty
     @Column(name = "username", unique = true, updatable = false)
