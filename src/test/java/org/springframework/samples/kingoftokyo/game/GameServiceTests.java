@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -19,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.kingoftokyo.dice.DiceValues;
 import org.springframework.samples.kingoftokyo.dice.Roll;
 import org.springframework.samples.kingoftokyo.game.exceptions.DeleteGameException;
@@ -28,9 +28,9 @@ import org.springframework.samples.kingoftokyo.player.Player;
 import org.springframework.samples.kingoftokyo.player.PlayerService;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
-import org.springframework.test.web.servlet.MockMvc;
+
+import javassist.NotFoundException;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 
@@ -63,7 +63,7 @@ class GameServiceTests {
 
 
     @Test
-    void testSaveCardIntoDatabaseAndGenerateId(){
+    public void testSaveCardIntoDatabaseAndGenerateId() throws DataAccessException, NotFoundException{
         Game game = new Game();
         game.setTurn(0);
         game.setMaxNumberOfPlayers(6);
@@ -87,9 +87,10 @@ class GameServiceTests {
 
 
     @Test
-    void testIsRecentlyHurtToFalse(){
-        List<Player> lsplayer = gameService.findPlayerList(1);
-        gameService.isRecentlyHurtToFalse(1);
+    public void testIsRecentlyHurtToFalse() throws DataAccessException, NotFoundException{
+        Game game = gameService.findGameById(1);
+        List<Player> lsplayer = game.getPlayers();
+        gameService.isRecentlyHurtToFalse(game);
         Boolean res = false;
         for(Player player : lsplayer){
             if(player.getRecentlyHurt().equals(true))
@@ -101,7 +102,7 @@ class GameServiceTests {
 
     @Disabled
     @Test
-    void testChangePosition(){
+    void testChangePosition() throws NotFoundException{
 
         //actualizar
         Player playerActualTurn = playerService.findPlayerById(gameService.actualTurnPlayerId(1));
@@ -112,7 +113,7 @@ class GameServiceTests {
         
     }
     @Test
-    void testShouldSaveGame(){
+    void testShouldSaveGame() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(2);//Un game acabado
         String winner = game.getWinner();
         String newWinner = "user3";
@@ -150,8 +151,9 @@ class GameServiceTests {
     }
 
     @Test
-    void testEndGameWithVictoryPoints(){
+    void testEndGameWithVictoryPoints() throws DataAccessException, NotFoundException{
         Integer gamesPlaying = numberOfGames-gameFinished;
+        Game game = gameService.findGameById(4);
         Player player = gameService.actualTurn(4);
         Integer gamesPlayingCalculated = gameService.findAllNotFinished().size();// Los juegos sin empezar cuentan como juegos jugandose
         Integer finishedGamesCalculated = gameService.findAllFinished().size(); 
@@ -159,7 +161,7 @@ class GameServiceTests {
         assertEquals(gameFinished,finishedGamesCalculated);
         player.setVictoryPoints(20);
         playerService.savePlayer(player);
-        gameService.endGame(4);
+        gameService.endGame(game);
         Integer finishedGamesCalculated2 = gameService.findAllFinished().size();
         assertEquals(gameFinished+1, finishedGamesCalculated2 );
         Integer gamesPlayingCalculated2 = gameService.findAllNotFinished().size();
@@ -167,12 +169,12 @@ class GameServiceTests {
     }
 
     @Test
-    void testEndGameKillingEveryone(){
+    void testEndGameKillingEveryone() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(5);
         Player player = gameService.actualTurn(5);
         player.setLifePoints(0);
         playerService.savePlayer(player);
-        gameService.endGame(5);
+        gameService.endGame(game);
         Integer finishedGamesCalculated = gameService.findAllFinished().size();
         assertEquals(gameFinished+1, finishedGamesCalculated ); //Debería haber un game finished más que antes
         Integer gamesPlayingCalculated = gameService.findAllNotFinished().size();
@@ -180,8 +182,9 @@ class GameServiceTests {
         assertThat(gamesPlaying).isGreaterThan(gamesPlayingCalculated); 
     }
     @Test
-    void testShouldNotEndGame(){
-        gameService.endGame(5);
+    void testShouldNotEndGame() throws DataAccessException, NotFoundException{
+        Game game = gameService.findGameById(5);
+        gameService.endGame(game);
         Integer finishedGamesCalculated = gameService.findAllFinished().size();
         assertEquals(gameFinished, finishedGamesCalculated ); //No debería acabar el juego
         Integer gamesPlayingCalculated = gameService.findAllNotFinished().size();
@@ -190,11 +193,11 @@ class GameServiceTests {
     
     
     @Test
-    void testOnePlayerShouldDie(){
+    public void testOnePlayerShouldDie() throws DataAccessException, NotFoundException{
         Integer numberPlayers = 5; 
         Game game = gameService.findGameById(4);
-        Integer playerIdActualTurn = gameService.actualTurnPlayerId(4);
-        Integer numPlayersTest = gameService.findPlayerList(4).size();
+        Player playerActualTurn = gameService.actualTurnPlayer(4);
+        Integer numPlayersTest = game.getPlayers().size();
         assertEquals(numPlayersTest, numberPlayers);
         //Vamos a crear una tirada a mano para matar al player 1 
         Roll roll = new Roll();
@@ -202,20 +205,20 @@ class GameServiceTests {
             DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK};
         roll.setKeep(guardados);
         roll.setRollAmount(2);
-        playerService.useRoll(playerIdActualTurn, roll);
+        playerService.useRoll(playerActualTurn, roll);
         numberPlayers = numberPlayers-1;
         Integer numPlayersTest2 = game.playersAlive().size();
         assertEquals(numPlayersTest2, numberPlayers);
     }
     @Disabled
     @Test
-    void testOnePlayerTurn(){
+    void testOnePlayerTurn() throws DataAccessException, NotFoundException{
         Player playerInitiaPlayer = gameService.actualTurn(4);
         Roll rollkeep = new Roll(); //una tirada cualquiera sin tener ningun dado guardado 
 
         Game game = gameService.findGameById(4);
         Integer initialTurn = game.getTurn();
-        gameService.handleTurnAction(4, Boolean.TRUE, rollkeep);
+        gameService.handleTurnAction(game, Boolean.TRUE, rollkeep);
         Player playerActualTurn = gameService.actualTurn(4);
         gameService.saveGame(game);
         assertNotEquals(game.getTurn(), initialTurn);
@@ -223,7 +226,7 @@ class GameServiceTests {
     }
 
     @Test
-    void testShouldStartGame(){
+    void testShouldStartGame() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(6);//Un game sin empezar (pero que cumple las condiciones para empezar)
         try {
             gameService.startGame(game);
@@ -238,7 +241,7 @@ class GameServiceTests {
     }
 
     @Test
-    void testStartGameNotEnoughPlayers(){
+    void testStartGameNotEnoughPlayers() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(7);//Un game sin empezar con 1 solo jugador
         assertThrows(NewGameException.class, () -> {gameService.startGame(game);});
         Integer gamesThatHadStarted = gameService.findOnGoingGames().size();
@@ -246,7 +249,7 @@ class GameServiceTests {
     }
     
     @Test
-    void testStartGameAlreadyStarted(){
+    void testStartGameAlreadyStarted() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(5);//Un game sin empezar con 1 solo jugador
         assertThrows(NewGameException.class, () -> {gameService.startGame(game);});  
         Integer gamesThatHadStarted = gameService.findOnGoingGames().size();
@@ -260,11 +263,11 @@ class GameServiceTests {
     }
 
     @Test
-    void testDeleteGame(){
+    void testDeleteGame() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(6);//un game sin empezar
         try {
             gameService.deleteGame(game);
-            assertThrows(NoSuchElementException.class,() ->{gameService.findGameById(6);});
+            assertThrows(NotFoundException.class,() ->{gameService.findGameById(6);});
             Integer calculatedGamesInLobby = gameService.findLobbies().size();
             assertEquals(gamesInLobby-1, calculatedGamesInLobby);      
         } catch (DeleteGameException e) {
@@ -274,7 +277,7 @@ class GameServiceTests {
     }
 
     @Test
-    void testShouldNotDeleteGameStarted(){
+    void testShouldNotDeleteGameStarted() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(5);//un game empezado
         assertThrows(DeleteGameException.class, () -> {gameService.deleteGame(game);});
         Integer calculatedGamesPlaying = gameService.findOnGoingGames().size();
@@ -282,7 +285,7 @@ class GameServiceTests {
     }
 
     @Test
-    void testPlayerInGameByUser(){
+    void testPlayerInGameByUser() throws DataAccessException, NotFoundException{
         Player player = playerService.findPlayerById(19);
         User user = userService.findUserById(21).get();
         Player playerObtenido = gameService.playerInGameByUser(user, 5);

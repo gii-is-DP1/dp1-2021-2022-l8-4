@@ -14,10 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
-import org.springframework.samples.kingoftokyo.user.Authorities;
-import org.springframework.samples.kingoftokyo.user.AuthoritiesService;
-import org.springframework.samples.kingoftokyo.user.User;
-import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
 
 /**

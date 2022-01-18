@@ -1,8 +1,6 @@
 package org.springframework.samples.kingoftokyo.playercard;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -21,6 +19,8 @@ import org.springframework.samples.kingoftokyo.player.PlayerService;
 import org.springframework.samples.kingoftokyo.player.exceptions.InvalidPlayerActionException;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
+
+import javassist.NotFoundException;
 
 /**
  * @author Jose Maria Delgado Sanchez
@@ -67,9 +67,11 @@ public class PlayerCardService {
      * 
      * @param player buying the card
      * @param card   card that the player wants to buy
+     * @throws NotFoundException
+     * @throws DataAccessException
      */
     @Transactional
-    public void buyCard(Player player, Card card) throws InvalidPlayerActionException {
+    public void buyCard(Player player, Card card) throws InvalidPlayerActionException, NotFoundException {
         // Retrieve the game linked to the player to check if the card is available to
         // buy
         Roll roll=mapGameRepository.getRoll(player.getGame().getId());
@@ -126,7 +128,7 @@ public class PlayerCardService {
     }
 
     @Transactional
-    public void discardShopCards(Player player) throws InvalidPlayerActionException {
+    public void discardShopCards(Player player) throws InvalidPlayerActionException, NotFoundException {
         Game game = player.getGame();
         Roll roll=mapGameRepository.getRoll(player.getGame().getId());
         List<Card> availableCards = gameCardService.findAvailableCardsByGame(game);

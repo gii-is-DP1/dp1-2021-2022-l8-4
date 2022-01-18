@@ -7,14 +7,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
+import javassist.NotFoundException;
 
 /**
  * @author Carlos Varela Soult
@@ -62,7 +63,7 @@ public class CardServiceTest {
     }
 
     @Test
-    void shouldFindCardById() {
+    void shouldFindCardById() throws DataAccessException, NotFoundException {
         Card card = cardService.findCardById(10);
         Card anotherCard = cardService.findCardById(25);
         assertEquals(card.getCost(), 4);
@@ -85,7 +86,7 @@ public class CardServiceTest {
 
     @Test
     @Transactional
-	void shouldUpdateCardName() {
+	void shouldUpdateCardName() throws DataAccessException, NotFoundException {
 		Card card = cardService.findCardById(1);
 		String newName = "Fábrica de agua";
         String newDescription = "Llueve y moja al jugador siguiente, así que pierde su turno";
@@ -103,5 +104,4 @@ public class CardServiceTest {
         int count = cardService.cardCount();
         assertEquals(count,NUM_CARTAS);
     }
-
 }
