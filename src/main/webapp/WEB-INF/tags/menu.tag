@@ -27,12 +27,40 @@
 					<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
 					<span>Reglas</span>
 				</kingoftokyo:menuItem>
-				<sec:authorize access="hasRole('admin')">
-					<kingoftokyo:menuItem active="${name eq 'users'}" url="/users?page=1"
-						title="Listado de usuarios">
-						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-						<span>Lista de Usuarios</span>
-					</kingoftokyo:menuItem>
+
+				<sec:authorize access="hasAnyAuthority('admin')">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
+							<span class="glyphicon glyphicon-eye-open"></span>
+							<strong>Administrador</strong>
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/users?page=1" title="Listado de usuarios">
+									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+									<span>Usuarios</span>
+								</kingoftokyo:menuItem>
+							</li>
+							<li>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/games" title="Partidas en">
+									<span class="glyphicon glyphicon-knight" aria-hidden="true"></span>
+									<span>Partidas en juego</span>
+								</kingoftokyo:menuItem>
+							</li>
+							<li>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/games/finished" title="Partidas terminadas">
+									<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+									<span>Partidas terminadas</span>
+								</kingoftokyo:menuItem>
+							</li>
+							<li>
+								<kingoftokyo:menuItem active="${name eq 'users'}" url="/achievements" title="Logros">
+									<span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+									<span>Logros</span>
+								</kingoftokyo:menuItem>
+							</li>
+						</ul>
 				</sec:authorize>
 			</ul>
 
@@ -56,11 +84,12 @@
 						<span>Estadisticas</span>
 					</kingoftokyo:menuItem>
 
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
-							<strong><sec:authentication property="name" /></strong> <span
-							class="glyphicon glyphicon-chevron-down"></span>
-					</a>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-user"></span>
+							<strong><sec:authentication property="name" /></strong> 
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						</a>
 						<ul class="dropdown-menu">
 							<li>
 								<div class="navbar-login">
