@@ -335,7 +335,7 @@ public class PlayerService {
 
             if(player.getTurnsTokyo()>user.getMaxTurnsTokyo()){
                 user.setMaxTurnsTokyo(player.getTurnsTokyo());
-                userService.saveUser(user);
+                userService.saveUser(user,true);
             }
         }
 

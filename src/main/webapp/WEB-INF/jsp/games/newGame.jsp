@@ -10,13 +10,12 @@
                         <kingoftokyo:layout pageName="newGameForm">
                             
                             <form:form modelAttribute="newGame" style="margin-bottom:20%">
-                                <div class="col-lg-8" style="margin-left: 37%;">
+                                <div class="col-lg-8" style="margin-left: 20%;">
                                     <div class="row" style="display: initial;">
                                             <kingoftokyo:inputField name="name" label="Nombre de la partida"/>
                                     </div>
                                     
                                     <div class="row" style="display: initial;">
-                                        
                                         <kingoftokyo:radiobuttonsField name="maxNumberOfPlayers" items="${{2, 3, 4, 5, 6}}"  label="Numero maximo de jugadores"/>
                                     </div>
 

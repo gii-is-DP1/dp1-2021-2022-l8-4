@@ -54,15 +54,37 @@ public class UserService {
 	}
 
 	@Transactional
-	public void saveUser(User user) {
+	public void saveUser(User user,Boolean passwordEncoded) {
 		user.setEnabled(true);
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		if(!passwordEncoded) {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
 		userRepository.save(user);
 		Authorities authority = new Authorities();
 		authority.setUser(user);
 		authority.setAuthority("user");
 		authoritiesRepository.save(authority);
 	}
+
+	
+
+	@Transactional
+	public User passwordCheckEdit(String oldPassword, String newPassword,User user) throws Exception {
+		Boolean userWantsToChangePassword=!oldPassword.isEmpty() && !newPassword.isEmpty();
+			String userPassword=user.getPassword();
+			Boolean isAdmin=isAdmin(authenticatedUser().getId());
+			if(userWantsToChangePassword || isAdmin) {
+				if(passwordEncoder.matches(oldPassword, userPassword) || isAdmin) {
+					user.setPassword(passwordEncoder.encode(newPassword));
+				} else {
+					throw new Exception("No coinciden las contraseñas");
+				}
+				
+			}
+		return user;
+	}
+
+	
 
 	/**
 	 * Find user given id

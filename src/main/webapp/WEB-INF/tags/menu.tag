@@ -32,30 +32,30 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 							<span class="glyphicon glyphicon-eye-open"></span>
-							<strong>Administrador</strong>
+							<strong>Admin</strong>
 							<span class="glyphicon glyphicon-chevron-down"></span>
 						</a>
 						<ul class="dropdown-menu">
 							<li>
-								<kingoftokyo:menuItem active="${name eq 'users'}" url="/users?page=1" title="Listado de usuarios">
+								<kingoftokyo:menuItem active="${name eq 'admins'}" url="/users?page=1" title="Listado de usuarios">
 									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 									<span>Usuarios</span>
 								</kingoftokyo:menuItem>
 							</li>
 							<li>
-								<kingoftokyo:menuItem active="${name eq 'users'}" url="/games" title="Partidas en">
+								<kingoftokyo:menuItem active="${name eq 'admins'}" url="/games" title="Partidas en juego">
 									<span class="glyphicon glyphicon-knight" aria-hidden="true"></span>
 									<span>Partidas en juego</span>
 								</kingoftokyo:menuItem>
 							</li>
 							<li>
-								<kingoftokyo:menuItem active="${name eq 'users'}" url="/games/finished" title="Partidas terminadas">
+								<kingoftokyo:menuItem active="${name eq 'admins'}" url="/games/finished" title="Partidas terminadas">
 									<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
 									<span>Partidas terminadas</span>
 								</kingoftokyo:menuItem>
 							</li>
 							<li>
-								<kingoftokyo:menuItem active="${name eq 'users'}" url="/achievements" title="Logros">
+								<kingoftokyo:menuItem active="${name eq 'admins'}" url="/achievements" title="Logros">
 									<span class="glyphicon glyphicon-check" aria-hidden="true"></span>
 									<span>Logros</span>
 								</kingoftokyo:menuItem>

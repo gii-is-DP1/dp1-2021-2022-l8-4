@@ -86,7 +86,7 @@ public class AchievementService {
                 .collect(Collectors.toSet());
 
         user.setAchievements(obtainedAchievements);
-        userService.saveUser(user);
+        userService.saveUser(user,true);
     }
 
     @Transactional
@@ -102,6 +102,11 @@ public class AchievementService {
     @Transactional
     public Integer cardsUsedByUser(User user) {
         return achievementRepository.cardsUsedByUser(user.getId());
+    }
+
+    @Transactional
+    public Integer turnsByUser(User user) {
+        return achievementRepository.turnsByUser(user.getId());
     }
 
     /**
@@ -123,6 +128,9 @@ public class AchievementService {
                 break;
             case wins:
                 score = winsByUser(user);
+                break;
+            case turnsTokyo:
+                score = turnsByUser(user);
                 break;
             default:
                 break;

@@ -32,4 +32,10 @@ import org.springframework.stereotype.Repository;
     @Query("SELECT COUNT(pc) FROM PlayerCard pc WHERE player.user.id=?1 AND pc.discarded IS TRUE")
     Integer cardsUsedByUser(int userId) throws DataAccessException;
 
+   /**
+	 * Retrieve number of turns by User.
+	 * @return a <code>Integer</code>
+	 */
+   @Query("SELECT u.maxTurnsTokyo FROM User u WHERE u.id=?1")
+   Integer turnsByUser(int userId) throws DataAccessException;
  }

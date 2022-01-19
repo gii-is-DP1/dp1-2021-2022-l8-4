@@ -51,7 +51,7 @@
                             </a>
                         </td>
                         <td style="padding-top: 18px; padding-bottom: 6px;">
-                            <c:out value="${player.game.endTime}" />
+                            <kingoftokyo:localDateTime dateTimeValue="${player.game.endTime}"></kingoftokyo:localDateTime>
                             </a>
                         </td>
                     </tr>             

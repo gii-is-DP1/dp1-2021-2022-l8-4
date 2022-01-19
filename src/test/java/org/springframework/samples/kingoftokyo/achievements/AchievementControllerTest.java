@@ -65,18 +65,17 @@ public class AchievementControllerTest {
 
     }
 
-    @Disabled("expected estatus 200 but is 404")
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
     void testAchievementCreateController() throws Exception {
-        mockMvc.perform(post("/achievement/new")
+        mockMvc.perform(post("/achievements/new")
                     .with(csrf())
                     .param("name", "name")
                     .param("description", "description")
                     .param("rewardPoints", "20")
                     .param("metrics", "Victorias"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("achievements"));
+                .andExpect(view().name("modules/statistics/achievements/newAchievement"));
 
     }
 
