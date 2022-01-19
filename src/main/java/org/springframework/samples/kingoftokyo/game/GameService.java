@@ -331,8 +331,8 @@ public class GameService {
         }
     }
     @Transactional
-    public void validateRoll(Roll newRoll, Roll oldRoll) throws InvalidPlayerActionException {
-        Boolean correctKeep=oldRoll.getValues().containsAll(Arrays.asList(newRoll.getKeep()));
+    public void validateRoll(Roll rollKeep, Roll rollValues) throws InvalidPlayerActionException {
+        Boolean correctKeep=rollValues.getValues().containsAll(Arrays.asList(rollKeep.getKeep()));
         if(!correctKeep) {
             throw new InvalidPlayerActionException("Los dados conservados no son validos");
         }
