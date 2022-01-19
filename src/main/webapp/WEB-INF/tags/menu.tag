@@ -32,7 +32,7 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 							<span class="glyphicon glyphicon-eye-open"></span>
-							<strong>Administrador</strong>
+							<strong>Admin</strong>
 							<span class="glyphicon glyphicon-chevron-down"></span>
 						</a>
 						<ul class="dropdown-menu">

@@ -6,10 +6,10 @@ INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (6,'Mi quinta victoria','Gana tu quinta partida',15,1,5);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (7,'Mi vigesima victoria','Gana tu vigesima partida',15,1,20);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (8,'Mi quincuagesimo victoria','Gana tu g partida',20,1,50);
-INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (9,'Mi primera carta usada','Gana tu primera partida',5,2,1);
-INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (10,'Mi quinta carta usada','Gana tu quinta partida',10,2,5);
-INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (11,'Mi decima carta usada','Gana tu vigesima partida',10,2,10);
-INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (12,'Mi vigesima carta usada','Gana tu g partida',20,2,20);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (9,'Mi primera carta usada','Usa tu primera carta',5,2,1);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (10,'Mi quinta carta usada','Usa tu quinta carta',10,2,5);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (11,'Mi decima carta usada','Usa tu decima carta',10,2,10);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (12,'Mi vigesima carta usada','Usa tu vigesima carta',20,2,20);
 
 INSERT INTO cards(id,cost,card_enum,type) VALUES(1,5,'APARTMENTBUILDING',0);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(2,3,'CORNERSTORE',0); 
