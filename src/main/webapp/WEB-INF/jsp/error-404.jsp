@@ -9,7 +9,7 @@
 
     <h2>Parece que King ha roto algun cable...</h2>
     <h3>Vuelve a intentarlo mas tarde</h3>
-
+    <p>Error 404</p>
     <p>${exception.message}</p>
 
 </kingoftokyo:layout>
