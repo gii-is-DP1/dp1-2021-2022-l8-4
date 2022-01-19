@@ -88,7 +88,7 @@ class PlayerCardServiceTests {
     @Test
     void shouldFindPlayerCard() throws NotFoundException  {
         Player player = playerService.findPlayerById(1);
-        Card card = cardService.findCardById(1);
+        Card card = cardService.findCardById(2);
         PlayerCard playercard = new PlayerCard();
         playercard.setCard(card);
         playercard.setPlayer(player);

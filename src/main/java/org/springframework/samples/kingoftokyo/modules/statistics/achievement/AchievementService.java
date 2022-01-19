@@ -122,7 +122,7 @@ public class AchievementService {
             case gamesPlayed:
                 score = gamesPlayedByUser(user);
                 break;
-            case cardsUsed:
+            case cardsBought:
                 score = cardsBoughtByUser(user);
                 break;
             case wins:
