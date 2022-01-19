@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -32,13 +31,12 @@ import org.springframework.samples.kingoftokyo.player.PlayerService;
 import org.springframework.samples.kingoftokyo.player.exceptions.InvalidPlayerActionException;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, MapGameRepository.class})
 /**
  *@author Jose Maria Delgado Sanchez
  *@author Sara Cruz Duárez

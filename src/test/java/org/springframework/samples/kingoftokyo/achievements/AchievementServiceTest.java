@@ -3,7 +3,6 @@ package org.springframework.samples.kingoftokyo.achievements;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,15 +11,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
-import org.springframework.samples.kingoftokyo.game.Game;
-import org.springframework.samples.kingoftokyo.game.GameService;
+import org.springframework.samples.kingoftokyo.game.MapGameRepository;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricType;
@@ -34,14 +31,12 @@ import org.springframework.stereotype.Service;
 */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, MapGameRepository.class})
 class AchievementServiceTest {
     @Autowired
     private AchievementService achievementsService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private GameService gameService;
 
     /**
      * should create new achievement
