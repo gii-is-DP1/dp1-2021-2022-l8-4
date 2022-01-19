@@ -1,13 +1,10 @@
 package org.springframework.samples.kingoftokyo.modules.statistics.metrics;
 
-import java.io.Console;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +15,6 @@ import org.springframework.samples.kingoftokyo.player.PlayerRepository;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.java.Log;
 
 /**
 *  @author Rosa Molina
