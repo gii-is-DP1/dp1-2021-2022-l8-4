@@ -347,7 +347,7 @@ class GameServiceTests {
         Integer pVictoriaInicio = player.getVictoryPoints();
         gameService.useCardsEndTurn(player);
         assertThat(player.getVictoryPoints()).isGreaterThan(pVictoriaInicio);
-        assertEquals(player.getVictoryPoints(),5); // 30/6 =5 puntos de victoria
+        assertEquals(5,player.getVictoryPoints()); // 30/6 =5 puntos de victoria
     }
     
     @Test

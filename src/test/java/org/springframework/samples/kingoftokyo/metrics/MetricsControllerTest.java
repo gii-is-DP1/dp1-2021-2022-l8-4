@@ -37,7 +37,7 @@ import org.springframework.data.domain.PageRequest;
             excludeAutoConfiguration = SecurityConfiguration.class)
             
             
-public class MetricsControllerTest {
+class MetricsControllerTest {
     
     @MockBean
     private UserService userService;
@@ -51,7 +51,7 @@ public class MetricsControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Disabled
+    @Disabled("En proceso")
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test
     void testRankingControllerOk() throws Exception {
@@ -70,7 +70,7 @@ public class MetricsControllerTest {
                 .andExpect(model().attributeExists("size"));
 
     }
-    @Disabled
+    @Disabled("En proceso")
     @WithMockUser(value = "spring", authorities = { "user" })
     @Test
     void testStatisticsControllerOk() throws Exception {
