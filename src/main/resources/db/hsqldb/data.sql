@@ -137,7 +137,7 @@ INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,loc
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (18,4,10,0,30,0,4,20);
 -- Players para test con 2 usuarios
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (19,0,10,0,30,0,5,21);
-INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (20,4,2,3,30,1,5,22);
+INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (20,4,1,3,30,1,5,22);
 -- Players para test partida sin empezar
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (21,1,10,0,20,0,6,23);
 INSERT INTO players(id,monster_name,life_points,victory_points,energy_points,location,game_id,user_id) VALUES (22,2,10,5,20,0,6,24);
@@ -149,3 +149,5 @@ INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (1, 1, 1,FALSE);
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (2, 1, 2,FALSE);
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (3, 1, 3,FALSE);
 
+INSERT INTO players_cards(id,discarded,player_id,card_id) VALUES (1,FALSE,19,29);
+INSERT INTO players_cards(id,discarded,player_id,card_id) VALUES (2,FALSE,19,17)
