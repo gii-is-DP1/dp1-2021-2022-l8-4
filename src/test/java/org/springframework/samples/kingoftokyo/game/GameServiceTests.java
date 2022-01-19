@@ -71,7 +71,7 @@ class GameServiceTests {
 
 
     @Test
-    public void testSaveCardIntoDatabaseAndGenerateId() throws DataAccessException, NotFoundException{
+    void testSaveCardIntoDatabaseAndGenerateId() throws DataAccessException, NotFoundException{
         Game game = new Game();
         game.setTurn(0);
         game.setMaxNumberOfPlayers(6);
@@ -95,7 +95,7 @@ class GameServiceTests {
 
 
     @Test
-    public void testIsRecentlyHurtToFalse() throws DataAccessException, NotFoundException{
+    void testIsRecentlyHurtToFalse() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(1);
         List<Player> lsplayer = game.getPlayers();
         gameService.isRecentlyHurtToFalse(game);

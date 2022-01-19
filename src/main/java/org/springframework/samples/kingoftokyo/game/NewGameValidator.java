@@ -11,6 +11,7 @@ import org.springframework.validation.Validator;
  */
 public class NewGameValidator implements Validator{
 
+    private static final String VALORINCORRECTO = "Valor incorrecto";
     @Override
     public boolean supports(Class<?> clazz) {
         return Game.class.isAssignableFrom(clazz);
@@ -29,31 +30,31 @@ public class NewGameValidator implements Validator{
         //turn validation
         Integer turn = game.getTurn();
         if(turn != 0){
-            errors.rejectValue("", "Valor incorrecto", "Valor incorrecto");
+            errors.rejectValue("", VALORINCORRECTO , VALORINCORRECTO);
         }
 
         //winner validation
         String winner = game.getWinner();
         if(winner != null){
-            errors.rejectValue("", "Valor incorrecto", "Valor incorrecto");
+            errors.rejectValue("", VALORINCORRECTO , VALORINCORRECTO);
         }
 
         //winner validation
         LocalDateTime startTime = game.getStartTime();
         if(startTime != null){
-            errors.rejectValue("", "Valor incorrecto", "Valor incorrecto");
+            errors.rejectValue("", VALORINCORRECTO , VALORINCORRECTO);
         }
 
         //winner validation
         LocalDateTime endTime = game.getEndTime();
         if(endTime != null){
-            errors.rejectValue("", "Valor incorrecto", "Valor incorrecto");
+            errors.rejectValue("", VALORINCORRECTO , VALORINCORRECTO);
         }
 
         //maxNumberOfPlayers validation
         Integer maxNumberOfPlayers = game.getMaxNumberOfPlayers();
         if(maxNumberOfPlayers == null || maxNumberOfPlayers > 6 || maxNumberOfPlayers < 2){
-            errors.rejectValue("maxNumberOfPlayers", "Valor incorrecto", "Valor incorrecto");
+            errors.rejectValue("maxNumberOfPlayers" , VALORINCORRECTO , VALORINCORRECTO);
         }
     }
     

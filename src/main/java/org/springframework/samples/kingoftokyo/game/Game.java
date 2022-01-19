@@ -117,7 +117,7 @@ import lombok.Setter;
     public Set<Monster> availableMonsters(){
        Monster[] monsters = Monster.values();
        Set<Monster> allMonsters = new HashSet<>(monsters.length);
-       Set<Monster> availableMonsters = new HashSet<Monster>(monsters.length);
+       Set<Monster> availableMonsters = new HashSet<>(monsters.length);
        Set<Monster> actualPlayersMonster = this.players.stream()
                                                          .map(p -> p.getMonster())
                                                          .collect(Collectors.toSet());

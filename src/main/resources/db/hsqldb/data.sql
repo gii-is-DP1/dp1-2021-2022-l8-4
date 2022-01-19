@@ -150,4 +150,5 @@ INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (2, 1, 2,FALSE);
 INSERT INTO games_cards(id,game_id,card_id,sold) VALUES (3, 1, 3,FALSE);
 
 INSERT INTO players_cards(id,discarded,player_id,card_id) VALUES (1,FALSE,19,29);
-INSERT INTO players_cards(id,discarded,player_id,card_id) VALUES (2,FALSE,19,17)
+INSERT INTO players_cards(id,discarded,player_id,card_id) VALUES (2,FALSE,19,17);
+INSERT INTO players_cards(id,discarded,player_id,card_id) VALUES (1, TRUE, 1,1)

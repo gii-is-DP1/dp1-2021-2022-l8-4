@@ -87,14 +87,4 @@ class GameCardServiceTests {
         assertEquals(cardId,availableCardsList.get(0).getId());
     }
 
-    @Test
-    void shouldShowCardsByGame() throws Exception {
-        Game game = gameService.findGameById(1);
-        gameCardService.showCards(game);
-        game.getGameCards().get(1).setSold(Boolean.TRUE);
-        gameCardService.showCards(game);
-        
-    }
-
-
 }

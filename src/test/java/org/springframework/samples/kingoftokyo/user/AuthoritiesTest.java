@@ -3,6 +3,8 @@ package org.springframework.samples.kingoftokyo.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -35,11 +37,16 @@ class AuthoritiesTest {
 
     @Test
     void createAuthWithPlayer(){
-        authoritiesService.saveAuthorities(1, "prueba");
         Authorities auth = new Authorities();
         auth.setAuthority("prueba");
-        authoritiesService.saveAuthorities(auth);
-        assertThat(userService.findUserById(1).getAuthorities().contains(auth));
+        authoritiesService.saveAuthorities(userService.findUserById(1).getId(), "prueba");
+        Set<Authorities> auths = userService.findUserById(1).getAuthorities();
+        for(Authorities a : auths){
+            if(a.getAuthority().equals("prueba")){
+                assertEquals(auth.getAuthority(), a.getAuthority());
+            }
+        }
     }
+
 
 }

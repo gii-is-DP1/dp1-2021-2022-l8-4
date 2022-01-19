@@ -33,9 +33,9 @@ public class MapGameRepository {
     }
 
     public void init() {
-        rollMap = new HashMap<Integer, Roll>();
-        turnListMap = new HashMap<Integer, List<Integer>>();
-        deckMap = new HashMap<Integer, Deck>();
+        rollMap = new HashMap<>();
+        turnListMap = new HashMap<>();
+        deckMap = new HashMap<>();
 
         Iterable<Card> itcard = cardService.findAll();
 

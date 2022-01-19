@@ -67,12 +67,12 @@ public class AchievementControllerTest {
 
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
-    void testAchievementCreateController() throws Exception {
+    void testAchievementCreateControllerWithErrors() throws Exception {
         mockMvc.perform(post("/achievements/new")
                     .with(csrf())
                     .param("name", "name")
                     .param("description", "description")
-                    .param("rewardPoints", "20")
+                    .param("rewardPoints", "-20")
                     .param("metrics", "Victorias"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("modules/statistics/achievements/newAchievement"));
