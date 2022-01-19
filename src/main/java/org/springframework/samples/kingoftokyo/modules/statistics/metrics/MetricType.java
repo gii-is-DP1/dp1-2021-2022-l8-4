@@ -6,7 +6,8 @@ package org.springframework.samples.kingoftokyo.modules.statistics.metrics;
 public enum MetricType {
         gamesPlayed("Partidas jugadas"),
         wins("Victorias"),
-        cardsUsed("Cartas usadas");
+        cardsUsed("Cartas usadas"),
+        turnsTokyo("Turnos en tokyo");
 
         private final String name;
 

@@ -10,6 +10,16 @@ INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (10,'Mi quinta carta usada','Usa tu quinta carta',10,2,5);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (11,'Mi decima carta usada','Usa tu decima carta',10,2,10);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (12,'Mi vigesima carta usada','Usa tu vigesima carta',20,2,20);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (13,'Mi primer turno en tokyo','Sobrevive tu primer turno en tokyo',5,3,1);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (14,'Mi segundo turno en tokyo','Sobrevive tu segundo turno en tokyo',6,3,2);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (15,'Mi tercer turno en tokyo','Sobrevive tu tercer turno en tokyo',7,3,3);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (16,'Mi cuarto turno en tokyo','Sobrevive tu cuarto turno en tokyo',8,3,4);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (17,'Mi quinto turno en tokyo','Sobrevive tu quinto turno en tokyo',9,3,5);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (18,'Mi sexto turno en tokyo','Sobrevive tu sexto turno en tokyo',10,3,6);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (19,'Mi septimo turno en tokyo','Sobrevive tu septimo turno en tokyo',15,3,7);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (20,'Mi octavo turno en tokyo','Sobrevive tu octavo turno en tokyo',20,3,8);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (21,'Mi noveno turno en tokyo','Sobrevive tu noveno turno en tokyo',25,3,9);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (22,'Mi decimo turno en tokyo','Sobrevive tu decimo turno en tokyo',30,3,10);
 
 INSERT INTO cards(id,cost,card_enum,type) VALUES(1,5,'APARTMENTBUILDING',0);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(2,3,'CORNERSTORE',0); 

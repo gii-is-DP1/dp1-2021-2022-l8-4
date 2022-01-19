@@ -58,6 +58,16 @@ public class MetricService {
         return metricRepository.cardsRanking(pageable);
     }    
 
+    /**
+     * 
+     * @return List of Users with their associated score of cards used ordered
+     */
+    @Transactional
+    public Page<MetricData> turnRanking(int pageNumber, int numberOfElements){    
+        PageRequest pageable = PageRequest.of(pageNumber, numberOfElements);    
+        return metricRepository.maxTurnUsers(pageable);
+    } 
+
         /**
      * 
      * @return List of Users with their associated score of wins ordered
@@ -99,6 +109,8 @@ public class MetricService {
                 return winsRanking(pageNumber, numberOfElements);
             case cardsUsed:
                 return cardsRanking(pageNumber, numberOfElements);
+            case turnsTokyo:
+                return turnRanking(pageNumber, numberOfElements);
             default:
                 break;
         }

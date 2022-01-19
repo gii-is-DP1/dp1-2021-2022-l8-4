@@ -89,7 +89,7 @@ class AchievementServiceTest {
     void shouldFindAllAchievement(){
         List<Achievement> listcont= new ArrayList<>();
         achievementsService.findAll().forEach(listcont::add);
-        Integer numero = 12;
+        Integer numero = 22;
         Integer contadorFind = listcont.size();
         assertEquals(contadorFind, numero);
 
@@ -105,7 +105,7 @@ class AchievementServiceTest {
 
         List<Achievement> listcont2= new ArrayList<>();
         achievementsService.findAll().forEach(listcont2::add);
-        numero = 13;
+        numero = 23;
         contadorFind = listcont2.size();
         assertEquals(contadorFind, numero);
     }
@@ -248,6 +248,7 @@ class AchievementServiceTest {
         mapExpected.put(MetricType.gamesPlayed, 1);
         mapExpected.put(MetricType.wins, 0);
         mapExpected.put(MetricType.cardsUsed, 0);
+        mapExpected.put(MetricType.turnsTokyo, 0);
         assertEquals(mapExpected, map);
     }
 

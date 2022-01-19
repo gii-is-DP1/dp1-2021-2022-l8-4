@@ -104,6 +104,11 @@ public class AchievementService {
         return achievementRepository.cardsUsedByUser(user.getId());
     }
 
+    @Transactional
+    public Integer turnsByUser(User user) {
+        return achievementRepository.turnsByUser(user.getId());
+    }
+
     /**
      * Given a metric type and a user, returns the score in that metric by the user
      * 
@@ -123,6 +128,9 @@ public class AchievementService {
                 break;
             case wins:
                 score = winsByUser(user);
+                break;
+            case turnsTokyo:
+                score = turnsByUser(user);
                 break;
             default:
                 break;
