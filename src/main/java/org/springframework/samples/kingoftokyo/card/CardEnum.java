@@ -105,7 +105,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
 
         @Override
         public void effect(Player player, PlayerService playerService, MapGameRepository mapGameRepository) {
-            playerService.damagePlayer(player, 5);
+            playerService.damagePlayer(player, 4);
             player.setVictoryPoints(player.getVictoryPoints() + 5);
             playerService.savePlayer(player);
 
@@ -356,7 +356,7 @@ public enum CardEnum implements UseCardsInterface { // Primero estan todas las d
             Map<String, Integer> efectosCartas = playerService.countRollValues(roll.getCardExtraValues());
 
             for (Player player : playerRolling.getGame().getPlayers()) {
-                if (player.getLocation() == playerRolling.getLocation()) {
+                if (player.isOutOfTokyo() && playerRolling.isOutOfTokyo() || player.isInTokyo() && playerRolling.isInTokyo()) {
                     Integer damageTotal=tiradas.get(damageString) + efectosCartas.get(damageString);
                     playerService.damagePlayer(player,damageTotal);
                 }
