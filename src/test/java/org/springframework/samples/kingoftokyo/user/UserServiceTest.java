@@ -64,7 +64,7 @@ public class UserServiceTest {
         user.setUsername("rosmolarr");
         user.setEmail("rosmolarr@alum.us.es");
         user.setPassword("rosmolarr");
-        userService.saveUser(user);
+        userService.saveUser(user,true);
         assertThat(user.getId()).isNotNull();
         Integer id = userService.findUserByUsername("rosmolarr").getId();
         assertEquals(user.getId(), id);
@@ -128,7 +128,7 @@ public class UserServiceTest {
 
 		String newName = "Admin";
 		user.setUsername(newName);
-        this.userService.saveUser(user);
+        this.userService.saveUser(user,true);
 
 		user = this.userService.findUserById(1);
 		assertThat(user.getUsername()).isEqualTo(newName);
@@ -144,7 +144,7 @@ public class UserServiceTest {
         user.setUsername("user4");
         user.setEmail("user4@correo.com");
         user.setPassword("user4");
-        userService.saveUser(user);
+        userService.saveUser(user,true);
 
         Integer contador2NewUser = userService.userCount();
         numero += 1;
@@ -164,7 +164,7 @@ public class UserServiceTest {
         user.setUsername("user4");
         user.setEmail("user4@correo.com");
         user.setPassword("user4");
-        userService.saveUser(user);
+        userService.saveUser(user,true);
 
         List<User> listcont2= new ArrayList<>();
         userService.findAll().forEach(listcont2::add);
