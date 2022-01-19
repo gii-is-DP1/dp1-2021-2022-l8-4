@@ -1,6 +1,7 @@
 package org.springframework.samples.kingoftokyo.user;
 
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * @author Sara Cruz
  * @author Rosa Molina
  * @author Carlos Varela Soult
  */
+@Slf4j
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-    private static final String VIEWS_USERS_CREATE_UPDATE_FORM = "users/createOrUpdateUsersForm";
+    private static final String VIEWS_USERS_UPDATE_FORM = "users/updateUsersForm";
+    private static final String VIEWS_USERS_CREATE_FORM = "users/createUsersForm";
     private static final String VIEW_USER_LIST = "users/usersList";
     private static final String VIEWS_EXCEPTION = "exception";
     private static final String MESSAGE = "message";
@@ -44,6 +49,7 @@ public class UserController {
      * @param page
      * @return View of paginated list of users
      */
+
     @GetMapping()
     public String usersList(ModelMap modelMap, @RequestParam(value = "page", defaultValue = "1") int page) {
         String view = VIEW_USER_LIST;
@@ -58,7 +64,7 @@ public class UserController {
 
     @GetMapping(path = "/new")
     public String initCreationForm(ModelMap modelMap) {
-        String view = VIEWS_USERS_CREATE_UPDATE_FORM;
+        String view = VIEWS_USERS_CREATE_FORM;
         modelMap.addAttribute("user", new User());
         modelMap.put(MAXTURNS, 0l);
         return view;
@@ -69,7 +75,7 @@ public class UserController {
         if (result.hasErrors()) {
             modelMap.addAttribute("user", user);
             modelMap.put(MAXTURNS, 0l);
-            return VIEWS_USERS_CREATE_UPDATE_FORM;
+            return VIEWS_USERS_CREATE_FORM;
 
         } else {
             // creating user
@@ -87,7 +93,7 @@ public class UserController {
             User user = this.userService.findUserById(userId);
             modelMap.put("user", user);
             modelMap.put(MAXTURNS, user.getMaxTurnsTokyo());
-            return VIEWS_USERS_CREATE_UPDATE_FORM;
+            return VIEWS_USERS_UPDATE_FORM;
 
         } else {
             return VIEWS_EXCEPTION;
@@ -107,19 +113,29 @@ public class UserController {
     @PostMapping(value = "/{userId}/edit")
     public String processUpdateForm(@Valid User user, BindingResult result, @PathVariable("userId") int userId,
             ModelMap modelMap, @RequestParam(value = "version", required=false) Integer version,
-             @RequestParam(value = "newPassword") String newPassword, @RequestParam(value = "oldPassword") String oldPassword) {
+             @RequestParam(value = "newPassword") String newPassword, @RequestParam(value = "oldPassword") String oldPassword, HttpServletResponse response) {
 
         if(user.getVersion()!=version) { 
-            modelMap.put(MESSAGE,"Ha habido una modificación del usuario mientras lo editabas! Prueba de nuevo!");
-            return initUpdateForm(user.getId(),modelMap);
+            modelMap.put("message","Ha habido una modificación del usuario mientras lo editabas! Prueba de nuevo!");
+            modelMap.put("user", user);
+            modelMap.put(MAXTURNS, user.getMaxTurnsTokyo());
+            return VIEWS_USERS_UPDATE_FORM;
         }else if (result.hasErrors()) {
             modelMap.put("user", user);
             modelMap.put(MAXTURNS, user.getMaxTurnsTokyo());
-            return VIEWS_USERS_CREATE_UPDATE_FORM;
+            return VIEWS_USERS_UPDATE_FORM;
         } else {
             User userToUpdate = this.userService.findUserById(userId);
             BeanUtils.copyProperties(user, userToUpdate, "id");
-            userToUpdate=userService.passwordCheckEdit(oldPassword, newPassword, userToUpdate);
+            try {
+                userToUpdate=userService.passwordCheckEdit(oldPassword, newPassword, userToUpdate);
+            } catch (Exception e) {
+                modelMap.put("user", user);
+                modelMap.put(MAXTURNS, user.getMaxTurnsTokyo());
+                modelMap.put("messageType","danger");
+                modelMap.put(MESSAGE,"Contraseña antigua erronea!");
+                return VIEWS_USERS_UPDATE_FORM;
+            }
             this.userService.saveUser(userToUpdate,true);
             modelMap.addAttribute(MESSAGE, "Usuario editado correctamente");
             return "redirect:/users/profile/{userId}";

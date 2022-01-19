@@ -11,34 +11,17 @@
                             <kingoftokyo:layout pageName="Users">
                                 <jsp:body>
                                     <h2>
-                                        <c:choose>
-                                            <c:when test="${user['new']}">
-                                                Nuevo usuario
-                                            </c:when>
-                                            <c:otherwise>
-                                                Editar usuario
-                                            </c:otherwise>
-                                        </c:choose>
+                                        Editar usuario
                                     </h2>
                                     <form:form modelAttribute="user" class="form-horizontal">
                                         <div class="form-group has-feedback">
-                                            <c:choose>
-                                                <c:when test="${user['new']}">
-                                                    <kingoftokyo:inputField label="Nombre de usuario" name="username" />
-                                                    <kingoftokyo:inputField label="Contrasena" name="password" />
-                                                    <kingoftokyo:inputField label="Email" name="email" />
-                                                    
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <kingoftokyo:inputFieldReadOnly label="Nombre de usuario" name="username" />
-                                                    <input type="hidden" name="password" value="${user.password}" />
-                                                    <kingoftokyo:inputField label="Email" name="email" />
-                                                    <h2 style="margin-left: 1.5%;">Para modificar tu contrasena:</h2>
-                                                </c:otherwise>
-                                            </c:choose>
+                                            
+                                            <kingoftokyo:inputFieldReadOnly label="Nombre de usuario" name="username" />
+                                            <input type="hidden" name="password" value="${user.password}" />
+                                            <kingoftokyo:inputField label="Email" name="email" />
+                                            <h2 style="margin-left: 1.5%;">Para modificar tu contrasena:</h2>
 
                                             <div class="col-sm-6" style="margin-left:25px">
-                                                <c:if test="${!user['new']}">
                                                 <div class="row" style="display: inline;">
                                                     <label for= "oldPassword" style="margin-right:4%">Antigua contrasena  </label>
                                                     <input id="oldPassword" name="oldPassword" />    
@@ -47,7 +30,6 @@
                                                     <label for= "newPassword" style="margin-right:6%">Nueva contrasena  </label>
                                                     <input id="newPassword" name="newPassword" />
                                                 </div>
-                                            </c:if>
                                             </div>
                                             
 
