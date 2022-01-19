@@ -86,7 +86,7 @@ public class AchievementService {
                 .collect(Collectors.toSet());
 
         user.setAchievements(obtainedAchievements);
-        userService.saveUser(user);
+        userService.saveUser(user,true);
     }
 
     @Transactional

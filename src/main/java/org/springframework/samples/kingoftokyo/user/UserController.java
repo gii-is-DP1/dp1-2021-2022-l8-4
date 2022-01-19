@@ -72,7 +72,7 @@ public class UserController {
 
         } else {
             // creating user
-            userService.saveUser(user);
+            userService.saveUser(user,false);
             modelMap.addAttribute(message, "User succesfully created!");
             return "redirect:/login";
         }
@@ -105,7 +105,9 @@ public class UserController {
 
     @PostMapping(value = "/{userId}/edit")
     public String processUpdateForm(@Valid User user, BindingResult result, @PathVariable("userId") int userId,
-            ModelMap modelMap, @RequestParam(value = "version", required=false) Integer version) {
+            ModelMap modelMap, @RequestParam(value = "version", required=false) Integer version,
+             @RequestParam(value = "newPassword") String newPassword, @RequestParam(value = "oldPassword") String oldPassword) {
+
         if(user.getVersion()!=version) { 
             modelMap.put("message","Concurrent modification of user! Try again!");
             return initUpdateForm(user.getId(),modelMap);
@@ -116,7 +118,8 @@ public class UserController {
         } else {
             User userToUpdate = this.userService.findUserById(userId);
             BeanUtils.copyProperties(user, userToUpdate, "id");
-            this.userService.saveUser(userToUpdate);
+            userToUpdate=userService.passwordCheckEdit(oldPassword, newPassword, userToUpdate);
+            this.userService.saveUser(userToUpdate,true);
             modelMap.addAttribute(message, "User succesfully edited!");
             return "redirect:/users/profile/{userId}";
         }

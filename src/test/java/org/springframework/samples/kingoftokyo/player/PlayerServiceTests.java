@@ -58,14 +58,14 @@ class PlayerServiceTests {
         user1.setEmail("usuarioDePrueba@gmail.com");
         user1.setPassword("contraseñaDePrueba");
         user1.setMaxTurnsTokyo(0l);
-        userService.saveUser(user1);
+        userService.saveUser(user1,true);
 
         user2=new User();
         user2.setUsername("UsuarioDePrueba2");
         user2.setEmail("usuarioDePrueba2@gmail.com");
         user2.setPassword("contraseñaDePrueba2");
         user2.setMaxTurnsTokyo(0l);
-        userService.saveUser(user2);
+        userService.saveUser(user2,true);
     
         game1=new Game();
         game1.setName("Partida prueba");
@@ -174,7 +174,7 @@ class PlayerServiceTests {
         testUser.setEmail("usuarioDePruebaJoin@gmail.com");
         testUser.setPassword("contraseñaDePruebaJoin");
         testUser.setGames(new HashSet<Game>());
-        userService.saveUser(testUser);
+        userService.saveUser(testUser,true);
 
         Game gameTest=new Game();
         List<Player> playersList=new ArrayList<Player>();
