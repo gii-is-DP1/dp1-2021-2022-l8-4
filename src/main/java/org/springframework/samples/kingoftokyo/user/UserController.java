@@ -116,7 +116,7 @@ public class UserController {
              @RequestParam(value = "newPassword") String newPassword, @RequestParam(value = "oldPassword") String oldPassword, HttpServletResponse response) {
 
         if(user.getVersion()!=version) { 
-            modelMap.put("message","Ha habido una modificación del usuario mientras lo editabas! Prueba de nuevo!");
+            modelMap.put(MESSAGE,"Ha habido una modificación del usuario mientras lo editabas! Prueba de nuevo!");
             modelMap.put("user", user);
             modelMap.put(MAXTURNS, user.getMaxTurnsTokyo());
             return VIEWS_USERS_UPDATE_FORM;
