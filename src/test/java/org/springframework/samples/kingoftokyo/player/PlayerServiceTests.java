@@ -118,16 +118,13 @@ class PlayerServiceTests {
         Player playerTest=playerService.findPlayerById(playerId);
         assertEquals(playerId, playerTest.getId());
     }
-
-    
-
   
 
     @Test
     void testFindPlayerWithCorrectId() throws DataAccessException, NotFoundException{
         Player player4 = playerService.findPlayerById(4);
         assertThat(player4.getMonster().getName()).startsWith("CyberBunny");
-		assertThat(player4.getLifePoints()).isEqualTo(0);
+		assertThat(player4.getLifePoints()).isZero();
         assertThat(player4.getVictoryPoints()).isEqualTo(8);
         assertThat(player4.getEnergyPoints()).isEqualTo(2);
         assertThat(player4.getLocation().toString()).startsWith("BAHIATOKYO");

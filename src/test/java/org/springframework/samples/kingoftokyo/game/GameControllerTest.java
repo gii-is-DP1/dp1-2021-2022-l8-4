@@ -28,7 +28,7 @@ import org.springframework.context.annotation.FilterType;
 @WebMvcTest(value = GameController.class,
             excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
             excludeAutoConfiguration = SecurityConfiguration.class)
-public class GameControllerTest {
+class GameControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -54,7 +54,7 @@ public class GameControllerTest {
 
     @WithMockUser(value = "spring", authorities = { "user" })
     @Test
-    public void testGameListNotFinishedOk() throws Exception {
+    void testGameListNotFinishedOk() throws Exception {
         mockMvc.perform(get("/games"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("games/gamesList"));
@@ -63,7 +63,7 @@ public class GameControllerTest {
 
     @WithMockUser(value = "spring", authorities = { "user" })
     @Test
-    public void testGameListFinishedOk() throws Exception {
+    void testGameListFinishedOk() throws Exception {
         mockMvc.perform(get("/games/finished"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("games/gamesListFinished"));
@@ -72,7 +72,7 @@ public class GameControllerTest {
 
     @WithMockUser(value = "spring", authorities = { "user" })
     @Test
-    public void testGameFinishedOk() throws Exception {
+    void testGameFinishedOk() throws Exception {
 
         Mockito.when(gameService.findGameById(anyInt())).thenReturn(new Game());
 
@@ -84,7 +84,7 @@ public class GameControllerTest {
     
     @WithMockUser(value = "spring", authorities = { "user" })
     @Test
-    public void testOnGoingGameOk() throws Exception {
+    void testOnGoingGameOk() throws Exception {
 
         Mockito.when(gameService.findGameById(anyInt())).thenReturn(new Game());
 
@@ -96,7 +96,7 @@ public class GameControllerTest {
 
     @WithMockUser(value = "spring", authorities = { "user" })
     @Test
-    public void testFinishedGameRedirectFromPlaying() throws Exception {
+    void testFinishedGameRedirectFromPlaying() throws Exception {
 
         Game game = new Game();
         game.setWinner("winner");
@@ -109,7 +109,7 @@ public class GameControllerTest {
 
     @WithMockUser(value = "spring", authorities = { "user" })
     @Test
-    public void testExitTokyo() throws Exception {
+    void testExitTokyo() throws Exception {
 
         mockMvc.perform(get("/games/{gameId}/exitTokyo", "1"))
                 .andExpect(status().is3xxRedirection())

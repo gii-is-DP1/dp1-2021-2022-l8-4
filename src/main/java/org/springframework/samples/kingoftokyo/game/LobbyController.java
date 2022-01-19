@@ -41,8 +41,8 @@ public class LobbyController {
     private final UserService userService;
     private final PlayerService playerService;
     private static final String VIEWS_EXCEPTION = "exception";
-    private final String lobby = "/lobby";
-    private final String rediGames = "redirect:/games/";
+    private static final String LOBBY = "/lobby";
+    private static final String REDIRECTGAMES= "redirect:/games/";
 
     @Autowired
     public LobbyController(GameService gameService,
@@ -86,7 +86,7 @@ public class LobbyController {
             try {
                 newGame.setCreator(user);
                 gameService.createNewGame(newGame);
-                return rediGames + newGame.getId() + lobby;
+                return REDIRECTGAMES + newGame.getId() + LOBBY;
             } catch (NewGameException e) {
                 log.warn(e.toString());
                 return "redirect:/games/lobbies";
@@ -103,7 +103,7 @@ public class LobbyController {
         try {
             Game game = gameService.findGameById(gameId);
             if (game.isStarted()) {
-                view = rediGames + game.getId() + "/playing";
+                view = REDIRECTGAMES + game.getId() + "/playing";
             } else {
                 responde.addHeader("Refresh", "10");
 
@@ -129,7 +129,7 @@ public class LobbyController {
     public String joinGame(@ModelAttribute("newPlayer") @Valid Player newPlayer, BindingResult result,
             ModelMap modelMap, @PathVariable("gameId") int gameId, final RedirectAttributes redirectAttributes) {
         
-        String view = rediGames + gameId + lobby;
+        String view = REDIRECTGAMES + gameId + LOBBY;
         if (!result.hasErrors()) {
 
             User user = userService.authenticatedUser();
@@ -163,7 +163,7 @@ public class LobbyController {
             if (user.isCreator(game)) {
                 gameService.deleteGame(game);
             } else {
-                view = rediGames + gameId + lobby;
+                view = REDIRECTGAMES + gameId + LOBBY;
             }
         } catch (NotFoundException | DeleteGameException e) {
             log.warn(e.toString());
@@ -175,7 +175,7 @@ public class LobbyController {
     @GetMapping("/{gameId}/start")
     public String startGame(ModelMap modelMap, @PathVariable("gameId") int gameId, HttpServletResponse response,
             final RedirectAttributes redirectAttributes) {
-        String view = rediGames + gameId + lobby;
+        String view = REDIRECTGAMES + gameId + LOBBY;
         User user = userService.authenticatedUser();
         try {
             Game game = gameService.findGameById(gameId);

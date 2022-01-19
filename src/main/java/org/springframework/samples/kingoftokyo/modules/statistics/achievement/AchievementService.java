@@ -35,8 +35,7 @@ public class AchievementService {
 
     @Transactional
     public Iterable<Achievement> findAll() {
-        Iterable<Achievement> all = achievementRepository.findAll();
-        return all;
+        return achievementRepository.findAll();
     }
 
     @Transactional

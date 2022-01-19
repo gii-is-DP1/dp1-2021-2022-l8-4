@@ -95,9 +95,9 @@ class PlayerCardServiceTests {
         playercard.setDiscarded(Boolean.FALSE);
         playerCardService.savePlayerCard(playercard);
 
-        assertEquals(playercard.getCard(), card);
-        assertEquals(playercard.getPlayer(), player);
-        assertEquals(playercard.getDiscarded(), Boolean.FALSE);
+        assertEquals(card, playercard.getCard());
+        assertEquals(player, playercard.getPlayer());
+        assertEquals(Boolean.FALSE, playercard.getDiscarded());
     }
 
     @Test

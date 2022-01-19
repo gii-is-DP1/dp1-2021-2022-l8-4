@@ -123,9 +123,6 @@ public class GameController {
             Player actualPlayer = playerService.actualPlayer(game);
             modelMap.addAttribute("actualPlayer", actualPlayer);
 
-            Player AuthenticatedPlayer = gameService.playerInGameByUser(userService.authenticatedUser(), gameId);
-            modelMap.addAttribute("AuthenticatedPlayer", AuthenticatedPlayer);
-
             Iterable<Player> players = game.getPlayers();
             modelMap.addAttribute("players", players);
             modelMap.addAttribute("game", game);
