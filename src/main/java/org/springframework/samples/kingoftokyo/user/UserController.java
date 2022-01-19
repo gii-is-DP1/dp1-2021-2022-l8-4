@@ -109,7 +109,7 @@ public class UserController {
              @RequestParam(value = "newPassword") String newPassword, @RequestParam(value = "oldPassword") String oldPassword) {
 
         if(user.getVersion()!=version) { 
-            modelMap.put("message","Concurrent modification of user! Try again!");
+            modelMap.put("message","Ha habido una modificación del usuario mientras lo editabas! Prueba de nuevo!");
             return initUpdateForm(user.getId(),modelMap);
         }else if (result.hasErrors()) {
             modelMap.put("user", user);
@@ -120,7 +120,7 @@ public class UserController {
             BeanUtils.copyProperties(user, userToUpdate, "id");
             userToUpdate=userService.passwordCheckEdit(oldPassword, newPassword, userToUpdate);
             this.userService.saveUser(userToUpdate,true);
-            modelMap.addAttribute(message, "User succesfully edited!");
+            modelMap.addAttribute("message", "Usuario editado correctamente");
             return "redirect:/users/profile/{userId}";
         }
     }

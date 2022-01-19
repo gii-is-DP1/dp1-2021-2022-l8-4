@@ -54,7 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
         } else {
             // creating card
             achievementService.saveAchievement(newAchievement);
-            modelMap.addAttribute("message", "Achievement se ha guardado correctamente!");
+            modelMap.addAttribute("message", "El nuevo logro se ha guardado correctamente!");
         }
         return "redirect:/achievements/";
     }
