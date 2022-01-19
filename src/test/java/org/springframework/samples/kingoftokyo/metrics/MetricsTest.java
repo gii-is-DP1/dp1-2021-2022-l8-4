@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 /**
 /* @author Rosa Molina
-/* @author Carlos Varela Soult
 */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
