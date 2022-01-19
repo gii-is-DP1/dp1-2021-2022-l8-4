@@ -28,8 +28,8 @@ public class UserController {
     private static final String VIEWS_USERS_CREATE_UPDATE_FORM = "users/createOrUpdateUsersForm";
     private static final String VIEW_USER_LIST = "users/usersList";
     private static final String VIEWS_EXCEPTION = "exception";
-    private static final String message = "message";
-    private static final String maxTurns = "maxTurns";
+    private static final String MESSAGE = "message";
+    private static final String MAXTURNS = "maxTurns";
 
     private UserService userService;
     private AchievementService achievementService;
@@ -60,7 +60,7 @@ public class UserController {
     public String initCreationForm(ModelMap modelMap) {
         String view = VIEWS_USERS_CREATE_UPDATE_FORM;
         modelMap.addAttribute("user", new User());
-        modelMap.put(maxTurns, 0l);
+        modelMap.put(MAXTURNS, 0l);
         return view;
     }
 
@@ -68,13 +68,13 @@ public class UserController {
     public String processCreationForm(@Valid User user, BindingResult result, ModelMap modelMap) {
         if (result.hasErrors()) {
             modelMap.addAttribute("user", user);
-            modelMap.put(maxTurns, 0l);
+            modelMap.put(MAXTURNS, 0l);
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
         } else {
             // creating user
             userService.saveUser(user,false);
-            modelMap.addAttribute(message, "User succesfully created!");
+            modelMap.addAttribute(MESSAGE, "User succesfully created!");
             return "redirect:/login";
         }
     }
@@ -86,7 +86,7 @@ public class UserController {
         if (currentUserId.equals(userId) || userService.isAdmin(currentUserId)) {
             User user = this.userService.findUserById(userId);
             modelMap.put("user", user);
-            modelMap.put(maxTurns, user.getMaxTurnsTokyo());
+            modelMap.put(MAXTURNS, user.getMaxTurnsTokyo());
             return VIEWS_USERS_CREATE_UPDATE_FORM;
 
         } else {
@@ -110,18 +110,18 @@ public class UserController {
              @RequestParam(value = "newPassword") String newPassword, @RequestParam(value = "oldPassword") String oldPassword) {
 
         if(user.getVersion()!=version) { 
-            modelMap.put(message,"Ha habido una modificación del usuario mientras lo editabas! Prueba de nuevo!");
+            modelMap.put(MESSAGE,"Ha habido una modificación del usuario mientras lo editabas! Prueba de nuevo!");
             return initUpdateForm(user.getId(),modelMap);
         }else if (result.hasErrors()) {
             modelMap.put("user", user);
-            modelMap.put(maxTurns, user.getMaxTurnsTokyo());
+            modelMap.put(MAXTURNS, user.getMaxTurnsTokyo());
             return VIEWS_USERS_CREATE_UPDATE_FORM;
         } else {
             User userToUpdate = this.userService.findUserById(userId);
             BeanUtils.copyProperties(user, userToUpdate, "id");
             userToUpdate=userService.passwordCheckEdit(oldPassword, newPassword, userToUpdate);
             this.userService.saveUser(userToUpdate,true);
-            modelMap.addAttribute(message, "Usuario editado correctamente");
+            modelMap.addAttribute(MESSAGE, "Usuario editado correctamente");
             return "redirect:/users/profile/{userId}";
         }
     }
@@ -142,7 +142,7 @@ public class UserController {
         
         User user = userService.findUserById(userId);
         userService.deleteUser(user);
-        modelMap.addAttribute(message, "User succesfully deleted");
+        modelMap.addAttribute(MESSAGE, "User succesfully deleted");
 
         return "redirect:/users?page=1";
     }
