@@ -29,7 +29,19 @@ mvn spring-boot:run
 
 Accede a la aplicación desde tu navegador favorito mediante este enlace: http://localhost:8080/
 
-## En caso de que encuentres un bug o una sugerencia de mejora para King of Tokyo
+## ¿Qué puedes hacer ahora?
+
+### Como usuario
+- Empezando por el principio: Regístrate, crea y edita tu perfil personal.
+- Juega tu primera partida, únete a una o crea una nueva. En caso de duda, lee las reglas.
+- Consulta las estadísticas, accede al ranking global de jugadores o mira tus logros en tu perfil.
+
+### Como administrador
+- Gestiona las cuentas de los usuarios.
+- Observa un listado de partidas activas o de partidas jugadas.
+- Crea nuevos logros y consulta los existentes.
+
+## En caso de que encuentres un bug o una sugerencia de mejora
 Nuestro banco de issues se encuentra aquí: https://github.com/gii-is-DP1/dp1-2021-2022-l8-4/issues
 
 # Licencia
