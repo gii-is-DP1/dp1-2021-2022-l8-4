@@ -69,11 +69,17 @@ public class UserService {
 	
 
 	@Transactional
-	public User passwordCheckEdit(String oldPassword, String newPassword,User user) {
+	public User passwordCheckEdit(String oldPassword, String newPassword,User user) throws Exception {
 		Boolean userWantsToChangePassword=!oldPassword.isEmpty() && !newPassword.isEmpty();
 			String userPassword=user.getPassword();
-			if(userWantsToChangePassword && passwordEncoder.matches(oldPassword, userPassword)) {
-				user.setPassword(passwordEncoder.encode(newPassword));
+			Boolean isAdmin=isAdmin(authenticatedUser().getId());
+			if(userWantsToChangePassword || isAdmin) {
+				if(passwordEncoder.matches(oldPassword, userPassword) || isAdmin) {
+					user.setPassword(passwordEncoder.encode(newPassword));
+				} else {
+					throw new Exception("No coinciden las contraseñas");
+				}
+				
 			}
 		return user;
 	}
