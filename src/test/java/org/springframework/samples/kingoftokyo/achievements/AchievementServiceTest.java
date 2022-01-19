@@ -230,9 +230,9 @@ class AchievementServiceTest {
     @Test
     void shouldGetCardsByUser(){
         User user1 = userService.findUserById(1);
-        MetricType metricType = MetricType.cardsUsed;
-        Integer cardUsedByUser = achievementsService.getScoreByUser(metricType, user1);
-        assertEquals(0, cardUsedByUser);
+        MetricType metricType = MetricType.cardsBought;
+        Integer cardBoughtByUser = achievementsService.getScoreByUser(metricType, user1);
+        assertEquals(1, cardBoughtByUser);
     }
 
     /**
@@ -247,7 +247,7 @@ class AchievementServiceTest {
         Map<MetricType, Integer> mapExpected = new HashMap<>();
         mapExpected.put(MetricType.gamesPlayed, 1);
         mapExpected.put(MetricType.wins, 0);
-        mapExpected.put(MetricType.cardsUsed, 0);
+        mapExpected.put(MetricType.cardsBought, 1);
         mapExpected.put(MetricType.turnsTokyo, 0);
         assertEquals(mapExpected, map);
     }

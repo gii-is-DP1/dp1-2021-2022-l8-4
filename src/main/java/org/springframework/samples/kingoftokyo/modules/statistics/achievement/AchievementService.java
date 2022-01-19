@@ -99,8 +99,8 @@ public class AchievementService {
     }
 
     @Transactional
-    public Integer cardsUsedByUser(User user) {
-        return achievementRepository.cardsUsedByUser(user.getId());
+    public Integer cardsBoughtByUser(User user) {
+        return achievementRepository.cardsBoughtByUser(user.getId());
     }
 
     @Transactional
@@ -122,8 +122,8 @@ public class AchievementService {
             case gamesPlayed:
                 score = gamesPlayedByUser(user);
                 break;
-            case cardsUsed:
-                score = cardsUsedByUser(user);
+            case cardsBought:
+                score = cardsBoughtByUser(user);
                 break;
             case wins:
                 score = winsByUser(user);

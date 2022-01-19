@@ -23,19 +23,22 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/players")
 public class PlayerController {
 
-    @Autowired
     private PlayerService playerService;
-
-    @Autowired
     private PlayerCardService playerCardService;
-
-    @Autowired
     private CardService cardService;
-
     private static final String VIEWS_EXCEPTION = "exception";
 
+    @Autowired
+    public PlayerController(PlayerService playerService, 
+            PlayerCardService playerCardService, 
+            CardService cardService) {
+        this.playerService = playerService;
+        this.playerCardService = playerCardService;
+        this.cardService = cardService;
+    }
+
     @GetMapping()
-    public String cardsList(ModelMap modelMap) {
+    public String playerList(ModelMap modelMap) {
         String view = "players/playersList";
         Iterable<Player> players = playerService.findAll();
         modelMap.addAttribute("players", players);

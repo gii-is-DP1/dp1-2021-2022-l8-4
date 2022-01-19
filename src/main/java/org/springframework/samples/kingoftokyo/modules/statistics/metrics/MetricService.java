@@ -103,7 +103,7 @@ public class MetricService {
                 return gamesPlayedRanking(pageNumber, numberOfElements);
             case wins:
                 return winsRanking(pageNumber, numberOfElements);
-            case cardsUsed:
+            case cardsBought:
                 return cardsRanking(pageNumber, numberOfElements);
             case turnsTokyo:
                 return turnRanking(pageNumber, numberOfElements);

@@ -114,12 +114,12 @@ class MetricsTest {
         MetricType wins = MetricType.wins;
         MetricType gamesPlayed = MetricType.gamesPlayed;
         MetricType turnsTokyo = MetricType.turnsTokyo;
-        MetricType cardsUsed = MetricType.cardsUsed;
+        MetricType cardsBought = MetricType.cardsBought;
 
         Page<MetricData> pageWins = metricService.rankingByMetricType(wins, 0, 1);
         Page<MetricData> pageGamesPlayed = metricService.rankingByMetricType(gamesPlayed, 0, 1);
         Page<MetricData> pageTurnsTokyo = metricService.rankingByMetricType(turnsTokyo, 0, 1);
-        //Page<MetricData> pageCardsUsed = metricService.rankingByMetricType(cardsUsed, 0, 1);
+        Page<MetricData> pageCardsBought = metricService.rankingByMetricType(cardsBought, 0, 1);
 
         User user2 = userService.findUserById(2);
         User user1 = userService.findUserById(1);
@@ -127,7 +127,7 @@ class MetricsTest {
         MetricData userWins = new MetricData(user2, 1l);
         MetricData userGamesPlayed = new MetricData(user1, 1l);
         MetricData userTurnsTokyo = new MetricData(user1, 0l);
-        //MetricData userCardsUsed = new MetricData(user1, 0l);
+        MetricData userCardsBought = new MetricData(user1, 1l);
 
         assertEquals(userWins.getUser().getId(), pageWins.toList().get(0).getUser().getId());
         assertEquals(userWins.getScore(), pageWins.toList().get(0).getScore());
@@ -138,8 +138,8 @@ class MetricsTest {
         assertEquals(userTurnsTokyo.getUser().getId(), pageTurnsTokyo.toList().get(0).getUser().getId());
         assertEquals(userTurnsTokyo.getScore(), pageTurnsTokyo.toList().get(0).getScore());
 
-        //assertEquals(userCardsUsed.getUser().getId(), pageCardsUsed.toList().get(0).getUser().getId());
-        //assertEquals(userCardsUsed.getScore(), pageCardsUsed.toList().get(0).getScore());
+        assertEquals(userCardsBought.getUser().getId(), pageCardsBought.toList().get(0).getUser().getId());
+        assertEquals(userCardsBought.getScore(), pageCardsBought.toList().get(0).getScore());
     }
 
     @Test

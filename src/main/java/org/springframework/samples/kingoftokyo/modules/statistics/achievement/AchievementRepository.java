@@ -26,11 +26,11 @@ import org.springframework.stereotype.Repository;
     Integer winsByUser(int userId) throws DataAccessException;
 
     /**
-	 * Retrieve number of used cards by User.
+	 * Retrieve number of bought cards by User.
 	 * @return a <code>Integer</code>
 	 */
     @Query("SELECT COUNT(pc) FROM PlayerCard pc WHERE player.user.id=?1 AND pc.discarded IS TRUE")
-    Integer cardsUsedByUser(int userId) throws DataAccessException;
+    Integer cardsBoughtByUser(int userId) throws DataAccessException;
 
    /**
 	 * Retrieve number of turns by User.
