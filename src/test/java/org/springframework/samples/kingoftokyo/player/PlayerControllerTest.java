@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.context.annotation.FilterType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -52,15 +51,8 @@ class PlayerControllerTest {
     @MockBean
     private CardService cardService;
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
-    @Test 
-    void testPlayerList() throws Exception {
-        mockMvc.perform(get("/players")).andExpect(status().isOk())
-                .andExpect(view().name("players/playersList"))
-                .andExpect(model().attributeExists("players"));
-    }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testBuyCard() throws Exception {
         Game game = new Game();
@@ -83,7 +75,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("redirect:/games/"+gameId+"/playing"));
     }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testBuyCardThrowingException() throws Exception {
         Player player = new Player();
@@ -101,7 +93,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("exception"));
     }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testDiscardAllCards() throws Exception {
         Game game = new Game();
@@ -119,7 +111,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("redirect:/games/"+gameId+"/playing"));
     }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testDiscardAllCardsThrowingException() throws Exception {
         Player player = new Player();
@@ -132,7 +124,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("exception"));
     }
     
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testSurrender() throws Exception {
         Game game = new Game();
@@ -150,7 +142,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("redirect:/games/"+gameId+"/playing"));
     }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testSurrenderThrowingException() throws Exception {
         Player player = new Player();

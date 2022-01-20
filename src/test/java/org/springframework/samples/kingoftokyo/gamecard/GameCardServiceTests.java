@@ -17,12 +17,13 @@ import org.springframework.samples.kingoftokyo.card.CardService;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
 import org.springframework.samples.kingoftokyo.game.Game;
 import org.springframework.samples.kingoftokyo.game.GameService;
+import org.springframework.samples.kingoftokyo.game.MapGameRepository;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, MapGameRepository.class})
 /**
  * @author Carlos Varela Soult
  * @author Rosa Molina

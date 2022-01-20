@@ -130,6 +130,7 @@ public class UserController {
             try {
                 userToUpdate=userService.passwordCheckEdit(oldPassword, newPassword, userToUpdate);
             } catch (Exception e) {
+                log.warn(e.toString());
                 modelMap.put("user", user);
                 modelMap.put(MAXTURNS, user.getMaxTurnsTokyo());
                 modelMap.put("messageType","danger");

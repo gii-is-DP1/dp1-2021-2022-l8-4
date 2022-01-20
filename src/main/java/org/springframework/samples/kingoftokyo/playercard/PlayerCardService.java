@@ -104,8 +104,6 @@ public class PlayerCardService {
                
                 // Show new cards
                 gameCardService.showCards(game);
-            }else{
-                throw new InvalidPlayerActionException("El jugador no tiene suficiente energia para comprar la carta");
             }
         }else{
             throw new InvalidPlayerActionException("No se puede llevar a cabo la compra de la carta");

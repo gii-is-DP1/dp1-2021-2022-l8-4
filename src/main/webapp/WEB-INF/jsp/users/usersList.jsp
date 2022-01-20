@@ -12,9 +12,9 @@
                 <tr>
                     <th style="width: 150px;">Usuario</th>
                     <th style="width: 200px;">Email</th>
-                    <th style="width: 120px">Contrasenya</th>
-                    <th style="width: 120px">Ultimo editor</th>
-                    <th style="width: 120px">Ultima edicion </th>
+                    <th style="width: 130px">Contrasena</th>
+                    <th style="width: 140px">Ultimo editor</th>
+                    <th style="width: 150px">Ultima edicion </th>
                 </tr>
             </thead>
             <tbody>
@@ -46,14 +46,20 @@
                                     <spring:url value="/users/{userId}/edit" var="userid">
                                         <spring:param name="userId" value="${user.id}"/>
                                     </spring:url>
-                                    <a href="${fn:escapeXml(userid)}">edit user</a>
+                                    <a href="${fn:escapeXml(userid)}">editar usuario</a>
+                                </td>
+                                <td>
+                                    <spring:url value="/users/delete/{userId}" var="userid">
+                                        <spring:param name="userId" value="${user.id}"/>
+                                    </spring:url>
+                                    <a href="${fn:escapeXml(userid)}">Eliminar usuario</a>
                                 </td>
                             </tr>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
                         <tr>
-                            <td colspan="5">No users available</td>
+                            <td colspan="5">No hay usuarios disponibles</td>
                         </tr>
                     </c:otherwise>
                 </c:choose>
@@ -61,7 +67,7 @@
                 <c:choose>
                     <c:when test="${size==1}">
                         <div class="panel">
-                            ${size} user on page ${number+1}/${totalPages}
+                            ${size} usuario en la pagina ${number+1}/${totalPages}
                         </div>
                         <ul class="pagination">
                             <c:forEach begin="0" end="${totalPages-1}" var="page">
@@ -75,7 +81,7 @@
                     </c:when>
                     <c:otherwise>
                         <div class="panel">
-                            ${size} users on page ${number+1}/${totalPages}
+                            ${size} usuarios en la pagina ${number+1}/${totalPages}
                         </div>
                         <ul class="pagination">
                             <c:forEach begin="0" end="${totalPages-1}" var="page">

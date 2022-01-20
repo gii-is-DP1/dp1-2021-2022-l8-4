@@ -5,7 +5,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
-/* @author Carlos Varela Soult
+*  @author Jose Maria Delgado
+*  @author Rosa Molina
+*  @author Sara Cruz
 */
 
  @Repository

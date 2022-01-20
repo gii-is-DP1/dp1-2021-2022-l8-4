@@ -14,6 +14,7 @@ import org.springframework.samples.kingoftokyo.user.User;
 /**
 *  @author Rosa Molina
 *  @author Sara Cruz
+*  @author Jose Maria Delgado
 */
 
 

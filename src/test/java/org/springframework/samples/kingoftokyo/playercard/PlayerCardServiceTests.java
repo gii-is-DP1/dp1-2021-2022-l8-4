@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.samples.kingoftokyo.card.Card;
 import org.springframework.samples.kingoftokyo.card.CardService;
 import org.springframework.samples.kingoftokyo.dice.Roll;
@@ -40,6 +42,7 @@ import org.springframework.stereotype.Service;
 import javassist.NotFoundException;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@Import(MapGameRepository.class)
 /**
  * @author Rosa Molina
  * @author Jose Maria Delgado Sanchez
@@ -120,13 +123,14 @@ class PlayerCardServiceTests {
     }
 
     @Test
-    void buyCardNotEnoughEnergy() throws InvalidPlayerActionException {
+    void buyCardNotEnoughEnergy() throws InvalidPlayerActionException, NotFoundException {
 
         player3.setEnergyPoints(0);
+        playerCardService.buyCard(player3, card1);
 
-        assertThrows(InvalidPlayerActionException.class, () -> {
-            playerCardService.buyCard(player3, card1);
-        }, "Debe lanzarse la excepcion InvalidPlayerActionException");
+        PlayerCard playerCard = playerCardService.findByPlayerCard(player3, card1);
+
+        assertNull(playerCard, "No debe encontrar asociacion entre la carta y el jugador");
     }
 
     @Test

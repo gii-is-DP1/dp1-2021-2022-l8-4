@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
-import org.springframework.samples.kingoftokyo.game.GameService;
+import org.springframework.samples.kingoftokyo.game.MapGameRepository;
 import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData;
 import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricService;
 import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricType;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, MapGameRepository.class})
 class MetricsTest {
 
     @Autowired
@@ -35,9 +35,6 @@ class MetricsTest {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private GameService gameService;
 
     
     @Test
