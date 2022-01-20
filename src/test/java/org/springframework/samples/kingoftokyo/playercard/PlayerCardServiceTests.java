@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -122,13 +123,14 @@ class PlayerCardServiceTests {
     }
 
     @Test
-    void buyCardNotEnoughEnergy() throws InvalidPlayerActionException {
+    void buyCardNotEnoughEnergy() throws InvalidPlayerActionException, NotFoundException {
 
         player3.setEnergyPoints(0);
+        playerCardService.buyCard(player3, card1);
 
-        assertThrows(InvalidPlayerActionException.class, () -> {
-            playerCardService.buyCard(player3, card1);
-        }, "Debe lanzarse la excepcion InvalidPlayerActionException");
+        PlayerCard playerCard = playerCardService.findByPlayerCard(player3, card1);
+
+        assertNull(playerCard, "No debe encontrar asociacion entre la carta y el jugador");
     }
 
     @Test
