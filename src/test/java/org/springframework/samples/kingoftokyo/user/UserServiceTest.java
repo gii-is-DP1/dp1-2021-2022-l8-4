@@ -26,6 +26,7 @@ import org.springframework.samples.kingoftokyo.game.GameService;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.player.Player;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
@@ -49,6 +50,8 @@ public class UserServiceTest {
     private AchievementService achievementService;
     @Autowired
     private GameService gameService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private Integer numeroUsuarios = 25;
 
@@ -186,7 +189,6 @@ public class UserServiceTest {
         }
     }
 
-    @Disabled
     @Test
     void testDeleteUser() {
         List<User> currentListUsers = new ArrayList<>();
@@ -250,5 +252,21 @@ public class UserServiceTest {
     @Test
     void testUserIsAdmin() {
         assertTrue(userService.isAdmin(1));
+    }
+
+    @Disabled
+    @Test
+    void shouldChangePassword() throws Exception{
+        User user = new User();
+        user.setUsername("usuariotest");
+        user.setEmail("usuariotest@email.com");
+        user.setPassword("usuariotest");
+        userService.saveUser(user, Boolean.FALSE);
+        User user1 = userService.findUserById(1);
+
+        userService.passwordCheckEdit("admin", "newPassword", user1);
+
+
+
     }
 }
