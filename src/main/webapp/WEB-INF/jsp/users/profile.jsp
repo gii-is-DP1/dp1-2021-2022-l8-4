@@ -24,7 +24,7 @@
                     <spring:url value="/users/delete/{userId}" var="userid">
                         <spring:param name="userId" value="${user.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(userid)}">borrar usuario</a>
+                    <a href="${fn:escapeXml(userid)}">eliminar usuario</a>
                 </td>
             </tr>
             <tr>
