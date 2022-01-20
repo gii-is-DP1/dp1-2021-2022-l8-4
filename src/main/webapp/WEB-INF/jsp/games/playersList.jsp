@@ -9,12 +9,12 @@
                             <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th style="width: 150px;">Game Name</th>
-                                    <th style="width: 120px;">Creator</th>
-                                    <th style="width: 120px">Turn</th>
-                                    <th style="width: 120px">Winner</th>
-                                    <th style="width: 150px">Start time</th>
-                                    <th style="width: 150px">End time</th>
+                                    <th style="width: 150px;">Nombre de partida</th>
+                                    <th style="width: 120px;">Creador</th>
+                                    <th style="width: 120px">Turno</th>
+                                    <th style="width: 120px">Ganador</th>
+                                    <th style="width: 150px">Fecha de inicio</th>
+                                    <th style="width: 150px">Fecha de fin</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,11 +49,11 @@
                             <table id="playersTable" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th style="width: 150px;">Monster Name</th>
-                                        <th style="width: 120px;">Life Points</th>
-                                        <th style="width: 120px">Victory Points</th>
-                                        <th style="width: 120px">Energy Points</th>
-                                        <th style="width: 150px">Location</th>
+                                        <th style="width: 150px;">Nombre del monstruo</th>
+                                        <th style="width: 120px;">Puntos de vida</th>
+                                        <th style="width: 120px">Puntos de victoria</th>
+                                        <th style="width: 120px">Puntos de energia</th>
+                                        <th style="width: 150px">Localizacion</th>
                                     </tr>
                                 </thead>
                                 <tbody>

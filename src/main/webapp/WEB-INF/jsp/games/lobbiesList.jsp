@@ -11,8 +11,8 @@
                             <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th style="width: 150px;">Game Name</th>
-                                            <th style="width: 120px;">Creator</th>
+                                            <th style="width: 150px;">Nombre de partida</th>
+                                            <th style="width: 120px;">Creador</th>
                                             <th style="width: 120px;">Numero maximo de jugadores</th>
                                             <th style="width: 120px;"></th>
                                         </tr>
