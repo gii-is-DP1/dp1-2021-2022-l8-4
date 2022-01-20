@@ -386,6 +386,7 @@ public class GameService {
         LocationType leavingTokyoLocation = player.getLocation();
         playerActualTurn.setLocation(leavingTokyoLocation);
         player.setLocation(LocationType.FUERATOKYO);
+        playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints()+1);
         playerService.savePlayer(player);
         playerService.savePlayer(playerActualTurn);
     }
