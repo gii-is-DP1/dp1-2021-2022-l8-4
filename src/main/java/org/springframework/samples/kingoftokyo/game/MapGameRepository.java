@@ -10,15 +10,15 @@ import org.springframework.samples.kingoftokyo.card.Card;
 import org.springframework.samples.kingoftokyo.card.CardService;
 import org.springframework.samples.kingoftokyo.card.Deck;
 import org.springframework.samples.kingoftokyo.dice.Roll;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+
 
 /**
  * @author Ricardo Nadal Garcia
  * @author Noelia López Durán
  */
 
-@Service // Dejo esto como @Service cuando debería ser @Component porque si no , no
-         // funcionan los test
+@Component
 public class MapGameRepository {
     private CardService cardService;
 

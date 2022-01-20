@@ -26,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
 import org.springframework.samples.kingoftokyo.game.Game;
 import org.springframework.samples.kingoftokyo.game.GameService;
+import org.springframework.samples.kingoftokyo.game.MapGameRepository;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.player.Player;
@@ -42,7 +43,7 @@ import javassist.NotFoundException;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, MapGameRepository.class})
 
 class UserServiceTest {
     
