@@ -14,8 +14,11 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
@@ -26,6 +29,8 @@ import org.springframework.samples.kingoftokyo.game.GameService;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.player.Player;
+import org.springframework.samples.kingoftokyo.player.PlayerService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
@@ -39,7 +44,7 @@ import javassist.NotFoundException;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @Import(SecurityConfiguration.class)
 
-public class UserServiceTest {
+class UserServiceTest {
     
     @Autowired
     private UserService userService;
@@ -49,6 +54,10 @@ public class UserServiceTest {
     private AchievementService achievementService;
     @Autowired
     private GameService gameService;
+    @Autowired
+    private PlayerService playerService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private Integer numeroUsuarios = 25;
 
@@ -186,7 +195,6 @@ public class UserServiceTest {
         }
     }
 
-    @Disabled
     @Test
     void testDeleteUser() {
         List<User> currentListUsers = new ArrayList<>();
@@ -225,7 +233,7 @@ public class UserServiceTest {
        
         // Checks if some user who is admin is in all admins list
         User userWhoIsAdmin = userService.findUserById(5);
-        assertThat(listAdmins.contains(userWhoIsAdmin));
+        assertThat(listAdmins.contains(userWhoIsAdmin)).isTrue();
     }
 
     @Test
@@ -250,5 +258,41 @@ public class UserServiceTest {
     @Test
     void testUserIsAdmin() {
         assertTrue(userService.isAdmin(1));
+    }
+
+    @Test
+    void testUserIsNotAdmin() {
+        assertFalse(userService.isAdmin(14));
+    }
+
+    @Test
+    void testUserIsNotAuth() {
+        User user = new User();
+        user.setUsername("usuariotest");
+        user.setEmail("usuariotest@email.com");
+        user.setPassword("usuariotest");
+        userService.saveUser(user, Boolean.FALSE);
+        assertFalse(userService.isAdmin(user.getId()));
+    }
+
+    @Test
+    void testUserIsNotLoginPlaying() throws DataAccessException, NotFoundException {
+        assertFalse(userService.isAuthUserPlayingAsPlayer(playerService.findPlayerById(1)));
+    }
+
+    @Disabled
+    @Test
+    void shouldChangePassword() throws Exception{
+        User user = new User();
+        user.setUsername("usuariotest");
+        user.setEmail("usuariotest@email.com");
+        user.setPassword("usuariotest");
+        userService.saveUser(user, Boolean.FALSE);
+        User user1 = userService.findUserById(1);
+
+        userService.passwordCheckEdit("admin", "newPassword", user1);
+
+
+
     }
 }
