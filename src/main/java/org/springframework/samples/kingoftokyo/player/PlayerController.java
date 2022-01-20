@@ -37,14 +37,6 @@ public class PlayerController {
         this.cardService = cardService;
     }
 
-    @GetMapping()
-    public String playerList(ModelMap modelMap) {
-        String view = "players/playersList";
-        Iterable<Player> players = playerService.findAll();
-        modelMap.addAttribute("players", players);
-        return view;
-    }
-
     @GetMapping("/{playerId}/cards/{cardId}/buy")
     public String buyCard(ModelMap modelMap, @PathVariable("playerId") int playerId,
             @PathVariable("cardId") int cardId) {

@@ -14,11 +14,8 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
@@ -31,7 +28,6 @@ import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Ac
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.player.Player;
 import org.springframework.samples.kingoftokyo.player.PlayerService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
@@ -57,8 +53,6 @@ class UserServiceTest {
     private GameService gameService;
     @Autowired
     private PlayerService playerService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     private Integer numeroUsuarios = 25;
 
