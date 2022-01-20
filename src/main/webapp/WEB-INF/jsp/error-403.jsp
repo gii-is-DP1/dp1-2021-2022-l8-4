@@ -14,7 +14,7 @@
     <br><br>
     <h2>Te has encontrado con los guardianes de Tokyo</h2>
     <h3>Parece que no puedes pasar</h3>
-
+    <p>Error 403</p>
     <p>${exception.message}</p>
     <a style="font-weight: bold; size: 50rem;" href="/"><span class="glyphicon glyphicon-chevron-left"> </span>Volver al inicio</a>
 

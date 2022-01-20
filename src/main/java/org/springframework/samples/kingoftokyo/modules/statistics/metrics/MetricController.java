@@ -22,14 +22,16 @@ import java.util.Map;
 @RequestMapping("/statistics")
 public class MetricController {
     
-    @Autowired
     private MetricService metricService;
-
-    @Autowired
     private UserService userService;
+    private AchievementService achievementService;
 
     @Autowired
-    private AchievementService achievementService;
+    private MetricController(MetricService metricService, UserService userService, AchievementService achievementService){
+      this.metricService= metricService;
+      this.userService=userService;
+      this.achievementService=achievementService;
+    }
 
     @GetMapping(path = "/ranking")
     public String getRanking(@RequestParam(value = "metric", defaultValue = "gamesPlayed") MetricType metric,@RequestParam(value = "page", defaultValue = "1") int page, ModelMap modelMap){
