@@ -16,8 +16,6 @@
 package org.springframework.samples.kingoftokyo.user;
 
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -42,8 +40,7 @@ public class AuthoritiesService {
 
 	@Transactional
 	public Iterable<Authorities> findAll() {
-		Iterable<Authorities> res = authoritiesRepository.findAll();
-		return res;
+		return authoritiesRepository.findAll();
 	}
 
 	@Transactional

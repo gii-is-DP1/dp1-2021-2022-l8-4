@@ -11,7 +11,6 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricController;
-import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricData;
 import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricService;
 import org.springframework.samples.kingoftokyo.modules.statistics.metrics.MetricType;
 import org.springframework.samples.kingoftokyo.user.UserService;
@@ -25,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 

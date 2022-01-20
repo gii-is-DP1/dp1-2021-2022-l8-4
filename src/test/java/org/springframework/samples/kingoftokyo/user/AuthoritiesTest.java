@@ -1,6 +1,5 @@
 package org.springframework.samples.kingoftokyo.user;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Set;
@@ -11,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
+import org.springframework.samples.kingoftokyo.game.MapGameRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, MapGameRepository.class})
 class AuthoritiesTest {
  
     

@@ -15,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
+import org.springframework.samples.kingoftokyo.game.MapGameRepository;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
@@ -24,7 +25,7 @@ import javassist.NotFoundException;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, MapGameRepository.class})
 
 class CardServiceTest {
 
@@ -51,7 +52,7 @@ class CardServiceTest {
     void shouldFindAll() {
         List<Card> listcont = new ArrayList<>();
         cardService.findAll().forEach(listcont::add);
-        assertEquals(listcont.size(), NUM_CARTAS);
+        assertEquals(NUM_CARTAS, listcont.size());
 
         Card newCard = new Card();
         newCard.setId(50);
@@ -62,15 +63,15 @@ class CardServiceTest {
 
         List<Card> listcont2 = new ArrayList<>();
         cardService.findAll().forEach(listcont2::add);
-        assertEquals(listcont2.size(), NUM_CARTAS+1);
+        assertEquals(NUM_CARTAS+1, listcont2.size());
     }
 
     @Test
     void shouldFindCardById() throws DataAccessException, NotFoundException {
         Card card = cardService.findCardById(10);
         Card anotherCard = cardService.findCardById(25);
-        assertEquals(card.getCost(), 4);
-        assertEquals(anotherCard.getCost(), 7);
+        assertEquals(4, card.getCost());
+        assertEquals(7, anotherCard.getCost());
         assertThat(card.getCardEnum().getName()).startsWith("Bombardeo");
         assertThat(anotherCard.getCardEnum().getName()).startsWith("¡Tiene");
     }
@@ -105,6 +106,6 @@ class CardServiceTest {
     @Test
     void shouldCardCount() {
         int count = cardService.cardCount();
-        assertEquals(count,NUM_CARTAS);
+        assertEquals(NUM_CARTAS, count);
     }
 }

@@ -41,7 +41,7 @@ import org.springframework.web.context.WebApplicationContext;
             excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
             excludeAutoConfiguration = SecurityConfiguration.class)
 
-public class UserControllerTest {
+class UserControllerTest {
 
     private static final Integer TEST_USER_ID = 17;
 
