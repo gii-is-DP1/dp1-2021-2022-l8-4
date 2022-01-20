@@ -35,7 +35,7 @@ import javassist.NotFoundException;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, MapGameRepository.class})
 
 public class CardTest {
     
