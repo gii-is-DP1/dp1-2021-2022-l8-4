@@ -111,8 +111,14 @@ class MetricsControllerTest {
     }
 
     @Test
-    void testShouldNotAccessBecauseNotLogged() throws Exception {
+    void testShouldNotAccessRankingBecauseNotLogged() throws Exception {
         mockMvc.perform(get("/statistics/ranking"))
+        .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void testShouldNotAccessStatisticsBecauseNotLogged() throws Exception {
+        mockMvc.perform(get("/statistics"))
         .andExpect(status().is4xxClientError());
     }
 }
