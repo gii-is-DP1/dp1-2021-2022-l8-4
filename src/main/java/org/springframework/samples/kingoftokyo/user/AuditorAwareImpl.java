@@ -1,6 +1,5 @@
 package org.springframework.samples.kingoftokyo.user;
 
-import java.lang.StackWalker.Option;
 import java.util.Optional;
 
 import org.springframework.data.domain.AuditorAware;
