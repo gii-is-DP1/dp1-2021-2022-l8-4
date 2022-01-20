@@ -123,10 +123,11 @@ public class AchievementControllerTest {
 
     }
 
-    /*
-    * Test negativo, no creo un logro correctamente
-    * @throws Exception
-    */
+    /**
+     * Test negativo, no creo un logro correctamente
+     * @throws Exception
+     */
+
 
 
     @WithMockUser(value = "spring", authorities = { "admin" })
