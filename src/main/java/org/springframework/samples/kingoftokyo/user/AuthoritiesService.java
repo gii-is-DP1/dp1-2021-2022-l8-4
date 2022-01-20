@@ -42,8 +42,7 @@ public class AuthoritiesService {
 
 	@Transactional
 	public Iterable<Authorities> findAll() {
-		Iterable<Authorities> res = authoritiesRepository.findAll();
-		return res;
+		return authoritiesRepository.findAll();
 	}
 
 	@Transactional
