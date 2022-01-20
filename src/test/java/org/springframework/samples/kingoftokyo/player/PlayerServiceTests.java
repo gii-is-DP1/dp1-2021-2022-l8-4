@@ -355,8 +355,7 @@ class PlayerServiceTests {
     } 
 
     @Test   
-	void shouldInsertPlayerIntoDatabaseAndGenerateId() {
-        
+	void shouldInsertPlayerIntoDatabaseAndGenerateId() { 
         User user1 = this.userService.findUserById(1);
 		Player player = new Player();
 		player.setMonster(Monster.gigaZaur);
