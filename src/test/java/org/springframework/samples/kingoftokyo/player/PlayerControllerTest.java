@@ -60,7 +60,7 @@ class PlayerControllerTest {
                 .andExpect(model().attributeExists("players"));
     }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testBuyCard() throws Exception {
         Game game = new Game();
@@ -83,7 +83,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("redirect:/games/"+gameId+"/playing"));
     }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testBuyCardThrowingException() throws Exception {
         Player player = new Player();
@@ -101,7 +101,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("exception"));
     }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testDiscardAllCards() throws Exception {
         Game game = new Game();
@@ -119,7 +119,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("redirect:/games/"+gameId+"/playing"));
     }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testDiscardAllCardsThrowingException() throws Exception {
         Player player = new Player();
@@ -132,7 +132,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("exception"));
     }
     
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testSurrender() throws Exception {
         Game game = new Game();
@@ -150,7 +150,7 @@ class PlayerControllerTest {
                 .andExpect(view().name("redirect:/games/"+gameId+"/playing"));
     }
 
-    @WithMockUser(value = "spring", authorities = {"admin"})
+    @WithMockUser(value = "spring", authorities = {"user"})
     @Test 
     void testSurrenderThrowingException() throws Exception {
         Player player = new Player();
