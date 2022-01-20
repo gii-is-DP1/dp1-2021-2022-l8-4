@@ -14,11 +14,8 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
@@ -26,11 +23,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
 import org.springframework.samples.kingoftokyo.game.Game;
 import org.springframework.samples.kingoftokyo.game.GameService;
+import org.springframework.samples.kingoftokyo.game.MapGameRepository;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.Achievement;
 import org.springframework.samples.kingoftokyo.modules.statistics.achievement.AchievementService;
 import org.springframework.samples.kingoftokyo.player.Player;
 import org.springframework.samples.kingoftokyo.player.PlayerService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
@@ -42,7 +39,7 @@ import javassist.NotFoundException;
  */
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, MapGameRepository.class})
 
 class UserServiceTest {
     
@@ -56,8 +53,6 @@ class UserServiceTest {
     private GameService gameService;
     @Autowired
     private PlayerService playerService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     private Integer numeroUsuarios = 25;
 
