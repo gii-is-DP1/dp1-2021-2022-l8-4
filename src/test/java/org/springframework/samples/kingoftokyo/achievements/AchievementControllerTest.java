@@ -103,6 +103,11 @@ public class AchievementControllerTest {
 
     }
 
+    /**
+     * Test positivo, creo un logro correctamente
+     * @throws Exception
+     */
+
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
     void testAchievementCreateController() throws Exception {
@@ -117,6 +122,12 @@ public class AchievementControllerTest {
                 .andExpect(view().name("redirect:/achievements/"));
 
     }
+
+    /*
+    * Test negativo, no creo un logro correctamente
+    * @throws Exception
+    */
+
 
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
