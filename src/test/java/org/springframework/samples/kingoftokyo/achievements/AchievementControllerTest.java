@@ -49,6 +49,12 @@ public class AchievementControllerTest {
     private CurrentUserController currentUserController;
 
 
+    /**
+     * Test positivo, ya que he iniciado sesión como admin,
+     * puedo acceder a la pagina de achievements
+     * @throws Exception
+     */
+
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
     void testAchievementControllerOk() throws Exception {
@@ -57,11 +63,58 @@ public class AchievementControllerTest {
 
     }
 
+    /**
+     * Test negativo, ya que no he iniciado sesión o no soy admin,
+     *  no puedo acceder a la pagina de achievements
+     * @throws Exception
+     */ 
+
+    @Test
+    void testAchievementControllerNoInicio() throws Exception {
+        mockMvc.perform(get("/achievements"))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    /**
+     * Test positivo, dado que soy admin, puedo acceder al formulario de creación
+     * de logros
+     * @throws Exception
+     */
+
     @WithMockUser(value = "spring", authorities = { "admin" })
     @Test
     void testAchievementCreateControllerOk() throws Exception {
         mockMvc.perform(get("/achievements/new"))
                 .andExpect(status().isOk());
+
+    }
+ 
+    /**
+     * Test negativo, dado que no he inciado sesión o no soy admin,
+     * no puedo acceder al formulario de creación de logros
+     * @throws Exception
+     */
+
+    @Test
+    void testAchievementCreateControllerNotOk() throws Exception {
+        mockMvc.perform(get("/achievements/new"))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @WithMockUser(value = "spring", authorities = { "admin" })
+    @Test
+    void testAchievementCreateController() throws Exception {
+        mockMvc.perform(post("/achievements/new")
+                    .with(csrf())
+                    .param("name", "name")
+                    .param("description", "description")
+                    .param("rewardPoints", "20")
+                    .param("goal", "1")
+                    .param("metric", "wins"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/achievements/"));
 
     }
 
@@ -70,14 +123,16 @@ public class AchievementControllerTest {
     void testAchievementCreateControllerWithErrors() throws Exception {
         mockMvc.perform(post("/achievements/new")
                     .with(csrf())
-                    .param("name", "name")
+                    .param("name", "Name")
                     .param("description", "description")
                     .param("rewardPoints", "-20")
-                    .param("metrics", "Victorias"))
+                    .param("goal", "1")
+                    .param("metric", "wins"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("modules/statistics/achievements/newAchievement"));
 
     }
+
 
 
 }
