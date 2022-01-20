@@ -12,9 +12,9 @@
                 <tr>
                     <th style="width: 150px;">Usuario</th>
                     <th style="width: 200px;">Email</th>
-                    <th style="width: 120px">Contrasenya</th>
-                    <th style="width: 120px">Ultimo editor</th>
-                    <th style="width: 120px">Ultima edicion </th>
+                    <th style="width: 130px">Contrasenya</th>
+                    <th style="width: 140px">Ultimo editor</th>
+                    <th style="width: 150px">Ultima edicion </th>
                 </tr>
             </thead>
             <tbody>
@@ -47,6 +47,12 @@
                                         <spring:param name="userId" value="${user.id}"/>
                                     </spring:url>
                                     <a href="${fn:escapeXml(userid)}">edit user</a>
+                                </td>
+                                <td>
+                                    <spring:url value="/users/delete/{userId}" var="userid">
+                                        <spring:param name="userId" value="${user.id}"/>
+                                    </spring:url>
+                                    <a href="${fn:escapeXml(userid)}">delete user</a>
                                 </td>
                             </tr>
                         </c:forEach>
