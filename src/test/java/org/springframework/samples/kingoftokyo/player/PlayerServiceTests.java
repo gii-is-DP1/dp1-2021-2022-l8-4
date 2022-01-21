@@ -25,7 +25,6 @@ import org.springframework.samples.kingoftokyo.playercard.PlayerCard;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javassist.NotFoundException;
 
