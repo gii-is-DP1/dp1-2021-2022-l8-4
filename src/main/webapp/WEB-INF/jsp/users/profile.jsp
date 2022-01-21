@@ -17,16 +17,6 @@
                     <a href="${fn:escapeXml(userid)}">editar usuario</a>
                 </td>
             </tr>
-            <tr style="background-color: white; ">
-                <td style="border: transparent; padding-bottom: 10px;">
-                </td>
-                <td style="border: transparent; float: right; padding-bottom: 10px;">
-                    <spring:url value="/users/delete/{userId}" var="userid">
-                        <spring:param name="userId" value="${user.id}"/>
-                    </spring:url>
-                    <a href="${fn:escapeXml(userid)}">eliminar usuario</a>
-                </td>
-            </tr>
             <tr>
                 <td style="border: transparent; background-color: white; padding-bottom: 10px;">
                     <c:out value="${user.email}"/>

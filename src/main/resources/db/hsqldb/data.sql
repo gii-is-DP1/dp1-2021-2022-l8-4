@@ -1,11 +1,11 @@
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (1,'Mi primera partida','Juega tu primera partida',10,0,1);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (2,'Mi quinta partida','Juega tu quinta partida',15,0,5);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (3,'Mi vigesima partida','Juega tu vigesima partida',15,0,20);
-INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (4,'Mi g partida','Juega tu g partida',20,0,50);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (4,'Mi quincuagesima partida','Juega tu quincuagesima partida',20,0,50);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (5,'Mi primera victoria','Gana tu primera partida',10,1,1);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (6,'Mi quinta victoria','Gana tu quinta partida',15,1,5);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (7,'Mi vigesima victoria','Gana tu vigesima partida',15,1,20);
-INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (8,'Mi quincuagesimo victoria','Gana tu g partida',20,1,50);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (8,'Mi quincuagesima victoria','Gana tu quincuagesima partida',20,1,50);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (9,'Mi primera carta usada','Usa tu primera carta',5,2,1);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (10,'Mi quinta carta usada','Usa tu quinta carta',10,2,5);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (11,'Mi decima carta usada','Usa tu decima carta',10,2,10);

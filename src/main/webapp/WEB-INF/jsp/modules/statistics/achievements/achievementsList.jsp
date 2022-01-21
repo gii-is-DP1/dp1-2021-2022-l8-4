@@ -8,8 +8,13 @@
 
                         <kingoftokyo:layout pageName="achievementsList">
 
-                        <h2>Logros</h2>
+                        <h2>
+                            Logros
+                            <br> 
+                            <a href="/achievements/new"><button type="button" >Nuevo logro</button></a>
+                         </h2>
 
+                        
                             <table id="achievementsTable" class="table table-striped">
                                 <thead>
                                     <tr>
@@ -48,6 +53,6 @@
                                 </tbody>
                             </table>
 
-                            <a href="/achievements/new"><button type="button" >Nuevo logro</button></a>
+                            
 
                         </kingoftokyo:layout>

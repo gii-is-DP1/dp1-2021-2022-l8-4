@@ -106,17 +106,7 @@ class GameServiceTests {
         }
         assertThat(res).isFalse();
     }
-
-    @Disabled
-    @Test
-    void testChangePosition() throws NotFoundException{
-        Player playerActualTurn = playerService.findPlayerById(gameService.actualTurnPlayerId(1));
-        LocationType firstPlayerLocation = playerActualTurn.getLocation();
-        gameService.changePosition(1);
-        LocationType secondPlayerLocation = playerActualTurn.getLocation();
-        assertThat(secondPlayerLocation.toString()).isNotEqualTo(firstPlayerLocation.toString());
-        
-    }
+    
     @Test
     void testShouldSaveGame() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(2);//Un game acabado
@@ -412,21 +402,6 @@ class GameServiceTests {
         Integer tiradasIniciales = mapGameRepository.rollMap.get(5).getRollAmount();
         gameService.handleTurnAction(game, Boolean.FALSE, roll);
         assertEquals(tiradasIniciales,mapGameRepository.rollMap.get(5).getRollAmount());
-    }
-
-    @Disabled
-    @Test
-    void testOnePlayerTurn() throws DataAccessException, NotFoundException, InvalidPlayerActionException{
-        Player playerInitiaPlayer = gameService.actualTurn(4);
-        Roll rollkeep = new Roll(); //una tirada cualquiera sin tener ningun dado guardado 
-
-        Game game = gameService.findGameById(4);
-        Integer initialTurn = game.getTurn();
-        gameService.handleTurnAction(game, Boolean.TRUE, rollkeep);
-        Player playerActualTurn = gameService.actualTurn(4);
-        gameService.saveGame(game);
-        assertNotEquals(game.getTurn(), initialTurn);
-        assertNotEquals(playerActualTurn.getMonster(), playerInitiaPlayer.getMonster());
     }
 
     @Test

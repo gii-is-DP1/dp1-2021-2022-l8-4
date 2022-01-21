@@ -1,5 +1,6 @@
 package org.springframework.samples.kingoftokyo.game;
 
+import org.hibernate.annotations.NotFound;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import org.springframework.test.web.servlet.MockMvc;
+import org.webjars.NotFoundException;
 import org.springframework.context.annotation.FilterType;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -144,6 +146,26 @@ class LobbyControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"admin"})
     @Test 
+    void testJoinNewLobbyNotFoundException() throws Exception {
+        Game game=new Game();
+        Integer gameId=1;
+
+        List<Player> players=new ArrayList<Player>();
+        Player player=new Player();
+        player.setMonster(Monster.king);
+        players.add(player);
+        game.setPlayers(players);
+        
+        Integer gameNotStartedTurn=0;
+        game.setTurn(gameNotStartedTurn);
+        Mockito.when(gameService.findGameById(gameId)).thenThrow(new NotFoundException("error"));
+
+        mockMvc.perform(get("/games/"+gameId+"/lobby")).andExpect(status().isOk())
+                .andExpect(view().name("exception"));
+    }
+
+    @WithMockUser(value = "spring", authorities = {"admin"})
+    @Test 
     void testJoinStartedLobby() throws Exception {
         Game game=new Game(); 
         Integer gameStartedTurn=1;      
@@ -173,10 +195,63 @@ class LobbyControllerTest {
                             .with(csrf())
                             .param("energyPoints","0")
                             .param("lifePoints","0")
-                            .param("location","fueraTokyo")
-                            .param("victoryPoints","0"))
+                            .param("location","FUERATOKYO")
+                            .param("victoryPoints","0")
+                            .param("recentlyHurt","FALSE")
+                            .param("monster",Monster.king.toString()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/games/"+gameId+"/lobby"));
+    }
+
+    @WithMockUser(value = "spring", authorities = {"admin"})
+    @Test 
+    void testPostLobbyNewGameException() throws Exception {
+        Player player=new Player();
+        player.setEnergyPoints(0);
+        player.setLocation(LocationType.FUERATOKYO);
+        player.setLifePoints(10);
+        player.setMonster(Monster.alien);
+        player.setVictoryPoints(0);
+        Game game=new Game();
+        Integer gameId=1;
+        Mockito.when(gameService.findGameById(gameId)).thenReturn(game);
+        doThrow(new NewGameException("error")).when(gameService).startGame(game);
+
+        mockMvc.perform(post("/games/"+gameId+"/lobby")
+                            .with(csrf())
+                            .param("energyPoints","0")
+                            .param("lifePoints","0")
+                            .param("location","FUERATOKYO")
+                            .param("victoryPoints","0")
+                            .param("recentlyHurt","FALSE")
+                            .param("monster",Monster.king.toString()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/games/"+gameId+"/lobby"));
+    }
+
+    @WithMockUser(value = "spring", authorities = {"admin"})
+    @Test 
+    void testPostLobbyNotFoundException() throws Exception {
+        Player player=new Player();
+        player.setEnergyPoints(0);
+        player.setLocation(LocationType.FUERATOKYO);
+        player.setLifePoints(10);
+        player.setMonster(Monster.alien);
+        player.setVictoryPoints(0);
+        
+        Integer gameId=1;
+        Mockito.when(gameService.findGameById(gameId)).thenThrow(new NotFoundException("error"));
+
+        mockMvc.perform(post("/games/"+gameId+"/lobby")
+                            .with(csrf())
+                            .param("energyPoints","0")
+                            .param("lifePoints","0")
+                            .param("location","FUERATOKYO")
+                            .param("victoryPoints","0")
+                            .param("recentlyHurt","FALSE")
+                            .param("monster",Monster.king.toString()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("exception"));
     }
 
 
@@ -266,6 +341,42 @@ class LobbyControllerTest {
         game.setId(gameId);
         Mockito.when(gameService.findGameById(gameId)).thenReturn(game);
 
+        User user=new User();
+        Set<Game> games=new HashSet<Game>();
+        
+        user.setGames(games);
+        Mockito.when(userService.authenticatedUser()).thenReturn(user);
+
+        mockMvc.perform(get("/games/"+gameId+"/start")).andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/games/" + gameId + "/lobby"));
+    }
+
+    @WithMockUser(value = "spring", authorities = {"admin"})
+    @Test 
+    void testStartLobbyExceptionNotFound() throws Exception {
+        Game game=new Game();
+        Integer gameId=1; 
+        game.setId(gameId);
+        Mockito.when(gameService.findGameById(gameId)).thenThrow(new NotFoundException("error"));
+
+        User user=new User();
+        Set<Game> games=new HashSet<Game>();
+        
+        user.setGames(games);
+        Mockito.when(userService.authenticatedUser()).thenReturn(user);
+
+        mockMvc.perform(get("/games/"+gameId+"/start")).andExpect(status().isOk())
+                .andExpect(view().name("exception"));
+    }
+
+    @WithMockUser(value = "spring", authorities = {"admin"})
+    @Test 
+    void testStartLobbyExceptionNewGame() throws Exception {
+        Game game=new Game();
+        Integer gameId=1; 
+        game.setId(gameId);
+        Mockito.when(gameService.findGameById(gameId)).thenReturn(game);
+        doThrow(new NewGameException("error")).when(gameService).startGame(game);
         User user=new User();
         Set<Game> games=new HashSet<Game>();
         

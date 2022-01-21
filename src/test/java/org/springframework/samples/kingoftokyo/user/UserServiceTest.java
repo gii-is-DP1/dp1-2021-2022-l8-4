@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -275,19 +274,5 @@ class UserServiceTest {
         assertFalse(userService.isAuthUserPlayingAsPlayer(playerService.findPlayerById(1)));
     }
 
-    @Disabled
-    @Test
-    void shouldChangePassword() throws Exception{
-        User user = new User();
-        user.setUsername("usuariotest");
-        user.setEmail("usuariotest@email.com");
-        user.setPassword("usuariotest");
-        userService.saveUser(user, Boolean.FALSE);
-        User user1 = userService.findUserById(1);
 
-        userService.passwordCheckEdit("admin", "newPassword", user1);
-
-
-
-    }
 }
