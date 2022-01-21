@@ -96,11 +96,6 @@ public class GameController {
             }
             gameService.endGame(game);
 
-            if (mapGameRepository.getTurnList(gameId) == null) {
-                List<Integer> turnList = gameService.initialTurnList(game);
-                mapGameRepository.putTurnList(gameId, turnList);
-            }
-
             List<Integer> turnList = mapGameRepository.getTurnList(gameId);
             Roll roll = mapGameRepository.getRoll(gameId);
 
@@ -148,7 +143,11 @@ public class GameController {
 
         try{
             Game game = gameService.findGameById(gameId);
-            gameService.handleTurnAction(game, newTurn, roll);
+            if (game.isFinished()) {
+                return viewGames + gameId + "/finished";
+            } else {
+                gameService.handleTurnAction(game, newTurn, roll);
+            }
         }catch(NotFoundException e){
             log.warn(e.toString());
             return VIEWS_EXCEPTION;

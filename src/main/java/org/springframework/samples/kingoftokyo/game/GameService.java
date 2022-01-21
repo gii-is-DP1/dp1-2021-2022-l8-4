@@ -60,7 +60,6 @@ public class GameService {
 
     @Autowired
     private MapGameRepository mapGameRepository;
-    
 
     private String laPartida = "La partida {id: '";
     private String name = "', Name: '";
@@ -83,13 +82,12 @@ public class GameService {
     @Transactional
     public Game findGameById(int id) throws DataAccessException, NotFoundException {
         Optional<Game> game = gameRepository.findById(id);
-        if(!game.isEmpty()){
+        if (!game.isEmpty()) {
             return game.get();
-        }else{
-            throw new NotFoundException("Game {id:"+id+"} no encontrada");
+        } else {
+            throw new NotFoundException("Game {id:" + id + "} no encontrada");
         }
     }
-
 
     @Transactional
     public List<Game> findOnGoingGames() throws DataAccessException {
@@ -111,8 +109,8 @@ public class GameService {
     public void deleteGame(Game game) throws DeleteGameException {
         if (!game.isStarted()) {
             gameRepository.delete(game);
-        }else{
-            throw new DeleteGameException(laPartida + game.getId() + name + game.getName()+"'} no puede ser borrada");
+        } else {
+            throw new DeleteGameException(laPartida + game.getId() + name + game.getName() + "'} no puede ser borrada");
         }
     }
 
@@ -122,9 +120,9 @@ public class GameService {
     @Transactional
     public Player playerInGameByUser(User user, int gameId) {
         Optional<Player> player = user.getPlayers().stream().filter(p -> p.getGame().getId() == gameId).findFirst();
-        if(player.isPresent()){
+        if (player.isPresent()) {
             return player.get();
-        }else{
+        } else {
             return null;
         }
     }
@@ -138,31 +136,37 @@ public class GameService {
             game.setTurn(1);
             game.setStartTime(LocalDateTime.now());
 
+            List<Integer> turnList = initialTurnList(game);
+            mapGameRepository.putTurnList(game.getId(), turnList);
+
             cardService.newDeck(game);
             gameCardService.showCards(game);
 
             saveGame(game);
-        }else{
-            if(!game.hasEnoughPlayers()){
-                throw new NewGameException(laPartida + game.getId() + name + game.getName()+"'} no puede ser iniciada porque no hay suficientes jugadores");
-            }else{
-                throw new NewGameException(laPartida + game.getId() + name + game.getName()+"'} ya ha sido iniciada");
+        } else {
+            if (!game.hasEnoughPlayers()) {
+                throw new NewGameException(laPartida + game.getId() + name + game.getName()
+                        + "'} no puede ser iniciada porque no hay suficientes jugadores");
+            } else {
+                throw new NewGameException(laPartida + game.getId() + name + game.getName() + "'} ya ha sido iniciada");
             }
-            
+
         }
     }
 
     /**
      * Create a new game
+     * 
      * @param game
      * @throws NewGameException
      */
     @Transactional
-    public void createNewGame(Game game) throws NewGameException{
+    public void createNewGame(Game game) throws NewGameException {
         User creator = game.getCreator();
-        if(creator.hasActiveGameAsCreator() || creator.hasActivePlayer()){
-            throw new NewGameException("El usuario {id: '"+creator.getId()+"', Username: '"+creator.getUsername()+"'} ya tiene otro juego activo");
-        }else{
+        if (creator.hasActiveGameAsCreator() || creator.hasActivePlayer()) {
+            throw new NewGameException("El usuario {id: '" + creator.getId() + "', Username: '" + creator.getUsername()
+                    + "'} ya tiene otro juego activo");
+        } else {
             saveGame(game);
         }
     }
@@ -201,7 +205,7 @@ public class GameService {
     public void useCardsStartTurn(Player player) {
         for (Card card : player.getAvailableCards()) {
             if (card.getType() != CardType.DESCARTAR) {
-                card.getCardEnum().effectStartTurn(player, playerService,mapGameRepository);
+                card.getCardEnum().effectStartTurn(player, playerService, mapGameRepository);
             }
         }
     }
@@ -217,7 +221,7 @@ public class GameService {
             if (!player.isDead()) {
                 turnList.add(turnList.remove(0));
                 mapGameRepository.putTurnList(gameId, turnList);
-                finished=Boolean.TRUE;
+                finished = Boolean.TRUE;
             } else {
                 turnList.remove(1);
             }
@@ -291,6 +295,7 @@ public class GameService {
 
     /**
      * Given a gameId returns the player who is playing their turn
+     * 
      * @param game
      * @throws NotFoundException
      * @throws DataAccessException
@@ -327,30 +332,30 @@ public class GameService {
     @Transactional
     public void useCardsEndTurn(Player player) {
         for (Card card : player.getAvailableCards()) {
-            card.getCardEnum().effectEndTurn(player, playerService,mapGameRepository);
+            card.getCardEnum().effectEndTurn(player, playerService, mapGameRepository);
         }
     }
+
     @Transactional
     public void validateRoll(Roll rollKeep, Roll rollValues) throws InvalidPlayerActionException {
-        Boolean correctKeep=rollValues.getValues().containsAll(Arrays.asList(rollKeep.getKeep()));
-        if(!correctKeep) {
+        Boolean correctKeep = rollValues.getValues().containsAll(Arrays.asList(rollKeep.getKeep()));
+        if (!correctKeep) {
             throw new InvalidPlayerActionException("Los dados conservados no son validos");
         }
     }
 
     @Transactional
-    public void validateNewTurn(Roll roll,Boolean newTurn) throws InvalidPlayerActionException {
-        if(newTurn && !roll.isFinished()) {
+    public void validateNewTurn(Roll roll, Boolean newTurn) throws InvalidPlayerActionException {
+        if (newTurn && !roll.isFinished()) {
             throw new InvalidPlayerActionException("No se puede terminar el turno todavia");
-        }   
+        }
     }
 
-    
-
     @Transactional
-    public void handleTurnAction(Game game, Boolean newTurn, Roll keepInfo) throws NotFoundException, InvalidPlayerActionException {
+    public void handleTurnAction(Game game, Boolean newTurn, Roll keepInfo)
+            throws NotFoundException, InvalidPlayerActionException {
         Integer gameId = game.getId();
-        Roll rollData = mapGameRepository.getRoll(gameId); 
+        Roll rollData = mapGameRepository.getRoll(gameId);
 
         if (isPlayerTurn(gameId)) {
             if (newTurn) {
@@ -359,7 +364,7 @@ public class GameService {
                 nuevoTurno(game);
                 playerService.checkplayers(game);
             } else {
-               
+
                 validateRoll(keepInfo, rollData);
                 rollData.setKeep(keepInfo.getKeep());
                 turnRoll(rollData, gameId);
@@ -372,9 +377,12 @@ public class GameService {
         }
 
     }
+
     /**
-     * Swaps the locations between the player who wants to leave tokyo and the player
+     * Swaps the locations between the player who wants to leave tokyo and the
+     * player
      * who hurt the player in tokyo.
+     * 
      * @param game
      * @throws NotFoundException
      */
@@ -386,12 +394,14 @@ public class GameService {
         LocationType leavingTokyoLocation = player.getLocation();
         playerActualTurn.setLocation(leavingTokyoLocation);
         player.setLocation(LocationType.FUERATOKYO);
-        playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints()+1);
+        playerActualTurn.setVictoryPoints(playerActualTurn.getVictoryPoints() + 1);
         playerService.savePlayer(player);
         playerService.savePlayer(playerActualTurn);
     }
+
     /**
-     * Changes the attribute "recentlyHurt" of all the players in the game to FALSE 
+     * Changes the attribute "recentlyHurt" of all the players in the game to FALSE
+     * 
      * @param game
      */
     @Transactional
@@ -404,8 +414,10 @@ public class GameService {
     }
 
     /**
-     * Handles the changes of the attribute "Location" of a player from Tokyo(or TokyoBay) to fueraDeTokyo 
-     * if the players has been hurt and is on Tokyo(or Tokyobay) 
+     * Handles the changes of the attribute "Location" of a player from Tokyo(or
+     * TokyoBay) to fueraDeTokyo
+     * if the players has been hurt and is on Tokyo(or Tokyobay)
+     * 
      * @param game
      * @throws NotFoundException
      */
@@ -418,7 +430,9 @@ public class GameService {
     }
 
     /**
-     * Given a list with the players Id (in order) returns a list with the Players in the given order
+     * Given a list with the players Id (in order) returns a list with the Players
+     * in the given order
+     * 
      * @param turnList
      * @return list of players
      */
@@ -428,7 +442,7 @@ public class GameService {
             try {
                 return playerService.findPlayerById(id);
             } catch (DataAccessException | NotFoundException e) {
-                 log.warn(e.toString());
+                log.warn(e.toString());
             }
             return null;
         }).collect(Collectors.toList());
