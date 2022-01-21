@@ -52,6 +52,8 @@ INSERT INTO cards(id,cost,card_enum,type) VALUES(28,5,'HERBIVORE',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(29,3,'ENERGYHOARDER',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(30,7,'NOVABREATH',1);
 
+--Los usuarios tienen contraseña user y los administradores tienen contraseña admin 
+--Un usuario admin es       Usuario : user1       Contraseña : admin 
 INSERT INTO users(id,username,email,password,enabled,version) VALUES (1,'user1','user1@email.com','$2a$10$POdm6NGv8Z.ADZAVFtchKeIXTQMAepl5JmjfLwvKQMk.ihd4.FvGC', TRUE,1);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
 INSERT INTO users(id,username,email,password,enabled,version) VALUES (2,'user2','user2@email.com','$2a$10$kz.zONpoIPBYxg7znN8yr.mi45ErkcRV8pnZn.O1Rsavazm63BUgi', TRUE,1);
