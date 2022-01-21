@@ -54,7 +54,7 @@ public class LobbyController {
     }
 
     @InitBinder("newGame")
-    public void initPetBinder(WebDataBinder dataBinder) {
+    public void initGameBinder(WebDataBinder dataBinder) {
         dataBinder.setValidator(new NewGameValidator());
     }
 

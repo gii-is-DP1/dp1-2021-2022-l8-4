@@ -107,12 +107,9 @@ class GameServiceTests {
         assertThat(res).isFalse();
     }
 
-
     @Disabled
     @Test
     void testChangePosition() throws NotFoundException{
-
-        //actualizar
         Player playerActualTurn = playerService.findPlayerById(gameService.actualTurnPlayerId(1));
         LocationType firstPlayerLocation = playerActualTurn.getLocation();
         gameService.changePosition(1);
@@ -169,6 +166,18 @@ class GameServiceTests {
         game.setMaxNumberOfPlayers(3);
         assertThrows(NewGameException.class , () -> {gameService.createNewGame(game);});
     }
+
+    @Test
+    void testShouldNotCreateGameBecauseCreatorAlreadyInLobby() throws NewGameException{
+        User creator = (User) userService.findUserById(25);//Un usuario en partida
+        Game game = new Game();
+        game.setCreator(creator);
+        game.setName("Partida insertada");
+        game.setTurn(1);
+        game.setStartTime(LocalDateTime.now());
+        game.setMaxNumberOfPlayers(3);
+        assertThrows(NewGameException.class , () -> {gameService.createNewGame(game);});
+    }
     
     
     @Test
@@ -189,21 +198,6 @@ class GameServiceTests {
         Integer numPlayersTest2 = game.playersAlive().size();
         assertEquals(numberPlayers, numPlayersTest2);
     }
-    @Disabled
-    @Test
-    void testOnePlayerTurn() throws DataAccessException, NotFoundException, InvalidPlayerActionException{
-        Player playerInitiaPlayer = gameService.actualTurn(4);
-        Roll rollkeep = new Roll(); //una tirada cualquiera sin tener ningun dado guardado 
-
-        Game game = gameService.findGameById(4);
-        Integer initialTurn = game.getTurn();
-        gameService.handleTurnAction(game, Boolean.TRUE, rollkeep);
-        Player playerActualTurn = gameService.actualTurn(4);
-        gameService.saveGame(game);
-        assertNotEquals(game.getTurn(), initialTurn);
-        assertNotEquals(playerActualTurn.getMonster(), playerInitiaPlayer.getMonster());
-    }
-
     @Test
     void testShouldStartGame() throws DataAccessException, NotFoundException{
         Game game = gameService.findGameById(6);//Un game sin empezar (pero que cumple las condiciones para empezar)
@@ -376,6 +370,63 @@ class GameServiceTests {
         gameService.initialTurnList(game);
         List<Integer> turno = mapGameRepository.getTurnList(4);
         assertEquals(numPlayers, turno.size()); 
+    }
+
+    @Test
+    void testTurnRollInitial(){
+        Roll roll = new Roll();
+        mapGameRepository.rollMap.put(5, roll);
+        Integer tiradasIniciales = mapGameRepository.rollMap.get(5).getRollAmount();
+        gameService.turnRoll(roll, 5);
+        assertThat(mapGameRepository.rollMap.get(5).getRollAmount()).isGreaterThan(tiradasIniciales);
+    }
+
+    @Test
+    void testTurnRollSecondRoll(){
+        Roll roll = new Roll();
+        roll.setRollAmount(1);
+        mapGameRepository.rollMap.put(5, roll);
+        Integer tiradasIniciales = mapGameRepository.rollMap.get(5).getRollAmount();
+        gameService.turnRoll(roll, 5);
+        assertThat(mapGameRepository.rollMap.get(5).getRollAmount()).isGreaterThan(tiradasIniciales);
+    }
+
+    @Test
+    void testTurnRollKeepingAllDices(){
+        Roll roll = new Roll();
+        roll.setRollAmount(1);
+        DiceValues[] guardados = new DiceValues[]{DiceValues.ATTACK,
+            DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK,DiceValues.ATTACK};
+        roll.setKeep(guardados);
+        mapGameRepository.rollMap.put(5, roll);
+        Integer tiradasIniciales = mapGameRepository.rollMap.get(5).getRollAmount();
+        gameService.turnRoll(roll, 5);
+        assertThat(mapGameRepository.rollMap.get(5).getRollAmount()).isGreaterThan(tiradasIniciales);
+    }
+
+    @Test
+    void testHandleTurnActionWhenIsNotPlayersTurn() throws DataAccessException, NotFoundException, InvalidPlayerActionException{
+        Game game = gameService.findGameById(5);
+        Roll roll = new Roll();
+        mapGameRepository.rollMap.put(5, roll);
+        Integer tiradasIniciales = mapGameRepository.rollMap.get(5).getRollAmount();
+        gameService.handleTurnAction(game, Boolean.FALSE, roll);
+        assertEquals(tiradasIniciales,mapGameRepository.rollMap.get(5).getRollAmount());
+    }
+
+    @Disabled
+    @Test
+    void testOnePlayerTurn() throws DataAccessException, NotFoundException, InvalidPlayerActionException{
+        Player playerInitiaPlayer = gameService.actualTurn(4);
+        Roll rollkeep = new Roll(); //una tirada cualquiera sin tener ningun dado guardado 
+
+        Game game = gameService.findGameById(4);
+        Integer initialTurn = game.getTurn();
+        gameService.handleTurnAction(game, Boolean.TRUE, rollkeep);
+        Player playerActualTurn = gameService.actualTurn(4);
+        gameService.saveGame(game);
+        assertNotEquals(game.getTurn(), initialTurn);
+        assertNotEquals(playerActualTurn.getMonster(), playerInitiaPlayer.getMonster());
     }
 
     @Test

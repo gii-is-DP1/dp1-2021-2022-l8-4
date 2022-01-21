@@ -117,18 +117,18 @@
                                     </div>
 
                                     <div class="col-11 col-lg-11">
-                                        <h2>Players</h2>
+                                        <h2>Jugadores</h2>
 
                                         <table id="playersTable" class="table table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 150px;">Username</th>
-                                                    <th style="width: 150px;">Monster Name</th>
-                                                    <th style="width: 120px;">Life Points</th>
-                                                    <th style="width: 120px">Victory Points</th>
-                                                    <th style="width: 120px">Energy Points</th>
-                                                    <th style="width: 150px">Location</th>
-                                                    <th style="width: 150px">Cards</th>
+                                                    <th style="width: 150px;">Nombre de usuario</th>
+                                                    <th style="width: 150px;">Nombre del monstruo</th>
+                                                    <th style="width: 120px;">Puntos de vida</th>
+                                                    <th style="width: 120px">Puntos de victoria</th>
+                                                    <th style="width: 120px">Puntos de energia</th>
+                                                    <th style="width: 150px">Localizacion</th>
+                                                    <th style="width: 150px">Cartas</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -179,7 +179,7 @@
 
 
 
-                                <h2>Card Shop</h2>
+                                <h2>Tienda de cartas</h2>
 
                                 <table id="cardsTable" class="table table-striped">
                                     <thead>
@@ -194,9 +194,9 @@
                                             </c:if>
                                         </tr>
                                         <tr>
-                                            <th style="width: 150px;">Card Name</th>
-                                            <th style="width: 120px;">Cost</th>
-                                            <th style="width: 120px">Type</th>
+                                            <th style="width: 150px;">Nombre de carta</th>
+                                            <th style="width: 120px;">Precio</th>
+                                            <th style="width: 120px">Tipo</th>
                                             <th style="width: 120px"></th>
                                         </tr>
                                     </thead>

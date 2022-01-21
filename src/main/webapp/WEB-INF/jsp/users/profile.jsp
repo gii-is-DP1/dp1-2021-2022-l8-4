@@ -14,7 +14,7 @@
                     <spring:url value="/users/{userId}/edit" var="userid">
                         <spring:param name="userId" value="${user.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(userid)}">edit user</a>
+                    <a href="${fn:escapeXml(userid)}">editar usuario</a>
                 </td>
             </tr>
             <tr style="background-color: white; ">
@@ -24,7 +24,7 @@
                     <spring:url value="/users/delete/{userId}" var="userid">
                         <spring:param name="userId" value="${user.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(userid)}">delete user</a>
+                    <a href="${fn:escapeXml(userid)}">eliminar usuario</a>
                 </td>
             </tr>
             <tr>

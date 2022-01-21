@@ -25,7 +25,6 @@ import org.springframework.samples.kingoftokyo.playercard.PlayerCard;
 import org.springframework.samples.kingoftokyo.user.User;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javassist.NotFoundException;
 
@@ -252,7 +251,6 @@ class PlayerServiceTests {
     }
 
     @Test
-	@Transactional
 	void shouldUpdateMonsterName() throws DataAccessException, NotFoundException {
 		Player player2 = this.playerService.findPlayerById(2);
 
@@ -357,9 +355,7 @@ class PlayerServiceTests {
     } 
 
     @Test   
-	@Transactional
-	void shouldInsertPlayerIntoDatabaseAndGenerateId() {
-        
+	void shouldInsertPlayerIntoDatabaseAndGenerateId() { 
         User user1 = this.userService.findUserById(1);
 		Player player = new Player();
 		player.setMonster(Monster.gigaZaur);

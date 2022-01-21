@@ -6,13 +6,12 @@
 <%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
 
 <kingoftokyo:layout pageName="users">
-    <h2>Users</h2>
+    <h2>Usarios</h2>
         <table id="usersTable" class="table table-striped">
             <thead>
                 <tr>
                     <th style="width: 150px;">Usuario</th>
                     <th style="width: 200px;">Email</th>
-                    <th style="width: 130px">Contrasena</th>
                     <th style="width: 140px">Ultimo editor</th>
                     <th style="width: 150px">Ultima edicion </th>
                 </tr>
@@ -34,9 +33,6 @@
                                     <c:out value="${user.email}"/>
                                 </td>
                                 <td>
-                                    <c:out value="${user.password}"/>
-                                </td>
-                                <td>
                                     <c:out value="${user.modifier}"/>
                                 </td>
                                 <td>
@@ -47,12 +43,11 @@
                                         <spring:param name="userId" value="${user.id}"/>
                                     </spring:url>
                                     <a href="${fn:escapeXml(userid)}">editar usuario</a>
-                                </td>
-                                <td>
+                                    <br>
                                     <spring:url value="/users/delete/{userId}" var="userid">
                                         <spring:param name="userId" value="${user.id}"/>
                                     </spring:url>
-                                    <a href="${fn:escapeXml(userid)}">Eliminar usuario</a>
+                                    <a href="${fn:escapeXml(userid)}">eliminar usuario</a>
                                 </td>
                             </tr>
                         </c:forEach>

@@ -120,11 +120,12 @@ class MetricsTest {
 
         User user2 = userService.findUserById(2);
         User user1 = userService.findUserById(1);
+        User user3 = userService.findUserById(21);
 
         MetricData userWins = new MetricData(user2, 1l);
         MetricData userGamesPlayed = new MetricData(user1, 1l);
         MetricData userTurnsTokyo = new MetricData(user1, 0l);
-        MetricData userCardsBought = new MetricData(user1, 1l);
+        MetricData userCardsBought = new MetricData(user3, 2l);
 
         assertEquals(userWins.getUser().getId(), pageWins.toList().get(0).getUser().getId());
         assertEquals(userWins.getScore(), pageWins.toList().get(0).getScore());

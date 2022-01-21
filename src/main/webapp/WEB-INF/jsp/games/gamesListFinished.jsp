@@ -6,17 +6,17 @@
                     <%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
 
                         <kingoftokyo:layout pageName="games">
-                            <h2>Games</h2>
+                            <h2>Partidas</h2>
 
                             <table id="gamesTable" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th style="width: 150px;">Game Name</th>
-                                        <th style="width: 120px;">Creator</th>
-                                        <th style="width: 120px">Turn</th>
-                                        <th style="width: 120px">Winner</th>
-                                        <th style="width: 150px">Start time</th>
-                                        <th style="width: 150px">End time</th>
+                                        <th style="width: 150px;">Nombre de partida</th>
+                                        <th style="width: 120px;">Creador</th>
+                                        <th style="width: 120px">Turno</th>
+                                        <th style="width: 120px">Ganador</th>
+                                        <th style="width: 150px">Fecha de inicio</th>
+                                        <th style="width: 150px">Fecha de fin</th>
                                         <th style="width: 100px;">Jugadores</th>
                                     </tr>
                                 </thead>

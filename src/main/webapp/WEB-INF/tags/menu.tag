@@ -94,14 +94,14 @@
 						<ul class="dropdown-menu">
 
 							<li>
-								<kingoftokyo:menuItem active="${name eq 'users'}" url="/users/profile/${currentUser.id}" title="Perfil">
+								<kingoftokyo:menuItem active="${name eq 'userData'}" url="/users/profile/${currentUser.id}" title="Perfil">
 									
 									<span>Perfil</span>
 								</kingoftokyo:menuItem>
 							</li>
 
 							<li>
-								<kingoftokyo:menuItem active="${name eq 'users'}" url="/logout" title="Logout">
+								<kingoftokyo:menuItem active="${name eq 'userData'}" url="/logout" title="Logout">
 									
 									<span>Cerrar sesion</span>
 								</kingoftokyo:menuItem>
