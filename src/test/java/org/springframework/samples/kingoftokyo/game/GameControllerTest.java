@@ -1,16 +1,11 @@
 package org.springframework.samples.kingoftokyo.game;
 
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.kingoftokyo.configuration.CurrentUserController;
 import org.springframework.samples.kingoftokyo.configuration.SecurityConfiguration;
-import org.springframework.samples.kingoftokyo.dice.Roll;
 import org.springframework.samples.kingoftokyo.gamecard.GameCardService;
 import org.springframework.samples.kingoftokyo.player.PlayerService;
-import org.springframework.samples.kingoftokyo.player.exceptions.InvalidPlayerActionException;
 import org.springframework.samples.kingoftokyo.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -151,44 +144,6 @@ class GameControllerTest {
         mockMvc.perform(get("/games/{gameId}/exitTokyo", "1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("exception"));
-    }
-
-    @WithMockUser(value = "spring", authorities = { "admin" })
-    @Test
-    @Disabled
-    void testRollKeepOk() throws Exception {
-        Mockito.when(gameService.findGameById(anyInt())).thenReturn(new Game());
-        mockMvc.perform(post("/games/1/playing")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/games/1/playing"));
-    }
-
-    @WithMockUser(value = "spring", authorities = { "user" })
-    @Test
-    @Disabled
-    void testRollKeepFailNoGame() throws Exception {
-        doThrow(new NotFoundException("")).when(gameService).findGameById(anyInt());
-
-        mockMvc.perform(post("/games/{gameId}/playing", "1")
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("exception"));
-    }
-
-    @WithMockUser(value = "spring", authorities = { "user" })
-    @Test
-    @Disabled
-    void testRollKeepFailInvalidAction() throws Exception {
-
-        Mockito.when(gameService.findGameById(anyInt())).thenReturn(new Game());
-        doThrow(new InvalidPlayerActionException("")).when(gameService).handleTurnAction(any(Game.class), anyBoolean(),
-                any(Roll.class));
-
-        mockMvc.perform(post("/games/{gameId}/playing", "1")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/games/1/playing"));
     }
 
 }
