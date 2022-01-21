@@ -1,11 +1,11 @@
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (1,'Mi primera partida','Juega tu primera partida',10,0,1);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (2,'Mi quinta partida','Juega tu quinta partida',15,0,5);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (3,'Mi vigesima partida','Juega tu vigesima partida',15,0,20);
-INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (4,'Mi g partida','Juega tu g partida',20,0,50);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (4,'Mi quincuagesima partida','Juega tu quincuagesima partida',20,0,50);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (5,'Mi primera victoria','Gana tu primera partida',10,1,1);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (6,'Mi quinta victoria','Gana tu quinta partida',15,1,5);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (7,'Mi vigesima victoria','Gana tu vigesima partida',15,1,20);
-INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (8,'Mi quincuagesimo victoria','Gana tu g partida',20,1,50);
+INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (8,'Mi quincuagesima victoria','Gana tu quincuagesima partida',20,1,50);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (9,'Mi primera carta usada','Usa tu primera carta',5,2,1);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (10,'Mi quinta carta usada','Usa tu quinta carta',10,2,5);
 INSERT INTO achievements(id,name,description,reward_points,metric,goal) VALUES (11,'Mi decima carta usada','Usa tu decima carta',10,2,10);
@@ -52,6 +52,8 @@ INSERT INTO cards(id,cost,card_enum,type) VALUES(28,5,'HERBIVORE',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(29,3,'ENERGYHOARDER',1);
 INSERT INTO cards(id,cost,card_enum,type) VALUES(30,7,'NOVABREATH',1);
 
+--Los usuarios tienen contraseña user y los administradores tienen contraseña admin 
+--Un usuario admin es       Usuario : user1       Contraseña : admin 
 INSERT INTO users(id,username,email,password,enabled,version) VALUES (1,'user1','user1@email.com','$2a$10$POdm6NGv8Z.ADZAVFtchKeIXTQMAepl5JmjfLwvKQMk.ihd4.FvGC', TRUE,1);
 INSERT INTO authorities(id,userid,authority) VALUES (1,1,'admin');
 INSERT INTO users(id,username,email,password,enabled,version) VALUES (2,'user2','user2@email.com','$2a$10$kz.zONpoIPBYxg7znN8yr.mi45ErkcRV8pnZn.O1Rsavazm63BUgi', TRUE,1);

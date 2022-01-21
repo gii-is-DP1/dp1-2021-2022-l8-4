@@ -6,14 +6,14 @@
 <%@ taglib prefix="kingoftokyo" tagdir="/WEB-INF/tags" %>
 
 <kingoftokyo:layout pageName="users">
-    <h2>Usarios</h2>
+    <h2>Usuarios</h2>
         <table id="usersTable" class="table table-striped">
             <thead>
                 <tr>
                     <th style="width: 150px;">Usuario</th>
                     <th style="width: 200px;">Email</th>
-                    <th style="width: 140px">Ultimo editor</th>
-                    <th style="width: 150px">Ultima edicion </th>
+                    <th style="width: 140px">Ultimo usuario en acceder </th>
+                    <th style="width: 150px">Ultimo acceso </th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +47,9 @@
                                     <spring:url value="/users/delete/{userId}" var="userid">
                                         <spring:param name="userId" value="${user.id}"/>
                                     </spring:url>
-                                    <a href="${fn:escapeXml(userid)}">eliminar usuario</a>
+                        
+                                        <a href="${fn:escapeXml(userid)}">eliminar usuario</a>
+                                   
                                 </td>
                             </tr>
                         </c:forEach>
